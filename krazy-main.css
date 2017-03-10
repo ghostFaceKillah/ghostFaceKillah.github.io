@@ -1,0 +1,15 @@
+body {
+   font-family: monospace;
+    font-size:large;
+    text-align: center;
+    background: linear-gradient(141deg, #ffaaaa, #fffb98, #a8f6ff, white);
+}
+div {
+    text-align: justify;
+    max-width: 500px;
+    display: inline-block;
+}
+
+h3 {
+    text-align: center;
+}
