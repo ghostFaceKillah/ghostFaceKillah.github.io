@@ -5,12 +5,21 @@ body {
    font-family: monospace;
     font-size:large;
     text-align: center;
-    background: linear-gradient(141deg, #ffaaaa, #fffb98);
+    background: linear-gradient(141deg, #fffb98, #a8f6ff);
 }
 div {
     text-align: justify;
     max-width: 500px;
     display: inline-block;
+}
+
+img {
+    max-width: 500px;
+}
+
+iframe {
+    width: 500px;
+    height: 280px;
 }
 
 h3 {
@@ -26,13 +35,13 @@ h3 {
 </head>
 <body>
   <h1> Mike Garmulewicz  </h1>
-    --------------------------------------------------
+  --------------------------------------------------
+  <br><br>
   <h2> How to build small self driving car? </h2>
   <br><br>
 
   <div>
-      My recent side project is a small self driving car 
-      with my friend Filip (jytug).
+      My recent side project is a small self driving car.
   </div>
   <br><br>
 
@@ -44,14 +53,15 @@ h3 {
   <br><br>
 
 
-  <h4> How does it work </h4>
+  <h4> Idea </h4>
   <div>
   A nice scheme how it workxx.
+  Draw on ipad.
   </div>
   <br><br>
 
 
-  <h3> First car epoch </h3>
+  <h3> Beginnings First car </h3>
   <div>
   Started the story with learning a bit about electronics.
 
@@ -66,101 +76,154 @@ h3 {
   </div>
   <br><br>
 
-
   <div>
    Bought a little green car, disassembled it completely.
    I didn't understand too much about about how this stuff works, just bought
    the cheapest one in Action.nl.
 
   <img src="img/car/vanilla_green.jpg">
-   This one was also contender, but too expensive ;)
-   IMG_0450.jpg [ Mercedes]
+  <br><br>
+
+  Deconstructed it looks like this.
+
+  <img src="img/car/green_basic_deconstruct.jpg">
+  <br><br>
+    Actually construction of it is really simple, there are two wires
+    going to battery, and two wires going to each engine front and back.
+
+  <img src="img/car/green/green_pcb_closeup.jpg">
+    
 
   </div>
   <br><br>
 
 
   <div>
+    So I have figured, if I can control when electricty goes to the motor, I
+    can control motor. But it is not so easy, raspi can't run such
+    high power through pins. If you connect motor, it will damage raspi
+    You can buy motor controller for raspi or be thrifty, and implement own.
+    Followed
+    <a href="https://business.tutsplus.com/tutorials/controlling-dc-motors-using-python-with-a-raspberry-pi--cms-20051">
+    this tutorial
+    </a> and it worked! 
+    <img src="img/car/green_engine_controller.jpg">
+    
+    Actually it contains an error.
+    
+    Read the chip factsheet, fixed the bug.
+  </div>
+  <br><br>
 
-Make a photo of how it looks before desoldering anything.
-
-IMG_3570.jpg [ Picture of PCB details]
-
-
-Actually construction of it is really simple, there are two wires
-going to battery, and two wires going to each engine front and back.
-
-
-So I have figured, if I can control when electricty goes to the motor, I
-can control motor. But it is not so easy, raspi can't run such
-high power through pins. If you connect motor, it will damage raspi
-
-You can buy motor controller for raspi
-
-or be thrifty, and implement own.
-
-
-Followed this tutorial:
-https://business.tutsplus.com/tutorials/controlling-dc-motors-using-python-with-a-raspberry-pi--cms-20051
-
-and it worked! Actually it contains an error.
-
-Read the chip factsheet, fixed the bug.
-
-
-
-
-Remote control
-first tried TCP
-the tried UDP
-
-
-
-### Camera
-
-
-
-
-### Second car
-
-
-When I learned that the first one is too weak to transport all this weight,
-bought second better one.
-
-I learned at this point that some of more advanced RC cars use more
-refined servo-style motor at front. These use PWM pulse width modulation
-and need a special hardware controller.
-
-Luckily this one was not that expensive, 20-30 euro so still has simplified
-steering with standard(what's the posh word?) engine.
-
-
-
-Remote control was too slow, fixed by buying faster intercae
-
-
-### Machine learning
-
-Nvidia paper, Udacity
-
-
-
-[IMG_4038.m4v]
-
-
-
-
-### Lessons
-* be patient
-* need a lot of money
-
-
-
+  <div>
+  <iframe src="https://drive.google.com/file/d/0Bw2eHK8Zx0mLZ0ZxaVQ3UDdhNGM/preview"></iframe>
   </div>
   <br><br>
 
 
+  <h4> Construction </h4>
+  <div>
+      Implemented a basic remote control system that sends driving command
+      over TCP socket.
+      Not sure about how much power Rpi needs, bought a really big power pack
+      for mobile phone.
+      When it comes to joining stuff together, a lot of ziptie engineering. Thanks roadkill!
 
+  <div>
+  <img src="img/car/green/green_heavy_iso_03.jpg">
+  <img src="img/car/green/green_heavy_iso_02.jpg">
+  <img src="img/car/green_ready_front.jpg">
+  <img src="img/car/green_ready_top.jpg">
+  </div> <br><br>
+
+
+  <h4> Fail no - too heavy</h4>
+
+  <div>
+  <iframe src="https://drive.google.com/file/d/0Bw2eHK8Zx0mLWDV1Ui1NeHNuSE0/preview"></iframe>
+  </div>
+  <br><br>
+
+  <div>
+      That one was way 2 heavy. Bought a way lighter battery with less capactiy.
+      We were really lucky about the Pokemon Go craze, as it meant 
+      a lot of cheap mobile battery packs.
+      <img src="img/car/green_ready_light.jpg">
+      <img src="img/car/green_ready_light_side.jpg">
+  </div>
+  <br><br>
+    
+
+
+  <h4> Camera </h4>
+  <div>
+      A lot of trial and error. 
+      First
+      https://github.com/hamuchiwa/AutoRCCar/blob/master/raspberryPi/stream_client.py
+
+
+      <img src="img/car/measuring_latency_03.jpg">
+      http://blog.davidsingleton.org/nnrccar/
+
+      Measuring latency takes both hands.
+  </div>
+  <br><br>
+
+  <div>
+    <iframe src="https://drive.google.com/file/d/0Bw2eHK8Zx0mLSHM5X1Btam5iWEk/preview"></iframe>
+  </div>
+  <br><br>
+
+
+  <h4> Remote control </h4>
+  <div>
+    
+    Remote control
+    first tried TCP
+    then tried UDP
+  </div>
+  <br><br>
+    
+  <h4> Second car </h4>
+  <div>
+    When I learned that the first one is too weak to transport all this weight,
+    bought second better one.
+    
+    I learned at this point that some of more advanced RC cars use more
+    refined servo-style motor at front. These use PWM pulse width modulation
+    and need a special hardware controller.
+    
+    Luckily this one was not that expensive, 20-30 euro so still has simplified
+    steering with linear engine driving the front whel
+    
+    Remote control was too slow, fixed by buying faster intercae
+
+  </div>
+  <br><br>
+
+  <h4> Machine learning</h4>
+  <div>
+    Nvidia paper, Udacity
+    
+    [IMG_4038.m4v]
+    
+
+
+  </div>
+  <br><br>
+    
+    
+  <h4> Machine learning</h4>
+  <div>
+    
+    
+    ### Lessons
+    * be patient
+    * need a lot of money
+    
+
+  </div>
+  <br><br>
 
 
 
