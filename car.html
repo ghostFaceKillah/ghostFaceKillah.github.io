@@ -30,6 +30,10 @@ h3 {
     max-width: 750px;
 }
 
+#how_it_works_pics {
+    max-width: 750px;
+}
+
 </style>
 <title>Mike Garmulewicz - gf4c3 - gf4c3k1la </title>
 </head>
@@ -54,9 +58,8 @@ h3 {
 
 
   <h4> Idea </h4>
-  <div>
-  A nice scheme how it workxx.
-  Draw on ipad.
+  <div id="first_pics">
+  <img src="img/car/how_it_works.jpg" style="max-width: 750px">
   </div>
   <br><br>
 
@@ -91,33 +94,37 @@ h3 {
     Actually construction of it is really simple, there are two wires
     going to battery, and two wires going to each engine front and back.
 
-  <img src="img/car/green/green_pcb_closeup.jpg">
-    
-
+    <br><br>
+    <img src="img/car/green/green_pcb_closeup.jpg">
   </div>
   <br><br>
 
 
   <div>
-    So I have figured, if I can control when electricty goes to the motor, I
-    can control motor. But it is not so easy, raspi can't run such
-    high power through pins. If you connect motor, it will damage raspi
+      So we can easily figure out that 
+     if we can control when electricty goes to the motor, we
+    can control motor.
+   
+    We cannot drive the motor directly by raspi output pins though,
+    as the current is too high.
+    If we connected motor, it would damage raspi.
+
     You can buy motor controller for raspi or be thrifty, and implement own.
-    Followed
+    I have chosen to follow
     <a href="https://business.tutsplus.com/tutorials/controlling-dc-motors-using-python-with-a-raspberry-pi--cms-20051">
     this tutorial
-    </a> and it worked! 
-    <img src="img/car/green_engine_controller.jpg">
-    
-    Actually it contains an error.
-    
-    Read the chip factsheet, fixed the bug.
-  </div>
-  <br><br>
+    </a> and it worked.
+    <br><br>
 
-  <div>
-  <iframe src="https://drive.google.com/file/d/0Bw2eHK8Zx0mLZ0ZxaVQ3UDdhNGM/preview"></iframe>
-  </div>
+    <img src="img/car/green_engine_controller.jpg">
+    <br><br>
+    Actually, I have learned soon that the tutorial contains a small error.
+    Can't drive two motors as shown
+    
+    Read the chip factsheet, fixed the bug. 
+    Can control car completely from raspi.
+
+    <iframe src="https://drive.google.com/file/d/0Bw2eHK8Zx0mLZ0ZxaVQ3UDdhNGM/preview"></iframe>
   <br><br>
 
 
@@ -159,7 +166,9 @@ h3 {
   <div>
       A lot of trial and error. 
       First
-      https://github.com/hamuchiwa/AutoRCCar/blob/master/raspberryPi/stream_client.py
+      <!--
+          https://github.com/hamuchiwa/AutoRCCar/blob/master/raspberryPi/stream_client.py
+      -->
 
 
       <img src="img/car/measuring_latency_03.jpg">
@@ -187,23 +196,66 @@ h3 {
   <h4> Second car </h4>
   <div>
     When I learned that the first one is too weak to transport all this weight,
-    bought second better one.
-    
+    bought second stronger one. This one was 27 euro instead 5 euro.
+
+    <br><br>
+      <img src="img/car/black/black_vanilla.jpg">
+    <br><br>
+
     I learned at this point that some of more advanced RC cars use more
     refined servo-style motor at front. These use PWM pulse width modulation
     and need a special hardware controller.
     
-    Luckily this one was not that expensive, 20-30 euro so still has simplified
-    steering with linear engine driving the front whel
+
+    <br><br>
+      <img src="img/car/black/black_disassembly.jpg">
+    <br><br>
+
     
-    Remote control was too slow, fixed by buying faster intercae
+    Luckily this one was not that expensive, 20-30 euro so still has simplified
+    steering with linear engine driving the front wheel, as tested by most direct
+    of methods.
+    
+    <br><br>
+      <img src="img/car/black/black_disassembly_01.jpg">
+    <br><br>
+
+    Cleaned up the control module a bit and fit it into slightly
+    tighter package.
+
+
+    <br><br>
+      <img src="img/car/black/black_engine_controller_clean.jpg">
+    <br><br>
+
+    Cleaned up the control module a bit and fit it into slightly
+    tighter package.
+    <br><br>
+      <img src="img/car/black/black_iso_no_cam_2.jpg">
+    <br><br>
+
+    Added high quality camera holder.
+
+    <br><br>
+      <img src="img/car/black/black_ready_iso_01.jpg">
+    <br><br>
+
+
+    Show vid/black_is_fast
 
   </div>
   <br><br>
 
   <h4> Machine learning</h4>
   <div>
-    Nvidia paper, Udacity
+      Idea was to do Nvidia paper, seen it used at Udacity
+      self driving car nanodegree and in comma.ai paper.
+
+      Did a bit data gathering, 3 sessions of around hour.
+      Started off with gathering one big track, around 10 meters
+      around the whole house.
+
+      Then decided to simplify
     
     [IMG_4038.m4v]
     
@@ -213,13 +265,12 @@ h3 {
   <br><br>
     
     
-  <h4> Machine learning</h4>
+  <h4> Lessons </h4>
   <div>
     
     
-    ### Lessons
-    * be patient
-    * need a lot of money
+    * be patient and persistent
+    * need a bit of money
     
 
   </div>
