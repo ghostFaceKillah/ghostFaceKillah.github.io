@@ -1,46 +1,47 @@
-sealed abstract class Element {
-  def compile: List[String]
-}
-case class TextBlob(text: List[String]) extends Element {
-  override def compile = List("<div>") ::: text ::: List( "</div>", "<br><br>", "")
-}
-case class Image(path: Option[String]) extends Element {
-  def smallPath: String = path match {
-    case Some(aPath) => aPath.split("\\.")(0) + "_small" + aPath.split("\\.")(1)
-    case _ => throw new Exception("Malformed object")
-  }
-
-  override def compile = path match {
-    case Some(path) => List(
-      "<div>",
-      s"<a href='$path'><img src='$smallPath'></a>",
-      "</div>", "<br><br>", ""
-    )
-    case _ => throw new Exception("Malformed object")
-  }
-}
-
-case class VideoFrame(path: Option[String]) extends Element {
-  override def compile: List[String] = path match {
-    case Some(path) => List(s"<iframe src='$path'></iframe>", "")
-    case _ => throw new Exception("Malformed object")
-  }
-}
-case class Heading(level: Int, text: Option[String]) extends Element {
-  override def compile: List[String] = text match {
-    case Some(text) => List(s"<h$level>$text</h$level>", "")
-    case _ => throw new Exception("Malformed object")
-  }
-}
-
-case class SiteHeader() extends Element {
-  def defaultHeaderFname: String = "/Users/misiu-dev/IdeaProjects/untitled1/src/defaultHeader.mike_html"
-  override def compile: List[String] = scala.io.Source.fromFile(defaultHeaderFname).getLines.toList
-}
-
-case class Line(no: Int, content: String)
-
 object Parser {
+  sealed abstract class Element {
+    def compile: List[String]
+  }
+  case class TextBlob(text: List[String]) extends Element {
+    override def compile = List("<div>") ::: text ::: List( "</div>", "<br><br>", "")
+  }
+  case class Image(path: Option[String]) extends Element {
+    def smallPath: String = path match {
+      case Some(aPath) => aPath.split("\\.")(0) + "_small" + aPath.split("\\.")(1)
+      case _ => throw new Exception("Malformed object")
+    }
+
+    override def compile = path match {
+      case Some(path) => List(
+        "<div>",
+        s"<a href='$path'><img src='$smallPath'></a>",
+        "</div>", "<br><br>", ""
+      )
+      case _ => throw new Exception("Malformed object")
+    }
+  }
+
+  case class VideoFrame(path: Option[String]) extends Element {
+    override def compile: List[String] = path match {
+      case Some(path) => List(s"<iframe src='$path'></iframe>", "")
+      case _ => throw new Exception("Malformed object")
+    }
+  }
+  case class Heading(level: Int, text: Option[String]) extends Element {
+    override def compile: List[String] = text match {
+      case Some(text) => List(s"<h$level>$text</h$level>", "")
+      case _ => throw new Exception("Malformed object")
+    }
+  }
+
+  case class SiteHeader() extends Element {
+    def defaultHeaderFname: String = "/Users/misiu-dev/IdeaProjects/untitled1/src/defaultHeader.mike_html"
+    override def compile: List[String] = {
+      scala.io.Source.fromFile(defaultHeaderFname).getLines.toList
+    }
+  }
+
+  case class Line(no: Int, content: String)
 
   def killDoubleBlank(lines: List[Line]): List[Line] = lines match {
     case Line(_, "") :: Line(no, "") :: rest => killDoubleBlank(Line(no, "") :: rest)
@@ -66,7 +67,8 @@ object Parser {
     case VideoFrame(None) => VideoFrame(Some(line.content))
     case Heading(level: Int, None) => Heading(level, Some(line.content))
     case _ => throw new Exception(
-      s"Error in line ${line.no}: Cannot append to current token $currentToken text: ${line.content}"
+      s"Error in line ${line.no}: Cannot append to " +
+      "current token $currentToken text: ${line.content}"
     )
   }
 
@@ -103,13 +105,9 @@ object Parser {
     .zipWithIndex
     .map{ case (lineText: String, idx:Int) => Line(idx + 1, lineText) }
 
-  /// def main(args: Array[String]): Unit = {
-  def main(): Unit = {
+  def main(args: Array[String]): Unit = {
     val lines = getFileLines("/Users/misiu-dev/IdeaProjects/untitled1/src/example.txt")
     val tokens = tokenize(lines)
     val html = compile(tokens)
-    print(html)
   }
 }
-
-Parser.main()
