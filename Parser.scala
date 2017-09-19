@@ -1,13 +1,30 @@
+// TODO: Add parsing gifs better
+// TODO: rescale the imgs
+
+
 object Parser {
+  import java.io._
+
   sealed abstract class Element {
     def compile: List[String]
   }
   case class TextBlob(text: List[String]) extends Element {
-    override def compile = List("<div>") ::: text ::: List( "</div>", "<br><br>", "")
+    override def compile = List("<div>") ::: text.reverse ::: List( "</div>", "<br><br>", "")
   }
+
+  case class WideDiv(text: List[String]) extends Element {
+    override def compile = List("<div class='wide'>") ::: text.reverse ::: List( "</div>", "<br><br>", "")
+  }
+
+
   case class Image(path: Option[String]) extends Element {
     def smallPath: String = path match {
-      case Some(aPath) => aPath.split("\\.")(0) + "_small" + aPath.split("\\.")(1)
+      case Some(aPath) => aPath.split("\\.")(1) match {
+        // we don't make gifs smaller
+        case "gif" => aPath
+        case _ => aPath.split("\\.")(0) + "_small." + aPath.split("\\.")(1)
+
+      }
       case _ => throw new Exception("Malformed object")
     }
 
@@ -23,7 +40,7 @@ object Parser {
 
   case class VideoFrame(path: Option[String]) extends Element {
     override def compile: List[String] = path match {
-      case Some(path) => List(s"<iframe src='$path'></iframe>", "")
+      case Some(path) => List("<div>", s"<iframe src='$path'></iframe>", "</div>", "<br><br>", "")
       case _ => throw new Exception("Malformed object")
     }
   }
@@ -35,7 +52,7 @@ object Parser {
   }
 
   case class SiteHeader() extends Element {
-    def defaultHeaderFname: String = "/Users/misiu-dev/IdeaProjects/untitled1/src/defaultHeader.mike_html"
+    def defaultHeaderFname: String = "default_header.html"
     override def compile: List[String] = {
       scala.io.Source.fromFile(defaultHeaderFname).getLines.toList
     }
@@ -50,7 +67,7 @@ object Parser {
     case xs => xs
   }
 
-  def newToken(firstLine: String): Element = firstLine match {
+  def newToken(firstLine: String): Element = firstLine.trim match {
     case "*img*" => Image(None)
     case "*iframe*" => VideoFrame(None)
     case "*h1*" => Heading(1, None)
@@ -58,11 +75,13 @@ object Parser {
     case "*h3*" => Heading(3, None)
     case "*h4*" => Heading(4, None)
     case "*h5*" => Heading(5, None)
+    case "*wide-div*" => WideDiv(List())
     case x => TextBlob(List(x))
   }
 
   def appendToCurrentToken(currentToken: Element, line: Line): Element = currentToken match {
     case TextBlob(text) => TextBlob(line.content :: text)
+    case WideDiv(text) => WideDiv(line.content :: text)
     case Image(None) => Image(Some(line.content))
     case VideoFrame(None) => VideoFrame(Some(line.content))
     case Heading(level: Int, None) => Heading(level, Some(line.content))
@@ -105,9 +124,19 @@ object Parser {
     .zipWithIndex
     .map{ case (lineText: String, idx:Int) => Line(idx + 1, lineText) }
 
+
+  def writeToFile(content: String, fname: String) = {
+    val pw = new PrintWriter(new File(fname))
+    pw.write(content)
+    pw.close
+  }
+
   def main(args: Array[String]): Unit = {
-    val lines = getFileLines("/Users/misiu-dev/IdeaProjects/untitled1/src/example.txt")
+    val name = args(0)
+
+    val lines = getFileLines(s"raw_text/$name.txt")
     val tokens = tokenize(lines)
     val html = compile(tokens)
+    writeToFile(html, s"$name.html")
   }
 }
