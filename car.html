@@ -5,7 +5,13 @@ body {
    font-family: monospace;
     font-size:large;
     text-align: center;
-    background: linear-gradient(141deg, #fffb98, #a8f6ff);
+    background: linear-gradient(141deg,
+        white,
+        white,
+        #e0fbff,
+        #ffaaaa,
+        #3157af
+        );
 }
 div {
     text-align: justify;
@@ -296,7 +302,7 @@ steering the L293D and in turn, the car.
 </div>
 <br><br>
 
-<h4>Hardware</h4>
+<h4>* Hardware * </h4>
 
 <div>
 In order to test the remote control of the car, we needed to power the RPi.
@@ -312,7 +318,7 @@ Roadkill</a>,
 in which two guys, mostly by themselves, fix extremely clapped out classic
 American cars, usually on the road / in WalMart parking lot / in the junkyard.
 Typically they take some rotten engine-less chassis and put in a
-cheapest-they-one-can-find V8 into them.  Needless to say, they are masters of
+cheapest-they-can-find V8 into them.  Needless to say, they are masters of
 using zip-ties.
 </div>
 <br><br>
@@ -346,7 +352,7 @@ that will move together. The end product looked like this:
 
 <div>
 You may say that it looks pretty, but that's about all it did.  Notice how big
-the battery is in relation to the car. That quickly turned out to be a problem.
+the battery is in relation to the car. Turns out, it was way too big.
 Unfortunately, the car was significantly too heavy to move on its own.
 </div>
 <br><br>
@@ -357,10 +363,10 @@ Unfortunately, the car was significantly too heavy to move on its own.
 <br><br>
 
 <div>
-The heaviest part of the car was the battery pack powering the RasPi. After
+So the heaviest part of the car was the battery pack powering the RasPi. After
 getting some initial experiences it became clear that 10000 mAh is a lot of
 more than sufficient power to run RasPi on, even with WiFi interface for
-reasonable amount of time.  Thus it was easiest to save weight by buying a way
+reasonable amount of time. Thus it was easiest to save weight by buying a way
 lighter battery with less capactiy.
 </div>
 <br><br>
@@ -409,9 +415,8 @@ At the beginning we have struggled a lot with high latency:
 <br><br>
 
 <div>
-but quickly we have converged to a pretty resilent UDP based stream.
-The code version that has worked best for us in the end was version
-presented in 
+but quickly we have converged to a pretty resilent UDP based stream.  The code
+version that has worked best for us in the end was version presented in 
 <a href="https://picamera.readthedocs.io/en/release-1.13/recipes2.html#rapid-capture-and-streaming">
 Advanced Recipes in picamera docs</a>, but with UDP based connection. You can see the code 
 <a href="https://github.com/ghostFaceKillah/mini-self-driving-car/blob/master/src/raspi/video.py">
@@ -426,10 +431,29 @@ here</a>. After this, we were consistently seeing good latency:
 
 <div>
 Measuring latency takes both hands.
+jA
+An interesting detail here is camera holder.  Filip works in 
+<a href="https://www.3dhubs.com"> 3D Hubs</a>, an Amsterdam based 3d printing
+company. As a perk, team members are given significant 3D printing allowance,
+which we used to 3d print case for RasPi camera in high quality. In this
+technology they shoot plastic-paticle spray with laser so it solifidies.  This
+technology results in very accurate and resilent products.
 </div>
 <br><br>
 
-<h4>Second car</h4>
+<div>
+** Come up with a good picture for it **
+</div>
+<br><br>
+
+<h4>* Second car *</h4>
+
+<div>
+After the first car couldn't move under it's own weight even with light battery
+pack, it became clear we need a new one. In the local shopping mall, this
+time in a proper toy shop we have found this car:
+</div>
+<br><br>
 
 <div>
 <a href='img/car/black/black_vanilla.jpg'><img src='img/car/black/black_vanilla_small.jpg'></a>
@@ -437,9 +461,13 @@ Measuring latency takes both hands.
 <br><br>
 
 <div>
-I learned at this point that some of more advanced RC cars use more
-refined servo-style motor at front. These use PWM pulse width modulation
-and need a special hardware controller.
+which is a bigger and slightly more advanced construction.
+However, in this car we can find some interesting mechanical pieces
+such rear differential, and slightly more advanced front steering.
+For now, I have resisted the temptation to tear it completely apart,
+but I think I will come back to it after we move to bigger car.
+The disassembly yielded a similar result for our project - three wire pairs,
+one for battery, one for front steering one for back steering.
 </div>
 <br><br>
 
@@ -449,9 +477,10 @@ and need a special hardware controller.
 <br><br>
 
 <div>
-Luckily this one was not that expensive, 20-30 euro so still has simplified
-steering with linear engine driving the front wheel, as tested by most direct
-of methods.
+As we didn't want to disassemble the front steering, we were unsure
+whether it will work in the simple, linear way. That is whether by just
+applying voltage to front we could steer the car.
+We tested it by hand:
 </div>
 <br><br>
 
@@ -461,8 +490,9 @@ of methods.
 <br><br>
 
 <div>
-Cleaned up the control module a bit and fit it into slightly
-tighter package.
+and luckily it worked, which meant we could reuse the previous engine control
+unit.  We used the opportunity to clean up the control module a bit and fit it
+into slightly tighter package.
 </div>
 <br><br>
 
@@ -472,8 +502,7 @@ tighter package.
 <br><br>
 
 <div>
-Cleaned up the control module a bit and fit it into slightly
-tighter package.
+Overall, the ready product looked like this:
 </div>
 <br><br>
 
@@ -483,7 +512,7 @@ tighter package.
 <br><br>
 
 <div>
-Added high quality camera holder.
+After this we added above described high quality camera holder.
 </div>
 <br><br>
 
@@ -502,7 +531,12 @@ Show vid/black_is_fast
 <div>
 Remote control
 first tried TCP
-then tried UDP
+then tried UDP, then added stronger Wifi
+</div>
+<br><br>
+
+<div>
+** Picture of stronger wifi **
 </div>
 <br><br>
 
@@ -567,12 +601,25 @@ It worked.
 </div>
 <br><br>
 
-<h4>Lessons</h4>
+<h4>* Lessons *</h4>
 
 <div>
 <ul>
 <li> be patient and persistent
 <li> need a bit of money
+</ul>
+</div>
+<br><br>
+
+<h4>* Plans for future *</h4>
+
+<div>
+<ul>
+<li> Riding around a bigger track
+<li> Lane detection, cross track error based PID controller
+<li> Lidar & mapping
+<li> Path planning
+<li> LSD SLAM
 </ul>
 </div>
 <br><br>
