@@ -33,18 +33,20 @@ h3 {
 <title>Mike Garmulewicz - gf4c3 - gf4c3k1la </title>
 </head>
 <body>
-<h2>How to build small self driving car?</h2>
+<h2>How to build a small self driving car?</h2>
 
 <div>
 My recent side project is a building small self driving car with
-my friend Filip.
+my friend Filip.  See the code on 
+<a href="https://github.com/ghostFaceKillah/mini-self-driving-car.git">
+my github</a>.
 </div>
 <br><br>
 
 <div>
-There is fair amount of people doing similar projects on the internet, there
-are even folks who race these things.
-If you are interested, you could do it too - and I'm sure you'd learn a lot.
+There is fair amount of folks doing similar projects, there are even people who
+race these things.  If it looks interesting, you could do it too - it is easier than 
+ever and I'm sure you'd learn a lot.
 </div>
 <br><br>
 
@@ -88,8 +90,13 @@ The most important element of this project is the car control loop:
 <br><br>
 
 <div>
-To enable all of this, pieces of various software infrastructure and harware
-are necessary.  In the text below I will explain how we figured out all these
+To enable all of this, pieces of various software infrastructure and hardware
+are necessary.
+</div>
+<br><br>
+
+<div>
+In the text below I will explain how we figured out all these
 details and hopefully convey that it was a lot of fun.
 </div>
 <br><br>
@@ -126,7 +133,7 @@ It is so good:
 <li> teaches you the practical basics via small projects:
   <ul>
   <li>how to solder,
-  <li> how to use multimeter
+  <li> how to use multimeter,
   </ul>
 <li> is exceptionally easy-to-read.
 </ul>
@@ -223,26 +230,28 @@ able to drive-by-code.
 </div>
 <br><br>
 
-<h5>Warning</h5>
+<h4>Warning!</h4>
 
 <div>
-As Raspberry Pi has some General Purpose Input / Output (GPIO) pins, that
-generally it is tempting to try to hook up the engine directly to RasPi.
-This is a very bad idea, which will destroy your RasPi.
+As Raspberry Pi has some General Purpose Input/Output (GPIO) pins
+it is tempting to try to hook up the engine directly to RasPi.
+This is a very bad idea, which will destroy your RasPi, by running too much power
+through it.
 </div>
 <br><br>
 
 <div>
 Thus, we need to implement a hardware engine controller which based
-on signals from Raspi will drive the motors
-</div>
-<br><br>
-
-<div>
-You can buy motor controller for raspi or be thrifty, and implement own.  I
-have chosen to follow
+on signals from Raspi will drive the motors.
+You can buy a ready motor controller or be thrifty, and implement own.
+As conceptually the wanted mechanism of action sounds like transistor - 
+"based on small electricty turn on flow of bigger electricty" -
+I have decided to build my own engine controller.
+Following
 <a href="https://business.tutsplus.com/tutorials/controlling-dc-motors-using-python-with-a-raspberry-pi--cms-20051">
-this tutorial </a> and it worked.
+this tutorial
+</a>
+produced an engine controller based on L293D chip.
 </div>
 <br><br>
 
@@ -252,14 +261,8 @@ this tutorial </a> and it worked.
 <br><br>
 
 <div>
-Actually, I have learned soon that the tutorial contains a small error.
-Can't drive two motors as shown
-</div>
-<br><br>
-
-<div>
-Read the chip factsheet, fixed the bug.
-Can control car completely from raspi.
+The tutorial worked - at least partially. I was able to steer the front wheels
+and move the car forward, but there was no reverse gear.
 </div>
 <br><br>
 
@@ -268,13 +271,56 @@ Can control car completely from raspi.
 </div>
 <br><br>
 
-<h4>Construction</h4>
+<div>
+Turns out the method shown in the above tutorial couldn't spin second engine
+in the reverse direction.
+After consulting the 
+<a href="http://www.ti.com/lit/ds/symlink/l293.pdf">
+chip's factsheet
+</a>
+I have come up with another way of hooking up L293D, which fixed the bug. 
+Now I could control car completely from Python code running on RasPi.
+</div>
+<br><br>
 
 <div>
-Implemented a basic remote control system that sends driving command over TCP
-socket.  Not sure about how much power Rpi needs, bought a really big power
-pack for mobile phone.  When it comes to joining stuff together, a lot of
-ziptie engineering. Thanks roadkill!
+Now, as I had a car that can be controlled by keyboard attached to RasPi, it
+was time to make the control remote. I have connected a basic small WiFi dongle
+to Raspberry and implemented a pair of Python scripts:
+<ul>
+<li> Server-side script capturing keyboard events and sending control
+events based on them to RasPi,
+<li> RasPi-side script listening for those events on TCP socket and based on them
+steering the L293D and in turn, the car.
+</ul>
+</div>
+<br><br>
+
+<h4>Hardware</h4>
+
+<div>
+In order to test the remote control of the car, we needed to power the RPi.
+Not sure about how much power it needs, we have bought a pretty big power
+bank for mobile phone with electric charge of 10.000 mAh, weighting around 400 g.
+</div>
+<br><br>
+
+<div>
+I am huge fan of American automotive show
+<a href="https://www.youtube.com/watch?v=t8zYpmoV0qE&list=PL12C0C916CECEA3BC">
+Roadkill</a>,
+in which two guys, mostly by themselves, fix extremely clapped out classic
+American cars, usually on the road / in WalMart parking lot / in the junkyard.
+Typically they take some rotten engine-less chassis and put in a
+cheapest-they-one-can-find V8 into them.  Needless to say, they are masters of
+using zip-ties.
+</div>
+<br><br>
+
+<div>
+Inspired by Freiburger and Finnegan experiences, I have relied on ziptie engineering
+in order to combine the collection of parts into one coherrent vehicle
+that will move together. The end product looked like this:
 </div>
 <br><br>
 
@@ -298,7 +344,12 @@ ziptie engineering. Thanks roadkill!
 </div>
 <br><br>
 
-<h4>Fail - too heavy</h4>
+<div>
+You may say that it looks pretty, but that's about all it did.  Notice how big
+the battery is in relation to the car. That quickly turned out to be a problem.
+Unfortunately, the car was significantly too heavy to move on its own.
+</div>
+<br><br>
 
 <div>
 <iframe src='https://drive.google.com/file/d/0Bw2eHK8Zx0mLWDV1Ui1NeHNuSE0/preview'></iframe>
@@ -306,9 +357,18 @@ ziptie engineering. Thanks roadkill!
 <br><br>
 
 <div>
-That one was way 2 heavy. Bought a way lighter battery with less capactiy.
-We were really lucky about the Pokemon Go craze, as it meant a lot of cheap
-mobile battery packs.
+The heaviest part of the car was the battery pack powering the RasPi. After
+getting some initial experiences it became clear that 10000 mAh is a lot of
+more than sufficient power to run RasPi on, even with WiFi interface for
+reasonable amount of time.  Thus it was easiest to save weight by buying a way
+lighter battery with less capactiy.
+</div>
+<br><br>
+
+<div>
+We were really lucky about the Pokemon Go craze that has rolled through the Netherlands
+in early 2017, as it meant abundant supply of cheap mobile battery packs.
+We quickly sourced a new one, and with the new battery, the car looked like this:
 </div>
 <br><br>
 
@@ -322,13 +382,40 @@ mobile battery packs.
 </div>
 <br><br>
 
-<h4>Camera</h4>
+<div>
+Unfortunately, the car was still way too weak to drive well with RasPi
+strapped to its back. We needed a bigger car, but before I describe it,
+I will show how we have put together image capture and streaming system.
+</div>
+<br><br>
+
+<h3>* Image capture and streaming *</h3>
 
 <div>
-A lot of trial and error.  First followed
-<a href="https://github.com/hamuchiwa/AutoRCCar/blob/master/raspberryPi/stream_client.py">
-this 
-</a> implementation, then followd where it was taken from - picamera recipes.
+Building this subsystem was a big loop of trial and error.
+In the end we have settled for RPi Camera on hardware side and
+amazing <b>picamera</b> Python module.
+</div>
+<br><br>
+
+<div>
+At the beginning we have struggled a lot with high latency:
+</div>
+<br><br>
+
+<div>
+<iframe src='https://drive.google.com/file/d/0Bw2eHK8Zx0mLSHM5X1Btam5iWEk/preview'></iframe>
+</div>
+<br><br>
+
+<div>
+but quickly we have converged to a pretty resilent UDP based stream.
+The code version that has worked best for us in the end was version
+presented in 
+<a href="https://picamera.readthedocs.io/en/release-1.13/recipes2.html#rapid-capture-and-streaming">
+Advanced Recipes in picamera docs</a>, but with UDP based connection. You can see the code 
+<a href="https://github.com/ghostFaceKillah/mini-self-driving-car/blob/master/src/raspi/video.py">
+here</a>. After this, we were consistently seeing good latency:
 </div>
 <br><br>
 
@@ -339,20 +426,6 @@ this
 
 <div>
 Measuring latency takes both hands.
-</div>
-<br><br>
-
-<div>
-<iframe src='https://drive.google.com/file/d/0Bw2eHK8Zx0mLSHM5X1Btam5iWEk/preview'></iframe>
-</div>
-<br><br>
-
-<h4>Remote control</h4>
-
-<div>
-Remote control
-first tried TCP
-then tried UDP
 </div>
 <br><br>
 
@@ -424,6 +497,15 @@ Show vid/black_is_fast
 </div>
 <br><br>
 
+<h4>Remote control story</h4>
+
+<div>
+Remote control
+first tried TCP
+then tried UDP
+</div>
+<br><br>
+
 <h4>Machine learning</h4>
 
 <div>
@@ -488,7 +570,9 @@ It worked.
 <h4>Lessons</h4>
 
 <div>
-* be patient and persistent
-* need a bit of money
+<ul>
+<li> be patient and persistent
+<li> need a bit of money
+</ul>
 </div>
 <br><br>
