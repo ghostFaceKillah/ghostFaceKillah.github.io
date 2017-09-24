@@ -36,7 +36,15 @@ h3 {
 <h2>How to build small self driving car?</h2>
 
 <div>
-My recent side project is a small self driving car.
+My recent side project is a building small self driving car with
+my friend Filip.
+</div>
+<br><br>
+
+<div>
+There is fair amount of people doing similar projects on the internet, there
+are even folks who race these things.
+If you are interested, you could do it too - and I'm sure you'd learn a lot.
 </div>
 <br><br>
 
@@ -47,22 +55,86 @@ My recent side project is a small self driving car.
 </div>
 <br><br>
 
-<h4>Idea</h4>
+<h4>* Idea *</h4>
 
 <div>
 <a href='img/car/how_it_works.jpg'><img src='img/car/how_it_works_small.jpg'></a>
 </div>
 <br><br>
 
-<h4>Beginnings - First car</h4>
+<div>
+The most important element of this project is the car control loop:
+<ul>
+  <li>
+    On board of the car there is forward facing <b>RasPi camera</b>.
+  <li>
+    The <b> image stream</b> is sent to another computer, 
+    which streams <b>steering commands</b> back:
+    "go forward", "stop", "turn left", etc.
+  <li>
+    Steering commands are issued in one of two ways:
+    <ul>
+      <li>
+        <b>Human input</b>, where you steer the car in racing video game fashion.
+      </li>
+      <li>
+        <b> Self-driving algorithm</b>, which tries to guess what would a human do 
+        based on current video frame.
+      </li>
+    </ul>
+  </li>
+</ul>
+</div>
+<br><br>
 
 <div>
-Started the story with learning a bit about electronics.
-Discovered a great book:
+To enable all of this, pieces of various software infrastructure and harware
+are necessary.  In the text below I will explain how we figured out all these
+details and hopefully convey that it was a lot of fun.
+</div>
+<br><br>
+
+<h4>* Before the first car *</h4>
+
+<div>
+The whole story started when I finally had time to learn some electronics.
+I have always wanted to understand it, as it delivers such exceptional
+amounts of value and - in my book - is as close to magic as it gets.
+</div>
+<br><br>
+
+<div>
+There are so many <a href="https://artofelectronics.net">cool books about electonics</a>,
+<a href="http://lcamtuf.coredump.cx/electronics/">online write-ups</a>,
+<a href="https://www.youtube.com/user/eaterbc">youtube videos</a>,
+<a href="http://www.falstad.com/circuit/">electronics simulators</a>,
+but what I found most practical for the car project was this book targetted to young teens:
 <a href="https://www.amazon.com/Make-Electronics-Discovery-Charles-Platt/dp/0596153740">
-Make: electronics
-</a>.
-and learned a little bit about basic electronics.
+</div>
+<br><br>
+
+<div>
+<a href='img/car/book-make-electronics.jpg'><img src='img/car/book-make-electronics_small.jpg'></a>
+</div>
+<br><br>
+
+<div>
+</a>
+It is so good:
+<ul>
+<li> has light-hearted vibe about it,
+<li> teaches you the practical basics via small projects:
+  <ul>
+  <li>how to solder,
+  <li> how to use multimeter
+  </ul>
+<li> is exceptionally easy-to-read.
+</ul>
+It lacks the proper theory build-up, so you will have to read up on that
+somewhere else if you are interested, but for the car project it should be
+sufficient.  After some lazy evenings with soldering iron I was able to reverse
+engineer and debug basic electronic circuits such as this "astable
+multivibrator", to use the proper name:
 </div>
 <br><br>
 
@@ -71,10 +143,14 @@ and learned a little bit about basic electronics.
 </div>
 <br><br>
 
+<h3>* The first car era *</h3>
+
 <div>
-Bought a little green car, disassembled it completely.  I didn't understand too
-much about about how this stuff works, just bought the cheapest one in
-Action.nl.
+Armed with knowledge of rudiments of electronics, it was time to reverse
+engineer how an RC car works.  As I generally had little idea what I was doing,
+I have decided to get cheapest one I could find so I wouldn't be too wasteful
+if I broke it while disassembling it.  The cheapest one I could find was this
+little marvel:
 </div>
 <br><br>
 
@@ -84,7 +160,27 @@ Action.nl.
 <br><br>
 
 <div>
-Deconstructed it looks like this.
+which I have bought in Dutch bargain store Action.nl, new, for below 5 euro.
+</div>
+<br><br>
+
+<div>
+Deconstructing it, you just cannot help wondering how
+ simple and elegantly designed it is. 
+It truly amazes me that for under 5 Euro per unit
+people are able to design, fabricate, package, ship 
+and sell this toy.
+It is possible mostly due to amusingly "to the point", "brutalist"
+design, where most of elements are right on their tolerances
+and wanted effects are achieved in the simplest possible way.
+This approach is best showcased by the design of the front wheels
+steering system, which I will describe below.
+</div>
+<br><br>
+
+<div>
+Coming back to the self-driving project, when we pop the body
+of the frame, we see this:
 </div>
 <br><br>
 
@@ -94,8 +190,21 @@ Deconstructed it looks like this.
 <br><br>
 
 <div>
-Actually construction of it is really simple, there are two wires
-going to battery, and two wires going to each engine front and back.
+Luckily for our project,
+this construction can be adapted to our needs in a straightforward fashion.
+In the center we see the logic PCB.
+There are three pairs of red & black wires attached to the PCB:
+<ul>
+<li> a pair feeding power from the battery pack
+<li> another pair sending power to the back motor, which movese car forward and backward
+<li> one more pair sending power to the front wheel steering system
+</ul>
+</div>
+<br><br>
+
+<div>
+When logic board receives radio inputs, it (more-or-less) connects
+the battery wires with the engine wires and the car moves.
 </div>
 <br><br>
 
@@ -105,16 +214,27 @@ going to battery, and two wires going to each engine front and back.
 <br><br>
 
 <div>
-So we can easily figure out that
-if we can control when electricty goes to the motor, we
-can control motor.
+You can see for yourself - if you directly connect the pair from the battery to
+the pair coming from one of engines (front or back engine), you see that the
+wheels move in wanted directions.  So if we substitute the current logic board
+with our custom RasPi based logic board that controls connection between
+battery and engines based on instructions that we control by code, we would be
+able to drive-by-code.
+</div>
+<br><br>
+
+<h5>Warning</h5>
+
+<div>
+As Raspberry Pi has some General Purpose Input / Output (GPIO) pins, that
+generally it is tempting to try to hook up the engine directly to RasPi.
+This is a very bad idea, which will destroy your RasPi.
 </div>
 <br><br>
 
 <div>
-We cannot drive the motor directly by raspi output pins though,
-as the current is too high.
-If we connected motor, it would damage raspi.
+Thus, we need to implement a hardware engine controller which based
+on signals from Raspi will drive the motors
 </div>
 <br><br>
 
