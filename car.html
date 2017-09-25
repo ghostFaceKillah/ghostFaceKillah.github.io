@@ -415,6 +415,11 @@ At the beginning we have struggled a lot with high latency:
 <br><br>
 
 <div>
+** show camera_too_slow_on_car.m4v ?? **
+</div>
+<br><br>
+
+<div>
 but quickly we have converged to a pretty resilent UDP based stream.  The code
 version that has worked best for us in the end was version presented in 
 <a href="https://picamera.readthedocs.io/en/release-1.13/recipes2.html#rapid-capture-and-streaming">
@@ -431,7 +436,7 @@ here</a>. After this, we were consistently seeing good latency:
 
 <div>
 Measuring latency takes both hands.
-jA
+  
 An interesting detail here is camera holder.  Filip works in 
 <a href="https://www.3dhubs.com"> 3D Hubs</a>, an Amsterdam based 3d printing
 company. As a perk, team members are given significant 3D printing allowance,
@@ -449,7 +454,7 @@ technology results in very accurate and resilent products.
 <h4>* Second car *</h4>
 
 <div>
-After the first car couldn't move under it's own weight even with light battery
+After the first car wouldn't move under it's own weight even with light battery
 pack, it became clear we need a new one. In the local shopping mall, this
 time in a proper toy shop we have found this car:
 </div>
@@ -463,7 +468,7 @@ time in a proper toy shop we have found this car:
 <div>
 which is a bigger and slightly more advanced construction.
 However, in this car we can find some interesting mechanical pieces
-such rear differential, and slightly more advanced front steering.
+such as rear differential, and slightly more advanced front steering.
 For now, I have resisted the temptation to tear it completely apart,
 but I think I will come back to it after we move to bigger car.
 The disassembly yielded a similar result for our project - three wire pairs,
@@ -522,16 +527,89 @@ After this we added above described high quality camera holder.
 <br><br>
 
 <div>
-Show vid/black_is_fast
+The black car turned out to be quite fast:
 </div>
 <br><br>
 
-<h4>Remote control story</h4>
+<div>
+<a href='img/car/black_is_fast.gif'><img src='img/car/black_is_fast.gif'></a>
+</div>
+<br><br>
 
 <div>
-Remote control
-first tried TCP
-then tried UDP, then added stronger Wifi
+And it was fun to just drive it around.
+</div>
+<br><br>
+
+<div>
+<iframe src='https://drive.google.com/file/d/0Bw2eHK8Zx0mLSm8xVFc4Rk5YR00/preview'></iframe>
+</div>
+<br><br>
+
+<h4>* Remote control *</h4>
+
+<div>
+Of course, driving by wire didn't cut it for us.
+</div>
+<br><br>
+
+<div>
+We have decided to stream the steering over WiFi. Another
+viable alternative was Bluetooth.
+First we have implemented event based controller that listens for keyboard
+events on the controller server side. If it catches any, it sends a message
+over TCP socket to the car to update the remote state.
+</div>
+<br><br>
+
+<div>
+On the testing bench, it has worked just fine:
+</div>
+<br><br>
+
+<div>
+<iframe src='https://drive.google.com/file/d/0Bw2eHK8Zx0mLZzdFVnNIY3VGMHc/preview'></iframe>
+</div>
+<br><br>
+
+<div>
+But in practice, it was error-prone:
+</div>
+<br><br>
+
+<div>
+<a href='img/car/black_crashes.gif'><img src='img/car/black_crashes.gif'></a>
+</div>
+<br><br>
+
+<div>
+The default WiFi dongle we have bought for RasPi was the small and had not so
+strong reception.  It was easy to get into spot, where there were problems with
+instant transfer of the data.  As the TCP retries sending the data until
+succesful, by the time the information arrived onto the car, several new events
+might have happened.  The car did not feel very responsive.
+</div>
+<br><br>
+
+<div>
+We partially resolved this issue by:
+<ul>
+<li> sending the state (spamming?) to the car every 10 ms
+<li> allowing information loss by switching to UDP
+</ul>
+so in the new implementation, algorithm listens for keyboard events and
+updates the state based on it and we send the state to the car all the
+time over and over again.
+</div>
+<br><br>
+
+<div>
+** You can see code on github **
+</div>
+<br><br>
+
+<div>
+then added stronger Wifi
 </div>
 <br><br>
 
@@ -549,7 +627,26 @@ self driving car nanodegree and in comma.ai paper.
 <br><br>
 
 <div>
+** link to the paper **
+</div>
+<br><br>
+
+<div>
 Did a bit data gathering, 2 sessions of around hour.
+</div>
+<br><br>
+
+<div>
+** how we gathered data **
+</div>
+<br><br>
+
+<div>
+** how the data gathering screen looks like **
+</div>
+<br><br>
+
+<div>
 Started off with gathering one big track, around 10 meters
 around the whole house.
 </div>

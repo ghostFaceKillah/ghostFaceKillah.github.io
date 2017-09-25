@@ -254,6 +254,10 @@ strapped to its back. We needed a bigger car, but before I describe it,
 I will show how we have put together image capture and streaming system.
 
 
+
+
+
+
 *h3*
 * Image capture and streaming *
 
@@ -266,6 +270,8 @@ At the beginning we have struggled a lot with high latency:
 *iframe* 
 https://drive.google.com/file/d/0Bw2eHK8Zx0mLSHM5X1Btam5iWEk/preview
 
+** show camera_too_slow_on_car.m4v ?? **
+
 but quickly we have converged to a pretty resilent UDP based stream.  The code
 version that has worked best for us in the end was version presented in 
 <a href="https://picamera.readthedocs.io/en/release-1.13/recipes2.html#rapid-capture-and-streaming">
@@ -273,11 +279,12 @@ Advanced Recipes in picamera docs</a>, but with UDP based connection. You can se
 <a href="https://github.com/ghostFaceKillah/mini-self-driving-car/blob/master/src/raspi/video.py">
 here</a>. After this, we were consistently seeing good latency:
 
+
 *img* 
 img/car/measuring_latency_03.jpg
 
 Measuring latency takes both hands.
-jA
+  
 An interesting detail here is camera holder.  Filip works in 
 <a href="https://www.3dhubs.com"> 3D Hubs</a>, an Amsterdam based 3d printing
 company. As a perk, team members are given significant 3D printing allowance,
@@ -289,10 +296,13 @@ technology results in very accurate and resilent products.
 
 
 
+
+
+
 *h4*
 * Second car *
 
-After the first car couldn't move under it's own weight even with light battery
+After the first car wouldn't move under it's own weight even with light battery
 pack, it became clear we need a new one. In the local shopping mall, this
 time in a proper toy shop we have found this car:
 
@@ -301,7 +311,7 @@ img/car/black/black_vanilla.jpg
 
 which is a bigger and slightly more advanced construction.
 However, in this car we can find some interesting mechanical pieces
-such rear differential, and slightly more advanced front steering.
+such as rear differential, and slightly more advanced front steering.
 For now, I have resisted the temptation to tear it completely apart,
 but I think I will come back to it after we move to bigger car.
 The disassembly yielded a similar result for our project - three wire pairs,
@@ -335,20 +345,66 @@ After this we added above described high quality camera holder.
 *img* 
 img/car/black/black_ready_iso_01.jpg
 
-Show vid/black_is_fast
+
+The black car turned out to be quite fast:
+
+*img*
+img/car/black_is_fast.gif
+
+And it was fun to just drive it around.
+
+*iframe*
+https://drive.google.com/file/d/0Bw2eHK8Zx0mLSm8xVFc4Rk5YR00/preview
+
+
+
+
 
 
 
 
 *h4*
-Remote control story
+* Remote control *
 
-Remote control
-first tried TCP
-then tried UDP, then added stronger Wifi
+Of course, driving by wire didn't cut it for us.
+
+
+We have decided to stream the steering over WiFi. Another
+viable alternative was Bluetooth.
+First we have implemented event based controller that listens for keyboard
+events on the controller server side. If it catches any, it sends a message
+over TCP socket to the car to update the remote state.
+
+On the testing bench, it has worked just fine:
+
+*iframe*
+https://drive.google.com/file/d/0Bw2eHK8Zx0mLZzdFVnNIY3VGMHc/preview
+
+But in practice, it was error-prone:
+
+*img*
+img/car/black_crashes.gif
+
+The default WiFi dongle we have bought for RasPi was the small and had not so
+strong reception.  It was easy to get into spot, where there were problems with
+instant transfer of the data.  As the TCP retries sending the data until
+succesful, by the time the information arrived onto the car, several new events
+might have happened.  The car did not feel very responsive.
+
+We partially resolved this issue by:
+<ul>
+<li> sending the state (spamming?) to the car every 10 ms
+<li> allowing information loss by switching to UDP
+</ul>
+so in the new implementation, algorithm listens for keyboard events and
+updates the state based on it and we send the state to the car all the
+time over and over again.
+
+** You can see code on github **
+
+then added stronger Wifi
 
 ** Picture of stronger wifi ** 
-
 
 
 
@@ -361,7 +417,14 @@ Machine learning
 Idea was to do Nvidia paper, seen it used at Udacity
 self driving car nanodegree and in comma.ai paper.
 
+** link to the paper **
+
 Did a bit data gathering, 2 sessions of around hour.
+
+** how we gathered data **
+
+** how the data gathering screen looks like ** 
+
 Started off with gathering one big track, around 10 meters
 around the whole house.
 
