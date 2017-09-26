@@ -599,30 +599,81 @@ We partially resolved this issue by:
 </ul>
 so in the new implementation, algorithm listens for keyboard events and
 updates the state based on it and we send the state to the car all the
-time over and over again.
+time over and over again. You can see the final code 
+<a href="https://github.com/ghostFaceKillah/mini-self-driving-car/blob/master/src/pc/keyboard_state_sender.py">
+here</a>
+and
+<a href="https://github.com/ghostFaceKillah/mini-self-driving-car/blob/master/src/raspi/steering.py">
+here</a>.
 </div>
 <br><br>
 
 <div>
-** You can see code on github **
+These changes in code helped the reliablity a lot, but it still wasn't perfect. Still
+in places with weak wifi reception, the car didn't work pefectly.
+We felt there is still room for improvement.
+We tried the easiest thing there was and added stronger Wifi dongle.
 </div>
 <br><br>
 
 <div>
-then added stronger Wifi
+<a href='img/car/new_wifi_two.jpg'><img src='img/car/new_wifi_two_small.jpg'></a>
 </div>
 <br><br>
 
 <div>
-** Picture of stronger wifi **
+** show new wifi on car **
 </div>
 <br><br>
 
 <h4>Machine learning</h4>
 
 <div>
-Idea was to do Nvidia paper, seen it used at Udacity
-self driving car nanodegree and in comma.ai paper.
+We have implement ConvNet-based behavioral cloning system that
+steers the car.
+It is a variation of widely used Nvidia implementation.
+</div>
+<br><br>
+
+<div>
+The inspiration came from many places:
+<ul> 
+<li> Reading the original Nvidia papers
+    <a href="https://arxiv.org/pdf/1704.07911.pdf">
+    "Explaining How a Deep Neural Network Trained with End-to-End Learning Steers a Car"
+    </a>
+    and
+    <a href="https://arxiv.org/pdf/1604.07316v1.pdf">
+    "End to End Learning for Self-Driving Cars"
+    </a>
+<li> Berkley <a href="http://rll.berkeley.edu/deeprlcourse/"> Deep reinforcement learning class </a>
+<li> Udacity self-driving car nanodegree
+<li> Reading Comma.ai paper <a href="https://github.com/commaai/research"> 
+"Learning a Driving Simulator"</a>
+</ul>
+</div>
+<br><br>
+
+<div>
+Different thing is that Nvidia has 3 cameras which enable to gather 3
+trajectories in one goal, especially trajectories around the most optimal one.
+This is pretty big problem in behavioral clonging
+</div>
+<br><br>
+
+<div>
+In our case it is kind ok, because we have less general problem (only so many
+tracks you can build around house), the track we follow is clearer and has less
+variations than real-life road lanes and we have significant variance over
+consecutive runs (we have more runs over the same area of track with a lot more
+variance than in the case of real life car).
+</div>
+<br><br>
+
+<div>
+You can see that it is not perfect, doesn't stay inside of the track, but wit
+current controls it may be beyond possible.  Should be possible with car that
+has more precise and possibly non-binary left-right steering.
 </div>
 <br><br>
 
@@ -669,7 +720,17 @@ Gathered a lot of data another time.
 <br><br>
 
 <div>
-Didn't work!
+Then noticed that horizon is not consitent around takes...
+</div>
+<br><br>
+
+<div>
+Corrected, gathered data again...
+</div>
+<br><br>
+
+<div>
+Still didn't work!
 </div>
 <br><br>
 
@@ -684,7 +745,7 @@ Still didn't work!
 <br><br>
 
 <div>
-Cast to greyscale.
+Cast to greyscale, cropped.
 </div>
 <br><br>
 
@@ -694,7 +755,14 @@ Implemented data augmentation based on brigthness and contrast.
 <br><br>
 
 <div>
-It worked.
+It worked!
+</div>
+<br><br>
+
+<div>
+Somewhat... Doesn't stay perfectly inside of the track
+(everything happens so much faster compared to real life car)
+Tested well only around one turn track.
 </div>
 <br><br>
 
