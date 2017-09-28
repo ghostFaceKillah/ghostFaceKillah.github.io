@@ -20,15 +20,12 @@ ever and I'm sure you'd learn a lot.
 *h4*
 * Idea *
 
-*img*
-img/car/how_it_works.jpg
-
-The most important element of this project is the car control loop:
+The car works in the following way:
 <ul>
   <li>
     On board of the car there is forward facing <b>RasPi camera</b>.
   <li>
-    The <b> image stream</b> is sent to another computer, 
+    The <b> image stream</b> is sent to GPU computer, 
     which streams <b>steering commands</b> back:
     "go forward", "stop", "turn left", etc.
   <li>
@@ -45,11 +42,52 @@ The most important element of this project is the car control loop:
   </li>
 </ul>
 
+Below diagaram visualizes the flow of data:
+
+*img*
+img/car/how_it_works.jpg
+
 To enable all of this, pieces of various software infrastructure and hardware
 are necessary.
 
-In the text below I will explain how we figured out all these
-details and hopefully convey that it was a lot of fun.
+On the GPU server side we need:
+<ul>
+<li> <a href="https://github.com/ghostFaceKillah/mini-self-driving-car/blob/master/src/pc/image_getter.py">code</a> 
+     that receives images from RasPi
+<li> <a href="https://github.com/ghostFaceKillah/mini-self-driving-car/blob/master/src/pc/keyboard_state_sender.py">code</a> 
+     that sends current steering state to the car
+<li> <a href="https://github.com/ghostFaceKillah/mini-self-driving-car/blob/master/src/pc/neural_network_computer.py">code</a> 
+     that executes neural network to obtain autonomous steering
+<li> <a href="https://github.com/ghostFaceKillah/mini-self-driving-car/blob/master/src/pc/pygame_driver.py">code</a> 
+     that displays user the "steering game" and collects steering
+<li> <a href="https://github.com/ghostFaceKillah/mini-self-driving-car/blob/master/src/pc/state_saver.py">code</a> 
+     that collects human input pairs and saves them to the drive
+</ul>
+Each of the above is <b>multiprocessing.Process</b> and they share a state
+which is <b>multiprocessing.Namespace</b>.
+On the RasPi side we need:
+<ul>
+<li> <a href="https://github.com/ghostFaceKillah/mini-self-driving-car/blob/master/src/raspi/steering.py">code</a> that receives steering commands and executes them
+<li> <a href="https://github.com/ghostFaceKillah/mini-self-driving-car/blob/master/src/raspi/video.py">code</a> that captures video stream and puts it on the wire
+</ul>
+
+
+On the hardware side there are following elements:
+<ul>
+<li> Raspberry Pi
+<li> RasPi battery pack
+<li> RasPi compatibile camera
+<li> RC Car
+<li> RC car engines battery pack
+<li> Engine controller to control RC car
+<li> Wifi interface (turns out it needs to be strong)
+<li> Ways to keep all of this together
+</ul>
+
+In the text below I will explain how we figured out
+how to combine all of them into a small self driving car,
+and hopefully convey that it was a lot of fun.
+And perhaps we have even learned a little.
 
 
 *h4* 
@@ -192,10 +230,95 @@ events based on them to RasPi,
 steering the L293D and in turn, the car.
 </ul>
 
+
+*h4*
+* Steering mechanism in first car *
+
+Now I will describe how steering is implemented mechanically 
+in the first RC car we have been working with. 
+
+Let me remark here that I am impressed by how simple this mechanism is.
+Perhaps the reason I am so excited about it is because I have only a vague
+idea about how mechanical design works, so I am easy to impress, and perhaps
+stuff like this gets done every day, who knows.  But I see an element of playful
+master in it and I can't help feeling happy about it.
+
+
+The mechanism is hidden if you look from the front
+
+*img*
+img/car/steering/green_iso_front_view.jpg
+
+and similarily remains hidden if you look at it from the top.
+
+*img*
+img/car/steering/green_top_view.jpg
+
+It is only after removing the top cover that we see the following mechanism
+(I have removed all the plastic elements to help visibility):
+
+*img*
+img/car/steering/green_side_front_engine.jpg
+
+Seen from the top:
+
+*img*
+img/car/steering/green_engine_top.jpg
+
+And here comes the trick:
+
+On top of shaft there is a pinion. The pinion is just slid on shaft, without
+any kind of glue.  The size and tightness of the pinion are chosen in in a way
+that when the engine starts moving, the friction between shaft and pinion is
+just enough to move the half-circle rack.
+
+*img*
+img/car/steering/green_front_engine_detail.jpg
+
+
+But when the half-circle rack hits
+the maximum extension point, the friction breaks and the shaft spins around
+inside pinion.  Is there a cheaper trick (speaking both symbolically and
+literally)?  How ingenious!
+
+*img*
+img/car/steering/green_steering_mechanism_action.gif
+
+Below the semicircular rack there is a spring that pulls the wheels back
+to neutral position:
+
+*img*
+img/car/steering/green_top_view_wheels_coming_off.jpg
+
+You can see it better in this close-up:
+
+*img*
+img/car/steering/green_steering_insides_2.jpg
+
+A small plastic element is connected to wheels. It has a small peg
+that sits in the middle of the spring, so the spring an act on it:
+
+*img*
+img/car/steering/green_detached_wheels.jpg
+
+So as you can see just a collection of as simple as possible 
+elements each doing its job well. Everything is super cheap,
+but the materials and their shapes are chosen in a smart
+way that makes it all work together well. So cool!
+
+That wraps up the description of the "brutalist"
+steering mechanism.  Back to self driving!
+
+
+
+
+
 *h4*
 * Hardware * 
 
-In order to test the remote control of the car, we needed to power the RPi.
+When we had already the "drive by keyboard attached to RasPi by cable"
+capability, we wanted to test remote control of the car.
+In order to do that, we needed to power the RPi.
 Not sure about how much power it needs, we have bought a pretty big power
 bank for mobile phone with electric charge of 10.000 mAh, weighting around 400 g.
 
@@ -257,7 +380,6 @@ I will show how we have put together image capture and streaming system.
 
 
 
-
 *h3*
 * Image capture and streaming *
 
@@ -265,34 +387,52 @@ Building this subsystem was a big loop of trial and error.
 In the end we have settled for RPi Camera on hardware side and
 amazing <b>picamera</b> Python module.
 
-At the beginning we have struggled a lot with high latency:
+*img*
+img/car/camera_holder.jpg
 
-*iframe* 
-https://drive.google.com/file/d/0Bw2eHK8Zx0mLSHM5X1Btam5iWEk/preview
-
-** show camera_too_slow_on_car.m4v ?? **
-
-but quickly we have converged to a pretty resilent UDP based stream.  The code
-version that has worked best for us in the end was version presented in 
-<a href="https://picamera.readthedocs.io/en/release-1.13/recipes2.html#rapid-capture-and-streaming">
-Advanced Recipes in picamera docs</a>, but with UDP based connection. You can see the code 
-<a href="https://github.com/ghostFaceKillah/mini-self-driving-car/blob/master/src/raspi/video.py">
-here</a>. After this, we were consistently seeing good latency:
-
-
-*img* 
-img/car/measuring_latency_03.jpg
-
-Measuring latency takes both hands.
-  
-An interesting detail here is camera holder.  Filip works in 
-<a href="https://www.3dhubs.com"> 3D Hubs</a>, an Amsterdam based 3d printing
+An interesting detail here is camera holder.  Filip works in <a
+href="https://www.3dhubs.com"> 3D Hubs</a>, an Amsterdam based 3d printing
 company. As a perk, team members are given significant 3D printing allowance,
 which we used to 3d print case for RasPi camera in high quality. In this
 technology they shoot plastic-paticle spray with laser so it solifidies.  This
 technology results in very accurate and resilent products.
 
-** Come up with a good picture for it **
+When it comes to the code side, at the beginning we have struggled a lot with
+high latency:
+
+*iframe* 
+https://drive.google.com/file/d/0Bw2eHK8Zx0mLSHM5X1Btam5iWEk/preview
+
+and then experimented some more:
+
+*iframe*
+https://drive.google.com/file/d/0Bw2eHK8Zx0mLOE93RTJHX0xpb0E/preview
+
+and even more:
+
+*iframe*
+https://drive.google.com/file/d/0Bw2eHK8Zx0mLNDhkRFhjejZvMGs/preview
+
+but quickly we have converged to a pretty resilent UDP based stream.  The code
+version that has worked best for us in the end was version presented in <a
+href="https://picamera.readthedocs.io/en/release-1.13/recipes2.html#rapid-capture-and-streaming">
+Advanced Recipes in picamera docs</a>, but with UDP based connection. You can
+see the code <a
+href="https://github.com/ghostFaceKillah/mini-self-driving-car/blob/master/src/raspi/video.py">
+here</a>. After this, we were consistently seeing good latency:
+
+*img* 
+img/car/measuring_latency_03.jpg
+
+Measuring latency takes both hands.
+
+** Show here the final picture that the car sees **
+
+*img* 
+img/car/ai_philosophy.jpg
+
+What does the self-driving car see when it sees itself in the mirror?
+
 
 
 
@@ -385,8 +525,8 @@ But in practice, it was error-prone:
 *img*
 img/car/black_crashes.gif
 
-The default WiFi dongle we have bought for RasPi was the small and had not so
-strong reception.  It was easy to get into spot, where there were problems with
+The default WiFi dongle we have bought for RasPi was too small and had not so
+strong reception.  It was easy to get into a spot where there were problems with
 instant transfer of the data.  As the TCP retries sending the data until
 succesful, by the time the information arrived onto the car, several new events
 might have happened.  The car did not feel very responsive.
@@ -413,11 +553,21 @@ We tried the easiest thing there was and added stronger Wifi dongle.
 *img*
 img/car/new_wifi_two.jpg
 
+We went for pentesting-style Alfa wifi dongle with reasonably big antenna.
+Look how well the dongle sits between the back engine and wing.
+It's almost as if we planned it to be constructed that way!
 
-** show new wifi on car **
+*img*
+img/car/black/black_wifi_on_car.jpg
+
+But we did not. It's just a bunch of zipties.
 
 
+This concluded the hardware part for now.
+This is how it looks when you (badly) drive the car around the track in the evening.
 
+*iframe*
+https://drive.google.com/file/d/0Bw2eHK8Zx0mLRGdUSXc3NnJjd1U/preview
 
 
 
@@ -428,7 +578,7 @@ img/car/new_wifi_two.jpg
 *h4*
 Machine learning
 
-We have implement ConvNet-based behavioral cloning system that
+We have implemented ConvNet-based behavioral cloning system that
 steers the car.
 It is a variation of widely used Nvidia implementation.
 
@@ -511,6 +661,19 @@ Tested well only around one turn track.
 <li> be patient and persistent
 <li> need a bit of money
 </ul>
+
+
+
+
+TODO:
+* Machine learning
+* final car pictures
+* describe the cool steering system from first car
+* flesh out plans for future
+* Good picture for 3d printed camera holder
+
+
+
 
 *h4*
 * Plans for future *
