@@ -872,7 +872,7 @@ This is how it looks when you (badly) drive the car around the track in the even
 <div>
 We have implemented ConvNet-based behavioral cloning system that
 steers the car.
-It is a variation of widely used Nvidia implementation.
+It is a variation of a widely used Nvidia implementation.
 </div>
 <br><br>
 
@@ -896,25 +896,173 @@ The inspiration came from many places:
 <br><br>
 
 <div>
-Different thing is that Nvidia has 3 cameras which enable to gather 3
-trajectories in one goal, especially trajectories around the most optimal one.
-This is pretty big problem in behavioral clonging
+As shown in the diagram at the top of the blog post, the system that we use
+implements behavioral cloning. Based on a dataset of pairs <b><i> (image, steering)
+</b></i> sampled from a human driving record, we learn to predict <b><i> steering
+</b></i> from <b><i> image from camera </b></i>.
+This is done by using a convolutional neural network.
 </div>
 <br><br>
 
 <div>
-In our case it is kind ok, because we have less general problem (only so many
-tracks you can build around house), the track we follow is clearer and has less
-variations than real-life road lanes and we have significant variance over
-consecutive runs (we have more runs over the same area of track with a lot more
-variance than in the case of real life car).
+There are good resources galore on deep learning / neural nets online, so I won't go into
+detail how this was implemented. Instead, I will focus on explaining 
+differences between our and Nvidia's approches.
 </div>
 <br><br>
 
 <div>
-You can see that it is not perfect, doesn't stay inside of the track, but wit
+First of all, in our case the steering is binary.  In a typical real-world
+self-driving car implementation you would gain control over steer-by-wire
+system done by car manufacturer.  This usually means you gain control
+over pretty precise actuators that allow you to set the steering angle with
+consistency and precision.  This was not the case in our model. Currently we
+only have three steering states - steer full left, steer full right or no
+steering.  Additionally, when returning from full steer to the neutral
+position, the mechanism is often not completely accurate and returns only to
+somewhat-neutral position with bias to one side that is noticeable when the car
+goes fast.
+</div>
+<br><br>
+
+<div>
+Secondly, in our implementation we only use one camera, where Nvidia's
+implementation uses three cameras that are generally forward facing,
+but at slightly different angles.
+This trick is done to get rid of a problem specific to behavioral learning.
+The problem is overrepresentation of idealized trajectories in the training data.
+If you consider a person driving a car on a road, even on a closed-off private road,
+the samples from the car going off-road, or near-crashing and recovering in the
+last moment are extremely rare compared to calm driving in the middle of the world.
+However, for the algorithm both cases are as important as the other.
+The self driving systems needs to know what to do when it starts going away from middle
+of the track.
+</div>
+<br><br>
+
+<div>
+<a href='img/car/behavioral_cloning_problem.jpg'><img src='img/car/behavioral_cloning_problem_small.jpg'></a>
+</div>
+<br><br>
+
+<div>
+<i>I copy-pasted this image from
+<a href="http://rll.berkeley.edu/deeprlcourse/f17docs/lecture_2_behavior_cloning.pdf">slides</a>
+of Sergey Levine for one of the beginning lectures of
+<a href="http://rll.berkeley.edu/deeprlcourse/">
+Berkeley CS294-112: Deep Reinforcement Learning</a>.
+- an incredibely high-quality online course generously offered for free by this university.</i>
+</div>
+<br><br>
+
+<div>
+You can see in this image that during the training, we have explored the black trajectory.
+Due to inherent randomness, we slightly diverging from the most well-known
+trajectory, for example the car steers a bit more to the right then usually.
+The correct response would be to correct and go back to the middle of the
+track, but there is no data like this in the training dataset (or there is
+but it is not sufficiently frequent to be represented in the machine learning).
+</div>
+<br><br>
+
+<div>
+The solution to this is to build a distribution of cost (and therefore, of
+wanted behaviours) around the optimal trajectory:
+</div>
+<br><br>
+
+<div>
+<a href='img/car/distribution_over_trajectories.jpg'><img src='img/car/distribution_over_trajectories_small.jpg'></a>
+</div>
+<br><br>
+
+<div>
+<i>Image, again courtesy to UC Berkeley, Prof Sergey Levine</i>.
+</div>
+<br><br>
+
+<div>
+There are several remarks that can be made about making such a
+distribution.
+</div>
+<br><br>
+
+<div>
+One could try to <li> Gather <b>a lot</b> more data, especially taking care to sample
+trajectories that are away from the optimal trajectory. In case of the car it
+could be turning off recording, steering slightly off the center of the road,
+turning recording back on, correcting the steering back to the center. Another
+idea would be to drive over the same piece of road many times, taking care to
+drive a bit to the left, than a bit to the right, then more to the right etc.
+As you can see, these solutions are doable, but not extremely practical, so it
+is not always there is an easy way to just gather the data.
+</div>
+<br><br>
+
+<div>
+One could consider the trick that Nvidia has done. They have set up two cameras at slight
+angles to left and right
+in addition to the central forward facing one.
+Then they correct for this in the steering commands that are recorded
+as the pair for that sideways facing image.
+So for example if they are driving straight forward, the right facing
+camera will record a picture as if the car was going to the right of the
+road, and a steering correction of the same angle to the left would be added
+to the current (fully straight steering).
+This will tell help the machine learning algorithm understand that 
+it needs to steer left when it sees this image.
+</div>
+<br><br>
+
+<div>
+** Make a picture for Nvidia adjustment **
+</div>
+<br><br>
+
+<div>
+In our case the problem is less severe than in the case of the real self-driving car.
+This is because:
+<ul> 
+<li>
+we have less general problem. The variety of tracks that we can build around the house 
+is significantly smaller than the variety of real roads, especially when you 
+take into consideration the spectrum of possible lighting conditions.
+Our track is white pieces of paper, which is very clearly visible and 
+similar to itself under a variety of conditions.
+<li> the tracks that we train on are shorter so we can run the car
+over each piece of road hundreds of times in a day or so. Imagine doing that 
+for each piece of road in Europe or US.
+<li> We have significant variations of runs due to lack of precision of our
+actuators. Driving in the small car world is a lot more dynamic,
+the turns are a lot sharper and we can afford to crash for free.
+Check out driving video above to see how quick everything happens.
+</ul>
+</div>
+<br><br>
+
+<div>
+In general the system works perfect on the track
+</div>
+<br><br>
+
+<div>
+The performance doesn't really generalize to more complicated, tighter
+track. We will run some new training on this 
+</div>
+<br><br>
+
+<div>
+You can see that it is not perfect, doesn't stay inside of the track, but with the
 current controls it may be beyond possible.  Should be possible with car that
 has more precise and possibly non-binary left-right steering.
+</div>
+<br><br>
+
+<div>
+The story of how this system is produced
+(you should be patient)
+Day to day both of us work in research, and 
+we know that it should like this.
 </div>
 <br><br>
 
@@ -1021,9 +1169,7 @@ Tested well only around one turn track.
 TODO:
 * Machine learning
 * final car pictures
-* describe the cool steering system from first car
 * flesh out plans for future
-* Good picture for 3d printed camera holder
 </div>
 <br><br>
 
