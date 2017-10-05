@@ -774,7 +774,9 @@ data collection, a dataset combiner.  Then we manually went through all of the
 data and corrected what we thought were inconsistencies.  This also didn't
 work...
 
-** Show a recording of how it doesn't work **
+
+*img*
+img/car/fails.gif
 
 Then we spent some even more time looking at the data and only then we have noticed
 that horizon is located differently in different parts of the dataset.
@@ -796,13 +798,15 @@ Than it finally worked!  Somewhat... The car doesn't stay perfectly inside of th
 (everything happens so much faster compared to real life car)
 We only tested the whole project well only around one turn track.
 
-** How it doesn't work now video **
 
 We can squeeze out / cheat a run that doesn't exit track
  around a more curvy, tighter track, but it doesn't count. But still
 it shows some degree of generalization.
 We think that if you just gather more data with the current architecture,
 it should work.
+
+*iframe*
+https://drive.google.com/file/d/0Bw2eHK8Zx0mLYU9YLWVXeFNQXzg/preview
 
 
 *h4*
