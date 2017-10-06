@@ -72,7 +72,7 @@ On the RasPi side we need:
 </ul>
 
 
-On the hardware side there are following elements:
+On the hardware side there are the following elements:
 <ul>
 <li> Raspberry Pi
 <li> RasPi battery pack
@@ -87,7 +87,7 @@ On the hardware side there are following elements:
 In the text below I will explain how we figured out
 how to combine all of them into a small self driving car,
 and hopefully convey that it was a lot of fun.
-And perhaps we have even learned a little.
+And that perhaps we have even learned a little.
 
 
 *h4* 
@@ -187,12 +187,12 @@ Warning!
 
 As Raspberry Pi has some General Purpose Input/Output (GPIO) pins
 it is tempting to try to hook up the engine directly to RasPi.
-This is a very bad idea, which will destroy your RasPi, by running too much power
-through it.
+This is a very bad idea, which will destroy your RasPi, by running too much 
+electricity through it.
 
 Thus, we need to implement a hardware engine controller which based
 on signals from Raspi will drive the motors.
-You can buy a ready motor controller or be thrifty, and implement own.
+You can buy a ready motor controller or be thrifty and implement your own.
 As conceptually the wanted mechanism of action sounds like transistor - 
 "based on small electricty turn on flow of bigger electricty" -
 I have decided to build my own engine controller.
@@ -314,7 +314,7 @@ steering mechanism.  Back to self driving!
 
 
 *h4*
-* Hardware * 
+* Hardware coming together * 
 
 When we had already the "drive by keyboard attached to RasPi by cable"
 capability, we wanted to test remote control of the car.
@@ -426,7 +426,11 @@ img/car/measuring_latency_03.jpg
 
 Measuring latency takes both hands.
 
-** Show here the final picture that the car sees **
+
+Here is how the final user interface looks like:
+
+*img*
+img/car/ux.jpg
 
 *img* 
 img/car/ai_philosophy.jpg
@@ -679,7 +683,7 @@ So for example if they are driving straight forward, the right facing
 camera will record a picture as if the car was going to the right of the
 road, and a steering correction of the same angle to the left would be added
 to the current (fully straight steering).
-This will tell help the machine learning algorithm understand that 
+This will help the machine learning algorithm understand that 
 it needs to steer left when it sees this image.
 
 *img*
@@ -747,7 +751,8 @@ Here you can see a previous iteration of it being tested carefully by another fr
 https://drive.google.com/file/d/0Bw2eHK8Zx0mLWmFPc2FkLUp3dU0/preview
 
 So we started off with gathering one big track, around 10 meters around the
-whole house.  While you drive, everything you do gets
+whole house.  In this iteration, everything that we did was "on camera"
+and got appended to the dataset.
 
 We have trained a neural net same as in the Nvidia paper.  It didn't work!  And
 by didn't work we don't mean running it once and declaring failure.  In
@@ -813,25 +818,21 @@ https://drive.google.com/file/d/0Bw2eHK8Zx0mLYU9YLWVXeFNQXzg/preview
 * Lessons *
 
 <ul>
-<li> be patient and persistent
-<li> need a bit of money
+<li> need to be patient and persistent if you want anything to work
+<li> need a bit of money - you need quite a bit of gear (we spent around 200-300 EUR on
+ the whole project, but we already had computer with CUDA strong GPUs)
 </ul>
-
-
-
-
-TODO:
-* Machine learning
-* final car pictures
-* flesh out plans for future
-
 
 
 *h4*
 * Plans for future *
 
+We have many ideas for the future. We want to try some of ideas listed below,
+but our priority is getting the car to work very well on a track more complex
+than one turn.
+
 <ul>
-<li> Riding around a bigger track / more complicated track
+<li> Riding around a bigger track / more complicated track faster
 <li> Depth nets
 <li> Lane detection, cross track error based PID controller
 <li> Lidar & mapping
