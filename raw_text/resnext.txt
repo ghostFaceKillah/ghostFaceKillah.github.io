@@ -1,0 +1,22 @@
+*h2*
+Obrazki o sieci ResNeXt
+
+Punkt startowy - ResNet
+
+*img*
+img/resnext/resnet.jpg
+
+ResNext forma pierwsza
+
+*img*
+img/resnext/resnext_one.jpg
+
+ResNext forma druga
+
+*img*
+img/resnext/resnext_two.jpg
+
+ResNext forma trzecia
+
+*img*
+img/resnext/resnext_three.jpg
