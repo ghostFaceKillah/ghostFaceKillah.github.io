@@ -1,0 +1,56 @@
+*h1*
+Expert-augmented actor-critic 
+
+*h3*
+for Vizdoom and Montezuma's Revenge
+
+We propose an actor-critic algorithm reinforcement learning algorithm, which
+can additionally utilise expert trajectories. The algorithm is evaluted on two
+environments with sparse rewards: Montezuma’s Revenge and Vizdoom. On
+Montezuma’s Revenge, our agent achieves qualitatively strong results,
+consistently scoring results above 8000 points and in some experiments solving
+the first world. In the case of Vizdoom, the agent learns to navigate a
+complicated maze in a scenario which is too difficult to be solved by
+model-free algorithms not augmented by expert data.
+
+
+*h3*
+Introduction
+
+Deep reinforcement learning has shown impressive results in simulated
+environments. However, as the cost of random exploration increases rapidly with
+the distance of rewards, current approaches often fail when rewards are sparse.
+This inhibits using reinforcement learning methods in real-world applications.
+Take as an example robotics, where in many cases rewards are calculated once a
+task is completed and thus are binary and sparse. The situation is aggravated
+if no simulation is available, making sample efficiency a key factor of
+success.
+
+One way to improve the efficiency of exploration is to utilize expert data. The
+standard behavioral cloning often suffers from compounding errors when drifting
+away from the supervisor’s demonstra- tions. While this can be mitigated by
+iterative methods like DAgger, the cost is cumbersome data collection process.
+In recent [1] authors analyze performance of behavioral cloning on Atari 2600
+games. In the challenging example of Montezuma’s Revenge their method reaches
+on average only 575 points despite being trained on demonstration trajectories
+that score 30 000 points.
+
+Our approach is based on the Actor-Critic using Kronecker-Factored Trust Region
+(ACKTR) algo- rithm [3]. This algorithm uses natural gradient techniques to
+accelerate the gradient ascent optimization by changing parameters in the
+direction that minimizes the loss with respect to small step in the distri-
+bution of network output (in our case policy), as opposed to small step in the
+parameter space metric. Natural gradient approaches proved to be successful in
+increasing speed and stability of learning. We modify ACKTR so that it utilizes
+expert data. We believe that expert data guides agent’s exploration. In our
+evalutation, on Montezuma’s Revenge and Vizdoom environments this substantially
+accelerates the learning process.
+
+
+*h3*
+Expert-augmented ACKTR
+
+
+
+
+

@@ -1,0 +1,269 @@
+<html>
+<head>
+<style>
+body {
+   font-family: monospace;
+    font-size:large;
+    text-align: center;
+    background: linear-gradient(141deg,
+        white,
+        white,
+        #e0fbff,
+        #ffaaaa,
+        #3157af
+        );
+}
+div {
+    text-align: justify;
+    max-width: 500px;
+    display: inline-block;
+}
+img {
+    max-width: 500px;
+}
+iframe {
+    width: 500px;
+    height: 280px;
+}
+h3 {
+    text-align: center;
+}
+.wide {
+    max-width: 750px;
+}
+
+#how_it_works_pics {
+    max-width: 750px;
+}
+</style>
+<title>Mike Garmulewicz - gf4c3 - gf4c3k1la </title>
+</head>
+<body>
+<h1>Expert-augmented actor-critic </h1>
+
+<h3>ror Vizdoom and Montezuma's Revenge</h3>
+
+<div>
+We propose an actor-critic algorithm reinforcement learning algorithm, which
+can additionally utilise expert trajectories. The algorithm is evaluted on two
+environments with sparse rewards: Montezuma’s Revenge and Vizdoom. On
+Montezuma’s Revenge, our agent achieves qualitatively strong results,
+consistently scoring results above 8000 points and in some experiments solving
+the first world. In the case of Vizdoom, the agent learns to navigate a
+complicated maze in a scenario which is too difficult to be solved by
+model-free algorithms not augmented by expert data.
+</div>
+<br><br>
+
+<h3>Introduction</h3>
+
+<div>
+Deep reinforcement learning has shown impressive results in simulated
+environments. However, as the cost of random exploration increases rapidly with
+the distance of rewards, current approaches often fail when rewards are sparse.
+This inhibits using reinforcement learning methods in real-world applications.
+Take as an example robotics, where in many cases rewards are calculated once a
+task is completed and thus are binary and sparse. The situation is aggravated
+if no simulation is available, making sample efficiency a key factor of
+success.
+</div>
+<br><br>
+
+<div>
+One way to improve the efficiency of exploration is to utilize expert data. The
+standard behavioral cloning often suffers from compounding errors when drifting
+away from the supervisor’s demonstra- tions. While this can be mitigated by
+iterative methods like DAgger, the cost is cumbersome data collection process.
+In recent [1] authors analyze performance of behavioral cloning on Atari 2600
+games. In the challenging example of Montezuma’s Revenge their method reaches
+on average only 575 points despite being trained on demonstration trajectories
+that score 30 000 points.
+</div>
+<br><br>
+
+<div>
+Our approach is based on the Actor-Critic using Kronecker-Factored Trust Region
+(ACKTR) algo- rithm [3]. This algorithm uses natural gradient techniques to
+accelerate the gradient ascent optimization by changing parameters in the
+direction that minimizes the loss with respect to small step in the distri-
+bution of network output (in our case policy), as opposed to small step in the
+parameter space metric. Natural gradient approaches proved to be successful in
+increasing speed and stability of learning. We modify ACKTR so that it utilizes
+expert data. We believe that expert data guides agent’s exploration. In our
+evalutation, on Montezuma’s Revenge and Vizdoom environments this substantially
+accelerates the learning process.
+</div>
+<br><br>
+
+<h2>How to build a small self driving car?</h2>
+
+<div>
+My recent side project is a building small self driving car with
+my friend Filip.  See the code on 
+<a href="https://github.com/ghostFaceKillah/mini-self-driving-car.git">
+my github</a>.
+</div>
+<br><br>
+
+<div>
+There is fair amount of folks doing similar projects, there are even people who
+race these things.  If it looks interesting, you could do it too - it is easier than 
+ever and I'm sure you'd learn a lot.
+</div>
+<br><br>
+
+<div class='wide'>
+<img src="img/car/car_works_1.gif">
+<img src="img/car/car_works_2.gif">
+<img src="img/car/car_works_3.gif">
+</div>
+<br><br>
+
+<div>
+<iframe src='https://drive.google.com/file/d/1loh-8lgGfUYml0VTSWWzu7ut2pAzqjqA/preview'></iframe>
+</div>
+<br><br>
+
+<div>
+The car works in the following way:
+<ul>
+  <li>
+    On board of the car there is forward facing <b>RasPi camera</b>.
+  <li>
+    The <b> image stream</b> is sent to GPU computer, 
+    which streams <b>steering commands</b> back:
+    "go forward", "stop", "turn left", etc.
+  <li>
+    Steering commands are issued in one of two ways:
+    <ul>
+      <li>
+        <b>Human input</b>, where you steer the car in racing video game fashion.
+      </li>
+      <li>
+        <b> Self-driving algorithm</b>, which tries to guess what would a human do 
+        based on current video frame.
+      </li>
+    </ul>
+  </li>
+</ul>
+</div>
+<br><br>
+
+<div>
+<a href='img/car/how_it_works.jpg'><img src='img/car/how_it_works_small.jpg'></a>
+</div>
+<br><br>
+
+<div>
+To enable all of this, pieces of various software infrastructure and hardware
+are necessary.
+</div>
+<br><br>
+
+<div>
+but the materials and their shapes are chosen in a smart
+way that makes it all work together well. So cool!
+</div>
+<br><br>
+
+<div>
+That wraps up the description of the "brutalist"
+steering mechanism.  Back to self driving!
+</div>
+<br><br>
+
+<h4>* Hardware coming together * </h4>
+
+<div>
+When we had already the "drive by keyboard attached to RasPi by cable"
+capability, we wanted to test remote control of the car.
+In order to do that, we needed to power the RPi.
+Not sure about how much power it needs, we have bought a pretty big power
+bank for mobile phone with electric charge of 10.000 mAh, weighting around 400 g.
+</div>
+<br><br>
+
+<div>
+I am huge fan of American automotive show
+<a href="https://www.youtube.com/watch?v=t8zYpmoV0qE&list=PL12C0C916CECEA3BC">
+Roadkill</a>,
+in which two guys, mostly by themselves, fix extremely clapped out classic
+American cars, usually on the road / in WalMart parking lot / in the junkyard.
+Typically they take some rotten engine-less chassis and put in a
+cheapest-they-can-find V8 into them.  Needless to say, they are masters of
+using zip-ties.
+</div>
+<br><br>
+
+<div>
+Inspired by Freiburger and Finnegan experiences, I have relied on ziptie engineering
+in order to combine the collection of parts into one coherrent vehicle
+that will move together. The end product looked like this:
+</div>
+<br><br>
+
+<div>
+<a href='img/car/green/green_heavy_iso_03.jpg'><img src='img/car/green/green_heavy_iso_03_small.jpg'></a>
+</div>
+<br><br>
+
+<div>
+<a href='img/car/green/green_heavy_iso_02.jpg'><img src='img/car/green/green_heavy_iso_02_small.jpg'></a>
+</div>
+<br><br>
+
+<div>
+<a href='img/car/green_ready_front.jpg'><img src='img/car/green_ready_front_small.jpg'></a>
+</div>
+<br><br>
+
+<div>
+<a href='img/car/green_ready_top.jpg'><img src='img/car/green_ready_top_small.jpg'></a>
+</div>
+<br><br>
+
+<div>
+You may say that it looks pretty, but that's about all it did.  Notice how big
+the battery is in relation to the car. Turns out, it was way too big.
+Unfortunately, the car was significantly too heavy to move on its own.
+</div>
+<br><br>
+
+<div>
+<iframe src='https://drive.google.com/file/d/0Bw2eHK8Zx0mLWDV1Ui1NeHNuSE0/preview'></iframe>
+</div>
+<br><br>
+
+<div>
+So the heaviest part of the car was the battery pack powering the RasPi. After
+getting some initial experiences it became clear that 10000 mAh is a lot of
+more than sufficient power to run RasPi on, even with WiFi interface for
+reasonable amount of time. Thus it was easiest to save weight by buying a way
+lighter battery with less capactiy.
+</div>
+<br><br>
+
+<div>
+We were really lucky about the Pokemon Go craze that has rolled through the Netherlands
+in early 2017, as it meant abundant supply of cheap mobile battery packs.
+We quickly sourced a new one, and with the new battery, the car looked like this:
+</div>
+<br><br>
+
+<div>
+<a href='img/car/green_ready_light.jpg'><img src='img/car/green_ready_light_small.jpg'></a>
+</div>
+<br><br>
+
+<div>
+<a href='img/car/green_ready_light_side.jpg'><img src='img/car/green_ready_light_side_small.jpg'></a>
+</div>
+<br><br>
+
+<div>
+Unfortunately, the car was still way too weak to drive well with RasPi
+strapped to its back. We needed a bigger car, but before I describe it,
+I will show how we have put together image capture and streaming system.
+
+</div>
+<br><br>
