@@ -47,10 +47,102 @@ evalutation, on Montezuma’s Revenge and Vizdoom environments this substantiall
 accelerates the learning process.
 
 
+
+
+
+
+
+
 *h3*
 Expert-augmented ACKTR
 
+*img*
+img/expert/main-formula.png
+
+*wide-div*
+<img src="img/expert/model-pro.png">
+
+*wide-div*
+$$
+ L_t(\theta) =
+ \mathbb{E}_{\pi_{\theta}} \left[
+    \underbrace{
+        -\text{adv}_t
+         \log \pi_\theta (a_t | s_t)
+        + \frac{1}{2} (R_t - V_\theta(s_t))^2
+    }_{ L^{\text{A2C}}_t(\theta) }
+    -
+    \lambda_{\text{expert}}
+    \underbrace{
+       \text{adv}^{\text{expert}}_t
+        \log \pi_\theta (a^{\text{expert}}_t | s^{\text{expert}}_t)
+    }_{L^{\text{expert}}_t(\theta)}
+\right]
+$$
+
+*img*
+wow.svg
+
+
+
+The expert data is sampled from a fixed dataset of rollouts achieving high
+rewards. We consider 3 variants of the expert advantage estimators:
+
+<ul>
+    <li>
+        reward: $ \text{adv}^{\text{expert}}_t =
+                \sum_{s\geq 0}  \gamma^s r_{t+s}^{\text{expert}} $\; 
+    </li>
+    <li>
+        actor-critic:  
+            $\text{adv}^{\text{expert}}_t = \left[ \sum_{s\geq 0}
+            \gamma^s r_{t+s}^{\text{expert}}-
+             V_{\theta}(s_t) \right]_{+} $, where $[x]_+ =
+             max(x, 0)$\;
+    </li>
+    <li>
+        simple: $ \text{adv}^{\text{expert}}_t= 1 $.  
+    </li>
+</ul>
+
+
+Expert data is not used in ACKTR estimation of inverse Fisher, but still during
+the Kroncker optimization step $g_{\text{expert}}$ is projected to the natural
+gradient direction.
 
 
 
 
+*h3*
+Algo listing
+
+
+ Inputs: Parameter vector $\theta$; <br>
+ Dataset of expert transitions 
+ $ (s^{\text{expert}}_t, a^{\text{expert}}_t,
+    s^{\text{expert}}_{t+1}, r^{\text{expert}}_t) $  <br>
+ for $iteration \leftarrow 1$ \KwTo max steps <br> {
+   \For{$t \leftarrow 1$ \KwTo T}{
+      Perform action $a_t$ according to $\pi_\theta(a|s_t)$ \\
+      Receive reward $r_t$ and new state $s_{t+1}$
+   }
+   \For{$t \leftarrow 1$ \KwTo $T$}{
+      Compute discounted future reward: $\hat{R}_t = r_t + \gamma r_{t+1} + ... + \gamma^{T-t+1}r_{T-1} + \gamma^{T-t}V_{\theta}(s_t)$ \\
+      Compute advantage: $\text{adv}_t = \hat{R}_t - V_{\theta}(s_t)$
+   }
+   Compute A2C loss gradient
+   $g_{A2C} =  \nabla_\theta \sum_{t = 1}^T 
+     \text{adv}_t \log \pi_\theta(a_t | s_t)  +
+     \frac{1}{2} (\hat{R}_t - V_{\theta})^2
+   $ \\
+   Sample mini batch of $k$ expert state-action pairs \\
+   Compute expert advantage estimate $\text{adv}^{\text{expert}}_t$ for each state-action pair. \\
+   Compute expert loss gradient
+   $g_{\text{expert}} = \nabla_\theta \frac{1}{k} \sum_{i=1}^{k}
+    \text{adv}^{\text{expert}}_i \log \pi_\theta(a^{\text{expert}}_i | s^{expert}_i)
+   $ \\
+   Update ACKTR inverse Fisher estimate. \\
+   Plug in gradient $g = g_{A2C} + \lambda_{\text{expert}}g_{\text{expert}}$ into ACKTR Kronecker optimizer.
+ }
+ \caption{Expert-augmented ACTKR}
+ \label{listing}

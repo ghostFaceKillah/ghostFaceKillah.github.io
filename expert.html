@@ -37,11 +37,14 @@ h3 {
 }
 </style>
 <title>Mike Garmulewicz - gf4c3 - gf4c3k1la </title>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML' async>
+    MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+</script>
 </head>
 <body>
 <h1>Expert-augmented actor-critic </h1>
 
-<h3>ror Vizdoom and Montezuma's Revenge</h3>
+<h3>for Vizdoom and Montezuma's Revenge</h3>
 
 <div>
 We propose an actor-critic algorithm reinforcement learning algorithm, which
@@ -95,175 +98,107 @@ accelerates the learning process.
 </div>
 <br><br>
 
-<h2>How to build a small self driving car?</h2>
+<h3>Expert-augmented ACKTR</h3>
 
 <div>
-My recent side project is a building small self driving car with
-my friend Filip.  See the code on 
-<a href="https://github.com/ghostFaceKillah/mini-self-driving-car.git">
-my github</a>.
-</div>
-<br><br>
-
-<div>
-There is fair amount of folks doing similar projects, there are even people who
-race these things.  If it looks interesting, you could do it too - it is easier than 
-ever and I'm sure you'd learn a lot.
+<a href='img/expert/main-formula.png'><img src='img/expert/main-formula_small.png'></a>
 </div>
 <br><br>
 
 <div class='wide'>
-<img src="img/car/car_works_1.gif">
-<img src="img/car/car_works_2.gif">
-<img src="img/car/car_works_3.gif">
+<img src="img/expert/model-pro.png">
+</div>
+<br><br>
+
+<div class='wide'>
+$$
+ L_t(\theta) =
+ \mathbb{E}_{\pi_{\theta}} \left[
+    \underbrace{
+        -\text{adv}_t
+         \log \pi_\theta (a_t | s_t)
+        + \frac{1}{2} (R_t - V_\theta(s_t))^2
+    }_{ L^{\text{A2C}}_t(\theta) }
+    -
+    \lambda_{\text{expert}}
+    \underbrace{
+       \text{adv}^{\text{expert}}_t
+        \log \pi_\theta (a^{\text{expert}}_t | s^{\text{expert}}_t)
+    }_{L^{\text{expert}}_t(\theta)}
+\right]
+$$
 </div>
 <br><br>
 
 <div>
-<iframe src='https://drive.google.com/file/d/1loh-8lgGfUYml0VTSWWzu7ut2pAzqjqA/preview'></iframe>
+<a href='wow.svg'><img src='wow_small.svg'></a>
 </div>
 <br><br>
 
 <div>
-The car works in the following way:
+The expert data is sampled from a fixed dataset of rollouts achieving high
+rewards. We consider 3 variants of the expert advantage estimators:
+</div>
+<br><br>
+
+<div>
 <ul>
-  <li>
-    On board of the car there is forward facing <b>RasPi camera</b>.
-  <li>
-    The <b> image stream</b> is sent to GPU computer, 
-    which streams <b>steering commands</b> back:
-    "go forward", "stop", "turn left", etc.
-  <li>
-    Steering commands are issued in one of two ways:
-    <ul>
-      <li>
-        <b>Human input</b>, where you steer the car in racing video game fashion.
-      </li>
-      <li>
-        <b> Self-driving algorithm</b>, which tries to guess what would a human do 
-        based on current video frame.
-      </li>
-    </ul>
-  </li>
+    <li>
+        reward: $ \text{adv}^{\text{expert}}_t =
+                \sum_{s\geq 0}  \gamma^s r_{t+s}^{\text{expert}} $\; 
+    </li>
+    <li>
+        actor-critic:  
+            $\text{adv}^{\text{expert}}_t = \left[ \sum_{s\geq 0}
+            \gamma^s r_{t+s}^{\text{expert}}-
+             V_{\theta}(s_t) \right]_{+} $, where $[x]_+ =
+             max(x, 0)$\;
+    </li>
+    <li>
+        simple: $ \text{adv}^{\text{expert}}_t= 1 $.  
+    </li>
 </ul>
 </div>
 <br><br>
 
 <div>
-<a href='img/car/how_it_works.jpg'><img src='img/car/how_it_works_small.jpg'></a>
+Expert data is not used in ACKTR estimation of inverse Fisher, but still during
+the Kroncker optimization step $g_{\text{expert}}$ is projected to the natural
+gradient direction.
 </div>
 <br><br>
 
-<div>
-To enable all of this, pieces of various software infrastructure and hardware
-are necessary.
-</div>
-<br><br>
+<h3>Algo listing</h3>
 
 <div>
-but the materials and their shapes are chosen in a smart
-way that makes it all work together well. So cool!
-</div>
-<br><br>
-
-<div>
-That wraps up the description of the "brutalist"
-steering mechanism.  Back to self driving!
-</div>
-<br><br>
-
-<h4>* Hardware coming together * </h4>
-
-<div>
-When we had already the "drive by keyboard attached to RasPi by cable"
-capability, we wanted to test remote control of the car.
-In order to do that, we needed to power the RPi.
-Not sure about how much power it needs, we have bought a pretty big power
-bank for mobile phone with electric charge of 10.000 mAh, weighting around 400 g.
-</div>
-<br><br>
-
-<div>
-I am huge fan of American automotive show
-<a href="https://www.youtube.com/watch?v=t8zYpmoV0qE&list=PL12C0C916CECEA3BC">
-Roadkill</a>,
-in which two guys, mostly by themselves, fix extremely clapped out classic
-American cars, usually on the road / in WalMart parking lot / in the junkyard.
-Typically they take some rotten engine-less chassis and put in a
-cheapest-they-can-find V8 into them.  Needless to say, they are masters of
-using zip-ties.
-</div>
-<br><br>
-
-<div>
-Inspired by Freiburger and Finnegan experiences, I have relied on ziptie engineering
-in order to combine the collection of parts into one coherrent vehicle
-that will move together. The end product looked like this:
-</div>
-<br><br>
-
-<div>
-<a href='img/car/green/green_heavy_iso_03.jpg'><img src='img/car/green/green_heavy_iso_03_small.jpg'></a>
-</div>
-<br><br>
-
-<div>
-<a href='img/car/green/green_heavy_iso_02.jpg'><img src='img/car/green/green_heavy_iso_02_small.jpg'></a>
-</div>
-<br><br>
-
-<div>
-<a href='img/car/green_ready_front.jpg'><img src='img/car/green_ready_front_small.jpg'></a>
-</div>
-<br><br>
-
-<div>
-<a href='img/car/green_ready_top.jpg'><img src='img/car/green_ready_top_small.jpg'></a>
-</div>
-<br><br>
-
-<div>
-You may say that it looks pretty, but that's about all it did.  Notice how big
-the battery is in relation to the car. Turns out, it was way too big.
-Unfortunately, the car was significantly too heavy to move on its own.
-</div>
-<br><br>
-
-<div>
-<iframe src='https://drive.google.com/file/d/0Bw2eHK8Zx0mLWDV1Ui1NeHNuSE0/preview'></iframe>
-</div>
-<br><br>
-
-<div>
-So the heaviest part of the car was the battery pack powering the RasPi. After
-getting some initial experiences it became clear that 10000 mAh is a lot of
-more than sufficient power to run RasPi on, even with WiFi interface for
-reasonable amount of time. Thus it was easiest to save weight by buying a way
-lighter battery with less capactiy.
-</div>
-<br><br>
-
-<div>
-We were really lucky about the Pokemon Go craze that has rolled through the Netherlands
-in early 2017, as it meant abundant supply of cheap mobile battery packs.
-We quickly sourced a new one, and with the new battery, the car looked like this:
-</div>
-<br><br>
-
-<div>
-<a href='img/car/green_ready_light.jpg'><img src='img/car/green_ready_light_small.jpg'></a>
-</div>
-<br><br>
-
-<div>
-<a href='img/car/green_ready_light_side.jpg'><img src='img/car/green_ready_light_side_small.jpg'></a>
-</div>
-<br><br>
-
-<div>
-Unfortunately, the car was still way too weak to drive well with RasPi
-strapped to its back. We needed a bigger car, but before I describe it,
-I will show how we have put together image capture and streaming system.
-
+Inputs: Parameter vector $\theta$; <br>
+ Dataset of expert transitions 
+ $ (s^{\text{expert}}_t, a^{\text{expert}}_t,
+    s^{\text{expert}}_{t+1}, r^{\text{expert}}_t) $  <br>
+ for $iteration \leftarrow 1$ \KwTo max steps <br> {
+   \For{$t \leftarrow 1$ \KwTo T}{
+      Perform action $a_t$ according to $\pi_\theta(a|s_t)$ \\
+      Receive reward $r_t$ and new state $s_{t+1}$
+   }
+   \For{$t \leftarrow 1$ \KwTo $T$}{
+      Compute discounted future reward: $\hat{R}_t = r_t + \gamma r_{t+1} + ... + \gamma^{T-t+1}r_{T-1} + \gamma^{T-t}V_{\theta}(s_t)$ \\
+      Compute advantage: $\text{adv}_t = \hat{R}_t - V_{\theta}(s_t)$
+   }
+   Compute A2C loss gradient
+   $g_{A2C} =  \nabla_\theta \sum_{t = 1}^T 
+     \text{adv}_t \log \pi_\theta(a_t | s_t)  +
+     \frac{1}{2} (\hat{R}_t - V_{\theta})^2
+   $ \\
+   Sample mini batch of $k$ expert state-action pairs \\
+   Compute expert advantage estimate $\text{adv}^{\text{expert}}_t$ for each state-action pair. \\
+   Compute expert loss gradient
+   $g_{\text{expert}} = \nabla_\theta \frac{1}{k} \sum_{i=1}^{k}
+    \text{adv}^{\text{expert}}_i \log \pi_\theta(a^{\text{expert}}_i | s^{expert}_i)
+   $ \\
+   Update ACKTR inverse Fisher estimate. \\
+   Plug in gradient $g = g_{A2C} + \lambda_{\text{expert}}g_{\text{expert}}$ into ACKTR Kronecker optimizer.
+ }
+ \caption{Expert-augmented ACTKR}
+ \label{listing}
 </div>
 <br><br>
