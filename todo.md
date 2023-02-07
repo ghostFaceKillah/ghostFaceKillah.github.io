@@ -1,5 +1,7 @@
 
 - projects I want to do / continue
+    - blogpost saving montezuma's revenge
+      - like wow, here's a crazy bug and wow that's so cool, right ?
     - trajopt from scratch
     - round of blog betterment
     - hedge fund rust
@@ -18,6 +20,9 @@
 
 - basic book reviews / summaries
 
+
+- blog work:
+  - put the pages in some kind of structured dirs, the current thing is too messy
 
 
 
