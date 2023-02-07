@@ -1,4 +1,13 @@
 
+- projects I want to do / continue
+    - trajopt from scratch
+    - round of blog betterment
+    - hedge fund rust
+    - conditional neural nets for the car again
+    - arm that picks up stuff yo
+
+
+
 - [ ] clean up github
 
     - [ ] merge compression ones
