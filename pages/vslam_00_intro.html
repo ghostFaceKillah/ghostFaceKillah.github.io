@@ -1,0 +1,1249 @@
+<html>
+<head>
+<style>
+body {
+   font-family: monospace;
+    font-size:large;
+    text-align: center;
+    background: linear-gradient(141deg,
+        white,
+        white,
+        #e0fbff,
+        #ffaaaa,
+        #3157af
+        );
+}
+div {
+    text-align: justify;
+    max-width: 500px;
+    display: inline-block;
+}
+img {
+    max-width: 500px;
+}
+iframe {
+    width: 500px;
+    height: 280px;
+}
+h3 {
+    text-align: center;
+}
+.wide {
+    max-width: 750px;
+}
+
+#how_it_works_pics {
+    max-width: 750px;
+}
+</style>
+<title>Mike Garmulewicz - gf4c3 - gf4c3k1la </title>
+</head>
+<body>
+<h2>How to build a small self driving car?</h2>
+
+<div>
+Welcome to the course on VSLAM
+</div>
+
+<div>
+<img src="img/vslam/logo.png">
+</div>
+
+
+<br><br>
+
+<div>
+There is fair amount of folks doing similar projects, there are even people who
+race these things.  If it looks interesting, you could do it too - it is easier than 
+ever and I'm sure you'd learn a lot.
+</div>
+<br><br>
+
+<div class='wide'>
+<img src="img/car/car_works_1.gif">
+<img src="img/car/car_works_2.gif">
+<img src="img/car/car_works_3.gif">
+</div>
+<br><br>
+
+<div>
+<iframe src='https://drive.google.com/file/d/1loh-8lgGfUYml0VTSWWzu7ut2pAzqjqA/preview'></iframe>
+</div>
+<br><br>
+
+<h4>* Idea *</h4>
+
+<div>
+The car works in the following way:
+<ul>
+  <li>
+    On board of the car there is forward facing <b>RasPi camera</b>.
+  <li>
+    The <b> image stream</b> is sent to GPU computer, 
+    which streams <b>steering commands</b> back:
+    "go forward", "stop", "turn left", etc.
+  <li>
+    Steering commands are issued in one of two ways:
+    <ul>
+      <li>
+        <b>Human input</b>, where you steer the car in racing video game fashion.
+      </li>
+      <li>
+        <b> Self-driving algorithm</b>, which tries to guess what would a human do 
+        based on current video frame.
+      </li>
+    </ul>
+  </li>
+</ul>
+</div>
+<br><br>
+
+<div>
+Below diagaram visualizes the flow of data:
+</div>
+<br><br>
+
+<div>
+<a href='img/car/how_it_works.jpg'><img src='img/car/how_it_works_small.jpg'></a>
+</div>
+<br><br>
+
+<div>
+To enable all of this, pieces of various software infrastructure and hardware
+are necessary.
+</div>
+<br><br>
+
+<div>
+On the GPU server side we need:
+<ul>
+<li> <a href="https://github.com/ghostFaceKillah/mini-self-driving-car/blob/master/src/pc/image_getter.py">code</a> 
+     that receives images from RasPi
+<li> <a href="https://github.com/ghostFaceKillah/mini-self-driving-car/blob/master/src/pc/keyboard_state_sender.py">code</a> 
+     that sends current steering state to the car
+<li> <a href="https://github.com/ghostFaceKillah/mini-self-driving-car/blob/master/src/pc/neural_network_computer.py">code</a> 
+     that executes neural network to obtain autonomous steering
+<li> <a href="https://github.com/ghostFaceKillah/mini-self-driving-car/blob/master/src/pc/pygame_driver.py">code</a> 
+     that displays user the "steering game" and collects steering
+<li> <a href="https://github.com/ghostFaceKillah/mini-self-driving-car/blob/master/src/pc/state_saver.py">code</a> 
+     that collects human input pairs and saves them to the drive
+</ul>
+Each of the above is <b>multiprocessing.Process</b> and they share a state
+which is <b>multiprocessing.Namespace</b>.
+On the RasPi side we need:
+<ul>
+<li> <a href="https://github.com/ghostFaceKillah/mini-self-driving-car/blob/master/src/raspi/steering.py">code</a> that receives steering commands and executes them
+<li> <a href="https://github.com/ghostFaceKillah/mini-self-driving-car/blob/master/src/raspi/video.py">code</a> that captures video stream and puts it on the wire
+</ul>
+</div>
+<br><br>
+
+<div>
+On the hardware side there are the following elements:
+<ul>
+<li> Raspberry Pi
+<li> RasPi battery pack
+<li> RasPi compatibile camera
+<li> RC Car
+<li> RC car engines battery pack
+<li> Engine controller to control RC car
+<li> Wifi interface (turns out it needs to be strong)
+<li> Ways to keep all of this together
+</ul>
+</div>
+<br><br>
+
+<div>
+In the text below I will explain how we figured out
+how to combine all of them into a small self driving car,
+and hopefully convey that it was a lot of fun.
+And that perhaps we have even learned a little.
+</div>
+<br><br>
+
+<h4>* Before the first car *</h4>
+
+<div>
+The whole story started when I finally had time to learn some electronics.
+I have always wanted to understand it, as it delivers such exceptional
+amounts of value and - in my book - is as close to magic as it gets.
+</div>
+<br><br>
+
+<div>
+There are so many <a href="https://artofelectronics.net">cool books about electonics</a>,
+<a href="http://lcamtuf.coredump.cx/electronics/">online write-ups</a>,
+<a href="https://www.youtube.com/user/eaterbc">youtube videos</a>,
+<a href="http://www.falstad.com/circuit/">electronics simulators</a>,
+but what I found most practical for the car project was this book targetted to young teens:
+<a href="https://www.amazon.com/Make-Electronics-Discovery-Charles-Platt/dp/0596153740">
+</div>
+<br><br>
+
+<div>
+<a href='img/car/book-make-electronics.jpg'><img src='img/car/book-make-electronics_small.jpg'></a>
+</div>
+<br><br>
+
+<div>
+</a>
+It is so good:
+<ul>
+<li> has light-hearted vibe about it,
+<li> teaches you the practical basics via small projects:
+  <ul>
+  <li>how to solder,
+  <li> how to use multimeter,
+  </ul>
+<li> is exceptionally easy-to-read.
+</ul>
+It lacks the proper theory build-up, so you will have to read up on that
+somewhere else if you are interested, but for the car project it should be
+sufficient.  After some lazy evenings with soldering iron I was able to reverse
+engineer and debug basic electronic circuits such as this "astable
+multivibrator", to use the proper name:
+</div>
+<br><br>
+
+<div>
+<a href='img/car/blinkenlights.gif'><img src='img/car/blinkenlights.gif'></a>
+</div>
+<br><br>
+
+<h3>* The first car era *</h3>
+
+<div>
+Armed with knowledge of rudiments of electronics, it was time to reverse
+engineer how an RC car works.  As I generally had little idea what I was doing,
+I have decided to get cheapest one I could find so I wouldn't be too wasteful
+if I broke it while disassembling it.  The cheapest one I could find was this
+little marvel:
+</div>
+<br><br>
+
+<div>
+<a href='img/car/vanilla_green.jpg'><img src='img/car/vanilla_green_small.jpg'></a>
+</div>
+<br><br>
+
+<div>
+which I have bought in Dutch bargain store Action.nl, new, for below 5 euro.
+</div>
+<br><br>
+
+<div>
+Deconstructing it, you just cannot help wondering how
+ simple and elegantly designed it is. 
+It truly amazes me that for under 5 Euro per unit
+people are able to design, fabricate, package, ship 
+and sell this toy.
+It is possible mostly due to amusingly "to the point", "brutalist"
+design, where most of elements are right on their tolerances
+and wanted effects are achieved in the simplest possible way.
+This approach is best showcased by the design of the front wheels
+steering system, which I will describe below.
+</div>
+<br><br>
+
+<div>
+Coming back to the self-driving project, when we pop the body
+of the frame, we see this:
+</div>
+<br><br>
+
+<div>
+<a href='img/car/green_basic_deconstruct.jpg'><img src='img/car/green_basic_deconstruct_small.jpg'></a>
+</div>
+<br><br>
+
+<div>
+Luckily for our project,
+this construction can be adapted to our needs in a straightforward fashion.
+In the center we see the logic PCB.
+There are three pairs of red & black wires attached to the PCB:
+<ul>
+<li> a pair feeding power from the battery pack
+<li> another pair sending power to the back motor, which movese car forward and backward
+<li> one more pair sending power to the front wheel steering system
+</ul>
+</div>
+<br><br>
+
+<div>
+When logic board receives radio inputs, it (more-or-less) connects
+the battery wires with the engine wires and the car moves.
+</div>
+<br><br>
+
+<div>
+<a href='img/car/green/green_pcb_closeup.jpg'><img src='img/car/green/green_pcb_closeup_small.jpg'></a>
+</div>
+<br><br>
+
+<div>
+You can see for yourself - if you directly connect the pair from the battery to
+the pair coming from one of engines (front or back engine), you see that the
+wheels move in wanted directions.  So if we substitute the current logic board
+with our custom RasPi based logic board that controls connection between
+battery and engines based on instructions that we control by code, we would be
+able to drive-by-code.
+</div>
+<br><br>
+
+<h4>Warning!</h4>
+
+<div>
+As Raspberry Pi has some General Purpose Input/Output (GPIO) pins
+it is tempting to try to hook up the engine directly to RasPi.
+This is a very bad idea, which will destroy your RasPi, by running too much 
+electricity through it.
+</div>
+<br><br>
+
+<div>
+Thus, we need to implement a hardware engine controller which based
+on signals from Raspi will drive the motors.
+You can buy a ready motor controller or be thrifty and implement your own.
+As conceptually the wanted mechanism of action sounds like transistor - 
+"based on small electricty turn on flow of bigger electricty" -
+I have decided to build my own engine controller.
+Following
+<a href="https://business.tutsplus.com/tutorials/controlling-dc-motors-using-python-with-a-raspberry-pi--cms-20051">
+this tutorial
+</a>
+produced an engine controller based on L293D chip.
+</div>
+<br><br>
+
+<div>
+<a href='img/car/green_engine_controller.jpg'><img src='img/car/green_engine_controller_small.jpg'></a>
+</div>
+<br><br>
+
+<div>
+The tutorial worked - at least partially. I was able to steer the front wheels
+and move the car forward, but there was no reverse gear.
+</div>
+<br><br>
+
+<div>
+<iframe src='https://drive.google.com/file/d/0Bw2eHK8Zx0mLZ0ZxaVQ3UDdhNGM/preview'></iframe>
+</div>
+<br><br>
+
+<div>
+Turns out the method shown in the above tutorial couldn't spin second engine
+in the reverse direction.
+After consulting the 
+<a href="http://www.ti.com/lit/ds/symlink/l293.pdf">
+chip's factsheet
+</a>
+I have come up with another way of hooking up L293D, which fixed the bug. 
+Now I could control car completely from Python code running on RasPi.
+</div>
+<br><br>
+
+<div>
+Now, as I had a car that can be controlled by keyboard attached to RasPi, it
+was time to make the control remote. I have connected a basic small WiFi dongle
+to Raspberry and implemented a pair of Python scripts:
+<ul>
+<li> Server-side script capturing keyboard events and sending control
+events based on them to RasPi,
+<li> RasPi-side script listening for those events on TCP socket and based on them
+steering the L293D and in turn, the car.
+</ul>
+</div>
+<br><br>
+
+<h4>* Steering mechanism in first car *</h4>
+
+<div>
+Now I will describe how steering is implemented mechanically
+in the first RC car we have been working with. 
+</div>
+<br><br>
+
+<div>
+Let me remark here that I am impressed by how simple this mechanism is.
+Perhaps the reason I am so excited about it is because I have only a vague
+idea about how mechanical design works, so I am easy to impress, and perhaps
+stuff like this gets done every day, who knows.  But I see an element of playful
+master in it and I can't help feeling happy about it.
+</div>
+<br><br>
+
+<div>
+The mechanism is hidden if you look from the front
+</div>
+<br><br>
+
+<div>
+<a href='img/car/steering/green_iso_front_view.jpg'><img src='img/car/steering/green_iso_front_view_small.jpg'></a>
+</div>
+<br><br>
+
+<div>
+and similarily remains hidden if you look at it from the top.
+</div>
+<br><br>
+
+<div>
+<a href='img/car/steering/green_top_view.jpg'><img src='img/car/steering/green_top_view_small.jpg'></a>
+</div>
+<br><br>
+
+<div>
+It is only after removing the top cover that we see the following mechanism
+(I have removed all the plastic elements to help visibility):
+</div>
+<br><br>
+
+<div>
+<a href='img/car/steering/green_side_front_engine.jpg'><img src='img/car/steering/green_side_front_engine_small.jpg'></a>
+</div>
+<br><br>
+
+<div>
+Seen from the top:
+</div>
+<br><br>
+
+<div>
+<a href='img/car/steering/green_engine_top.jpg'><img src='img/car/steering/green_engine_top_small.jpg'></a>
+</div>
+<br><br>
+
+<div>
+And here comes the trick:
+</div>
+<br><br>
+
+<div>
+On top of shaft there is a pinion. The pinion is just slid on shaft, without
+any kind of glue.  The size and tightness of the pinion are chosen in in a way
+that when the engine starts moving, the friction between shaft and pinion is
+just enough to move the half-circle rack.
+</div>
+<br><br>
+
+<div>
+<a href='img/car/steering/green_front_engine_detail.jpg'><img src='img/car/steering/green_front_engine_detail_small.jpg'></a>
+</div>
+<br><br>
+
+<div>
+But when the half-circle rack hits
+the maximum extension point, the friction breaks and the shaft spins around
+inside pinion.  Is there a cheaper trick (speaking both symbolically and
+literally)?  How ingenious!
+</div>
+<br><br>
+
+<div>
+<a href='img/car/steering/green_steering_mechanism_action.gif'><img src='img/car/steering/green_steering_mechanism_action.gif'></a>
+</div>
+<br><br>
+
+<div>
+Below the semicircular rack there is a spring that pulls the wheels back
+to neutral position:
+</div>
+<br><br>
+
+<div>
+<a href='img/car/steering/green_top_view_wheels_coming_off.jpg'><img src='img/car/steering/green_top_view_wheels_coming_off_small.jpg'></a>
+</div>
+<br><br>
+
+<div>
+You can see it better in this close-up:
+</div>
+<br><br>
+
+<div>
+<a href='img/car/steering/green_steering_insides_2.jpg'><img src='img/car/steering/green_steering_insides_2_small.jpg'></a>
+</div>
+<br><br>
+
+<div>
+A small plastic element is connected to wheels. It has a small peg
+that sits in the middle of the spring, so the spring an act on it:
+</div>
+<br><br>
+
+<div>
+<a href='img/car/steering/green_detached_wheels.jpg'><img src='img/car/steering/green_detached_wheels_small.jpg'></a>
+</div>
+<br><br>
+
+<div>
+So as you can see just a collection of as simple as possible
+elements each doing its job well. Everything is super cheap,
+but the materials and their shapes are chosen in a smart
+way that makes it all work together well. So cool!
+</div>
+<br><br>
+
+<div>
+That wraps up the description of the "brutalist"
+steering mechanism.  Back to self driving!
+</div>
+<br><br>
+
+<h4>* Hardware coming together * </h4>
+
+<div>
+When we had already the "drive by keyboard attached to RasPi by cable"
+capability, we wanted to test remote control of the car.
+In order to do that, we needed to power the RPi.
+Not sure about how much power it needs, we have bought a pretty big power
+bank for mobile phone with electric charge of 10.000 mAh, weighting around 400 g.
+</div>
+<br><br>
+
+<div>
+I am huge fan of American automotive show
+<a href="https://www.youtube.com/watch?v=t8zYpmoV0qE&list=PL12C0C916CECEA3BC">
+Roadkill</a>,
+in which two guys, mostly by themselves, fix extremely clapped out classic
+American cars, usually on the road / in WalMart parking lot / in the junkyard.
+Typically they take some rotten engine-less chassis and put in a
+cheapest-they-can-find V8 into them.  Needless to say, they are masters of
+using zip-ties.
+</div>
+<br><br>
+
+<div>
+Inspired by Freiburger and Finnegan experiences, I have relied on ziptie engineering
+in order to combine the collection of parts into one coherrent vehicle
+that will move together. The end product looked like this:
+</div>
+<br><br>
+
+<div>
+<a href='img/car/green/green_heavy_iso_03.jpg'><img src='img/car/green/green_heavy_iso_03_small.jpg'></a>
+</div>
+<br><br>
+
+<div>
+<a href='img/car/green/green_heavy_iso_02.jpg'><img src='img/car/green/green_heavy_iso_02_small.jpg'></a>
+</div>
+<br><br>
+
+<div>
+<a href='img/car/green_ready_front.jpg'><img src='img/car/green_ready_front_small.jpg'></a>
+</div>
+<br><br>
+
+<div>
+<a href='img/car/green_ready_top.jpg'><img src='img/car/green_ready_top_small.jpg'></a>
+</div>
+<br><br>
+
+<div>
+You may say that it looks pretty, but that's about all it did.  Notice how big
+the battery is in relation to the car. Turns out, it was way too big.
+Unfortunately, the car was significantly too heavy to move on its own.
+</div>
+<br><br>
+
+<div>
+<iframe src='https://drive.google.com/file/d/0Bw2eHK8Zx0mLWDV1Ui1NeHNuSE0/preview'></iframe>
+</div>
+<br><br>
+
+<div>
+So the heaviest part of the car was the battery pack powering the RasPi. After
+getting some initial experiences it became clear that 10000 mAh is a lot of
+more than sufficient power to run RasPi on, even with WiFi interface for
+reasonable amount of time. Thus it was easiest to save weight by buying a way
+lighter battery with less capactiy.
+</div>
+<br><br>
+
+<div>
+We were really lucky about the Pokemon Go craze that has rolled through the Netherlands
+in early 2017, as it meant abundant supply of cheap mobile battery packs.
+We quickly sourced a new one, and with the new battery, the car looked like this:
+</div>
+<br><br>
+
+<div>
+<a href='img/car/green_ready_light.jpg'><img src='img/car/green_ready_light_small.jpg'></a>
+</div>
+<br><br>
+
+<div>
+<a href='img/car/green_ready_light_side.jpg'><img src='img/car/green_ready_light_side_small.jpg'></a>
+</div>
+<br><br>
+
+<div>
+Unfortunately, the car was still way too weak to drive well with RasPi
+strapped to its back. We needed a bigger car, but before I describe it,
+I will show how we have put together image capture and streaming system.
+</div>
+<br><br>
+
+<h3>* Image capture and streaming *</h3>
+
+<div>
+Building this subsystem was a big loop of trial and error.
+In the end we have settled for RPi Camera on hardware side and
+amazing <b>picamera</b> Python module.
+</div>
+<br><br>
+
+<div>
+<a href='img/car/camera_holder.jpg'><img src='img/car/camera_holder_small.jpg'></a>
+</div>
+<br><br>
+
+<div>
+An interesting detail here is camera holder.  Filip works in <a
+href="https://www.3dhubs.com"> 3D Hubs</a>, an Amsterdam based 3d printing
+company. As a perk, team members are given significant 3D printing allowance,
+which we used to 3d print case for RasPi camera in high quality. In this
+technology they shoot plastic-paticle spray with laser so it solifidies.  This
+technology results in very accurate and resilent products.
+</div>
+<br><br>
+
+<div>
+When it comes to the code side, at the beginning we have struggled a lot with
+high latency:
+</div>
+<br><br>
+
+<div>
+<iframe src='https://drive.google.com/file/d/0Bw2eHK8Zx0mLSHM5X1Btam5iWEk/preview'></iframe>
+</div>
+<br><br>
+
+<div>
+and then experimented some more:
+</div>
+<br><br>
+
+<div>
+<iframe src='https://drive.google.com/file/d/0Bw2eHK8Zx0mLOE93RTJHX0xpb0E/preview'></iframe>
+</div>
+<br><br>
+
+<div>
+and even more:
+</div>
+<br><br>
+
+<div>
+<iframe src='https://drive.google.com/file/d/0Bw2eHK8Zx0mLNDhkRFhjejZvMGs/preview'></iframe>
+</div>
+<br><br>
+
+<div>
+but quickly we have converged to a pretty resilent UDP based stream.  The code
+version that has worked best for us in the end was version presented in <a
+href="https://picamera.readthedocs.io/en/release-1.13/recipes2.html#rapid-capture-and-streaming">
+Advanced Recipes in picamera docs</a>, but with UDP based connection. You can
+see the code <a
+href="https://github.com/ghostFaceKillah/mini-self-driving-car/blob/master/src/raspi/video.py">
+here</a>. After this, we were consistently seeing good latency:
+</div>
+<br><br>
+
+<div>
+<a href='img/car/measuring_latency_03.jpg'><img src='img/car/measuring_latency_03_small.jpg'></a>
+</div>
+<br><br>
+
+<div>
+Measuring latency takes both hands.
+</div>
+<br><br>
+
+<div>
+Here is how the final user interface looks like:
+</div>
+<br><br>
+
+<div>
+<a href='img/car/ux.jpg'><img src='img/car/ux_small.jpg'></a>
+</div>
+<br><br>
+
+<div>
+<a href='img/car/ai_philosophy.jpg'><img src='img/car/ai_philosophy_small.jpg'></a>
+</div>
+<br><br>
+
+<div>
+What does the self-driving car see when it sees itself in the mirror?
+</div>
+<br><br>
+
+<h4>* Second car *</h4>
+
+<div>
+After the first car wouldn't move under it's own weight even with light battery
+pack, it became clear we need a new one. In the local shopping mall, this
+time in a proper toy shop we have found this car:
+</div>
+<br><br>
+
+<div>
+<a href='img/car/black/black_vanilla.jpg'><img src='img/car/black/black_vanilla_small.jpg'></a>
+</div>
+<br><br>
+
+<div>
+which is a bigger and slightly more advanced construction.
+However, in this car we can find some interesting mechanical pieces
+such as rear differential, and slightly more advanced front steering.
+For now, I have resisted the temptation to tear it completely apart,
+but I think I will come back to it after we move to bigger car.
+The disassembly yielded a similar result for our project - three wire pairs,
+one for battery, one for front steering one for back steering.
+</div>
+<br><br>
+
+<div>
+<a href='img/car/black/black_disassembly.jpg'><img src='img/car/black/black_disassembly_small.jpg'></a>
+</div>
+<br><br>
+
+<div>
+As we didn't want to disassemble the front steering, we were unsure
+whether it will work in the simple, linear way. That is whether by just
+applying voltage to front we could steer the car.
+We tested it by hand:
+</div>
+<br><br>
+
+<div>
+<a href='img/car/black/black_disassembly_01.jpg'><img src='img/car/black/black_disassembly_01_small.jpg'></a>
+</div>
+<br><br>
+
+<div>
+and luckily it worked, which meant we could reuse the previous engine control
+unit.  We used the opportunity to clean up the control module a bit and fit it
+into slightly tighter package.
+</div>
+<br><br>
+
+<div>
+<a href='img/car/black/black_engine_controller_clean.jpg'><img src='img/car/black/black_engine_controller_clean_small.jpg'></a>
+</div>
+<br><br>
+
+<div>
+Overall, the ready product looked like this:
+</div>
+<br><br>
+
+<div>
+<a href='img/car/black/black_iso_no_cam_2.jpg'><img src='img/car/black/black_iso_no_cam_2_small.jpg'></a>
+</div>
+<br><br>
+
+<div>
+After this we added above described high quality camera holder.
+</div>
+<br><br>
+
+<div>
+<a href='img/car/black/black_ready_iso_01.jpg'><img src='img/car/black/black_ready_iso_01_small.jpg'></a>
+</div>
+<br><br>
+
+<div>
+The black car turned out to be quite fast:
+</div>
+<br><br>
+
+<div>
+<a href='img/car/black_is_fast.gif'><img src='img/car/black_is_fast.gif'></a>
+</div>
+<br><br>
+
+<div>
+And it was fun to just drive it around.
+</div>
+<br><br>
+
+<div>
+<iframe src='https://drive.google.com/file/d/0Bw2eHK8Zx0mLSm8xVFc4Rk5YR00/preview'></iframe>
+</div>
+<br><br>
+
+<h4>* Remote control *</h4>
+
+<div>
+Of course, driving by wire didn't cut it for us.
+</div>
+<br><br>
+
+<div>
+We have decided to stream the steering over WiFi. Another
+viable alternative was Bluetooth.
+First we have implemented event based controller that listens for keyboard
+events on the controller server side. If it catches any, it sends a message
+over TCP socket to the car to update the remote state.
+</div>
+<br><br>
+
+<div>
+On the testing bench, it has worked just fine:
+</div>
+<br><br>
+
+<div>
+<iframe src='https://drive.google.com/file/d/0Bw2eHK8Zx0mLZzdFVnNIY3VGMHc/preview'></iframe>
+</div>
+<br><br>
+
+<div>
+But in practice, it was error-prone:
+</div>
+<br><br>
+
+<div>
+<a href='img/car/black_crashes.gif'><img src='img/car/black_crashes.gif'></a>
+</div>
+<br><br>
+
+<div>
+The default WiFi dongle we have bought for RasPi was too small and had not so
+strong reception.  It was easy to get into a spot where there were problems with
+instant transfer of the data.  As the TCP retries sending the data until
+succesful, by the time the information arrived onto the car, several new events
+might have happened.  The car did not feel very responsive.
+</div>
+<br><br>
+
+<div>
+We partially resolved this issue by:
+<ul>
+<li> sending the state (spamming?) to the car every 10 ms
+<li> allowing information loss by switching to UDP
+</ul>
+so in the new implementation, algorithm listens for keyboard events and
+updates the state based on it and we send the state to the car all the
+time over and over again. You can see the final code 
+<a href="https://github.com/ghostFaceKillah/mini-self-driving-car/blob/master/src/pc/keyboard_state_sender.py">
+here</a>
+and
+<a href="https://github.com/ghostFaceKillah/mini-self-driving-car/blob/master/src/raspi/steering.py">
+here</a>.
+</div>
+<br><br>
+
+<div>
+These changes in code helped the reliablity a lot, but it still wasn't perfect. Still
+in places with weak wifi reception, the car didn't work pefectly.
+We felt there is still room for improvement.
+We tried the easiest thing there was and added stronger Wifi dongle.
+</div>
+<br><br>
+
+<div>
+<a href='img/car/new_wifi_two.jpg'><img src='img/car/new_wifi_two_small.jpg'></a>
+</div>
+<br><br>
+
+<div>
+We went for pentesting-style Alfa wifi dongle with reasonably big antenna.
+Look how well the dongle sits between the back engine and wing.
+It's almost as if we planned it to be constructed that way!
+</div>
+<br><br>
+
+<div>
+<a href='img/car/black/black_wifi_on_car.jpg'><img src='img/car/black/black_wifi_on_car_small.jpg'></a>
+</div>
+<br><br>
+
+<div>
+But we did not. It's just a bunch of zipties.
+</div>
+<br><br>
+
+<div>
+This concluded the hardware part for now.
+This is how it looks when you (badly) drive the car around the track in the evening.
+</div>
+<br><br>
+
+<div>
+<iframe src='https://drive.google.com/file/d/0Bw2eHK8Zx0mLRGdUSXc3NnJjd1U/preview'></iframe>
+</div>
+<br><br>
+
+<h4>Machine learning</h4>
+
+<div>
+We have implemented ConvNet-based behavioral cloning system that
+steers the car.
+It is a variation of a widely used Nvidia implementation.
+See the full code 
+<a href="https://github.com/ghostFaceKillah/mini-self-driving-car/blob/master/src/ml/train_model.py">
+here</a>.
+</div>
+<br><br>
+
+<div>
+The inspiration came from many places:
+<ul> 
+<li> Reading the original Nvidia papers
+    <a href="https://arxiv.org/pdf/1704.07911.pdf">
+    "Explaining How a Deep Neural Network Trained with End-to-End Learning Steers a Car"
+    </a>
+    and
+    <a href="https://arxiv.org/pdf/1604.07316v1.pdf">
+    "End to End Learning for Self-Driving Cars"
+    </a>
+<li> Berkley <a href="http://rll.berkeley.edu/deeprlcourse/"> Deep reinforcement learning class </a>
+<li> Udacity self-driving car nanodegree
+<li> Reading Comma.ai paper <a href="https://github.com/commaai/research"> 
+"Learning a Driving Simulator"</a>
+</ul>
+</div>
+<br><br>
+
+<div>
+As shown in the diagram at the top of the blog post, based on a dataset of
+pairs <b><i> (image, steering) </b></i> sampled from a human driving record, we
+learn to predict <b><i> steering </b></i> from <b><i> image from camera
+</b></i>.  This is done by using a convolutional neural network.
+</div>
+<br><br>
+
+<div>
+There are good resources galore on deep learning / neural nets online, so I won't go into
+detail how this was implemented. Instead, I will focus on explaining 
+differences between our and Nvidia's approches.
+</div>
+<br><br>
+
+<div>
+<b>First of all</b>, in our case the steering is binary.  In a typical real-world
+self-driving car implementation you would gain control over steer-by-wire
+system done by car manufacturer.  This usually means you gain control
+over pretty precise actuators that allow you to set the steering angle with
+consistency and precision.  This was not the case in our model. Currently we
+only have three steering states - steer full left, steer full right or no
+steering.  Additionally, when returning from full steer to the neutral
+position, the mechanism is often not completely accurate and returns only to
+somewhat-neutral position with bias to one side that is noticeable when the car
+goes fast. Check the driving video linked above and compare how fast everything
+happens compared to driving a normal car.
+</div>
+<br><br>
+
+<div>
+<b>Secondly</b>, in our implementation we only use one camera, where Nvidia's
+implementation uses three cameras that are generally forward facing,
+but at slightly different angles.
+This trick is done to get rid of a problem specific to behavioral learning.
+The problem is overrepresentation of idealized trajectories in the training data.
+If you consider a person driving a car on a road, even on a closed-off private road,
+the samples from the car going off-road, or near-crashing and recovering in the
+last moment are extremely rare compared to calm driving in the middle of the world.
+However, for the algorithm both cases are as important as the other.
+The self driving systems needs to know what to do when it starts going away from middle
+of the track.
+</div>
+<br><br>
+
+<div>
+<a href='img/car/behavioral_cloning_problem.jpg'><img src='img/car/behavioral_cloning_problem_small.jpg'></a>
+</div>
+<br><br>
+
+<div>
+<i>I have copy-pasted this image from
+<a href="http://rll.berkeley.edu/deeprlcourse/f17docs/lecture_2_behavior_cloning.pdf">slides</a>
+of Sergey Levine for one of the beginning lectures of
+<a href="http://rll.berkeley.edu/deeprlcourse/">
+Berkeley CS294-112: Deep Reinforcement Learning</a>.
+- an incredibely high-quality online course generously offered for free by this university.</i>
+</div>
+<br><br>
+
+<div>
+You can see in this image that during the training, we have explored the black trajectory.
+Due to inherent randomness, we are slightly diverging from the most well-known
+trajectory, for example the car steers a bit more to the right then usually.
+The correct response would be to correct and go back to the middle of the
+track, but there is no data like this in the training dataset (or there is
+but it is not sufficiently frequent to be represented in the machine learning).
+</div>
+<br><br>
+
+<div>
+The solution to this is to build a distribution of cost (and therefore, of
+wanted behaviours) around the optimal trajectory:
+</div>
+<br><br>
+
+<div>
+<a href='img/car/distribution_over_trajectories.jpg'><img src='img/car/distribution_over_trajectories_small.jpg'></a>
+</div>
+<br><br>
+
+<div>
+<i>Image, again courtesy to UC Berkeley, Prof Sergey Levine</i>.
+</div>
+<br><br>
+
+<div>
+There are several ways one could go around producing such a distribution.
+</div>
+<br><br>
+
+<div>
+One could try to <b>gather a lot more data</b>, especially taking care to sample
+trajectories that are away from the optimal trajectory. In the case of the car it
+could be turning off recording, steering slightly off the center of the road,
+turning recording back on, correcting the steering back to the center. Another
+idea would be to drive over the same piece of road many times, taking care to
+drive a bit to the left, than a bit to the right, then more to the right etc.
+As you can see, these solutions are doable, but not extremely practical, so it
+is not always there is an easy way to just gather the data.
+</div>
+<br><br>
+
+<div>
+One could consider the trick that Nvidia has done. They have set up two cameras at slight
+angles to left and right
+in addition to the central forward facing one.
+Then they correct for this in the steering commands that are recorded
+as the pair for that sideways facing image.
+So for example if they are driving straight forward, the right facing
+camera will record a picture as if the car was going to the right of the
+road, and a steering correction of the same angle to the left would be added
+to the current (fully straight steering).
+This will help the machine learning algorithm understand that 
+it needs to steer left when it sees this image.
+</div>
+<br><br>
+
+<div>
+<a href='img/car/steering_adjustment.jpg'><img src='img/car/steering_adjustment_small.jpg'></a>
+</div>
+<br><br>
+
+<div>
+In our case the problem is less severe than in the case of the real self-driving car.
+This is because:
+<ul> 
+<li>
+we have less general problem. The variety of tracks that we can build around the house 
+is significantly smaller than the variety of real roads, especially when you 
+take into consideration the spectrum of possible lighting conditions.
+Our track is white pieces of paper, which is very clearly visible and 
+similar to itself under a variety of conditions.
+<li> the tracks that we train on are shorter so we can run the car
+over each piece of road hundreds of times in a day or so. Imagine doing that 
+for each piece of road in Europe or US.
+<li> We have significant variations of runs due to lack of precision of our
+actuators. Driving in the small car world is a lot more dynamic,
+the turns are a lot sharper and we can afford to crash for free.
+Check out driving video above to see how quick everything happens.
+</ul>
+</div>
+<br><br>
+
+<div>
+We have also added some more layers to the NVIDIA architecture, but I don't
+think it should make a big difference (as the structure of the data we have
+is relatively simple).
+</div>
+<br><br>
+
+<div>
+One more difference is purely architectural - NVIDIA has run the deep learning
+directly on the car, using cutting edge (but super expensive)
+<a href="http://www.nvidia.com/object/drive-px.html">
+NVIDIA DRIVE PX</a> computer for autonomous driving.
+NVIDIA claims that they got 30 fps, and we got 25 fps, so I would say not too bad.
+</div>
+<br><br>
+
+<div>
+In general the system works well on the track it was trained on, but the
+performance doesn't generalize to a more complicated, tighter track. We will run
+some experiments about training on the new track soon. My guess the 
+performance should be improving steadily with amount of training data gathered.
+</div>
+<br><br>
+
+<div>
+You can see that even on the vanilla one-turn track the driving is not perfect,
+doesn't stay inside of the track, but with the current controls it may be
+beyond possible. It should be possible with a car that has more precise, preferably
+non-binary left-right steering.
+</div>
+<br><br>
+
+<h3>* Machine learning development story * </h3>
+
+<div>
+From the beginning of the development, we were pretty sure that our approach
+should work - we knew it has been applied sucessfully in real life applications
+and very similar project but inside of simulator was part of Udacity
+self-driving car course. Still, getting it right required some degree of patience
+and creative tweaks. 
+</div>
+<br><br>
+
+<div>
+After the hardware construction & testing phase, we had a real-time, low-latency system where you
+drive the car around track, based solely on the video input.
+</div>
+<br><br>
+
+<div>
+The final user interface looks like this:
+</div>
+<br><br>
+
+<div>
+<a href='img/car/ux.jpg'><img src='img/car/ux_small.jpg'></a>
+</div>
+<br><br>
+
+<div>
+Here you can see a previous iteration of it being tested carefully by another friend.
+</div>
+<br><br>
+
+<div>
+<iframe src='https://drive.google.com/file/d/0Bw2eHK8Zx0mLWmFPc2FkLUp3dU0/preview'></iframe>
+</div>
+<br><br>
+
+<div>
+So we started off with gathering one big track, around 10 meters around the
+whole house.  In this iteration, everything that we did was "on camera"
+and got appended to the dataset.
+</div>
+<br><br>
+
+<div>
+We have trained a neural net same as in the Nvidia paper.  It didn't work!  And
+by didn't work we don't mean running it once and declaring failure.  In
+general, we tried to make at least three optimization runs for each setting of
+architecutre / metaparameters to be sure to take out effect of random
+initialization.
+</div>
+<br><br>
+
+<div>
+After the initial attempt didn't work, we decided to simplify the problem to
+just one turn.  We have gathered a lot of data another time - more or less 2
+sessions of 2 hours each.  The raw collected pictures look like this:
+</div>
+<br><br>
+
+<div>
+<a href='img/car/training_data.jpg'><img src='img/car/training_data_small.jpg'></a>
+</div>
+<br><br>
+
+<div>
+After training the network we have found that again it doesn't work.  We had a
+brainstorming session we decided that most effective would be to implement a
+manual data adjuster.  We were thinking that perhaps there was too much error
+in our training data (that we were driving too much outside of the lane as
+things were happening too fast, that there was overrepresentation of start of
+track and end of track with 0 velocity but nonzero steering).  We have
+implemented some additional infrastructure to help debugging this kind of data
+errors - a data viewer / editor, capability to turn recording on and off in
+data collection, a dataset combiner.  Then we manually went through all of the
+data and corrected what we thought were inconsistencies.  This also didn't
+work...
+</div>
+<br><br>
+
+<div>
+<a href='img/car/fails.gif'><img src='img/car/fails.gif'></a>
+</div>
+<br><br>
+
+<div>
+Then we spent some even more time looking at the data and only then we have noticed
+that horizon is located differently in different parts of the dataset.
+That meant that our camera was moving around too much, introducing
+significant noise in the data.
+We have fixed the camera placement, added a guiding line in the driver UI and
+collected more data. Still didn't work!
+</div>
+<br><br>
+
+<div>
+Then we had the breakthrough, which was noticing that we should cast to grayscale
+and implement brightness and contrast adjustments. We do it to correct for 
+differing lighting conditions. An example of our final augmentation pipeline is
+visible below:
+</div>
+<br><br>
+
+<div>
+<a href='img/car/img_aug_2.jpg'><img src='img/car/img_aug_2_small.jpg'></a>
+</div>
+<br><br>
+
+<div>
+Than it finally worked!  Somewhat... The car doesn't stay perfectly inside of the track
+(everything happens so much faster compared to real life car)
+We only tested the whole project well only around one turn track.
+</div>
+<br><br>
+
+<div>
+We can squeeze out / cheat a run that doesn't exit track
+ around a more curvy, tighter track, but it doesn't count. But still
+it shows some degree of generalization.
+We think that if you just gather more data with the current architecture,
+it should work.
+</div>
+<br><br>
+
+<div>
+<iframe src='https://drive.google.com/file/d/0Bw2eHK8Zx0mLYU9YLWVXeFNQXzg/preview'></iframe>
+</div>
+<br><br>
+
+<h4>* Lessons *</h4>
+
+<div>
+<ul>
+<li> need to be patient and persistent if you want anything to work
+<li> need a bit of money - you need quite a bit of gear (we spent around 200-300 EUR on
+ the whole project, but we already had computer with CUDA strong GPUs)
+</ul>
+</div>
+<br><br>
+
+<h4>* Plans for future *</h4>
+
+<div>
+We have many ideas for the future. We want to try some of ideas listed below,
+but our priority is getting the car to work very well on a track more complex
+than one turn.
+</div>
+<br><br>
+
+<div>
+<ul>
+<li> Riding around a bigger track / more complicated track faster
+<li> Depth nets
+<li> Lane detection, cross track error based PID controller
+<li> Lidar & mapping
+<li> Path planning
+<li> LSD SLAM
+</ul>
+</div>
+<br><br>
