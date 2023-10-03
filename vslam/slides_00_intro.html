@@ -104,12 +104,17 @@ This course is based on this book:
 <div>
 <ul>
 <li> This book is 
-<a href="https://github.com/gaoxiang12/slambook-en/blob/master/slambook-en.pdf">
-open source and pdf is hosted on github.</a> 
+  <a href="https://github.com/gaoxiang12/slambook-en/blob/master/slambook-en.pdf">
+  open source and pdf is hosted on github.</a> 
 <li> The practical C++ code presented in this book is
-<a href="https://github.com/gaoxiang12/slambook-en">
-also open source and available for free on github</a> 
+  <a href="https://github.com/gaoxiang12/slambook-en">
+  also open source and available for free on github</a> 
 <li> I am extermely grateful to authors of this book.
+</ul>
+<br><br>
+
+mike
+
 </div>
 <br><br>
 
@@ -130,7 +135,7 @@ https://github.com/ghostFaceKillah/vslam</a>
 
 
 <div>
-What's VSLAM:
+<h3> What's VSLAM? </h3>
 <li>  SLAM - simultaneous visualization and mapping, but based on vision
 <li> given cameras (usually one or two, but could be more) and IMU (accelometer) figure out:
     <ul>  
@@ -152,11 +157,10 @@ What's VSLAM:
 <br> <br> 
 
 <div>
-<ul>
-  <li>How does the system work?
+<h3> How does the system work?</h3>
   <ul>
-    <li>The robot has two cameras.</li>
-    <li>The robot goes thru env in timesteps and each time we get picture from left eye and right eye.</li>
+    <li>The robot has two cameras.
+    <li>The robot goes thru env in timesteps and each time we get picture from left eye and right eye.
     <li>We could do one of 2 things at the given timestep:
     <ul>
       <li>Firstly, it uses information from two cameras to estimate depth of the points it sees.
@@ -183,10 +187,6 @@ What's VSLAM:
     </ul>
     </li>
   </ul>
-  </li>
-</ul>
-
-
 
 
 </div>
@@ -195,24 +195,21 @@ What's VSLAM:
 
 
 <div>
+<h3> Plan of the lecture: </h3>
 <ul>
-    <li>What things we will need to understand
+    <li>Ways to express poses mathematically: out of couple of possibilities, we will choose SO(3) SE(3)</li>
+    <li>coordinate systems & coordinate transormations
         <ul>
-            <li>Ways to express poses mathematically: out of couple of possibilities, we will choose SO(3) SE(3)</li>
-            <li>coordinate systems & coordinate transormations
-                <ul>
-                    <li>if this object is at position xyz when measured wrt to left eye, where is it wrt to right eye?</li>
-                </ul>
-            </li>
-            <li>pinhole camera system / equations</li>
-            <li>rendering</li>
-            <li>feature matching</li>
-            <li>depth estimation</li>
-            <li>gauss newton</li>
-            <li>3d pnp via</li>
-            <li>putting it together - the actual VSLAM</li>
+            <li>if this object is at position xyz when measured wrt to left eye, where is it wrt to right eye?</li>
         </ul>
     </li>
+    <li>pinhole camera system / equations</li>
+    <li>rendering</li>
+    <li>feature matching</li>
+    <li>depth estimation</li>
+    <li>gauss newton</li>
+    <li>3d pnp via</li>
+    <li>putting it together - the actual VSLAM</li>
 </ul>
 </div>
 <br> <br>
@@ -222,15 +219,17 @@ What's VSLAM:
 
 
 <div>
-More specialized refrences:
+<h3>More specialized refrences</h3>
 <ul>
-  <li> steepest possible learning curve:
-  <ul>
-  <li> go to ORB-SLAM3 source code and paper and start reading. 
-  </ul>
+
+  <li> Steepest possible learning curve:
+    <ul>
+    <li> go to <a href="https://github.com/UZ-SLAMLab/ORB_SLAM3">
+ORB-SLAM3 source code</a> and <a href="https://ieeexplore.ieee.org/document/9440682">paper</a> and start reading. 
+    </ul>
   <br>
-  <li>
-    There's a book and library.
+  <li> To get stuff done in non-deep-learning way in real life, 
+    there's a widely-used and practicioner-recommended book and C++ library.
     <ul>
       <li> <a href="http://www.cs.cmu.edu/~kaess/pub/Dellaert17fnt.pdf">
         Factor Graphs for Robot Perception</a>
@@ -241,19 +240,25 @@ More specialized refrences:
       <li> <a href="https://github.com/borglab/gtsam">
       The library GTSAM</a>
       same authors (+ open source community, lab members and grad students)
-
-
     </ul>
-
-    - Probabilistic robotics by Thrun
-
-  - for SE(3), SO(3) there's many:
-    - Barfoot
-    - Naive Lie Theory
-
-  SOTA
-  - deep learning paper
-    
+  <li>
+    There's a bunch of classic books:
+    <ul>
+      <li> Gentle, cute and classic introduction to mapping as Bayesian filtering:
+        <a href="http://www.probabilistic-robotics.org"> Probabilistic robotics</a>.
+      <li> For SE(3), SO(3) there's 2 classic textbooks:
+        <ul>
+          <li> In the context of robotics
+            <a href="http://asrl.utias.utoronto.ca/~tdb/bib/barfoot_ser17.pdf">
+            State Estimation for Robotics"</a>
+          <li> In the context of math 
+            <a href="https://link.springer.com/book/10.1007/978-0-387-78214-0">
+            Naive Lie Theory</a>
+          <li> For math lovers, robot haters:
+            <a href="https://math.berkeley.edu/~jchaidez/materials/reu/lee_smooth_manifolds.pdf">
+            Introduction to Smooth Manifolds</a>
+        </ul>
+    </ul>
 </ul>
 </div>
 <br> <br> 
