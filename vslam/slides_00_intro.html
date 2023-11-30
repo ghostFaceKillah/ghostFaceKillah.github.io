@@ -90,8 +90,8 @@ h3 {
 
 
 <div>
-<h3> References, tuned to your goals </h3>
-This course is based on this book:
+<h3> Opening references </h3>
+The course is roughly based on this book:
 </div>
 <br><br>
 <br>
@@ -112,8 +112,6 @@ This course is based on this book:
 <li> I am extermely grateful to authors of this book.
 </ul>
 <br><br>
-
-mike
 
 </div>
 <br><br>
@@ -136,23 +134,27 @@ https://github.com/ghostFaceKillah/vslam</a>
 
 <div>
 <h3> What's VSLAM? </h3>
-<li>  SLAM - simultaneous visualization and mapping, but based on vision
-<li> given cameras (usually one or two, but could be more) and IMU (accelometer) figure out:
+<b>SLAM</b> - simultaneous visualization and mapping based on vision.
+<br><br>
+<li> given cameras (usually one or two, but could be more) and IMU (accelometer)
+   we want to figure out:
     <ul>  
-      <li> where you are and
-      <li> how the environment around you looks like. "Where are the walls and how far are you from them"
+      <li> Where are we?
+      <li> How does the environment around us look like?
+      <li> "Where are the walls and how far are we from them"?
     </ul>  
-  <li> the biggest practical difference between VSLAM and SLAM is that usually SLAM uses 2D or 3D  LiDaR
+  <li> SLAM vs VSLAM: the biggest practical difference is that SLAM uses 2D or 3D LiDaR <br><br>
   <li> LiDaR (which are laser distance meters)
-    gives you ~20 scans per second in 2d and 3d about where you are
+    gives us ~20 scans per second in 2d or 3d  <br><br>
 
-  <li> 
-
-  - don't buy wholesale popular narratives "Lidar is an expensive crutch. Humans can navigate from vision perfectly well".
-    it is partially true, but the sitation is dynamic.
-    LidarS are becoming cheaper at an exponential pace. Cameras have their own complexities and blindspots.
-    Cameras can be hard to integrate and surprisingly expensive if you are going for quality.
-
+  <li> Some say "Lidar is an expensive crutch. Humans can navigate from vision perfectly well"
+    <ul>
+    <li> This is only partially true. 
+    <li> The sitation is dynamic.
+    <li> Lidars are becoming exponentially cheaper.
+    <li> Cameras have their own complexities and blindspots.  
+    <li> Cameras can be hard to integrate and surprisingly expensive if you are going for quality.
+    </ul>
 </div>
 <br> <br> 
 
@@ -160,55 +162,110 @@ https://github.com/ghostFaceKillah/vslam</a>
 <h3> How does the system work?</h3>
   <ul>
     <li>The robot has two cameras.
-    <li>The robot goes thru env in timesteps and each time we get picture from left eye and right eye.
-    <li>We could do one of 2 things at the given timestep:
-    <ul>
-      <li>Firstly, it uses information from two cameras to estimate depth of the points it sees.
-        <ul>
-          <li>we match up points from left image to points in the right image.</li>
-          <li>we know how far apart are the eyes of the robot, and based on this we could figure out how far away from us are the things.</li>
-          <li>Then, the robot remembers this information and call this reference frame "keyframe".
-            <ul>
-              <li>so keyframe is a picture from two cameras, where we have estimated depth of points</li>
-              <li>The special thing about the keyframe is that it has a bunch of 3d points attached to it.</li>
-            </ul>
-          </li>
-        </ul>
-      </li>
-      <li>Then, as the robot moves on, we could compare the new information from left eye in reference keyframe to information that the left eye currently sees.
-        <ul>
-          <li>It tries to figure out which elements of the image are the same elements as it has seen before and based on their movement, it figures out how much it has moved.</li>
-          <li>As it gets away from the keyframe, the shared elements between
-               the keyframes current left eye image and past left eye image might get more
-               rare. We have moved on so we see other stuff. So we need to make a new keyframe
-               every now and then</li>
-        </ul>
-      </li>
-    </ul>
-    </li>
+    <li>The robot goes through the environment in timesteps 
   </ul>
-
-
 </div>
 <br> <br> 
 
+
+<div>
+<img src="../img/vslam/slides_00_robot_goes_through_env.jpg" style="max-width:400px">
+</div>
+<br><br>
+
+<div>
+<ul>
+  <li> At each timestep we get a picture from the left eye and right eye.
+  <li>We could do one of 2 things at the given timestep:
+    <ul>
+    <li> Establish "keyframe" reference location. We will relate our later location in 
+         the world comparing to this location.
+    <li> Compute our pose in relation to this previously saved keyframe
+    </ul>
+    </ul>
+</ul>
+</div>
+<br><br>
+
+
+<div>
+
+First, by comparing image from two eyes we could estimate depth of things we see.
+    <ul>
+    <li>we match up points from left image to points in the right image.</li>
+    <li>we know how far apart are the eyes of the robot, 
+       and based on this we could figure out how far away from us are the things.</li>
+    </ul>
+</ul>
+</div>
+<br><br>
+
+
+
+<div>
+<img src="../img/vslam/slides_00_birdeye-view.jpg" style="max-width:400px">
+</div>
+<br><br>
+
+
+<div>
+<ul>
+    <ul>
+      <li> We remember depth information and call this reference 
+            3d-from-two-eyes picture the "keyframe".
+      </li>
+    </ul>
+  </li>
+</ul>
+</div>
+<br><br>
+
+<div>
+  Then, as the robot moves on, we compare the new information 
+  to the reference keyframe.
+</div>
+<br><br>
+
+<div>
+<img src="../img/vslam/slides_00_comparing_keyframes.jpeg" style="max-width:400px">
+</div>
+<br><br>
+
+
+<div>
+    <ul>
+      <li> We try to figure out which points in the new image are the same elements 
+          that we have seen before. Based on their movement, we figure out how much we
+           have moved.
+      <li>As it gets away from the keyframe, the shared elements between
+           the keyframes current left eye image and past left eye image might get more
+           rare. We have moved on so we see other stuff. So we need to make a new keyframe
+           every now and then
+    </ul>
+</div>
+<br> <br> 
 
 
 <div>
 <h3> Plan of the lecture: </h3>
 <ul>
-    <li>Ways to express poses mathematically: out of couple of possibilities, we will choose SO(3) SE(3)</li>
+    <li> Expressing poses of robot as SO(3) and SE(3).
     <li>coordinate systems & coordinate transormations
         <ul>
-            <li>if this object is at position xyz when measured wrt to left eye, where is it wrt to right eye?</li>
+        <li>if this object is at position xyz when measured wrt to left eye, where is it wrt to right eye?</li>
         </ul>
     </li>
-    <li>pinhole camera system / equations</li>
-    <li>rendering</li>
-    <li>feature matching</li>
-    <li>depth estimation</li>
-    <li>gauss newton</li>
-    <li>3d pnp via</li>
+    <li>Pinhole camera system / equations</li>
+      <ul>
+      <li> if object is at such and such position wrt the robot, where is it in the picture?
+      </ul>
+    <!-- <li>rendering</li> -->
+    <li>Feature matching</li>
+    <li>Depth estimation</li>
+    <li>Gauss Newton optimization & PNP (Point n Perspective)
+      <ul><li> If we know which correspondence of objects in the current frame 
+        and keyframe, how do we compute current pose wrt to keyframe?
+      </ul>
     <li>putting it together - the actual VSLAM</li>
 </ul>
 </div>
