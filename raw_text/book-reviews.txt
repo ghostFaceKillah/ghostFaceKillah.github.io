@@ -3,11 +3,12 @@ Hall of Fame
 
 Books that influenced me big time:
 
-- "Po południu" - Robert Krasowski
+- "Po południu" oraz "O demokracji w Polsce" - Robert Krasowski
 - Sam Harris
 - Principles for Dealing with Changing World Order
-
-
+- Przeszłość to Dziś
+- MMM
+- Haidt - psychology of Morality
 
 General book reviews
 ====================
@@ -62,7 +63,7 @@ Why America is not New Rome, Vaclav Smil
 
 
 The original trilogy Harari
-------
+---------------------------
 
 Jakim prawem
 ------------
@@ -88,8 +89,6 @@ The God Delusion
 Radical Candor
 ------------------------
 
-How to Write One Song
-------------------------
 
 
 This Explains Everything
@@ -97,3 +96,234 @@ This Explains Everything
 
 Free will
 ------------------------
+
+
+Intro to SLAM
+-------------
+Science
+
+
+Meditations by Marcus Aurelius
+------------------------------
+
+
+Thinking Fast & Slow
+---------------------
+ultra scam lol
+
+
+
+
+How to Win Friends and Influence People by Dale Carnegie
+------------------------------------------
+
+The Lean Startup by Eric Ries
+-----------------------
+
+
+Rich Dad Poor Dad by Robert Kiyosaki
+-------------------------
+
+
+Zero to One by Peter Thiel
+-----------------------
+
+Deep Work by Cal Newport
+-----------------------
+
+Sapiens: A Brief History of Humankind by Yuval Noah Harari
+-----------------------
+
+Phrack
+------
+
+
+CTFChan
+-------
+
+Gynvael Coldwind
+----------------
+
+Vapnik - Statistical Learning Theory
+--------------------------
+
+Tao Te Ching
+------------
+
+
+Hastie Tibshirani
+-------------------
+
+Przeszłość to dziś
+----------------
+
+MMM
+---
+
+
+Paul Graham 
+----------------
+
+lcamtuf
+-------
+
+Haidt - psychology of Morality
+-----
+
+Sam Atlman blog
+-------------
+
+Valve - New employee Handbook
+
+
+Ted Kaczynski Manifesto
+----------
+
+No Starch Press - security series
+
+
+Selfish Gene
+------------
+
+
+
+Gwern
+-----
+
+Poglądy polskich naukowców
+-------------------------
+
+
+Zero To One
+----------
+
+
+slicing pie
+-----------
+
+STEM, etc
+==========
+
+Original Lisp paper
+-----------------
+
+Pawel Strzelecki - Analiza 
+--------------
+
+
+
+
+Music resources
+===============
+Persichetti - 20th century harmony
+
+Making music - Ableton (Dennis DeSantis
+
+Aebersold
+
+How to Write One Song
+------------------------
+
+New Jazz videos
+----------------
+
+
+
+Reading list 
+============
+
+The Four Agreements by Don Miguel Ruiz
+The Seven Habits of Highly Effective People by Stephen R. Covey
+Sapiens: A Brief History of Humankind by Yuval Noah Harari
+
+Man’s Search for Meaning by Viktor E. Frankl
+The Power of Now by Eckhart Tolle
+Atomic Habits by James Clear
+Thinking, Fast and Slow by Daniel Kahneman
+
+
+Rich Dad Poor Dad by Robert Kiyosaki
+
+The Lean Startup by Eric Ries
+
+The Intelligent Investor by Benjamin Graham
+Shoe Dog by Phil Knight
+Outliers by Malcolm Gladwell
+The Tipping Point by Malcolm Gladwell
+Thinking in Bets by Annie Duke
+Deep Work by Cal Newport
+Start with Why by Simon Sinek
+
+
+Why Nations Fail by Daron Acemoglu and James A. Robinson
+
+
+The Alchemist by Paulo Coelho
+The Celestine Prophecy by James Redfield
+A New Earth by Eckhart Tolle
+The Untethered Soul by Michael A. Singer
+Daring Greatly by Brené Brown
+Big Magic by Elizabeth Gilbert
+The Tao Te Ching by Laozi
+
+
+
+
+
+
+
+
+
+
+
+Expandey: Philosophy & Self-Improvement (25 Books)
+Meditations by Marcus Aurelius
+The Art of War by Sun Tzu
+Man’s Search for Meaning by Viktor E. Frankl
+The Power of Now by Eckhart Tolle
+Atomic Habits by James Clear
+Thinking, Fast and Slow by Daniel Kahneman
+How to Win Friends and Influence People by Dale Carnegie
+The Four Agreements by Don Miguel Ruiz
+The Seven Habits of Highly Effective People by Stephen R. Covey
+The Courage to Be Disliked by Ichiro Kishimi and Fumitake Koga
+Awaken the Giant Within by Tony Robbins
+Mindset: The New Psychology of Success by Carol S. Dweck
+The Subtle Art of Not Giving a F*ck by Mark Manson
+Ego Is the Enemy by Ryan Holiday
+The Obstacle Is the Way by Ryan Holiday
+Quiet: The Power of Introverts in a World That Can't Stop Talking by Susan Cain
+Flow: The Psychology of Optimal Experience by Mihaly Csikszentmihalyi
+Grit: The Power of Passion and Perseverance by Angela Duckworth
+12 Rules for Life: An Antidote to Chaos by Jordan B. Peterson
+The Happiness Hypothesis by Jonathan Haidt
+The War of Art by Steven Pressfield
+Radical Acceptance by Tara Brach
+Daring Greatly by Brené Brown
+The Untethered Soul by Michael A. Singer
+Expanded: Business & Economics (25 Books)
+Rich Dad Poor Dad by Robert Kiyosaki
+The Intelligent Investor by Benjamin Graham
+Principles by Ray Dalio
+Shoe Dog by Phil Knight
+The Lean Startup by Eric Ries
+Outliers by Malcolm Gladwell
+The Tipping Point by Malcolm Gladwell
+Thinking in Bets by Annie Duke
+Start with Why by Simon Sinek
+Good to Great by Jim Collins
+Built to Last by Jim Collins and Jerry Porras
+The Hard Thing About Hard Things by Ben Horowitz
+Measure What Matters by John Doerr
+Crossing the Chasm by Geoffrey A. Moore
+Blue Ocean Strategy by W. Chan Kim and Renée Mauborgne
+Never Split the Difference by Chris Voss
+The Art of Strategy by Avinash K. Dixit and Barry J. Nalebuff
+The Innovator’s Dilemma by Clayton M. Christensen
+The Psychology of Money by Morgan Housel
+Your Money or Your Life by Vicki Robin
+The Millionaire Next Door by Thomas J. Stanley and William D. Danko
+Doughnut Economics by Kate Raworth
+The Big Short by Michael Lewis
+
+
