@@ -1,10 +1,19 @@
+Intro
+=====
+There is a subtle tension between wanting to appear smart to the reader and truthfully reporting on what was influencial on me.
+
+For each stage of development there is optimal book stimulus, and what slaps now might (or shall I say - will) turn cringe later. Part of the game!
+
+With this in mind, may I humbly ask for reader's understanding for more spicy & cringy positions around here.
+
+
 Hall of Fame
 ============
 
 Books that influenced me big time:
 
 - "Po południu" oraz "O demokracji w Polsce" - Robert Krasowski
-- Sam Harris
+- Sam Harris - 
 - Principles for Dealing with Changing World Order
 - Przeszłość to Dziś
 - MMM
@@ -68,8 +77,11 @@ The original trilogy Harari
 Jakim prawem
 ------------
 
-Fiction
+*Fiction*
+
 4.5/5
+
+
 
 Determined
 ------------
@@ -112,19 +124,62 @@ Meditations by Marcus Aurelius
 
 Thinking Fast & Slow
 ---------------------
-ultra scam lol
+
+- 2/5
+
+- great read, and major people pleaser. 
+
+- minds are blown, with the tiny problem that the whole field looks like "ultra scam lol"?
+- Who am I to doubt him, but *many* studies cited in this very influential book failed to replicate. See Kahneman's 2012 letter on the topic
+  https://www.nature.com/news/polopoly_fs/7.6716.1349271308!/suppinfoFile/Kahneman%20Letter.pdf
+- Also see Gwern's work on replication crisis https://gwern.net/replication and wikipedia https://en.wikipedia.org/wiki/Replication_crisis
+
 
 Personal MBA
 ------------
 
 Hacking-the art of exploitation
-So good they cant ignore you
+------------
 
+many books NoStarchPress
+-------------
+
+- I love this publishing company.
+- Their catalogue is full of gems, and I learned so much from them.
+- Do they upload their own releases to libgen and torrents? That's crazy
+
+
+So good they cant ignore you
+------------
+
+
+Black Hat Rust
+--------------
+
+* Technical
+
+3/5
+
+- solid book to contextually learn some rust and some hacking
+- retype examples from the book by hand into the terminal and you'll learn a lot
+- I didn't enjoy the somewhat pompous tone of the book, it's especialy strange in the security research context, which - in my mind - is a hugely humbling exercise 
+
+
+Kulisy PiS
+----------
+
+4/5
+
+- realpolitik and mechanics of power in action
 
 
 
 How to Win Friends and Influence People by Dale Carnegie
 ------------------------------------------
+
+Very useful and very cringe
+
+
 
 The Lean Startup by Eric Ries
 -----------------------
@@ -166,8 +221,14 @@ Hastie Tibshirani
 Przeszłość to dziś
 ----------------
 
-MMM
+Mr Money Mustache - the blog
 ---
+5/5
+
+- This was hugely influential on me
+
+- it can be easily interpreted as neoliberalism indoctrination
+
 
 
 Paul Graham 
@@ -186,12 +247,33 @@ Sam Atlman blog
 -------------
 
 Valve - New employee Handbook
+-------------------
+
 
 
 Ted Kaczynski Manifesto
 ----------
+1/5
+
+- whenever Ted starts relying on paraphrasing some serious thinkers, he starts
+  making sense. Stuff about technology leading to gradual loss of meaning in
+  the modern world - there is something to be learned here.
+
+- whenever Ted starts adding to this
+
+
+
+Weber - psychology as vocation
+-----
+
+Gdula - socjologia / krytyka polityczna
+-------------------------
+
+- Very fun to read, seems very wrong to me
+
 
 No Starch Press - security series
+---------------------
 
 
 Selfish Gene
@@ -290,7 +372,7 @@ The Tao Te Ching by Laozi
 
 
 
-
+Hayek
 
 
 
