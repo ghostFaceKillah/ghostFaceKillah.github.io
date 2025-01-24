@@ -234,6 +234,12 @@ Mr Money Mustache - the blog
 Paul Graham 
 ----------------
 
+- not every essay aged well
+- I refrain from emotional judgement of people upstream of me in the food chain 
+- very influential on me at the time
+- a type of rite of passage in my social circle
+
+
 lcamtuf
 -------
 Eseje Amerykańskie
@@ -322,15 +328,28 @@ How to Write One Song
 New Jazz videos
 ----------------
 
+The Lean Startup by Eric Ries
+----------------
+
+Deep Work by Cal Newport
+-------------
 
 
 
 Reading list 
 ============
 
+This is stuff that I want to read
+
+Giełzak - Wieczna Lewica
+Prześwity - wydawnictwo
+Czerwone i Czarne - wyadwnictwo
+Geoff Hinton - prace zebrane
+
 “End of History” - Francis Fukuyama
 "czasy ostateczne" - turchin
 "Coming wave" - Suleyman
+Hayek
 
 
 The Four Agreements by Don Miguel Ruiz
@@ -339,21 +358,15 @@ Sapiens: A Brief History of Humankind by Yuval Noah Harari
 
 Man’s Search for Meaning by Viktor E. Frankl
 The Power of Now by Eckhart Tolle
-Atomic Habits by James Clear
-Thinking, Fast and Slow by Daniel Kahneman
 
-
-Rich Dad Poor Dad by Robert Kiyosaki
-
-The Lean Startup by Eric Ries
 
 The Intelligent Investor by Benjamin Graham
+
 Shoe Dog by Phil Knight
 Outliers by Malcolm Gladwell
 The Tipping Point by Malcolm Gladwell
 Thinking in Bets by Annie Duke
-Deep Work by Cal Newport
-Start with Why by Simon Sinek
+Start with Why by Simon Sinek (this guy seems very cringe)
 
 
 Why Nations Fail by Daron Acemoglu and James A. Robinson
@@ -372,7 +385,6 @@ The Tao Te Ching by Laozi
 
 
 
-Hayek
 
 
 
