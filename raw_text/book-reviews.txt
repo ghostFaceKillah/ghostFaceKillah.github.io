@@ -87,15 +87,9 @@ LessWrong - collected
 
 0/5 or 5/5 depending on prior
 
-(This review of LW as a whole has 50% prior probability of being honest, and you have to observe me to update yourself).
-(Read this in Harry Potter's voice).
-
-This website makes me angry and that's clearly a problem with me! Diagnose me.
-Maybe I see reflection of myself in them and hate it? Maybe I would like to be
-friends with them?
-
-Anyway, here's what I think about LW, and OMG I hope no-one reads it because my
-social circle has a decent chance of overlapping with LW crowd.
+(This review of LW as a whole has 50% prior probability of being honest, and
+you probably have to observe me closely to update).
+(Read below in Hermione's voice).
 
 The LW's menu staple is a short form essay on meta-cognition written in dense,
 besserwisser tone, sprinkled with neologisms and signature lack of emotional
@@ -109,34 +103,34 @@ stratagems) and thought that now you're going to win all arguments with your
 mom.  Imagine the last time you were re-playing an argument from your work
 or school, 3 years after it happened, and came up with the _perfect_
 comeback. HPMoR is quite literally a recording of such mental roleplay, in a
-book form, in a book lenght, written as a Harry Potter fanfic!  It could only get
+book form, in a book length, written as a Harry Potter fanfic! It could only get
 better if Harry turned out a furry, a catboy or both! (I swear I have nothing
 against furries and catboys, but I do have my doubts about quality of
 furry fanfics, sorry folks).
 
 Then there are parts of the LW's corpus that treat about theory. Those tend to
 contain copious amount of hand waving that goes far beyond than just being
-sloppy on explaining / proving key insights.  It feels those were specifically
-written in a way that suggests "I am very smart", and omit intermediate
-reasoning steps as an exrcise to the reader, and if you don't get it, it's a
-problem with you - you should have read more background.
+sloppy on explaining / proving key insights.  It feels those were written
+specifically in a way that suggests "I am very smart", and leaves the
+intermediate reasoning steps as an exercise to the reader, and if you don't get
+it, it's a problem with you - you should have read more background.
 
 In better moments, this meandring exposition combined with arguably false or
 irrelevant conclusions, evokes books of Zizek or Fanged Noumena. But at least
-Fanged Noumena is mysterious and looks good on a coffee table.
+zizek is funny and Fanged Noumena looks good on a coffee table!  In worse
+momements, it reminds me of Tractatus logico-philosophicus with it's misguided
+applications of fake maths. 
 
-In worse momemnts, it reminds me of Tractatus logico-philosophicus with it's
-misguided applications of fake maths. 
-
-Yes, if you squint your eyes, you can apply Bayes theorem to every single area
+Yeah, if you squint your eyes, you can apply Bayes theorem to every single area
 in your life.  Yes, you can ignore the tiny problem of figuring what the hell
 is your prior (non-zero function integrated over a set of infinite measure?) and
 paper that you write it on won't scream at you in terror.
 
 But, I claim, boldly, that for deciding if it's more "utils" if you disown your
-mum, break up your partner, participate in gang-bang or donate your kidney to a
-stranger even the basic ethical heuristics available to neolithical hunter
-gatherers have a decent chance of serving you better than LW-flavor Rationalism. 
+mum or not, break up your partner, participate in gang-bang or donate your
+kidney to a stranger even the basic ethical heuristics available to neolithical
+hunter gatherers have a decent chance of serving you better than the LW-flavor of
+rationalism. 
 
 This work is in deep need of touching grass, and I hope someone will be be able
 to provide to this community the service that Xu Xiaodong
