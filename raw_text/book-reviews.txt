@@ -1,8 +1,8 @@
 Intro
 =====
-There is a subtle tension between wanting to appear smart to the reader and truthfully reporting on what was influencial on me.
+There is a subtle tension between wanting to appear smart in hindsight to the reader and truthfully reporting on what was influencial on me.
 
-For each stage of development there is optimal book stimulus, and what slaps now might (or shall I say - will) turn cringe later. Part of the game!
+For each stage of development there is optimal book stimulus, and what slaps now might / will turn cringe later. Part of the game!
 
 With this in mind, may I humbly ask for reader's understanding for more spicy & cringy positions around here.
 
@@ -82,8 +82,88 @@ Jakim prawem
 4.5/5
 
 
+LessWrong - collected
+---------------------
 
-Determined
+0/5 or 5/5 depending on prior
+
+(This review of LW as a whole has 50% prior probability of being honest, and you have to observe me to update yourself).
+(Read this in Harry Potter's voice).
+
+This website makes me angry and that's clearly a problem with me! Diagnose me.
+Maybe I see reflection of myself in them and hate it? Maybe I would like to be
+friends with them?
+
+Anyway, here's what I think about LW, and OMG I hope no-one reads it because my
+social circle has a decent chance of overlapping with LW crowd.
+
+The LW's menu staple is a short form essay on meta-cognition written in dense,
+besserwisser tone, sprinkled with neologisms and signature lack of emotional
+intelligence / empathy. I am guessing that it was specifically this self-served
+intellectual diet of not-enough-fiber that made the spiritus movens of LW "burp
+into existence" Harry Potter and Methods of Rationality, the true magnum opus
+of hazy mansplain-core.
+
+Imagine the first time you read about eristic tricks (Schopenhauer's
+stratagems) and thought that now you're going to win all arguments with your
+mom.  Imagine the last time you were re-playing an argument from your work
+or school, 3 years after it happened, and came up with the _perfect_
+comeback. HPMoR is quite literally a recording of such mental roleplay, in a
+book form, in a book lenght, written as a Harry Potter fanfic!  It could only get
+better if Harry turned out a furry, a catboy or both! (I swear I have nothing
+against furries and catboys, but I do have my doubts about quality of
+furry fanfics, sorry folks).
+
+Then there are parts of the LW's corpus that treat about theory. Those tend to
+contain copious amount of hand waving that goes far beyond than just being
+sloppy on explaining / proving key insights.  It feels those were specifically
+written in a way that suggests "I am very smart", and omit intermediate
+reasoning steps as an exrcise to the reader, and if you don't get it, it's a
+problem with you - you should have read more background.
+
+In better moments, this meandring exposition combined with arguably false or
+irrelevant conclusions, evokes books of Zizek or Fanged Noumena. But at least
+Fanged Noumena is mysterious and looks good on a coffee table.
+
+In worse momemnts, it reminds me of Tractatus logico-philosophicus with it's
+misguided applications of fake maths. 
+
+Yes, if you squint your eyes, you can apply Bayes theorem to every single area
+in your life.  Yes, you can ignore the tiny problem of figuring what the hell
+is your prior (non-zero function integrated over a set of infinite measure?) and
+paper that you write it on won't scream at you in terror.
+
+But, I claim, boldly, that for deciding if it's more "utils" if you disown your
+mum, break up your partner, participate in gang-bang or donate your kidney to a
+stranger even the basic ethical heuristics available to neolithical hunter
+gatherers have a decent chance of serving you better than LW-flavor Rationalism. 
+
+This work is in deep need of touching grass, and I hope someone will be be able
+to provide to this community the service that Xu Xiaodong
+(https://en.wikipedia.org/wiki/Xu_Xiaodong) provided to Kung Fu community,
+beating the shit out of Kung Fu masters that were up to the challange of
+duelling him on MMA rules.  (I am not calling for physical violence, just
+direct and unambiguous refutation of central points of LW's work, if they ever
+get formualted clearly, because no one's gonna read all of that stuff).
+
+[it's just a joke don't sue me pls].
+
+Nice things, that are all at least partially related to LW:
+
+- small but concrete social good produced by grants
+- manifold markets <3
+- scott alexander <3
+- gwern <3
+
+* notes
+  - Collisions of LW-adjacent ethical thinking with normie social norms 
+    is a reliable source of entertainment:
+    - "Capture the flag, except flags are woman" and "came in fluffer"
+    - "If you have a partner, what’s the best argument in favor of breaking up with them?" from
+     "Staring into the abyss as a core life skill" 
+- Instead of graphomaniac 700 essays of sequences, wouldn't it be nicer to have 1 crisp book that clearly states
+the point ?
+
 ------------
 
 Outlive
