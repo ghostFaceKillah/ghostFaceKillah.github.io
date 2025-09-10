@@ -92,11 +92,11 @@ you probably have to observe me closely to update).
 (Read below in Hermione's voice).
 
 The LW's menu staple is a short form essay on meta-cognition written in dense,
-besserwisser tone, sprinkled with neologisms and signature lack of emotional
-intelligence / empathy. I am guessing that it was specifically this self-served
-intellectual diet of not-enough-fiber that made the spiritus movens of LW "burp
-into existence" Harry Potter and Methods of Rationality, the true magnum opus
-of hazy mansplain-core.
+besserwisser tone, sprinkled with neologisms and signature lack of
+self-awareness and emotional intelligence / empathy. I am guessing that it was
+specifically this self-served intellectual diet of not-enough-fiber that made
+the spiritus movens of LW "burp into existence" Harry Potter and Methods of
+Rationality, the true magnum opus of hazy mansplain-core.
 
 Imagine the first time you read about eristic tricks (Schopenhauer's
 stratagems) and thought that now you're going to win all arguments with your
@@ -129,8 +129,8 @@ paper that you write it on won't scream at you in terror.
 But, I claim, boldly, that for deciding if it's more "utils" if you disown your
 mum or not, break up your partner, participate in gang-bang or donate your
 kidney to a stranger even the basic ethical heuristics available to neolithical
-hunter gatherers have a decent chance of serving you better than the LW-flavor of
-rationalism. 
+hunter gatherers have a decent chance of serving you Pareto-not-worse-or-better
+than the LW-flavor of rationalism. 
 
 This work is in deep need of touching grass, and I hope someone will be be able
 to provide to this community the service that Xu Xiaodong
@@ -139,6 +139,7 @@ beating the shit out of Kung Fu masters that were up to the challange of
 duelling him on MMA rules.  (I am not calling for physical violence, just
 direct and unambiguous refutation of central points of LW's work, if they ever
 get formualted clearly, because no one's gonna read all of that stuff).
+This might be realized as a future entity, called Roko's basilisk.
 
 [it's just a joke don't sue me pls].
 
@@ -158,7 +159,65 @@ Nice things, that are all at least partially related to LW:
 - Instead of graphomaniac 700 essays of sequences, wouldn't it be nicer to have 1 crisp book that clearly states
 the point ?
 
+
+
+"A Thousand Plateaus" - Gilles Deleuze, Félix Guattari
 ------------
+
+5/5
+
+Performative male summer hit me hard this year.
+
+I already got my baggy pants (Yamatomichi), tote bag (Topologie bouldering club)
+and was enjoying fancy-yet-totally-natural drinks from Tong Sui
+(or for a less healthy option you might also try Molly Tea). I considered
+selling my FM3a, I gave away most of my lens and sold some of rarer pieces
+of my guitar pedal collection.
+
+But as the hair on peak of my head inevitably gave way to my polish genes,
+my flexmaxxing creativity peaked as well. In the end, it was the last
+week of summer!  I decided that instead of getting a laptop stand, I will just
+get a stack of edgy books.
+
+After deciding against Hanselmann's excellent "Seeds and Stems" for their
+NSFWkness, I turned to everyone's "Looks good, didn't read though" favourites:
+1000 Plateus, Anti-Oedipus, Fanged Noumena, etc. I guessed I'll complement that with
+Hatcher's Algebraic Topology and maybe Lee's Intro to Smooth Manifolds to lighten
+the mood a little, and that would help me project correct aura till the end of the
+first non-brat summer.
+
+My pitiful arogance quickly turned into delight as I was met with
+the single most creative piece of philosophical wrting I was ever able to experience.
+1000 Plateus turned out to be mere 13 or 15, and depending how you look at them,
+maybe only one or two, but boy are those immense! Insight-zanmai!
+
+Gilles and Felix pull out from your mind a thought, a smidge of
+feeling that you felt, yet didn't notice, and then let you watch it in full glory.
+
+They touch invidual neurons. They make electric impulses go through paths very
+rarely untaken, and it's a very pleasant feeling. It's the feeling of finding
+the lost time!
+
+They immediatelly, fearlessly expose you to you the mess of your own subconscious,
+as long as you are willing to let go of the preconception of the sentence having
+to make sense.
+
+1kP bears some resemblence to Zizek's aimless but infinitely entertaining
+ meandering. However, contrary to our ambidextrous hotto doggu enjoyer,
+Guittari and Delulu are 100% serious and make great points that force your
+mind to expand.
+
+Sometimes, they bear some resemblence to neo-traditional Zen Buddhist writing, e.g.
+Uchiyama's "Opening Hand of Thought" or Suzuki's "Zen Mind, Beginners's Mind".  Those
+folks also make concrete point and evoke concrete feelings by using non-konkret
+langunage and arguments.
+
+Deleuze and Guattari invite to, inspire, demand, force and encourage to transcend 
+and I remain deeply indebted to their hypertext.
+
+
+                                                                                                                                                                                          12,70         Top
+
 
 Outlive
 ------------
@@ -177,6 +236,17 @@ Radical Candor
 
 Capital - Piketty
 -------
+
+The Fable of the Dragon-Tyrant
+==============================
+Nick Bostrom
+
+4.5/5
+
+Nice!
+
+
+
 
 
 
@@ -415,6 +485,13 @@ Reading list
 
 This is stuff that I want to read
 
+„ Wielka transformacja węgierskiego ekonomisty Karla Polanyiego i Droga do zniewolenia Friedricha Hayeka, ”
+
+Fragmenty z książki
+Patopaństwo. O tym, jak elity pustoszą nasz kraj
+Jan Śpiewak
+Ten materiał może być chroniony prawem autorskim.
+
 Giełzak - Wieczna Lewica
 Prześwity - wydawnictwo
 Czerwone i Czarne - wyadwnictwo
@@ -424,7 +501,43 @@ Geoff Hinton - prace zebrane
 "czasy ostateczne" - turchin
 "Coming wave" - Suleyman
 Hayek
+Nowe Ateny
+London review of boks
+https://archive.org/details/bub_man_58946febff9b6193346cf0808c43caeb
 
+
+"The Ancient City" by Numa Denis Fustel de Coulanges - About Indo-European
+societies and their social structures
+
+"The Machiavellians" by James Burnham - Described as "probably the best book on
+politics written in the 20th century"
+
+"The Power of the Powerless" by Vaclav Havel - About life under communist rule
+
+"Private Truths, Public Lies" by Timur Kuran - About preference falsification
+
+"The True Believer" by Eric Hoffer - About mass movements and the role of elites vs masses
+
+"The Decline and Fall of the American Programmer" - Mentioned in context of
+automated coding systems in the late 80s/early 90s
+
+
+The Diversity Myth: Multiculturalism and the Politics of Intolerance at Stanford - Authors: David O. Sacks and Peter A. Thiel
+
+The Federalist Papers - Authors: Alexander Hamilton, James Madison, and John Jay
+(Typically bound and published as one volume, mentioned in the discussion of America’s founding.)
+
+Eric Vogelin.
+
+The transcript also references but doesn't explicitly name books by Eric Voegelin about political religions and communism/Nazism.
+
+
+Such time might be better spent reading some of the books written by the actual
+researchers behind the Sequences' concepts, such as 
+The Fabric of Reality by David Deutsch,
+[33] Thinking, Fast and Slow by Daniel Kahneman,[34] 
+The Black Swan by Nassim Nicholas Taleb,[35] or 
+Thinking and Deciding by Jonathan Baron[36] — all of which are readable.
 
 The Four Agreements by Don Miguel Ruiz
 The Seven Habits of Highly Effective People by Stephen R. Covey
@@ -446,8 +559,8 @@ Start with Why by Simon Sinek (this guy seems very cringe)
 Why Nations Fail by Daron Acemoglu and James A. Robinson
 
 
-The Alchemist by Paulo Coelho
-The Celestine Prophecy by James Redfield
+Three body theory
+
 A New Earth by Eckhart Tolle
 The Untethered Soul by Michael A. Singer
 Daring Greatly by Brené Brown
@@ -523,3 +636,5 @@ https://slatestarcodex.com/2015/08/17/the-goddess-of-everything-else-2/
 
 https://www.si.edu/spotlight/mlk?page=4&iframe=true
 
+
+https://arbital.com/p/61b/?startPath - bayes
