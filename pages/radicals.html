@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Radical Trainer</title>
+<style>
+  :root {
+    --bg: #f4f4f5;
+    --card: #ffffff;
+    --ink: #18181b;
+    --muted: #71717a;
+    --line: #e4e4e7;
+    --green: #16a34a;
+    --amber: #d97706;
+    --accent: #2563eb;
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+  .wrap { width: 100%; max-width: 560px; }
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  h1 { font-size: 1.6rem; margin: 0 0 4px; text-align: center; }
+  .sub { color: var(--muted); text-align: center; margin: 0 0 28px; font-size: .95rem; }
+
+  .label { font-size: .8rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 0 0 10px; }
+
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 24px; }
+  .opt {
+    border: 1px solid var(--line);
+    background: var(--card);
+    border-radius: 12px;
+    padding: 14px 10px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: border-color .12s, background .12s;
+  }
+  .opt:hover { border-color: var(--accent); }
+  .opt.sel { border-color: var(--accent); background: #eff6ff; color: var(--accent); font-weight: 600; }
+
+  .range { display: flex; align-items: flex-end; gap: 12px; margin-bottom: 8px; }
+  .range label { flex: 1; display: flex; flex-direction: column; gap: 6px; font-size: .8rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+  .range .dash { padding-bottom: 14px; color: var(--muted); }
+  .range select {
+    width: 100%;
+    border: 1px solid var(--line);
+    background: var(--card);
+    color: var(--ink);
+    border-radius: 12px;
+    padding: 14px 10px;
+    font-size: 1rem;
+    cursor: pointer;
+    appearance: none;
+    text-align: center;
+  }
+  .range select:focus { outline: none; border-color: var(--accent); }
+  .rangeInfo { color: var(--muted); font-size: .9rem; margin: 0 0 24px; text-align: center; min-height: 1.2em; }
+
+  .toggle { display: flex; gap: 10px; margin-bottom: 28px; }
+  .toggle .opt { flex: 1; }
+
+  .btn {
+    display: block;
+    width: 100%;
+    border: none;
+    border-radius: 12px;
+    padding: 16px;
+    font-size: 1.05rem;
+    font-weight: 600;
+    cursor: pointer;
+    background: var(--accent);
+    color: #fff;
+    transition: opacity .12s;
+  }
+  .btn:hover { opacity: .9; }
+  .btn.ghost { background: var(--card); color: var(--ink); border: 1px solid var(--line); }
+
+  /* Card screen */
+  .topbar { display: flex; justify-content: space-between; align-items: center; color: var(--muted); font-size: .9rem; margin-bottom: 20px; }
+  .topbar a { color: var(--muted); text-decoration: none; cursor: pointer; }
+  .topbar a:hover { color: var(--ink); }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 40px 24px;
+    text-align: center;
+    cursor: pointer;
+    user-select: none;
+    min-height: 320px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .radical { font-size: 9rem; line-height: 1; margin: 0; }
+  .variant { font-size: 4rem; color: var(--muted); }
+  .hint { color: var(--muted); margin-top: 24px; font-size: .9rem; }
+
+  .answer { display: none; margin-top: 24px; }
+  .answer.show { display: block; }
+  .pinyin { font-size: 2rem; margin: 0 0 4px; color: var(--accent); }
+  .english { font-size: 1.3rem; margin: 0 0 18px; }
+  .examples { font-size: 1.6rem; color: var(--ink); margin: 0; }
+  .examples small { display: block; font-size: .8rem; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 6px; }
+
+  .actions { display: none; gap: 12px; margin-top: 16px; }
+  .actions.show { display: flex; }
+  .actions .btn { flex: 1; }
+  .btn.again { background: var(--amber); }
+  .btn.got { background: var(--green); }
+
+  .reveal-row { margin-top: 16px; }
+
+  /* Done screen */
+  .done { text-align: center; }
+  .done .big { font-size: 3rem; margin: 0 0 8px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- START -->
+  <section id="start" class="screen active">
+    <h1>Radical Trainer</h1>
+    <p class="sub">Learn common Chinese radicals — flashcard style.</p>
+
+    <p class="label">Which radicals?</p>
+    <div class="range">
+      <label>From
+        <select id="fromSel"></select>
+      </label>
+      <span class="dash">&ndash;</span>
+      <label>To
+        <select id="toSel"></select>
+      </label>
+    </div>
+    <p class="rangeInfo" id="rangeInfo"></p>
+
+    <p class="label">Order</p>
+    <div class="toggle" id="orderToggle">
+      <button class="opt sel" data-order="shuffle">Shuffle</button>
+      <button class="opt" data-order="ordered">In order</button>
+    </div>
+
+    <button class="btn" id="startBtn">Start</button>
+  </section>
+
+  <!-- CARD -->
+  <section id="study" class="screen">
+    <div class="topbar">
+      <a id="quitBtn">&larr; Quit</a>
+      <span id="progress">0 / 0</span>
+    </div>
+
+    <div class="card" id="card">
+      <p class="radical" id="radical">人</p>
+      <div class="answer" id="answer">
+        <p class="pinyin" id="pinyin"></p>
+        <p class="english" id="english"></p>
+        <p class="examples"><small>Examples</small><span id="examples"></span></p>
+      </div>
+      <p class="hint" id="hint">Tap card or press Space to reveal</p>
+    </div>
+
+    <div class="reveal-row" id="revealRow">
+      <button class="btn" id="revealBtn">Reveal</button>
+    </div>
+
+    <div class="actions" id="actions">
+      <button class="btn again" id="againBtn">Again <small>(1)</small></button>
+      <button class="btn got" id="gotBtn">Got it <small>(2)</small></button>
+    </div>
+  </section>
+
+  <!-- DONE -->
+  <section id="done" class="screen">
+    <div class="done">
+      <p class="big">All cleared! 🎉</p>
+      <p class="sub" id="doneSummary"></p>
+      <button class="btn" id="restartBtn">Study again</button>
+    </div>
+  </section>
+
+</div>
+
+<script>
+  // ----- Data: the 40 radicals -----
+  const RADICALS = [
+    { n: 1,  base: "人", variant: "亻", pinyin: "rén",  english: "person",            examples: "今，他" },
+    { n: 2,  base: "刀", variant: "刂", pinyin: "dāo",  english: "knife",             examples: "分，到" },
+    { n: 3,  base: "力", variant: "",   pinyin: "lì",   english: "power",             examples: "加，助" },
+    { n: 4,  base: "又", variant: "",   pinyin: "yòu",  english: "right hand, again", examples: "友，取" },
+    { n: 5,  base: "口", variant: "",   pinyin: "kǒu",  english: "mouth",             examples: "叫，可" },
+    { n: 6,  base: "囗", variant: "",   pinyin: "wéi",  english: "enclose",           examples: "回，因" },
+    { n: 7,  base: "土", variant: "",   pinyin: "tǔ",   english: "earth",             examples: "在，坐" },
+    { n: 8,  base: "夕", variant: "",   pinyin: "xī",   english: "sunset",            examples: "外，多" },
+    { n: 9,  base: "大", variant: "",   pinyin: "dà",   english: "big",               examples: "天，太" },
+    { n: 10, base: "女", variant: "",   pinyin: "nǚ",   english: "woman",             examples: "婆，好" },
+    { n: 11, base: "子", variant: "",   pinyin: "zǐ",   english: "child",             examples: "字，孩" },
+    { n: 12, base: "寸", variant: "",   pinyin: "cùn",  english: "inch",              examples: "寺，封" },
+    { n: 13, base: "小", variant: "",   pinyin: "xiǎo", english: "small",             examples: "少，尖" },
+    { n: 14, base: "工", variant: "",   pinyin: "gōng", english: "labor, work",       examples: "左，差" },
+    { n: 15, base: "幺", variant: "",   pinyin: "yāo",  english: "tiny, small",       examples: "幻，幼" },
+    { n: 16, base: "弓", variant: "",   pinyin: "gōng", english: "bow",               examples: "引，弟" },
+    { n: 17, base: "心", variant: "忄", pinyin: "xīn",  english: "heart",             examples: "想，忙" },
+    { n: 18, base: "戈", variant: "",   pinyin: "gē",   english: "dagger-axe",        examples: "我，或" },
+    { n: 19, base: "手", variant: "扌", pinyin: "shǒu", english: "hand",              examples: "拿，打" },
+    { n: 20, base: "日", variant: "",   pinyin: "rì",   english: "sun",               examples: "早，明" },
+    { n: 21, base: "月", variant: "",   pinyin: "yuè",  english: "moon",              examples: "期，朗" },
+    { n: 22, base: "木", variant: "",   pinyin: "mù",   english: "wood",              examples: "李，杯" },
+    { n: 23, base: "水", variant: "氵", pinyin: "shuǐ", english: "water",             examples: "汞，洗" },
+    { n: 24, base: "火", variant: "灬", pinyin: "huǒ",  english: "fire",              examples: "烧，热" },
+    { n: 25, base: "田", variant: "",   pinyin: "tián", english: "field",             examples: "男，留" },
+    { n: 26, base: "目", variant: "",   pinyin: "mù",   english: "eye",               examples: "看，睡" },
+    { n: 27, base: "示", variant: "礻", pinyin: "shì",  english: "show",              examples: "票，社" },
+    { n: 28, base: "糸", variant: "纟", pinyin: "mì",   english: "fine silk",         examples: "素，红" },
+    { n: 29, base: "耳", variant: "",   pinyin: "ěr",   english: "ear",               examples: "聋，聊" },
+    { n: 30, base: "衣", variant: "衤", pinyin: "yī",   english: "clothing",          examples: "袋，衫" },
+    { n: 31, base: "言", variant: "讠", pinyin: "yán",  english: "speech",            examples: "誓，话" },
+    { n: 32, base: "贝", variant: "",   pinyin: "bèi",  english: "cowrie shell",      examples: "贵，财" },
+    { n: 33, base: "走", variant: "",   pinyin: "zǒu",  english: "walk",              examples: "趣，起" },
+    { n: 34, base: "足", variant: "",   pinyin: "zú",   english: "foot",              examples: "跳，跑" },
+    { n: 35, base: "金", variant: "钅", pinyin: "jīn",  english: "gold",              examples: "鉴，银" },
+    { n: 36, base: "门", variant: "",   pinyin: "mén",  english: "door",              examples: "间，闷" },
+    { n: 37, base: "隹", variant: "",   pinyin: "zhuī", english: "short-tailed bird", examples: "难，集" },
+    { n: 38, base: "雨", variant: "",   pinyin: "yǔ",   english: "rain",              examples: "雪，雷" },
+    { n: 39, base: "食", variant: "饣", pinyin: "shí",  english: "eat",               examples: "餐，饭" },
+    { n: 40, base: "马", variant: "",   pinyin: "mǎ",   english: "horse",             examples: "骑，骂" },
+  ];
+
+  const TOTAL = RADICALS.length;            // 40
+  const FROM_OPTS = [1, 6, 11, 16, 21, 26, 31, 36];
+  const TO_OPTS   = [5, 10, 15, 20, 25, 30, 35, 40];
+
+  // ----- State -----
+  let rangeFrom = 1;   // 1-based, inclusive
+  let rangeTo = 10;    // 1-based, inclusive
+  let order = "shuffle";
+  let queue = [];        // remaining cards this session
+  let totalThisRound = 0;
+  let cleared = 0;
+  let revealed = false;
+
+  // ----- Elements -----
+  const screens = {
+    start: document.getElementById("start"),
+    study: document.getElementById("study"),
+    done:  document.getElementById("done"),
+  };
+  const el = {
+    fromSel:    document.getElementById("fromSel"),
+    toSel:      document.getElementById("toSel"),
+    rangeInfo:  document.getElementById("rangeInfo"),
+    orderToggle:document.getElementById("orderToggle"),
+    startBtn:   document.getElementById("startBtn"),
+    progress:   document.getElementById("progress"),
+    card:       document.getElementById("card"),
+    radical:    document.getElementById("radical"),
+    answer:     document.getElementById("answer"),
+    pinyin:     document.getElementById("pinyin"),
+    english:    document.getElementById("english"),
+    examples:   document.getElementById("examples"),
+    hint:       document.getElementById("hint"),
+    revealRow:  document.getElementById("revealRow"),
+    revealBtn:  document.getElementById("revealBtn"),
+    actions:    document.getElementById("actions"),
+    againBtn:   document.getElementById("againBtn"),
+    gotBtn:     document.getElementById("gotBtn"),
+    quitBtn:    document.getElementById("quitBtn"),
+    doneSummary:document.getElementById("doneSummary"),
+    restartBtn: document.getElementById("restartBtn"),
+  };
+
+  // ----- Setup start screen -----
+  function fillSelect(sel, values, selected) {
+    values.forEach(v => {
+      const o = document.createElement("option");
+      o.value = v;
+      o.textContent = "#" + v;
+      if (v === selected) o.selected = true;
+      sel.appendChild(o);
+    });
+  }
+  fillSelect(el.fromSel, FROM_OPTS, rangeFrom);
+  fillSelect(el.toSel, TO_OPTS, rangeTo);
+
+  function syncRange() {
+    rangeFrom = parseInt(el.fromSel.value, 10);
+    rangeTo = parseInt(el.toSel.value, 10);
+    // Keep To >= From: if user picks a From past To, bump To up.
+    if (rangeTo < rangeFrom) {
+      rangeTo = TO_OPTS.find(v => v >= rangeFrom);
+      el.toSel.value = rangeTo;
+    }
+    const count = rangeTo - rangeFrom + 1;
+    el.rangeInfo.textContent = `Radicals ${rangeFrom}–${rangeTo} · ${count} card${count === 1 ? "" : "s"}`;
+  }
+  el.fromSel.addEventListener("change", syncRange);
+  el.toSel.addEventListener("change", syncRange);
+  syncRange();
+
+  el.orderToggle.addEventListener("click", e => {
+    const b = e.target.closest(".opt");
+    if (!b) return;
+    order = b.dataset.order;
+    [...el.orderToggle.children].forEach(c => c.classList.toggle("sel", c === b));
+  });
+
+  function show(name) {
+    Object.values(screens).forEach(s => s.classList.remove("active"));
+    screens[name].classList.add("active");
+  }
+
+  function shuffle(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+
+  // ----- Session flow -----
+  function startSession() {
+    queue = RADICALS.slice(rangeFrom - 1, rangeTo);
+    if (order === "shuffle") shuffle(queue);
+    else queue = queue.slice(); // copy
+    totalThisRound = queue.length;
+    cleared = 0;
+    show("study");
+    nextCard();
+  }
+
+  function nextCard() {
+    if (queue.length === 0) {
+      el.doneSummary.textContent = `You cleared ${totalThisRound} radical${totalThisRound === 1 ? "" : "s"}.`;
+      show("done");
+      return;
+    }
+    const c = queue[0];
+    revealed = false;
+    el.radical.innerHTML = c.variant
+      ? `${c.base} <span class="variant">(${c.variant})</span>`
+      : c.base;
+    el.pinyin.textContent = c.pinyin;
+    el.english.textContent = c.english;
+    el.examples.textContent = c.examples;
+
+    el.answer.classList.remove("show");
+    el.actions.classList.remove("show");
+    el.revealRow.style.display = "block";
+    el.hint.style.display = "block";
+    updateProgress();
+  }
+
+  function updateProgress() {
+    el.progress.textContent = `${cleared} / ${totalThisRound}`;
+  }
+
+  function reveal() {
+    if (revealed) return;
+    revealed = true;
+    el.answer.classList.add("show");
+    el.actions.classList.add("show");
+    el.revealRow.style.display = "none";
+    el.hint.style.display = "none";
+  }
+
+  function gotIt() {
+    if (!revealed) return;
+    queue.shift();          // remove from session
+    cleared++;
+    nextCard();
+  }
+
+  function again() {
+    if (!revealed) return;
+    const c = queue.shift();
+    // push back near the end so it returns later this session
+    const insertAt = Math.min(queue.length, 4);
+    queue.splice(insertAt, 0, c);
+    nextCard();
+  }
+
+  // ----- Events -----
+  el.startBtn.addEventListener("click", startSession);
+  el.restartBtn.addEventListener("click", () => show("start"));
+  el.quitBtn.addEventListener("click", () => show("start"));
+  el.card.addEventListener("click", reveal);
+  el.revealBtn.addEventListener("click", reveal);
+  el.gotBtn.addEventListener("click", gotIt);
+  el.againBtn.addEventListener("click", again);
+
+  document.addEventListener("keydown", e => {
+    if (!screens.study.classList.contains("active")) return;
+    if (e.code === "Space") { e.preventDefault(); reveal(); return; }
+    if (!revealed) return;
+    if (e.key === "1" || e.key === "ArrowLeft")  { e.preventDefault(); again(); }
+    if (e.key === "2" || e.key === "ArrowRight" || e.key === "Enter") { e.preventDefault(); gotIt(); }
+  });
+</script>
+</body>
+</html>
