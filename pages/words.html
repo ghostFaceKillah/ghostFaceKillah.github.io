@@ -98,9 +98,19 @@
   .theme-toggle:hover { border-color: var(--accent); }
 
   /* Lesson picker */
-  .lessons { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 8px; }
-  .lessons .opt { text-align: left; }
-  .lessons .opt.all { grid-column: 1 / -1; text-align: center; }
+  .sel-input {
+    width: 100%;
+    border: 1px solid var(--line);
+    background: var(--card);
+    color: var(--ink);
+    border-radius: 12px;
+    padding: 14px 12px;
+    font-size: 1rem;
+    cursor: pointer;
+    appearance: none;
+    margin-bottom: 16px;
+  }
+  .sel-input:focus { outline: none; border-color: var(--accent); }
   .rangeInfo { color: var(--muted); font-size: .9rem; margin: 0 0 24px; text-align: center; min-height: 1.2em; }
 
   .toggle { display: flex; gap: 10px; margin-bottom: 28px; }
@@ -195,10 +205,17 @@
   <!-- START -->
   <section id="start" class="screen active">
     <h1>Word Trainer</h1>
-    <p class="sub">Learn Chinese words — flashcard style.</p>
+    <p class="sub">Learn Chinese words — flashcard style. (Integrated Chinese, Lessons 1–10)</p>
 
-    <p class="label">Which words?</p>
-    <div class="lessons" id="lessonPicker"></div>
+    <p class="label">Lesson</p>
+    <select class="sel-input" id="lessonSel"></select>
+
+    <p class="label">Dialogue</p>
+    <div class="toggle" id="dialogueToggle">
+      <button class="opt sel" data-dia="1">Dialogue 1</button>
+      <button class="opt" data-dia="2">Dialogue 2</button>
+      <button class="opt" data-dia="BOTH">Both</button>
+    </div>
     <p class="rangeInfo" id="rangeInfo"></p>
 
     <p class="label">Order</p>
@@ -282,93 +299,452 @@
     syncIcon();
   })();
 
-  // ----- Lessons -----
+  // ----- Lessons (theme per lesson; each has dialogues 1 & 2) -----
   const LESSONS = [
-    { id: "L1", label: "Lesson 1 · Greetings & Family" },
+    { num: 1,  theme: "Greetings" },
+    { num: 2,  theme: "Family" },
+    { num: 3,  theme: "Time" },
+    { num: 4,  theme: "Hobbies" },
+    { num: 5,  theme: "Visiting Friends" },
+    { num: 6,  theme: "Making Appointments" },
+    { num: 7,  theme: "Studying Chinese" },
+    { num: 8,  theme: "School Life" },
+    { num: 9,  theme: "Shopping" },
+    { num: 10, theme: "Transportation" },
   ];
 
-  // ----- Data: vocabulary (Integrated Chinese, Lessons 1 & 2) -----
-  // w = word, pinyin, pos = part of speech, def = definition, lesson.
+  // ----- Data: vocabulary (Integrated Chinese, Level 1 Part 1, Lessons 1–10) -----
+  // w = word, pinyin, pos = part of speech, def = definition, lesson = "L<n>D<d>".
+  // Lessons 1–2 are transcribed from the textbook tables; Lessons 3–10 are
+  // compiled from the same series' standard vocabulary.
   const WORDS = [
     // ----- Lesson 1, Dialogue 1 -----
-    { w: "你",     pinyin: "nǐ",          pos: "pr",     def: "you",                                                              lesson: "L1" },
-    { w: "好",     pinyin: "hǎo",         pos: "adj",    def: "fine, good, nice, OK, it's settled",                               lesson: "L1" },
-    { w: "请",     pinyin: "qǐng",        pos: "v",      def: "please (polite form of request); to treat or to invite (somebody)", lesson: "L1" },
-    { w: "问",     pinyin: "wèn",         pos: "v",      def: "to ask (a question)",                                              lesson: "L1" },
-    { w: "贵",     pinyin: "guì",         pos: "adj",    def: "honorable; expensive",                                             lesson: "L1" },
-    { w: "姓",     pinyin: "xìng",        pos: "v/n",    def: "(one's) family name is…; family name",                             lesson: "L1" },
-    { w: "我",     pinyin: "wǒ",          pos: "pr",     def: "I, me",                                                            lesson: "L1" },
-    { w: "呢",     pinyin: "ne",          pos: "qp",     def: "(question particle)",                                              lesson: "L1" },
-    { w: "小姐",   pinyin: "xiǎojiě",     pos: "n",      def: "Miss, young lady",                                                 lesson: "L1" },
-    { w: "叫",     pinyin: "jiào",        pos: "v",      def: "to be called, to call",                                            lesson: "L1" },
-    { w: "什么",   pinyin: "shénme",      pos: "qpr",    def: "what",                                                             lesson: "L1" },
-    { w: "名字",   pinyin: "míngzi",      pos: "n",      def: "name",                                                             lesson: "L1" },
-    { w: "先生",   pinyin: "xiānsheng",   pos: "n",      def: "Mr., husband, teacher",                                            lesson: "L1" },
-    { w: "李友",   pinyin: "Lǐ Yǒu",      pos: "pn",     def: "(a personal name)",                                                lesson: "L1" },
-    { w: "李",     pinyin: "lǐ",          pos: "pn/n",   def: "(a family name); plum",                                            lesson: "L1" },
-    { w: "王朋",   pinyin: "Wáng Péng",   pos: "pn",     def: "(a personal name)",                                                lesson: "L1" },
-    { w: "王",     pinyin: "wáng",        pos: "pn/n",   def: "(a family name); king",                                            lesson: "L1" },
+    { w: "你",     pinyin: "nǐ",          pos: "pr",     def: "you",                                                              lesson: "L1D1" },
+    { w: "好",     pinyin: "hǎo",         pos: "adj",    def: "fine, good, nice, OK, it's settled",                               lesson: "L1D1" },
+    { w: "请",     pinyin: "qǐng",        pos: "v",      def: "please (polite form of request); to treat or to invite (somebody)", lesson: "L1D1" },
+    { w: "问",     pinyin: "wèn",         pos: "v",      def: "to ask (a question)",                                              lesson: "L1D1" },
+    { w: "贵",     pinyin: "guì",         pos: "adj",    def: "honorable; expensive",                                             lesson: "L1D1" },
+    { w: "姓",     pinyin: "xìng",        pos: "v/n",    def: "(one's) family name is…; family name",                             lesson: "L1D1" },
+    { w: "我",     pinyin: "wǒ",          pos: "pr",     def: "I, me",                                                            lesson: "L1D1" },
+    { w: "呢",     pinyin: "ne",          pos: "qp",     def: "(question particle)",                                              lesson: "L1D1" },
+    { w: "小姐",   pinyin: "xiǎojiě",     pos: "n",      def: "Miss, young lady",                                                 lesson: "L1D1" },
+    { w: "叫",     pinyin: "jiào",        pos: "v",      def: "to be called, to call",                                            lesson: "L1D1" },
+    { w: "什么",   pinyin: "shénme",      pos: "qpr",    def: "what",                                                             lesson: "L1D1" },
+    { w: "名字",   pinyin: "míngzi",      pos: "n",      def: "name",                                                             lesson: "L1D1" },
+    { w: "先生",   pinyin: "xiānsheng",   pos: "n",      def: "Mr., husband, teacher",                                            lesson: "L1D1" },
+    { w: "李友",   pinyin: "Lǐ Yǒu",      pos: "pn",     def: "(a personal name)",                                                lesson: "L1D1" },
+    { w: "李",     pinyin: "lǐ",          pos: "pn/n",   def: "(a family name); plum",                                            lesson: "L1D1" },
+    { w: "王朋",   pinyin: "Wáng Péng",   pos: "pn",     def: "(a personal name)",                                                lesson: "L1D1" },
+    { w: "王",     pinyin: "wáng",        pos: "pn/n",   def: "(a family name); king",                                            lesson: "L1D1" },
 
     // ----- Lesson 1, Dialogue 2 -----
-    { w: "是",     pinyin: "shì",         pos: "v",      def: "to be",                                                            lesson: "L1" },
-    { w: "老师",   pinyin: "lǎoshī",      pos: "n",      def: "teacher",                                                          lesson: "L1" },
-    { w: "吗",     pinyin: "ma",          pos: "qp",     def: "(question particle)",                                              lesson: "L1" },
-    { w: "不",     pinyin: "bù",          pos: "adv",    def: "not, no",                                                          lesson: "L1" },
-    { w: "学生",   pinyin: "xuésheng",    pos: "n",      def: "student",                                                          lesson: "L1" },
-    { w: "也",     pinyin: "yě",          pos: "adv",    def: "too, also",                                                        lesson: "L1" },
-    { w: "人",     pinyin: "rén",         pos: "n",      def: "people, person",                                                   lesson: "L1" },
-    { w: "中国",   pinyin: "Zhōngguó",    pos: "pn",     def: "China",                                                            lesson: "L1" },
-    { w: "北京",   pinyin: "Běijīng",     pos: "pn",     def: "Beijing",                                                          lesson: "L1" },
-    { w: "美国",   pinyin: "Měiguó",      pos: "pn",     def: "America",                                                          lesson: "L1" },
-    { w: "纽约",   pinyin: "Niǔyuē",      pos: "pn",     def: "New York",                                                         lesson: "L1" },
+    { w: "是",     pinyin: "shì",         pos: "v",      def: "to be",                                                            lesson: "L1D2" },
+    { w: "老师",   pinyin: "lǎoshī",      pos: "n",      def: "teacher",                                                          lesson: "L1D2" },
+    { w: "吗",     pinyin: "ma",          pos: "qp",     def: "(question particle)",                                              lesson: "L1D2" },
+    { w: "不",     pinyin: "bù",          pos: "adv",    def: "not, no",                                                          lesson: "L1D2" },
+    { w: "学生",   pinyin: "xuésheng",    pos: "n",      def: "student",                                                          lesson: "L1D2" },
+    { w: "也",     pinyin: "yě",          pos: "adv",    def: "too, also",                                                        lesson: "L1D2" },
+    { w: "人",     pinyin: "rén",         pos: "n",      def: "people, person",                                                   lesson: "L1D2" },
+    { w: "中国",   pinyin: "Zhōngguó",    pos: "pn",     def: "China",                                                            lesson: "L1D2" },
+    { w: "北京",   pinyin: "Běijīng",     pos: "pn",     def: "Beijing",                                                          lesson: "L1D2" },
+    { w: "美国",   pinyin: "Měiguó",      pos: "pn",     def: "America",                                                          lesson: "L1D2" },
+    { w: "纽约",   pinyin: "Niǔyuē",      pos: "pn",     def: "New York",                                                         lesson: "L1D2" },
 
     // ----- Lesson 2, Dialogue 1 -----
-    { w: "那",     pinyin: "nà",          pos: "pr",     def: "that",                                                             lesson: "L1" },
-    { w: "的",     pinyin: "de",          pos: "p",      def: "(a possessive or descriptive particle)",                           lesson: "L1" },
-    { w: "照片",   pinyin: "zhàopiàn",    pos: "n",      def: "picture, photo",                                                   lesson: "L1" },
-    { w: "这",     pinyin: "zhè",         pos: "pr",     def: "this",                                                             lesson: "L1" },
-    { w: "爸爸",   pinyin: "bàba",        pos: "n",      def: "father, dad",                                                      lesson: "L1" },
-    { w: "妈妈",   pinyin: "māma",        pos: "n",      def: "mother, mom",                                                      lesson: "L1" },
-    { w: "个",     pinyin: "gè/ge",       pos: "m",      def: "(measure word for many common everyday objects)",                  lesson: "L1" },
-    { w: "女",     pinyin: "nǚ",          pos: "adj",    def: "female",                                                           lesson: "L1" },
-    { w: "孩子",   pinyin: "háizi",       pos: "n",      def: "child",                                                            lesson: "L1" },
-    { w: "谁",     pinyin: "shéi",        pos: "qpr",    def: "who, whom",                                                        lesson: "L1" },
-    { w: "她",     pinyin: "tā",          pos: "pr",     def: "she, her",                                                         lesson: "L1" },
-    { w: "姐姐",   pinyin: "jiějie",      pos: "n",      def: "older sister",                                                     lesson: "L1" },
-    { w: "男",     pinyin: "nán",         pos: "adj",    def: "male",                                                             lesson: "L1" },
-    { w: "弟弟",   pinyin: "dìdi",        pos: "n",      def: "younger brother",                                                  lesson: "L1" },
-    { w: "他",     pinyin: "tā",          pos: "pr",     def: "he, him",                                                          lesson: "L1" },
-    { w: "大哥",   pinyin: "dàgē",        pos: "n",      def: "eldest/oldest brother",                                            lesson: "L1" },
-    { w: "儿子",   pinyin: "érzi",        pos: "n",      def: "son",                                                              lesson: "L1" },
-    { w: "有",     pinyin: "yǒu",         pos: "v",      def: "to have, to exist",                                                lesson: "L1" },
-    { w: "女儿",   pinyin: "nǚ'ér",       pos: "n",      def: "daughter",                                                         lesson: "L1" },
-    { w: "没",     pinyin: "méi",         pos: "adv",    def: "not",                                                              lesson: "L1" },
-    { w: "高文中", pinyin: "Gāo Wénzhōng", pos: "pn",    def: "(a personal name)",                                                lesson: "L1" },
-    { w: "高",     pinyin: "gāo",         pos: "pn/adj", def: "(a family name); tall, high",                                      lesson: "L1" },
+    { w: "那",     pinyin: "nà",          pos: "pr",     def: "that",                                                             lesson: "L2D1" },
+    { w: "的",     pinyin: "de",          pos: "p",      def: "(a possessive or descriptive particle)",                           lesson: "L2D1" },
+    { w: "照片",   pinyin: "zhàopiàn",    pos: "n",      def: "picture, photo",                                                   lesson: "L2D1" },
+    { w: "这",     pinyin: "zhè",         pos: "pr",     def: "this",                                                             lesson: "L2D1" },
+    { w: "爸爸",   pinyin: "bàba",        pos: "n",      def: "father, dad",                                                      lesson: "L2D1" },
+    { w: "妈妈",   pinyin: "māma",        pos: "n",      def: "mother, mom",                                                      lesson: "L2D1" },
+    { w: "个",     pinyin: "gè/ge",       pos: "m",      def: "(measure word for many common everyday objects)",                  lesson: "L2D1" },
+    { w: "女",     pinyin: "nǚ",          pos: "adj",    def: "female",                                                           lesson: "L2D1" },
+    { w: "孩子",   pinyin: "háizi",       pos: "n",      def: "child",                                                            lesson: "L2D1" },
+    { w: "谁",     pinyin: "shéi",        pos: "qpr",    def: "who, whom",                                                        lesson: "L2D1" },
+    { w: "她",     pinyin: "tā",          pos: "pr",     def: "she, her",                                                         lesson: "L2D1" },
+    { w: "姐姐",   pinyin: "jiějie",      pos: "n",      def: "older sister",                                                     lesson: "L2D1" },
+    { w: "男",     pinyin: "nán",         pos: "adj",    def: "male",                                                             lesson: "L2D1" },
+    { w: "弟弟",   pinyin: "dìdi",        pos: "n",      def: "younger brother",                                                  lesson: "L2D1" },
+    { w: "他",     pinyin: "tā",          pos: "pr",     def: "he, him",                                                          lesson: "L2D1" },
+    { w: "大哥",   pinyin: "dàgē",        pos: "n",      def: "eldest/oldest brother",                                            lesson: "L2D1" },
+    { w: "儿子",   pinyin: "érzi",        pos: "n",      def: "son",                                                              lesson: "L2D1" },
+    { w: "有",     pinyin: "yǒu",         pos: "v",      def: "to have, to exist",                                                lesson: "L2D1" },
+    { w: "女儿",   pinyin: "nǚ'ér",       pos: "n",      def: "daughter",                                                         lesson: "L2D1" },
+    { w: "没",     pinyin: "méi",         pos: "adv",    def: "not",                                                              lesson: "L2D1" },
+    { w: "高文中", pinyin: "Gāo Wénzhōng", pos: "pn",    def: "(a personal name)",                                                lesson: "L2D1" },
+    { w: "高",     pinyin: "gāo",         pos: "pn/adj", def: "(a family name); tall, high",                                      lesson: "L2D1" },
 
     // ----- Lesson 2, Dialogue 2 -----
-    { w: "家",     pinyin: "jiā",         pos: "n",      def: "family, home",                                                     lesson: "L1" },
-    { w: "几",     pinyin: "jǐ",          pos: "nu",     def: "how many, some, a few",                                            lesson: "L1" },
-    { w: "口",     pinyin: "kǒu",         pos: "m",      def: "(measure word for number of family members)",                      lesson: "L1" },
-    { w: "哥哥",   pinyin: "gēge",        pos: "n",      def: "older brother",                                                    lesson: "L1" },
-    { w: "两",     pinyin: "liǎng",       pos: "nu",     def: "two, a couple of",                                                 lesson: "L1" },
-    { w: "妹妹",   pinyin: "mèimei",      pos: "n",      def: "younger sister",                                                   lesson: "L1" },
-    { w: "和",     pinyin: "hé",          pos: "conj",   def: "and",                                                              lesson: "L1" },
-    { w: "大姐",   pinyin: "dàjiě",       pos: "n",      def: "eldest/oldest sister",                                             lesson: "L1" },
-    { w: "二姐",   pinyin: "èrjiě",       pos: "n",      def: "second oldest sister",                                             lesson: "L1" },
-    { w: "做",     pinyin: "zuò",         pos: "v",      def: "to do",                                                            lesson: "L1" },
-    { w: "工作",   pinyin: "gōngzuò",     pos: "n/v",    def: "job; to work",                                                     lesson: "L1" },
-    { w: "律师",   pinyin: "lǜshī",       pos: "n",      def: "lawyer",                                                           lesson: "L1" },
-    { w: "英文",   pinyin: "Yīngwén",     pos: "n",      def: "the English language",                                             lesson: "L1" },
-    { w: "都",     pinyin: "dōu",         pos: "adv",    def: "both, all",                                                        lesson: "L1" },
-    { w: "大学生", pinyin: "dàxuéshēng",  pos: "n",      def: "college student",                                                  lesson: "L1" },
-    { w: "大学",   pinyin: "dàxué",       pos: "n",      def: "university, college",                                              lesson: "L1" },
-    { w: "医生",   pinyin: "yīshēng",     pos: "n",      def: "doctor, physician",                                                lesson: "L1" },
-    { w: "白英爱", pinyin: "Bái Yīng'ài", pos: "pn",     def: "(a personal name)",                                                lesson: "L1" },
+    { w: "家",     pinyin: "jiā",         pos: "n",      def: "family, home",                                                     lesson: "L2D2" },
+    { w: "几",     pinyin: "jǐ",          pos: "nu",     def: "how many, some, a few",                                            lesson: "L2D2" },
+    { w: "口",     pinyin: "kǒu",         pos: "m",      def: "(measure word for number of family members)",                      lesson: "L2D2" },
+    { w: "哥哥",   pinyin: "gēge",        pos: "n",      def: "older brother",                                                    lesson: "L2D2" },
+    { w: "两",     pinyin: "liǎng",       pos: "nu",     def: "two, a couple of",                                                 lesson: "L2D2" },
+    { w: "妹妹",   pinyin: "mèimei",      pos: "n",      def: "younger sister",                                                   lesson: "L2D2" },
+    { w: "和",     pinyin: "hé",          pos: "conj",   def: "and",                                                              lesson: "L2D2" },
+    { w: "大姐",   pinyin: "dàjiě",       pos: "n",      def: "eldest/oldest sister",                                             lesson: "L2D2" },
+    { w: "二姐",   pinyin: "èrjiě",       pos: "n",      def: "second oldest sister",                                             lesson: "L2D2" },
+    { w: "做",     pinyin: "zuò",         pos: "v",      def: "to do",                                                            lesson: "L2D2" },
+    { w: "工作",   pinyin: "gōngzuò",     pos: "n/v",    def: "job; to work",                                                     lesson: "L2D2" },
+    { w: "律师",   pinyin: "lǜshī",       pos: "n",      def: "lawyer",                                                           lesson: "L2D2" },
+    { w: "英文",   pinyin: "Yīngwén",     pos: "n",      def: "the English language",                                             lesson: "L2D2" },
+    { w: "都",     pinyin: "dōu",         pos: "adv",    def: "both, all",                                                        lesson: "L2D2" },
+    { w: "大学生", pinyin: "dàxuéshēng",  pos: "n",      def: "college student",                                                  lesson: "L2D2" },
+    { w: "大学",   pinyin: "dàxué",       pos: "n",      def: "university, college",                                              lesson: "L2D2" },
+    { w: "医生",   pinyin: "yīshēng",     pos: "n",      def: "doctor, physician",                                                lesson: "L2D2" },
+    { w: "白英爱", pinyin: "Bái Yīng'ài", pos: "pn",     def: "(a personal name)",                                                lesson: "L2D2" },
+
+    // ----- Lesson 3, Dialogue 1 (Dates and Time) -----
+    { w: "九月",   pinyin: "jiǔyuè",      pos: "n",      def: "September",                                                        lesson: "L3D1" },
+    { w: "月",     pinyin: "yuè",         pos: "n",      def: "month",                                                            lesson: "L3D1" },
+    { w: "十二",   pinyin: "shí'èr",      pos: "nu",     def: "twelve",                                                           lesson: "L3D1" },
+    { w: "号",     pinyin: "hào",         pos: "m",      def: "(measure word for position in a numerical series; day of the month)", lesson: "L3D1" },
+    { w: "星期",   pinyin: "xīngqī",      pos: "n",      def: "week",                                                             lesson: "L3D1" },
+    { w: "星期四", pinyin: "xīngqīsì",    pos: "n",      def: "Thursday",                                                         lesson: "L3D1" },
+    { w: "天",     pinyin: "tiān",        pos: "n",      def: "day",                                                              lesson: "L3D1" },
+    { w: "生日",   pinyin: "shēngrì",     pos: "n",      def: "birthday",                                                         lesson: "L3D1" },
+    { w: "生",     pinyin: "shēng",       pos: "v",      def: "to give birth to; to be born",                                     lesson: "L3D1" },
+    { w: "日",     pinyin: "rì",          pos: "n",      def: "day; sun",                                                         lesson: "L3D1" },
+    { w: "今年",   pinyin: "jīnnián",     pos: "t",      def: "this year",                                                        lesson: "L3D1" },
+    { w: "年",     pinyin: "nián",        pos: "n",      def: "year",                                                             lesson: "L3D1" },
+    { w: "多",     pinyin: "duō",         pos: "adv",    def: "how many/much; to what extent",                                    lesson: "L3D1" },
+    { w: "大",     pinyin: "dà",          pos: "adj",    def: "big; old",                                                         lesson: "L3D1" },
+    { w: "十八",   pinyin: "shíbā",       pos: "nu",     def: "eighteen",                                                         lesson: "L3D1" },
+    { w: "岁",     pinyin: "suì",         pos: "n",      def: "year (of age)",                                                    lesson: "L3D1" },
+    { w: "吃",     pinyin: "chī",         pos: "v",      def: "to eat",                                                           lesson: "L3D1" },
+    { w: "饭",     pinyin: "fàn",         pos: "n",      def: "meal; (cooked) rice",                                              lesson: "L3D1" },
+    { w: "怎么样", pinyin: "zěnmeyàng",   pos: "qpr",    def: "Is it OK? How is that? How does that sound?",                      lesson: "L3D1" },
+    { w: "太…了",  pinyin: "tài…le",      pos: "",       def: "too; extremely",                                                   lesson: "L3D1" },
+    { w: "谢谢",   pinyin: "xièxie",      pos: "v",      def: "to thank",                                                         lesson: "L3D1" },
+    { w: "喜欢",   pinyin: "xǐhuan",      pos: "v",      def: "to like; to prefer",                                               lesson: "L3D1" },
+    { w: "菜",     pinyin: "cài",         pos: "n",      def: "dishes; cuisine",                                                  lesson: "L3D1" },
+    { w: "还是",   pinyin: "háishi",      pos: "conj",   def: "or",                                                               lesson: "L3D1" },
+    { w: "可是",   pinyin: "kěshì",       pos: "conj",   def: "but",                                                              lesson: "L3D1" },
+
+    // ----- Lesson 3, Dialogue 2 (Dates and Time) -----
+    { w: "我们",   pinyin: "wǒmen",       pos: "pr",     def: "we, us",                                                           lesson: "L3D2" },
+    { w: "点",     pinyin: "diǎn",        pos: "m",      def: "o'clock (point on the clock)",                                     lesson: "L3D2" },
+    { w: "半",     pinyin: "bàn",         pos: "nu",     def: "half; half an hour",                                               lesson: "L3D2" },
+    { w: "晚上",   pinyin: "wǎnshang",    pos: "t",      def: "evening; night",                                                   lesson: "L3D2" },
+    { w: "见",     pinyin: "jiàn",        pos: "v",      def: "to see",                                                           lesson: "L3D2" },
+    { w: "再见",   pinyin: "zàijiàn",     pos: "v",      def: "goodbye; see you again",                                           lesson: "L3D2" },
+    { w: "再",     pinyin: "zài",         pos: "adv",    def: "again",                                                            lesson: "L3D2" },
+    { w: "现在",   pinyin: "xiànzài",     pos: "t",      def: "now",                                                              lesson: "L3D2" },
+    { w: "刻",     pinyin: "kè",          pos: "m",      def: "quarter (of an hour)",                                             lesson: "L3D2" },
+    { w: "事",     pinyin: "shì",         pos: "n",      def: "matter; affair; event",                                            lesson: "L3D2" },
+    { w: "今天",   pinyin: "jīntiān",     pos: "t",      def: "today",                                                            lesson: "L3D2" },
+    { w: "很",     pinyin: "hěn",         pos: "adv",    def: "very",                                                             lesson: "L3D2" },
+    { w: "忙",     pinyin: "máng",        pos: "adj",    def: "busy",                                                             lesson: "L3D2" },
+    { w: "明天",   pinyin: "míngtiān",    pos: "t",      def: "tomorrow",                                                         lesson: "L3D2" },
+    { w: "晚饭",   pinyin: "wǎnfàn",      pos: "n",      def: "dinner; supper",                                                   lesson: "L3D2" },
+    { w: "为什么", pinyin: "wèishénme",   pos: "qpr",    def: "why",                                                              lesson: "L3D2" },
+    { w: "为",     pinyin: "wèi",         pos: "prep",   def: "for",                                                              lesson: "L3D2" },
+    { w: "因为",   pinyin: "yīnwèi",      pos: "conj",   def: "because",                                                          lesson: "L3D2" },
+    { w: "还",     pinyin: "hái",         pos: "adv",    def: "also; too; as well",                                               lesson: "L3D2" },
+    { w: "同学",   pinyin: "tóngxué",     pos: "n",      def: "classmate",                                                        lesson: "L3D2" },
+    { w: "认识",   pinyin: "rènshi",      pos: "v",      def: "to know (someone); to be acquainted with",                         lesson: "L3D2" },
+    { w: "朋友",   pinyin: "péngyou",     pos: "n",      def: "friend",                                                           lesson: "L3D2" },
+
+    // ----- Lesson 4, Dialogue 1 (Hobbies) -----
+    { w: "周末",   pinyin: "zhōumò",      pos: "n",      def: "weekend",                                                          lesson: "L4D1" },
+    { w: "打球",   pinyin: "dǎ qiú",      pos: "vo",     def: "to play ball",                                                     lesson: "L4D1" },
+    { w: "打",     pinyin: "dǎ",          pos: "v",      def: "to hit",                                                           lesson: "L4D1" },
+    { w: "球",     pinyin: "qiú",         pos: "n",      def: "ball",                                                             lesson: "L4D1" },
+    { w: "看",     pinyin: "kàn",         pos: "v",      def: "to watch; to look; to read",                                       lesson: "L4D1" },
+    { w: "电视",   pinyin: "diànshì",     pos: "n",      def: "television",                                                       lesson: "L4D1" },
+    { w: "电",     pinyin: "diàn",        pos: "n",      def: "electricity",                                                      lesson: "L4D1" },
+    { w: "视",     pinyin: "shì",         pos: "n",      def: "vision",                                                           lesson: "L4D1" },
+    { w: "唱歌",   pinyin: "chàng gē",    pos: "vo",     def: "to sing (a song)",                                                 lesson: "L4D1" },
+    { w: "唱",     pinyin: "chàng",       pos: "v",      def: "to sing",                                                          lesson: "L4D1" },
+    { w: "歌",     pinyin: "gē",          pos: "n",      def: "song",                                                             lesson: "L4D1" },
+    { w: "跳舞",   pinyin: "tiào wǔ",     pos: "vo",     def: "to dance",                                                         lesson: "L4D1" },
+    { w: "跳",     pinyin: "tiào",        pos: "v",      def: "to jump",                                                          lesson: "L4D1" },
+    { w: "舞",     pinyin: "wǔ",          pos: "n",      def: "dance",                                                            lesson: "L4D1" },
+    { w: "听",     pinyin: "tīng",        pos: "v",      def: "to listen",                                                        lesson: "L4D1" },
+    { w: "音乐",   pinyin: "yīnyuè",      pos: "n",      def: "music",                                                            lesson: "L4D1" },
+    { w: "书",     pinyin: "shū",         pos: "n",      def: "book",                                                             lesson: "L4D1" },
+    { w: "对",     pinyin: "duì",         pos: "adj",    def: "right; correct",                                                   lesson: "L4D1" },
+    { w: "有的",   pinyin: "yǒude",       pos: "pr",     def: "some",                                                             lesson: "L4D1" },
+    { w: "时候",   pinyin: "shíhou",      pos: "n",      def: "(a point in) time; moment",                                        lesson: "L4D1" },
+    { w: "电影",   pinyin: "diànyǐng",    pos: "n",      def: "movie",                                                            lesson: "L4D1" },
+    { w: "影",     pinyin: "yǐng",        pos: "n",      def: "shadow",                                                           lesson: "L4D1" },
+    { w: "常常",   pinyin: "chángcháng",  pos: "adv",    def: "often",                                                            lesson: "L4D1" },
+    { w: "那",     pinyin: "nà",          pos: "conj",   def: "in that case; then",                                               lesson: "L4D1" },
+    { w: "去",     pinyin: "qù",          pos: "v",      def: "to go",                                                            lesson: "L4D1" },
+    { w: "外国",   pinyin: "wàiguó",      pos: "n",      def: "foreign country",                                                  lesson: "L4D1" },
+    { w: "请客",   pinyin: "qǐng kè",     pos: "vo",     def: "to invite someone (to dinner, etc.); to play the host",            lesson: "L4D1" },
+    { w: "昨天",   pinyin: "zuótiān",     pos: "t",      def: "yesterday",                                                        lesson: "L4D1" },
+    { w: "所以",   pinyin: "suǒyǐ",       pos: "conj",   def: "so",                                                               lesson: "L4D1" },
+
+    // ----- Lesson 4, Dialogue 2 (Hobbies) -----
+    { w: "小",     pinyin: "xiǎo",        pos: "adj",    def: "small; little",                                                    lesson: "L4D2" },
+    { w: "好久",   pinyin: "hǎojiǔ",      pos: "",       def: "a long time",                                                      lesson: "L4D2" },
+    { w: "好",     pinyin: "hǎo",         pos: "adv",    def: "very",                                                             lesson: "L4D2" },
+    { w: "不错",   pinyin: "búcuò",       pos: "adj",    def: "not bad; pretty good",                                             lesson: "L4D2" },
+    { w: "想",     pinyin: "xiǎng",       pos: "mv",     def: "to want to; would like to; to think",                              lesson: "L4D2" },
+    { w: "觉得",   pinyin: "juéde",       pos: "v",      def: "to feel; to think",                                                lesson: "L4D2" },
+    { w: "有意思", pinyin: "yǒu yìsi",    pos: "adj",    def: "interesting",                                                      lesson: "L4D2" },
+    { w: "意思",   pinyin: "yìsi",        pos: "n",      def: "meaning",                                                          lesson: "L4D2" },
+    { w: "只",     pinyin: "zhǐ",         pos: "adv",    def: "only",                                                             lesson: "L4D2" },
+    { w: "睡觉",   pinyin: "shuì jiào",   pos: "vo",     def: "to sleep",                                                         lesson: "L4D2" },
+    { w: "睡",     pinyin: "shuì",        pos: "v",      def: "to sleep",                                                         lesson: "L4D2" },
+    { w: "觉",     pinyin: "jiào",        pos: "n",      def: "sleep",                                                            lesson: "L4D2" },
+    { w: "算了",   pinyin: "suàn le",     pos: "ie",     def: "forget it; never mind",                                            lesson: "L4D2" },
+    { w: "找",     pinyin: "zhǎo",        pos: "v",      def: "to look for",                                                      lesson: "L4D2" },
+    { w: "别人",   pinyin: "biéren",      pos: "pr",     def: "other people; another person",                                    lesson: "L4D2" },
+    { w: "别",     pinyin: "bié",         pos: "adj",    def: "other",                                                            lesson: "L4D2" },
+
+    // ----- Lesson 5, Dialogue 1 (Visiting Friends) -----
+    { w: "呀",     pinyin: "ya",          pos: "p",      def: "(interjectory particle used to soften a question)",                lesson: "L5D1" },
+    { w: "进",     pinyin: "jìn",         pos: "v",      def: "to enter",                                                         lesson: "L5D1" },
+    { w: "快",     pinyin: "kuài",        pos: "adj",    def: "fast; quick; quickly",                                             lesson: "L5D1" },
+    { w: "进来",   pinyin: "jìnlai",      pos: "vc",     def: "to come in",                                                       lesson: "L5D1" },
+    { w: "来",     pinyin: "lái",         pos: "v",      def: "to come",                                                          lesson: "L5D1" },
+    { w: "介绍",   pinyin: "jièshào",     pos: "v",      def: "to introduce",                                                     lesson: "L5D1" },
+    { w: "一下",   pinyin: "yíxià",       pos: "nm",     def: "once; a bit",                                                      lesson: "L5D1" },
+    { w: "高兴",   pinyin: "gāoxìng",     pos: "adj",    def: "happy; pleased",                                                   lesson: "L5D1" },
+    { w: "漂亮",   pinyin: "piàoliang",   pos: "adj",    def: "pretty",                                                           lesson: "L5D1" },
+    { w: "坐",     pinyin: "zuò",         pos: "v",      def: "to sit",                                                           lesson: "L5D1" },
+    { w: "在",     pinyin: "zài",         pos: "prep",   def: "at; in; on",                                                       lesson: "L5D1" },
+    { w: "哪儿",   pinyin: "nǎr",         pos: "qpr",    def: "where",                                                            lesson: "L5D1" },
+    { w: "学校",   pinyin: "xuéxiào",     pos: "n",      def: "school",                                                           lesson: "L5D1" },
+    { w: "喝",     pinyin: "hē",          pos: "v",      def: "to drink",                                                         lesson: "L5D1" },
+    { w: "茶",     pinyin: "chá",         pos: "n",      def: "tea",                                                              lesson: "L5D1" },
+    { w: "咖啡",   pinyin: "kāfēi",       pos: "n",      def: "coffee",                                                           lesson: "L5D1" },
+    { w: "吧",     pinyin: "ba",          pos: "p",      def: "(a sentence-final particle)",                                      lesson: "L5D1" },
+    { w: "要",     pinyin: "yào",         pos: "v",      def: "to want; to have a desire for",                                    lesson: "L5D1" },
+    { w: "杯",     pinyin: "bēi",         pos: "m",      def: "(measure word for cup and glass)",                                 lesson: "L5D1" },
+    { w: "水",     pinyin: "shuǐ",        pos: "n",      def: "water",                                                            lesson: "L5D1" },
+    { w: "高小音", pinyin: "Gāo Xiǎoyīn", pos: "pn",     def: "(a personal name)",                                                lesson: "L5D1" },
+
+    // ----- Lesson 5, Dialogue 2 (Visiting Friends — narrative) -----
+    { w: "玩",     pinyin: "wán",         pos: "v",      def: "to have fun; to play",                                             lesson: "L5D2" },
+    { w: "了",     pinyin: "le",          pos: "p",      def: "(a dynamic particle)",                                             lesson: "L5D2" },
+    { w: "图书馆", pinyin: "túshūguǎn",   pos: "n",      def: "library",                                                          lesson: "L5D2" },
+    { w: "瓶",     pinyin: "píng",        pos: "m/n",    def: "(measure word for bottles); bottle",                               lesson: "L5D2" },
+    { w: "一起",   pinyin: "yìqǐ",        pos: "adv",    def: "together",                                                         lesson: "L5D2" },
+    { w: "聊天",   pinyin: "liáo tiān",   pos: "vo",     def: "to chat",                                                          lesson: "L5D2" },
+    { w: "聊",     pinyin: "liáo",        pos: "v",      def: "to chat",                                                          lesson: "L5D2" },
+    { w: "才",     pinyin: "cái",         pos: "adv",    def: "not until; only then",                                             lesson: "L5D2" },
+    { w: "回家",   pinyin: "huí jiā",     pos: "vo",     def: "to go home",                                                       lesson: "L5D2" },
+    { w: "回",     pinyin: "huí",         pos: "v",      def: "to return",                                                        lesson: "L5D2" },
+
+    // ----- Lesson 6, Dialogue 1 (Making Appointments) -----
+    { w: "给",     pinyin: "gěi",         pos: "prep",   def: "to; for",                                                          lesson: "L6D1" },
+    { w: "打电话", pinyin: "dǎ diànhuà",  pos: "vo",     def: "to make a phone call",                                             lesson: "L6D1" },
+    { w: "电话",   pinyin: "diànhuà",     pos: "n",      def: "telephone",                                                        lesson: "L6D1" },
+    { w: "喂",     pinyin: "wéi",         pos: "interj", def: "(on the phone) Hello!; Hey!",                                      lesson: "L6D1" },
+    { w: "在",     pinyin: "zài",         pos: "v",      def: "to be present; to be at (a place)",                                lesson: "L6D1" },
+    { w: "就",     pinyin: "jiù",         pos: "adv",    def: "precisely; exactly",                                               lesson: "L6D1" },
+    { w: "您",     pinyin: "nín",         pos: "pr",     def: "you (honorific)",                                                  lesson: "L6D1" },
+    { w: "哪",     pinyin: "nǎ",          pos: "qpr",    def: "which",                                                            lesson: "L6D1" },
+    { w: "位",     pinyin: "wèi",         pos: "m",      def: "(polite measure word for people)",                                 lesson: "L6D1" },
+    { w: "下午",   pinyin: "xiàwǔ",       pos: "t",      def: "afternoon",                                                        lesson: "L6D1" },
+    { w: "时间",   pinyin: "shíjiān",     pos: "n",      def: "time",                                                             lesson: "L6D1" },
+    { w: "问题",   pinyin: "wèntí",       pos: "n",      def: "question; problem",                                                lesson: "L6D1" },
+    { w: "要",     pinyin: "yào",         pos: "mv",     def: "will; to be going to; to want to",                                 lesson: "L6D1" },
+    { w: "开会",   pinyin: "kāi huì",     pos: "vo",     def: "to have a meeting",                                                lesson: "L6D1" },
+    { w: "开",     pinyin: "kāi",         pos: "v",      def: "to open; to hold (a meeting, party, etc.)",                        lesson: "L6D1" },
+    { w: "会",     pinyin: "huì",         pos: "n",      def: "meeting",                                                          lesson: "L6D1" },
+    { w: "上午",   pinyin: "shàngwǔ",     pos: "t",      def: "morning",                                                          lesson: "L6D1" },
+    { w: "节",     pinyin: "jié",         pos: "m",      def: "(measure word for class periods)",                                 lesson: "L6D1" },
+    { w: "课",     pinyin: "kè",          pos: "n",      def: "class; course; lesson",                                            lesson: "L6D1" },
+    { w: "年级",   pinyin: "niánjí",      pos: "n",      def: "grade in school",                                                  lesson: "L6D1" },
+    { w: "考试",   pinyin: "kǎoshì",      pos: "vo/n",   def: "to give or take a test; test",                                     lesson: "L6D1" },
+    { w: "以后",   pinyin: "yǐhòu",       pos: "t",      def: "after; from now on; later on",                                     lesson: "L6D1" },
+    { w: "空",     pinyin: "kòng",        pos: "n",      def: "free time",                                                        lesson: "L6D1" },
+    { w: "要是",   pinyin: "yàoshi",      pos: "conj",   def: "if",                                                               lesson: "L6D1" },
+    { w: "方便",   pinyin: "fāngbiàn",    pos: "adj",    def: "convenient",                                                       lesson: "L6D1" },
+    { w: "到",     pinyin: "dào",         pos: "v",      def: "to go to; to arrive",                                              lesson: "L6D1" },
+    { w: "办公室", pinyin: "bàngōngshì",  pos: "n",      def: "office",                                                           lesson: "L6D1" },
+    { w: "行",     pinyin: "xíng",        pos: "adj",    def: "all right; OK",                                                    lesson: "L6D1" },
+    { w: "等",     pinyin: "děng",        pos: "v",      def: "to wait; to wait for",                                             lesson: "L6D1" },
+    { w: "别",     pinyin: "bié",         pos: "adv",    def: "don't",                                                            lesson: "L6D1" },
+    { w: "客气",   pinyin: "kèqi",        pos: "adj",    def: "polite",                                                           lesson: "L6D1" },
+
+    // ----- Lesson 6, Dialogue 2 (Making Appointments) -----
+    { w: "帮",     pinyin: "bāng",        pos: "v",      def: "to help",                                                          lesson: "L6D2" },
+    { w: "准备",   pinyin: "zhǔnbèi",     pos: "v",      def: "to prepare",                                                       lesson: "L6D2" },
+    { w: "练习",   pinyin: "liànxí",      pos: "v",      def: "to practice",                                                      lesson: "L6D2" },
+    { w: "说话",   pinyin: "shuō huà",    pos: "vo",     def: "to talk",                                                          lesson: "L6D2" },
+    { w: "话",     pinyin: "huà",         pos: "n",      def: "word; speech",                                                     lesson: "L6D2" },
+    { w: "啊",     pinyin: "a",           pos: "p",      def: "(a sentence-final particle of exclamation or interrogation)",      lesson: "L6D2" },
+    { w: "但是",   pinyin: "dànshì",      pos: "conj",   def: "but",                                                              lesson: "L6D2" },
+    { w: "得",     pinyin: "děi",         pos: "mv",     def: "must; to have to",                                                 lesson: "L6D2" },
+    { w: "跟",     pinyin: "gēn",         pos: "prep",   def: "with",                                                             lesson: "L6D2" },
+    { w: "见面",   pinyin: "jiàn miàn",   pos: "vo",     def: "to meet up; to meet with",                                         lesson: "L6D2" },
+    { w: "面",     pinyin: "miàn",        pos: "n",      def: "face",                                                             lesson: "L6D2" },
+    { w: "回来",   pinyin: "huílai",      pos: "vc",     def: "to come back",                                                     lesson: "L6D2" },
+
+    // ----- Lesson 7, Dialogue 1 (Studying Chinese) -----
+    { w: "说",     pinyin: "shuō",        pos: "v",      def: "to say; to speak",                                                 lesson: "L7D1" },
+    { w: "慢",     pinyin: "màn",         pos: "adj",    def: "slow",                                                             lesson: "L7D1" },
+    { w: "枝",     pinyin: "zhī",         pos: "m",      def: "(measure word for long, thin, inflexible objects such as pens)",   lesson: "L7D1" },
+    { w: "笔",     pinyin: "bǐ",          pos: "n",      def: "pen",                                                              lesson: "L7D1" },
+    { w: "张",     pinyin: "zhāng",       pos: "m",      def: "(measure word for flat objects such as paper, pictures, etc.)",    lesson: "L7D1" },
+    { w: "纸",     pinyin: "zhǐ",         pos: "n",      def: "paper",                                                            lesson: "L7D1" },
+    { w: "教",     pinyin: "jiāo",        pos: "v",      def: "to teach",                                                         lesson: "L7D1" },
+    { w: "怎么",   pinyin: "zěnme",       pos: "qpr",    def: "how; how come",                                                    lesson: "L7D1" },
+    { w: "懂",     pinyin: "dǒng",        pos: "v",      def: "to understand",                                                    lesson: "L7D1" },
+    { w: "真",     pinyin: "zhēn",        pos: "adv",    def: "really",                                                           lesson: "L7D1" },
+    { w: "哪里",   pinyin: "nǎli",        pos: "pr",     def: "(polite reply) not really",                                        lesson: "L7D1" },
+    { w: "预习",   pinyin: "yùxí",        pos: "v",      def: "to preview",                                                       lesson: "L7D1" },
+    { w: "学",     pinyin: "xué",         pos: "v",      def: "to study; to learn",                                               lesson: "L7D1" },
+    { w: "第",     pinyin: "dì",          pos: "prefix", def: "(prefix for ordinal numbers)",                                     lesson: "L7D1" },
+    { w: "语法",   pinyin: "yǔfǎ",        pos: "n",      def: "grammar",                                                          lesson: "L7D1" },
+    { w: "容易",   pinyin: "róngyì",      pos: "adj",    def: "easy",                                                             lesson: "L7D1" },
+    { w: "生词",   pinyin: "shēngcí",     pos: "n",      def: "new words; vocabulary",                                            lesson: "L7D1" },
+    { w: "多",     pinyin: "duō",         pos: "adj",    def: "many; much",                                                       lesson: "L7D1" },
+    { w: "汉字",   pinyin: "hànzì",       pos: "n",      def: "Chinese character",                                                lesson: "L7D1" },
+    { w: "难",     pinyin: "nán",         pos: "adj",    def: "difficult",                                                        lesson: "L7D1" },
+
+    // ----- Lesson 7, Dialogue 2 (Studying Chinese) -----
+    { w: "平常",   pinyin: "píngcháng",   pos: "t",      def: "generally; usually",                                               lesson: "L7D2" },
+    { w: "早",     pinyin: "zǎo",         pos: "adj",    def: "early",                                                            lesson: "L7D2" },
+    { w: "这么",   pinyin: "zhème",       pos: "pr",     def: "so; this (late, etc.)",                                            lesson: "L7D2" },
+    { w: "晚",     pinyin: "wǎn",         pos: "adj",    def: "late",                                                             lesson: "L7D2" },
+    { w: "早上",   pinyin: "zǎoshang",    pos: "t",      def: "morning",                                                          lesson: "L7D2" },
+    { w: "功课",   pinyin: "gōngkè",      pos: "n",      def: "homework; schoolwork",                                             lesson: "L7D2" },
+    { w: "大家",   pinyin: "dàjiā",       pos: "pr",     def: "everybody",                                                        lesson: "L7D2" },
+    { w: "上课",   pinyin: "shàng kè",    pos: "vo",     def: "to go to class; to start a class",                                 lesson: "L7D2" },
+    { w: "开始",   pinyin: "kāishǐ",      pos: "v/n",    def: "to begin; beginning",                                              lesson: "L7D2" },
+    { w: "以前",   pinyin: "yǐqián",      pos: "t",      def: "before",                                                           lesson: "L7D2" },
+    { w: "复习",   pinyin: "fùxí",        pos: "v",      def: "to review",                                                        lesson: "L7D2" },
+    { w: "写",     pinyin: "xiě",         pos: "v",      def: "to write",                                                         lesson: "L7D2" },
+    { w: "字",     pinyin: "zì",          pos: "n",      def: "character; word",                                                  lesson: "L7D2" },
+    { w: "课文",   pinyin: "kèwén",       pos: "n",      def: "text of a lesson",                                                 lesson: "L7D2" },
+    { w: "念",     pinyin: "niàn",        pos: "v",      def: "to read aloud",                                                    lesson: "L7D2" },
+
+    // ----- Lesson 8, Dialogue 1 (School Life — a diary) -----
+    { w: "篇",     pinyin: "piān",        pos: "m",      def: "(measure word for essays, articles, etc.)",                        lesson: "L8D1" },
+    { w: "日记",   pinyin: "rìjì",        pos: "n",      def: "diary",                                                            lesson: "L8D1" },
+    { w: "累",     pinyin: "lèi",         pos: "adj",    def: "tired",                                                            lesson: "L8D1" },
+    { w: "起床",   pinyin: "qǐ chuáng",   pos: "vo",     def: "to get up",                                                        lesson: "L8D1" },
+    { w: "床",     pinyin: "chuáng",      pos: "n",      def: "bed",                                                              lesson: "L8D1" },
+    { w: "洗澡",   pinyin: "xǐ zǎo",      pos: "vo",     def: "to take a bath/shower",                                            lesson: "L8D1" },
+    { w: "早饭",   pinyin: "zǎofàn",      pos: "n",      def: "breakfast",                                                        lesson: "L8D1" },
+    { w: "一边",   pinyin: "yìbiān",      pos: "adv",    def: "simultaneously; at the same time",                                 lesson: "L8D1" },
+    { w: "教室",   pinyin: "jiàoshì",     pos: "n",      def: "classroom",                                                        lesson: "L8D1" },
+    { w: "发音",   pinyin: "fāyīn",       pos: "n",      def: "pronunciation",                                                    lesson: "L8D1" },
+    { w: "新",     pinyin: "xīn",         pos: "adj",    def: "new",                                                              lesson: "L8D1" },
+    { w: "电脑",   pinyin: "diànnǎo",     pos: "n",      def: "computer",                                                         lesson: "L8D1" },
+    { w: "脑",     pinyin: "nǎo",         pos: "n",      def: "brain",                                                            lesson: "L8D1" },
+    { w: "中午",   pinyin: "zhōngwǔ",     pos: "t",      def: "noon",                                                             lesson: "L8D1" },
+    { w: "餐厅",   pinyin: "cāntīng",     pos: "n",      def: "dining room; cafeteria",                                           lesson: "L8D1" },
+    { w: "饭馆",   pinyin: "fànguǎn",     pos: "n",      def: "restaurant",                                                       lesson: "L8D1" },
+    { w: "宿舍",   pinyin: "sùshè",       pos: "n",      def: "dormitory",                                                        lesson: "L8D1" },
+    { w: "那儿",   pinyin: "nàr",         pos: "pr",     def: "there",                                                            lesson: "L8D1" },
+    { w: "录音",   pinyin: "lùyīn",       pos: "vo/n",   def: "to record; sound recording",                                       lesson: "L8D1" },
+    { w: "正在",   pinyin: "zhèngzài",    pos: "adv",    def: "in the middle of (doing something)",                               lesson: "L8D1" },
+
+    // ----- Lesson 8, Dialogue 2 (School Life — a letter) -----
+    { w: "封",     pinyin: "fēng",        pos: "m",      def: "(measure word for letters)",                                       lesson: "L8D2" },
+    { w: "信",     pinyin: "xìn",         pos: "n",      def: "letter (correspondence)",                                          lesson: "L8D2" },
+    { w: "最近",   pinyin: "zuìjìn",      pos: "t",      def: "recently",                                                         lesson: "L8D2" },
+    { w: "学期",   pinyin: "xuéqī",       pos: "n",      def: "school term; semester/quarter",                                    lesson: "L8D2" },
+    { w: "除了…以外", pinyin: "chúle…yǐwài", pos: "conj", def: "in addition to; besides",                                          lesson: "L8D2" },
+    { w: "专业",   pinyin: "zhuānyè",     pos: "n",      def: "major (in college); specialty",                                    lesson: "L8D2" },
+    { w: "会",     pinyin: "huì",         pos: "mv",     def: "can; to know how to",                                              lesson: "L8D2" },
+    { w: "中文",   pinyin: "Zhōngwén",    pos: "n",      def: "Chinese language",                                                 lesson: "L8D2" },
+    { w: "笑",     pinyin: "xiào",        pos: "v",      def: "to laugh; to laugh at",                                            lesson: "L8D2" },
+    { w: "希望",   pinyin: "xīwàng",      pos: "v/n",    def: "to hope; hope",                                                    lesson: "L8D2" },
+    { w: "用",     pinyin: "yòng",        pos: "v",      def: "to use",                                                           lesson: "L8D2" },
+    { w: "进步",   pinyin: "jìnbù",       pos: "v/n",    def: "to make progress; progress",                                       lesson: "L8D2" },
+    { w: "帮助",   pinyin: "bāngzhù",     pos: "v",      def: "to help",                                                          lesson: "L8D2" },
+
+    // ----- Lesson 9, Dialogue 1 (Shopping) -----
+    { w: "买",     pinyin: "mǎi",         pos: "v",      def: "to buy",                                                           lesson: "L9D1" },
+    { w: "东西",   pinyin: "dōngxi",      pos: "n",      def: "things; objects",                                                  lesson: "L9D1" },
+    { w: "售货员", pinyin: "shòuhuòyuán", pos: "n",      def: "shop assistant; salesclerk",                                       lesson: "L9D1" },
+    { w: "衣服",   pinyin: "yīfu",        pos: "n",      def: "clothes",                                                          lesson: "L9D1" },
+    { w: "件",     pinyin: "jiàn",        pos: "m",      def: "(measure word for shirts, dresses, jackets, etc.)",               lesson: "L9D1" },
+    { w: "衬衫",   pinyin: "chènshān",    pos: "n",      def: "shirt",                                                            lesson: "L9D1" },
+    { w: "颜色",   pinyin: "yánsè",       pos: "n",      def: "color",                                                            lesson: "L9D1" },
+    { w: "黄",     pinyin: "huáng",       pos: "adj",    def: "yellow",                                                           lesson: "L9D1" },
+    { w: "红",     pinyin: "hóng",        pos: "adj",    def: "red",                                                              lesson: "L9D1" },
+    { w: "穿",     pinyin: "chuān",       pos: "v",      def: "to wear; to put on",                                               lesson: "L9D1" },
+    { w: "条",     pinyin: "tiáo",        pos: "m",      def: "(measure word for long, narrow objects)",                          lesson: "L9D1" },
+    { w: "裤子",   pinyin: "kùzi",        pos: "n",      def: "pants",                                                            lesson: "L9D1" },
+    { w: "号",     pinyin: "hào",         pos: "n",      def: "size",                                                             lesson: "L9D1" },
+    { w: "中",     pinyin: "zhōng",       pos: "adj",    def: "medium; middle",                                                   lesson: "L9D1" },
+    { w: "便宜",   pinyin: "piányi",      pos: "adj",    def: "cheap; inexpensive",                                               lesson: "L9D1" },
+    { w: "如果",   pinyin: "rúguǒ",       pos: "conj",   def: "if",                                                               lesson: "L9D1" },
+    { w: "长短",   pinyin: "chángduǎn",   pos: "n",      def: "length",                                                           lesson: "L9D1" },
+    { w: "长",     pinyin: "cháng",       pos: "adj",    def: "long",                                                             lesson: "L9D1" },
+    { w: "短",     pinyin: "duǎn",        pos: "adj",    def: "short",                                                            lesson: "L9D1" },
+    { w: "合适",   pinyin: "héshì",       pos: "adj",    def: "suitable",                                                         lesson: "L9D1" },
+    { w: "试",     pinyin: "shì",         pos: "v",      def: "to try",                                                           lesson: "L9D1" },
+    { w: "不用",   pinyin: "búyòng",      pos: "",       def: "need not",                                                         lesson: "L9D1" },
+    { w: "一共",   pinyin: "yígòng",      pos: "adv",    def: "altogether",                                                       lesson: "L9D1" },
+    { w: "多少",   pinyin: "duōshao",     pos: "qpr",    def: "how much; how many",                                               lesson: "L9D1" },
+    { w: "钱",     pinyin: "qián",        pos: "n",      def: "money",                                                            lesson: "L9D1" },
+    { w: "块",     pinyin: "kuài",        pos: "m",      def: "(measure word for the basic Chinese monetary unit, yuan)",         lesson: "L9D1" },
+    { w: "毛",     pinyin: "máo",         pos: "m",      def: "(measure word for 1/10 of a kuai, dime)",                          lesson: "L9D1" },
+    { w: "分",     pinyin: "fēn",         pos: "m",      def: "(measure word for 1/100 of a kuai, cent)",                         lesson: "L9D1" },
+    { w: "百",     pinyin: "bǎi",         pos: "nu",     def: "hundred",                                                          lesson: "L9D1" },
+    { w: "找",     pinyin: "zhǎo",        pos: "v",      def: "to give change",                                                   lesson: "L9D1" },
+
+    // ----- Lesson 9, Dialogue 2 (Shopping) -----
+    { w: "双",     pinyin: "shuāng",      pos: "m",      def: "(measure word for a pair)",                                        lesson: "L9D2" },
+    { w: "鞋",     pinyin: "xié",         pos: "n",      def: "shoes",                                                            lesson: "L9D2" },
+    { w: "换",     pinyin: "huàn",        pos: "v",      def: "to exchange; to change",                                           lesson: "L9D2" },
+    { w: "一样",   pinyin: "yíyàng",      pos: "adj",    def: "same; alike",                                                      lesson: "L9D2" },
+    { w: "虽然",   pinyin: "suīrán",      pos: "conj",   def: "although",                                                         lesson: "L9D2" },
+    { w: "大小",   pinyin: "dàxiǎo",      pos: "n",      def: "size",                                                             lesson: "L9D2" },
+    { w: "咖啡色", pinyin: "kāfēisè",     pos: "n",      def: "brown; coffee color",                                              lesson: "L9D2" },
+    { w: "种",     pinyin: "zhǒng",       pos: "m",      def: "(measure word for kinds, sorts, types)",                           lesson: "L9D2" },
+    { w: "黑",     pinyin: "hēi",         pos: "adj",    def: "black",                                                            lesson: "L9D2" },
+    { w: "没关系", pinyin: "méi guānxi",  pos: "",       def: "it doesn't matter",                                                lesson: "L9D2" },
+    { w: "信用卡", pinyin: "xìnyòngkǎ",   pos: "n",      def: "credit card",                                                      lesson: "L9D2" },
+    { w: "收",     pinyin: "shōu",        pos: "v",      def: "to receive; to accept",                                            lesson: "L9D2" },
+    { w: "不过",   pinyin: "búguò",       pos: "conj",   def: "however; but",                                                     lesson: "L9D2" },
+    { w: "这样",   pinyin: "zhèyàng",     pos: "pr",     def: "like this; this way",                                              lesson: "L9D2" },
+    { w: "刷卡",   pinyin: "shuā kǎ",     pos: "vo",     def: "to pay with a credit card",                                        lesson: "L9D2" },
+    { w: "刷",     pinyin: "shuā",        pos: "v",      def: "to brush; to swipe",                                               lesson: "L9D2" },
+    { w: "卡",     pinyin: "kǎ",          pos: "n",      def: "card",                                                             lesson: "L9D2" },
+
+    // ----- Lesson 10, Dialogue 1 (Transportation) -----
+    { w: "寒假",   pinyin: "hánjià",      pos: "n",      def: "winter vacation",                                                  lesson: "L10D1" },
+    { w: "飞机",   pinyin: "fēijī",       pos: "n",      def: "airplane",                                                         lesson: "L10D1" },
+    { w: "飞",     pinyin: "fēi",         pos: "v",      def: "to fly",                                                           lesson: "L10D1" },
+    { w: "机",     pinyin: "jī",          pos: "n",      def: "machine",                                                          lesson: "L10D1" },
+    { w: "票",     pinyin: "piào",        pos: "n",      def: "ticket",                                                           lesson: "L10D1" },
+    { w: "机场",   pinyin: "jīchǎng",     pos: "n",      def: "airport",                                                          lesson: "L10D1" },
+    { w: "坐",     pinyin: "zuò",         pos: "v",      def: "to travel by",                                                     lesson: "L10D1" },
+    { w: "公共汽车", pinyin: "gōnggòng qìchē", pos: "n", def: "bus",                                                              lesson: "L10D1" },
+    { w: "公共",   pinyin: "gōnggòng",    pos: "adj",    def: "public",                                                           lesson: "L10D1" },
+    { w: "汽车",   pinyin: "qìchē",       pos: "n",      def: "automobile; car",                                                  lesson: "L10D1" },
+    { w: "车",     pinyin: "chē",         pos: "n",      def: "vehicle; car",                                                     lesson: "L10D1" },
+    { w: "或者",   pinyin: "huòzhě",      pos: "conj",   def: "or; either…or",                                                    lesson: "L10D1" },
+    { w: "地铁",   pinyin: "dìtiě",       pos: "n",      def: "subway; metro",                                                    lesson: "L10D1" },
+    { w: "走",     pinyin: "zǒu",         pos: "v",      def: "to go by way of; to walk",                                         lesson: "L10D1" },
+    { w: "先",     pinyin: "xiān",        pos: "adv",    def: "first",                                                            lesson: "L10D1" },
+    { w: "站",     pinyin: "zhàn",        pos: "m/n",    def: "(measure word for stops of bus, train, etc.); stop; station",      lesson: "L10D1" },
+    { w: "下车",   pinyin: "xià chē",     pos: "vo",     def: "to get off (a bus, train, etc.)",                                  lesson: "L10D1" },
+    { w: "然后",   pinyin: "ránhòu",      pos: "adv",    def: "then",                                                             lesson: "L10D1" },
+    { w: "绿",     pinyin: "lǜ",          pos: "adj",    def: "green",                                                            lesson: "L10D1" },
+    { w: "线",     pinyin: "xiàn",        pos: "n",      def: "line",                                                             lesson: "L10D1" },
+    { w: "最后",   pinyin: "zuìhòu",      pos: "",       def: "final; last",                                                      lesson: "L10D1" },
+    { w: "蓝",     pinyin: "lán",         pos: "adj",    def: "blue",                                                             lesson: "L10D1" },
+    { w: "麻烦",   pinyin: "máfan",       pos: "adj",    def: "troublesome",                                                      lesson: "L10D1" },
+    { w: "出租汽车", pinyin: "chūzū qìchē", pos: "n",    def: "taxi",                                                             lesson: "L10D1" },
+    { w: "出租",   pinyin: "chūzū",       pos: "v",      def: "to rent out; to let",                                              lesson: "L10D1" },
+
+    // ----- Lesson 10, Dialogue 2 (Transportation — an email) -----
+    { w: "开车",   pinyin: "kāi chē",     pos: "vo",     def: "to drive a car",                                                   lesson: "L10D2" },
+    { w: "送",     pinyin: "sòng",        pos: "v",      def: "to see off or out; to take (someone somewhere)",                   lesson: "L10D2" },
+    { w: "电子邮件", pinyin: "diànzǐ yóujiàn", pos: "n", def: "email",                                                            lesson: "L10D2" },
+    { w: "电子",   pinyin: "diànzǐ",      pos: "n",      def: "electron",                                                         lesson: "L10D2" },
+    { w: "让",     pinyin: "ràng",        pos: "v",      def: "to allow or cause (somebody to do something)",                     lesson: "L10D2" },
+    { w: "花",     pinyin: "huā",         pos: "v",      def: "to spend",                                                         lesson: "L10D2" },
+    { w: "不好意思", pinyin: "bù hǎoyìsi", pos: "",      def: "to feel embarrassed",                                              lesson: "L10D2" },
+    { w: "新年",   pinyin: "xīnnián",     pos: "n",      def: "new year",                                                         lesson: "L10D2" },
+    { w: "快乐",   pinyin: "kuàilè",      pos: "adj",    def: "happy",                                                            lesson: "L10D2" },
   ];
 
   // ----- State -----
-  let selectedLesson = "L1";   // lesson id, or "ALL"
+  let selectedLesson = 1;        // lesson number 1–10, or "ALL"
+  let selectedDialogue = 1;      // 1, 2, or "BOTH"
   let order = "shuffle";
   let autoPlay = true;
   let queue = [];        // remaining cards this session
@@ -413,7 +789,8 @@
     done:  document.getElementById("done"),
   };
   const el = {
-    lessonPicker: document.getElementById("lessonPicker"),
+    lessonSel:  document.getElementById("lessonSel"),
+    dialogueToggle: document.getElementById("dialogueToggle"),
     rangeInfo:  document.getElementById("rangeInfo"),
     orderToggle:document.getElementById("orderToggle"),
     audioToggle:document.getElementById("audioToggle"),
@@ -441,41 +818,54 @@
   };
 
   // ----- Setup start screen -----
-  function countFor(id) {
-    return id === "ALL" ? WORDS.length : WORDS.filter(w => w.lesson === id).length;
+  // Decode a word's "L<n>D<d>" id into { num, dia }.
+  function parseLesson(id) {
+    const m = /^L(\d+)D(\d+)$/.exec(id);
+    return { num: +m[1], dia: +m[2] };
   }
-  function labelFor(id) {
-    if (id === "ALL") return "All words";
-    const l = LESSONS.find(l => l.id === id);
-    return l ? l.label : id;
+  function matchesSelection(w) {
+    const { num, dia } = parseLesson(w.lesson);
+    if (selectedLesson !== "ALL" && num !== selectedLesson) return false;
+    if (selectedDialogue !== "BOTH" && dia !== selectedDialogue) return false;
+    return true;
   }
-  function buildLessonPicker() {
+  function selectedWords() {
+    return WORDS.filter(matchesSelection);
+  }
+
+  // Populate the lesson dropdown: "All lessons" + one option per lesson.
+  function buildLessonSelect() {
+    const all = document.createElement("option");
+    all.value = "ALL";
+    all.textContent = "All lessons";
+    el.lessonSel.appendChild(all);
     LESSONS.forEach(l => {
-      const b = document.createElement("button");
-      b.className = "opt" + (l.id === selectedLesson ? " sel" : "");
-      b.dataset.lesson = l.id;
-      b.textContent = l.label;
-      el.lessonPicker.appendChild(b);
+      const o = document.createElement("option");
+      o.value = String(l.num);
+      o.textContent = `Lesson ${l.num} · ${l.theme}`;
+      el.lessonSel.appendChild(o);
     });
-    if (LESSONS.length > 1) {
-      const all = document.createElement("button");
-      all.className = "opt all" + (selectedLesson === "ALL" ? " sel" : "");
-      all.dataset.lesson = "ALL";
-      all.textContent = "All words";
-      el.lessonPicker.appendChild(all);
-    }
+    el.lessonSel.value = String(selectedLesson);
   }
-  buildLessonPicker();
+  buildLessonSelect();
 
   function syncRange() {
-    const count = countFor(selectedLesson);
-    el.rangeInfo.textContent = `${labelFor(selectedLesson)} · ${count} word${count === 1 ? "" : "s"}`;
+    const count = selectedWords().length;
+    const lessonPart = selectedLesson === "ALL"
+      ? "All lessons"
+      : `Lesson ${selectedLesson} · ${LESSONS.find(l => l.num === selectedLesson).theme}`;
+    const diaPart = selectedDialogue === "BOTH" ? "both dialogues" : `Dialogue ${selectedDialogue}`;
+    el.rangeInfo.textContent = `${lessonPart} · ${diaPart} · ${count} word${count === 1 ? "" : "s"}`;
   }
-  el.lessonPicker.addEventListener("click", e => {
+  el.lessonSel.addEventListener("change", () => {
+    selectedLesson = el.lessonSel.value === "ALL" ? "ALL" : parseInt(el.lessonSel.value, 10);
+    syncRange();
+  });
+  el.dialogueToggle.addEventListener("click", e => {
     const b = e.target.closest(".opt");
     if (!b) return;
-    selectedLesson = b.dataset.lesson;
-    [...el.lessonPicker.children].forEach(c => c.classList.toggle("sel", c === b));
+    selectedDialogue = b.dataset.dia === "BOTH" ? "BOTH" : parseInt(b.dataset.dia, 10);
+    [...el.dialogueToggle.children].forEach(c => c.classList.toggle("sel", c === b));
     syncRange();
   });
   syncRange();
@@ -509,9 +899,7 @@
 
   // ----- Session flow -----
   function startSession() {
-    queue = selectedLesson === "ALL"
-      ? WORDS.slice()
-      : WORDS.filter(w => w.lesson === selectedLesson);
+    queue = selectedWords();
     if (order === "shuffle") shuffle(queue);
     else queue = queue.slice(); // copy
     totalThisRound = queue.length;
