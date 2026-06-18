@@ -114,6 +114,25 @@
   .examples { font-size: 1.6rem; color: var(--ink); margin: 0; }
   .examples small { display: block; font-size: .8rem; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 6px; }
 
+  .speak {
+    margin-top: 18px;
+    border: 1px solid var(--line);
+    background: var(--card);
+    color: var(--accent);
+    border-radius: 999px;
+    padding: 9px 18px;
+    font-size: .95rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    transition: border-color .12s, background .12s, color .12s;
+  }
+  .speak:hover { border-color: var(--accent); background: #eff6ff; }
+  .speak.playing { border-color: var(--amber); background: #fef3c7; color: var(--amber); }
+  .speak[hidden], #audioSection[hidden] { display: none; }
+
   .actions { display: none; gap: 12px; margin-top: 16px; }
   .actions.show { display: flex; }
   .actions .btn { flex: 1; }
@@ -153,6 +172,14 @@
       <button class="opt" data-order="ordered">In order</button>
     </div>
 
+    <div id="audioSection">
+      <p class="label">Audio</p>
+      <div class="toggle" id="audioToggle">
+        <button class="opt sel" data-audio="on">🔊 Auto-play</button>
+        <button class="opt" data-audio="off">Off</button>
+      </div>
+    </div>
+
     <button class="btn" id="startBtn">Start</button>
   </section>
 
@@ -169,6 +196,7 @@
         <p class="pinyin" id="pinyin"></p>
         <p class="english" id="english"></p>
         <p class="examples"><small>Examples</small><span id="examples"></span></p>
+        <button class="speak" id="speakBtn" type="button" title="Replay (R)">🔊 Play sound</button>
       </div>
       <p class="hint" id="hint">Tap card or press Space to reveal</p>
     </div>
@@ -247,10 +275,41 @@
   let rangeFrom = 1;   // 1-based, inclusive
   let rangeTo = 10;    // 1-based, inclusive
   let order = "shuffle";
+  let autoPlay = true;
   let queue = [];        // remaining cards this session
   let totalThisRound = 0;
   let cleared = 0;
   let revealed = false;
+  let currentZh = "";
+
+  // ----- Pronunciation: Web Speech API (Option A) -----
+  const Speech = (() => {
+    const synth = window.speechSynthesis;
+    let voice = null;
+    function pick() {
+      if (!synth) return;
+      const zh = synth.getVoices().filter(v => v.lang && v.lang.toLowerCase().startsWith("zh"));
+      // prefer mainland simplified, then any Chinese voice
+      voice = zh.find(v => /^zh[-_]?(cn|hans)/i.test(v.lang)) || zh[0] || null;
+    }
+    if (synth) { pick(); synth.addEventListener("voiceschanged", pick); }
+    function speak(text, btn) {
+      if (!synth || !text) return;
+      synth.cancel();
+      if (!voice) pick();
+      const u = new SpeechSynthesisUtterance(text);
+      if (voice) u.voice = voice;
+      u.lang = (voice && voice.lang) || "zh-CN";
+      u.rate = 0.9;
+      if (btn) {
+        u.onstart = () => btn.classList.add("playing");
+        const done = () => btn.classList.remove("playing");
+        u.onend = done; u.onerror = done;
+      }
+      synth.speak(u);
+    }
+    return { supported: !!synth, speak };
+  })();
 
   // ----- Elements -----
   const screens = {
@@ -263,6 +322,9 @@
     toSel:      document.getElementById("toSel"),
     rangeInfo:  document.getElementById("rangeInfo"),
     orderToggle:document.getElementById("orderToggle"),
+    audioToggle:document.getElementById("audioToggle"),
+    audioSection:document.getElementById("audioSection"),
+    speakBtn:   document.getElementById("speakBtn"),
     startBtn:   document.getElementById("startBtn"),
     progress:   document.getElementById("progress"),
     card:       document.getElementById("card"),
@@ -317,6 +379,13 @@
     [...el.orderToggle.children].forEach(c => c.classList.toggle("sel", c === b));
   });
 
+  el.audioToggle.addEventListener("click", e => {
+    const b = e.target.closest(".opt");
+    if (!b) return;
+    autoPlay = b.dataset.audio === "on";
+    [...el.audioToggle.children].forEach(c => c.classList.toggle("sel", c === b));
+  });
+
   function show(name) {
     Object.values(screens).forEach(s => s.classList.remove("active"));
     screens[name].classList.add("active");
@@ -349,12 +418,14 @@
     }
     const c = queue[0];
     revealed = false;
+    currentZh = c.base;
     el.radical.innerHTML = c.variant
       ? `${c.base} <span class="variant">(${c.variant})</span>`
       : c.base;
     el.pinyin.textContent = c.pinyin;
     el.english.textContent = c.english;
     el.examples.textContent = c.examples;
+    el.speakBtn.classList.remove("playing");
 
     el.answer.classList.remove("show");
     el.actions.classList.remove("show");
@@ -374,6 +445,7 @@
     el.actions.classList.add("show");
     el.revealRow.style.display = "none";
     el.hint.style.display = "none";
+    if (autoPlay) Speech.speak(currentZh, el.speakBtn);
   }
 
   function gotIt() {
@@ -400,14 +472,26 @@
   el.revealBtn.addEventListener("click", reveal);
   el.gotBtn.addEventListener("click", gotIt);
   el.againBtn.addEventListener("click", again);
+  el.speakBtn.addEventListener("click", e => {
+    e.stopPropagation();   // don't bubble to the card
+    Speech.speak(currentZh, el.speakBtn);
+  });
 
   document.addEventListener("keydown", e => {
     if (!screens.study.classList.contains("active")) return;
     if (e.code === "Space") { e.preventDefault(); reveal(); return; }
     if (!revealed) return;
+    if (e.key === "r" || e.key === "R") { e.preventDefault(); Speech.speak(currentZh, el.speakBtn); return; }
     if (e.key === "1" || e.key === "ArrowLeft")  { e.preventDefault(); again(); }
     if (e.key === "2" || e.key === "ArrowRight" || e.key === "Enter") { e.preventDefault(); gotIt(); }
   });
+
+  // ----- Init -----
+  if (!Speech.supported) {           // very old browsers: hide audio UI
+    el.audioSection.hidden = true;
+    el.speakBtn.hidden = true;
+    autoPlay = false;
+  }
 </script>
 </body>
 </html>
