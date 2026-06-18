@@ -163,8 +163,8 @@
   .examples { font-size: 1.6rem; color: var(--ink); margin: 0; }
   .examples small { display: block; font-size: .8rem; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 6px; }
 
+  .speak-row { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
   .speak {
-    margin-top: 18px;
     border: 1px solid var(--line);
     background: var(--card);
     color: var(--accent);
@@ -180,7 +180,7 @@
   }
   .speak:hover { border-color: var(--accent); background: var(--sel-bg); }
   .speak.playing { border-color: var(--amber); color: var(--amber); }
-  .speak[hidden], #audioSection[hidden] { display: none; }
+  .speak[hidden], .speak-row[hidden], #audioSection[hidden] { display: none; }
 
   .actions { display: none; gap: 12px; margin-top: 16px; }
   .actions.show { display: flex; }
@@ -253,7 +253,10 @@
         <p class="pinyin" id="pinyin"></p>
         <p class="english" id="english"></p>
         <p class="examples"><small>Examples</small><span id="examples"></span></p>
-        <button class="speak" id="speakBtn" type="button" title="Replay (R)">🔊 Play sound</button>
+        <div class="speak-row" id="speakRow">
+          <button class="speak" id="speakBtn" type="button" title="Replay (R)">🔊 Play</button>
+          <button class="speak" id="speakSlowBtn" type="button" title="Read slowly (S)">🐢 Slow</button>
+        </div>
       </div>
       <p class="hint" id="hint">Tap card or press Space to reveal</p>
     </div>
@@ -371,14 +374,14 @@
       voice = zh.find(v => /^zh[-_]?(cn|hans)/i.test(v.lang)) || zh[0] || null;
     }
     if (synth) { pick(); synth.addEventListener("voiceschanged", pick); }
-    function speak(text, btn) {
+    function speak(text, btn, rate) {
       if (!synth || !text) return;
       synth.cancel();
       if (!voice) pick();
       const u = new SpeechSynthesisUtterance(text);
       if (voice) u.voice = voice;
       u.lang = (voice && voice.lang) || "zh-CN";
-      u.rate = 0.9;
+      u.rate = rate || 0.9;
       if (btn) {
         u.onstart = () => btn.classList.add("playing");
         const done = () => btn.classList.remove("playing");
@@ -403,6 +406,8 @@
     audioToggle:document.getElementById("audioToggle"),
     audioSection:document.getElementById("audioSection"),
     speakBtn:   document.getElementById("speakBtn"),
+    speakSlowBtn:document.getElementById("speakSlowBtn"),
+    speakRow:   document.getElementById("speakRow"),
     startBtn:   document.getElementById("startBtn"),
     progress:   document.getElementById("progress"),
     card:       document.getElementById("card"),
@@ -504,6 +509,7 @@
     el.english.textContent = c.english;
     el.examples.textContent = c.examples;
     el.speakBtn.classList.remove("playing");
+    el.speakSlowBtn.classList.remove("playing");
 
     el.answer.classList.remove("show");
     el.actions.classList.remove("show");
@@ -550,9 +556,14 @@
   el.revealBtn.addEventListener("click", reveal);
   el.gotBtn.addEventListener("click", gotIt);
   el.againBtn.addEventListener("click", again);
+  const SLOW_RATE = 0.5;
   el.speakBtn.addEventListener("click", e => {
     e.stopPropagation();   // don't bubble to the card
     Speech.speak(currentZh, el.speakBtn);
+  });
+  el.speakSlowBtn.addEventListener("click", e => {
+    e.stopPropagation();
+    Speech.speak(currentZh, el.speakSlowBtn, SLOW_RATE);
   });
 
   document.addEventListener("keydown", e => {
@@ -560,6 +571,7 @@
     if (e.code === "Space") { e.preventDefault(); reveal(); return; }
     if (!revealed) return;
     if (e.key === "r" || e.key === "R") { e.preventDefault(); Speech.speak(currentZh, el.speakBtn); return; }
+    if (e.key === "s" || e.key === "S") { e.preventDefault(); Speech.speak(currentZh, el.speakSlowBtn, SLOW_RATE); return; }
     if (e.key === "1" || e.key === "ArrowLeft")  { e.preventDefault(); again(); }
     if (e.key === "2" || e.key === "ArrowRight" || e.key === "Enter") { e.preventDefault(); gotIt(); }
   });
@@ -567,7 +579,7 @@
   // ----- Init -----
   if (!Speech.supported) {           // very old browsers: hide audio UI
     el.audioSection.hidden = true;
-    el.speakBtn.hidden = true;
+    el.speakRow.hidden = true;
     autoPlay = false;
   }
 </script>
