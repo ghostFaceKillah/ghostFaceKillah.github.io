@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pronunciation: Option A vs Option B</title>
+<style>
+  :root {
+    --bg: #f4f4f5;
+    --card: #ffffff;
+    --ink: #18181b;
+    --muted: #71717a;
+    --line: #e4e4e7;
+    --accent: #2563eb;
+    --green: #16a34a;
+    --amber: #d97706;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    padding: 24px;
+  }
+  .wrap { max-width: 760px; margin: 0 auto; }
+  h1 { font-size: 1.6rem; margin: 0 0 4px; text-align: center; }
+  .sub { color: var(--muted); text-align: center; margin: 0 0 20px; font-size: .95rem; }
+
+  .legend {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 16px 18px;
+    margin-bottom: 22px;
+    font-size: .92rem;
+    line-height: 1.5;
+  }
+  .legend p { margin: 0 0 8px; }
+  .legend p:last-child { margin-bottom: 0; }
+  .tag { display: inline-block; font-weight: 700; padding: 1px 8px; border-radius: 6px; font-size: .82rem; }
+  .tag.a { background: #eff6ff; color: var(--accent); }
+  .tag.b { background: #ecfdf5; color: var(--green); }
+  .warn { color: var(--amber); font-size: .85rem; }
+
+  .voicebar {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
+    margin-bottom: 22px; font-size: .85rem; color: var(--muted);
+  }
+  .voicebar select {
+    border: 1px solid var(--line); background: var(--card); color: var(--ink);
+    border-radius: 8px; padding: 6px 8px; font-size: .85rem; max-width: 100%;
+  }
+
+  .row {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 16px 18px;
+    margin-bottom: 14px;
+  }
+  .top { display: flex; align-items: baseline; gap: 10px; }
+  .num { color: var(--muted); font-size: .8rem; min-width: 1.6em; }
+  .zh { font-size: 1.7rem; line-height: 1.3; }
+  .py { color: var(--accent); margin: 2px 0 2px; font-size: 1.05rem; }
+  .en { color: var(--muted); font-size: .92rem; margin: 0 0 12px; }
+
+  .btns { display: flex; gap: 10px; flex-wrap: wrap; }
+  .btn {
+    border: 1px solid var(--line); background: var(--card); cursor: pointer;
+    border-radius: 10px; padding: 10px 14px; font-size: .95rem; font-weight: 600;
+    display: inline-flex; align-items: center; gap: 7px; transition: border-color .12s, background .12s;
+  }
+  .btn:hover { border-color: var(--accent); }
+  .btn.a { color: var(--accent); }
+  .btn.a:hover { background: #eff6ff; }
+  .btn.b { color: var(--green); }
+  .btn.b:hover { background: #ecfdf5; }
+  .btn.playing { background: #fef3c7; border-color: var(--amber); color: var(--amber); }
+  .btn:disabled { opacity: .45; cursor: not-allowed; }
+
+  footer { color: var(--muted); font-size: .82rem; text-align: center; margin-top: 26px; line-height: 1.5; }
+  a { color: var(--accent); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Pronunciation: Option A vs Option B</h1>
+  <p class="sub">Same 10 sentences (HSK 1 #1–10). Tap each button and compare how they sound.</p>
+
+  <div class="legend">
+    <p><span class="tag a">Option A</span> &nbsp;<strong>Browser speech</strong> (Web Speech API). No files, no cost — the
+       voice comes from <em>your</em> device, so quality varies and it may be silent if you have no Chinese voice installed.</p>
+    <p><span class="tag b">Option B</span> &nbsp;<strong>Pre-generated audio</strong> (committed MP3s, neural TTS). Same on every
+       device, works offline once loaded — costs repo space and a build step.</p>
+    <p class="warn" id="aWarn" style="display:none">⚠ No Chinese (zh) voice found on this device, so Option A will be silent here.
+       This is exactly the inconsistency that Option B avoids.</p>
+  </div>
+
+  <div class="voicebar">
+    <label for="voiceSel">Option A voice:</label>
+    <select id="voiceSel"><option>loading…</option></select>
+  </div>
+
+  <div id="list"></div>
+
+  <footer>
+    Option B clips generated with sherpa-onnx (MeloTTS, offline neural) via
+    <code>tools/gen_pronunciation_demo.py</code>. On a normal network, edge-tts or Google Cloud TTS sound even better.<br>
+    A demo to help decide — see <a href="sentences.html">the Sentence Trainer</a>.
+  </footer>
+</div>
+
+<script>
+  const SENTENCES = [
+    { n: 1,  zh: "你好！",            py: "nǐ hǎo!",                  en: "Hello!" },
+    { n: 2,  zh: "你好吗？",          py: "nǐ hǎo ma?",               en: "How are you?" },
+    { n: 3,  zh: "我很好，谢谢。",      py: "wǒ hěn hǎo, xiè xiè.",      en: "I'm very well, thank you." },
+    { n: 4,  zh: "你叫什么名字？",      py: "nǐ jiào shén me míng zì?",  en: "What is your name?" },
+    { n: 5,  zh: "我叫李明。",         py: "wǒ jiào lǐ míng.",          en: "My name is Li Ming." },
+    { n: 6,  zh: "他叫什么名字？",      py: "tā jiào shén me míng zì?",  en: "What is his name?" },
+    { n: 7,  zh: "她的名字很漂亮。",    py: "tā de míng zì hěn piào liàng.", en: "Her name is very pretty." },
+    { n: 8,  zh: "认识你很高兴。",      py: "rèn shí nǐ hěn gāo xìng.",  en: "Nice to meet you." },
+    { n: 9,  zh: "这是我的朋友。",      py: "zhè shì wǒ de péng yǒu.",   en: "This is my friend." },
+    { n: 10, zh: "那是我的老师。",      py: "nà shì wǒ de lǎo shī.",     en: "That is my teacher." },
+  ];
+
+  // ----- Option A: Web Speech API -----
+  const synth = window.speechSynthesis;
+  let zhVoices = [];
+  const voiceSel = document.getElementById("voiceSel");
+  const aWarn = document.getElementById("aWarn");
+
+  function loadVoices() {
+    const all = synth ? synth.getVoices() : [];
+    zhVoices = all.filter(v => /^zh/i.test(v.lang));
+    voiceSel.innerHTML = "";
+    if (!synth) {
+      voiceSel.innerHTML = "<option>not supported in this browser</option>";
+      voiceSel.disabled = true;
+      aWarn.style.display = "block";
+      return;
+    }
+    if (zhVoices.length === 0) {
+      voiceSel.innerHTML = "<option>(no Chinese voice on this device)</option>";
+      voiceSel.disabled = true;
+      aWarn.style.display = "block";
+      return;
+    }
+    aWarn.style.display = "none";
+    voiceSel.disabled = false;
+    zhVoices.forEach((v, i) => {
+      const o = document.createElement("option");
+      o.value = i; o.textContent = `${v.name} (${v.lang})`;
+      voiceSel.appendChild(o);
+    });
+  }
+  if (synth) {
+    loadVoices();
+    synth.onvoiceschanged = loadVoices; // voices often load async
+  } else {
+    loadVoices();
+  }
+
+  function speakA(text, btn) {
+    if (!synth || zhVoices.length === 0) return;
+    synth.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    const v = zhVoices[parseInt(voiceSel.value, 10) || 0];
+    if (v) u.voice = v;
+    u.lang = (v && v.lang) || "zh-CN";
+    u.rate = 0.95;
+    markPlaying(btn, u);
+    synth.speak(u);
+  }
+
+  // ----- Option B: pre-generated MP3 -----
+  let current = null;
+  function playB(n, btn) {
+    if (current) { current.pause(); current = null; }
+    const audio = new Audio(`audio_demo/hsk1_${String(n).padStart(2, "0")}.mp3`);
+    current = audio;
+    markPlaying(btn, audio);
+    audio.play().catch(() => clearPlaying(btn));
+  }
+
+  // ----- shared playing state -----
+  function markPlaying(btn, src) {
+    document.querySelectorAll(".btn.playing").forEach(b => b.classList.remove("playing"));
+    btn.classList.add("playing");
+    const done = () => clearPlaying(btn);
+    if (src instanceof Audio) {
+      src.onended = done; src.onerror = done; src.onpause = done;
+    } else {
+      src.onend = done; src.onerror = done;
+    }
+  }
+  function clearPlaying(btn) { btn.classList.remove("playing"); }
+
+  // ----- render -----
+  const list = document.getElementById("list");
+  SENTENCES.forEach(s => {
+    const row = document.createElement("div");
+    row.className = "row";
+    row.innerHTML = `
+      <div class="top"><span class="num">#${s.n}</span><span class="zh">${s.zh}</span></div>
+      <div class="py">${s.py}</div>
+      <div class="en">${s.en}</div>
+      <div class="btns">
+        <button class="btn a">🔊 Option A · browser</button>
+        <button class="btn b">🔊 Option B · file</button>
+      </div>`;
+    row.querySelector(".btn.a").addEventListener("click", e => speakA(s.zh, e.currentTarget));
+    row.querySelector(".btn.b").addEventListener("click", e => playB(s.n, e.currentTarget));
+    list.appendChild(row);
+  });
+</script>
+</body>
+</html>
