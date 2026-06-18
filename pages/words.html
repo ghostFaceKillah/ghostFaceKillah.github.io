@@ -98,9 +98,19 @@
   .theme-toggle:hover { border-color: var(--accent); }
 
   /* Lesson picker */
-  .lessons { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 8px; }
-  .lessons .opt { text-align: left; font-size: .95rem; }
-  .lessons .opt.all { grid-column: 1 / -1; text-align: center; }
+  .sel-input {
+    width: 100%;
+    border: 1px solid var(--line);
+    background: var(--card);
+    color: var(--ink);
+    border-radius: 12px;
+    padding: 14px 12px;
+    font-size: 1rem;
+    cursor: pointer;
+    appearance: none;
+    margin-bottom: 16px;
+  }
+  .sel-input:focus { outline: none; border-color: var(--accent); }
   .rangeInfo { color: var(--muted); font-size: .9rem; margin: 0 0 24px; text-align: center; min-height: 1.2em; }
 
   .toggle { display: flex; gap: 10px; margin-bottom: 28px; }
@@ -197,8 +207,15 @@
     <h1>Word Trainer</h1>
     <p class="sub">Learn Chinese words — flashcard style. (Integrated Chinese, Lessons 1–10)</p>
 
-    <p class="label">Which words?</p>
-    <div class="lessons" id="lessonPicker"></div>
+    <p class="label">Lesson</p>
+    <select class="sel-input" id="lessonSel"></select>
+
+    <p class="label">Dialogue</p>
+    <div class="toggle" id="dialogueToggle">
+      <button class="opt sel" data-dia="1">Dialogue 1</button>
+      <button class="opt" data-dia="2">Dialogue 2</button>
+      <button class="opt" data-dia="BOTH">Both</button>
+    </div>
     <p class="rangeInfo" id="rangeInfo"></p>
 
     <p class="label">Order</p>
@@ -282,33 +299,23 @@
     syncIcon();
   })();
 
-  // ----- Lessons (one group per dialogue) -----
+  // ----- Lessons (theme per lesson; each has dialogues 1 & 2) -----
   const LESSONS = [
-    { id: "L1D1", label: "L1·D1 Greetings" },
-    { id: "L1D2", label: "L1·D2 Greetings" },
-    { id: "L2D1", label: "L2·D1 Family" },
-    { id: "L2D2", label: "L2·D2 Family" },
-    { id: "L3D1", label: "L3·D1 Time" },
-    { id: "L3D2", label: "L3·D2 Time" },
-    { id: "L4D1", label: "L4·D1 Hobbies" },
-    { id: "L4D2", label: "L4·D2 Hobbies" },
-    { id: "L5D1", label: "L5·D1 Visiting" },
-    { id: "L5D2", label: "L5·D2 Visiting" },
-    { id: "L6D1", label: "L6·D1 Appointments" },
-    { id: "L6D2", label: "L6·D2 Appointments" },
-    { id: "L7D1", label: "L7·D1 Studying" },
-    { id: "L7D2", label: "L7·D2 Studying" },
-    { id: "L8D1", label: "L8·D1 School Life" },
-    { id: "L8D2", label: "L8·D2 School Life" },
-    { id: "L9D1", label: "L9·D1 Shopping" },
-    { id: "L9D2", label: "L9·D2 Shopping" },
-    { id: "L10D1", label: "L10·D1 Transport" },
-    { id: "L10D2", label: "L10·D2 Transport" },
+    { num: 1,  theme: "Greetings" },
+    { num: 2,  theme: "Family" },
+    { num: 3,  theme: "Time" },
+    { num: 4,  theme: "Hobbies" },
+    { num: 5,  theme: "Visiting Friends" },
+    { num: 6,  theme: "Making Appointments" },
+    { num: 7,  theme: "Studying Chinese" },
+    { num: 8,  theme: "School Life" },
+    { num: 9,  theme: "Shopping" },
+    { num: 10, theme: "Transportation" },
   ];
 
-  // ----- Data: vocabulary (Integrated Chinese, Level 1 Part 1, Lessons 1–5) -----
-  // w = word, pinyin, pos = part of speech, def = definition, lesson = dialogue id.
-  // Lessons 1–2 are transcribed from the textbook tables; Lessons 3–5 are
+  // ----- Data: vocabulary (Integrated Chinese, Level 1 Part 1, Lessons 1–10) -----
+  // w = word, pinyin, pos = part of speech, def = definition, lesson = "L<n>D<d>".
+  // Lessons 1–2 are transcribed from the textbook tables; Lessons 3–10 are
   // compiled from the same series' standard vocabulary.
   const WORDS = [
     // ----- Lesson 1, Dialogue 1 -----
@@ -736,7 +743,8 @@
   ];
 
   // ----- State -----
-  let selectedLesson = "L1D1";   // lesson id, or "ALL"
+  let selectedLesson = 1;        // lesson number 1–10, or "ALL"
+  let selectedDialogue = 1;      // 1, 2, or "BOTH"
   let order = "shuffle";
   let autoPlay = true;
   let queue = [];        // remaining cards this session
@@ -781,7 +789,8 @@
     done:  document.getElementById("done"),
   };
   const el = {
-    lessonPicker: document.getElementById("lessonPicker"),
+    lessonSel:  document.getElementById("lessonSel"),
+    dialogueToggle: document.getElementById("dialogueToggle"),
     rangeInfo:  document.getElementById("rangeInfo"),
     orderToggle:document.getElementById("orderToggle"),
     audioToggle:document.getElementById("audioToggle"),
@@ -809,41 +818,54 @@
   };
 
   // ----- Setup start screen -----
-  function countFor(id) {
-    return id === "ALL" ? WORDS.length : WORDS.filter(w => w.lesson === id).length;
+  // Decode a word's "L<n>D<d>" id into { num, dia }.
+  function parseLesson(id) {
+    const m = /^L(\d+)D(\d+)$/.exec(id);
+    return { num: +m[1], dia: +m[2] };
   }
-  function labelFor(id) {
-    if (id === "ALL") return "All words";
-    const l = LESSONS.find(l => l.id === id);
-    return l ? l.label : id;
+  function matchesSelection(w) {
+    const { num, dia } = parseLesson(w.lesson);
+    if (selectedLesson !== "ALL" && num !== selectedLesson) return false;
+    if (selectedDialogue !== "BOTH" && dia !== selectedDialogue) return false;
+    return true;
   }
-  function buildLessonPicker() {
+  function selectedWords() {
+    return WORDS.filter(matchesSelection);
+  }
+
+  // Populate the lesson dropdown: "All lessons" + one option per lesson.
+  function buildLessonSelect() {
+    const all = document.createElement("option");
+    all.value = "ALL";
+    all.textContent = "All lessons";
+    el.lessonSel.appendChild(all);
     LESSONS.forEach(l => {
-      const b = document.createElement("button");
-      b.className = "opt" + (l.id === selectedLesson ? " sel" : "");
-      b.dataset.lesson = l.id;
-      b.textContent = l.label;
-      el.lessonPicker.appendChild(b);
+      const o = document.createElement("option");
+      o.value = String(l.num);
+      o.textContent = `Lesson ${l.num} · ${l.theme}`;
+      el.lessonSel.appendChild(o);
     });
-    if (LESSONS.length > 1) {
-      const all = document.createElement("button");
-      all.className = "opt all" + (selectedLesson === "ALL" ? " sel" : "");
-      all.dataset.lesson = "ALL";
-      all.textContent = "All words";
-      el.lessonPicker.appendChild(all);
-    }
+    el.lessonSel.value = String(selectedLesson);
   }
-  buildLessonPicker();
+  buildLessonSelect();
 
   function syncRange() {
-    const count = countFor(selectedLesson);
-    el.rangeInfo.textContent = `${labelFor(selectedLesson)} · ${count} word${count === 1 ? "" : "s"}`;
+    const count = selectedWords().length;
+    const lessonPart = selectedLesson === "ALL"
+      ? "All lessons"
+      : `Lesson ${selectedLesson} · ${LESSONS.find(l => l.num === selectedLesson).theme}`;
+    const diaPart = selectedDialogue === "BOTH" ? "both dialogues" : `Dialogue ${selectedDialogue}`;
+    el.rangeInfo.textContent = `${lessonPart} · ${diaPart} · ${count} word${count === 1 ? "" : "s"}`;
   }
-  el.lessonPicker.addEventListener("click", e => {
+  el.lessonSel.addEventListener("change", () => {
+    selectedLesson = el.lessonSel.value === "ALL" ? "ALL" : parseInt(el.lessonSel.value, 10);
+    syncRange();
+  });
+  el.dialogueToggle.addEventListener("click", e => {
     const b = e.target.closest(".opt");
     if (!b) return;
-    selectedLesson = b.dataset.lesson;
-    [...el.lessonPicker.children].forEach(c => c.classList.toggle("sel", c === b));
+    selectedDialogue = b.dataset.dia === "BOTH" ? "BOTH" : parseInt(b.dataset.dia, 10);
+    [...el.dialogueToggle.children].forEach(c => c.classList.toggle("sel", c === b));
     syncRange();
   });
   syncRange();
@@ -877,9 +899,7 @@
 
   // ----- Session flow -----
   function startSession() {
-    queue = selectedLesson === "ALL"
-      ? WORDS.slice()
-      : WORDS.filter(w => w.lesson === selectedLesson);
+    queue = selectedWords();
     if (order === "shuffle") shuffle(queue);
     else queue = queue.slice(); // copy
     totalThisRound = queue.length;
