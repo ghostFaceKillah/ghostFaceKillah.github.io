@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Word Trainer</title>
+<style>
+  :root {
+    --bg: #f4f4f5;
+    --card: #ffffff;
+    --ink: #18181b;
+    --muted: #71717a;
+    --line: #e4e4e7;
+    --green: #16a34a;
+    --amber: #d97706;
+    --accent: #2563eb;
+    --sel-bg: #eff6ff;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #18181b;
+      --card: #27272a;
+      --ink: #f4f4f5;
+      --muted: #a1a1aa;
+      --line: #3f3f46;
+      --green: #22c55e;
+      --amber: #f59e0b;
+      --accent: #60a5fa;
+      --sel-bg: #1e3a5f;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #18181b;
+    --card: #27272a;
+    --ink: #f4f4f5;
+    --muted: #a1a1aa;
+    --line: #3f3f46;
+    --green: #22c55e;
+    --amber: #f59e0b;
+    --accent: #60a5fa;
+    --sel-bg: #1e3a5f;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+  .wrap { width: 100%; max-width: 560px; }
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  h1 { font-size: 1.6rem; margin: 0 0 4px; text-align: center; }
+  .sub { color: var(--muted); text-align: center; margin: 0 0 28px; font-size: .95rem; }
+
+  .label { font-size: .8rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 0 0 10px; }
+
+  .opt {
+    border: 1px solid var(--line);
+    background: var(--card);
+    border-radius: 12px;
+    padding: 14px 10px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: border-color .12s, background .12s;
+    color: var(--ink);
+  }
+  .opt:hover { border-color: var(--accent); }
+  .opt.sel { border-color: var(--accent); background: var(--sel-bg); color: var(--accent); font-weight: 600; }
+
+  .theme-toggle {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    border: 1px solid var(--line);
+    background: var(--card);
+    color: var(--ink);
+    font-size: 1.15rem;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    transition: border-color .12s;
+  }
+  .theme-toggle:hover { border-color: var(--accent); }
+
+  /* Lesson picker */
+  .lessons { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 8px; }
+  .lessons .opt { text-align: left; }
+  .lessons .opt.all { grid-column: 1 / -1; text-align: center; }
+  .rangeInfo { color: var(--muted); font-size: .9rem; margin: 0 0 24px; text-align: center; min-height: 1.2em; }
+
+  .toggle { display: flex; gap: 10px; margin-bottom: 28px; }
+  .toggle .opt { flex: 1; }
+
+  .btn {
+    display: block;
+    width: 100%;
+    border: none;
+    border-radius: 12px;
+    padding: 16px;
+    font-size: 1.05rem;
+    font-weight: 600;
+    cursor: pointer;
+    background: var(--accent);
+    color: #fff;
+    transition: opacity .12s;
+  }
+  .btn:hover { opacity: .9; }
+  .btn.ghost { background: var(--card); color: var(--ink); border: 1px solid var(--line); }
+
+  /* Card screen */
+  .topbar { display: flex; justify-content: space-between; align-items: center; color: var(--muted); font-size: .9rem; margin-bottom: 20px; }
+  .topbar a { color: var(--muted); text-decoration: none; cursor: pointer; }
+  .topbar a:hover { color: var(--ink); }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 40px 24px;
+    text-align: center;
+    cursor: pointer;
+    user-select: none;
+    min-height: 320px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .word { font-size: 6rem; line-height: 1.1; margin: 0; }
+  .hint { color: var(--muted); margin-top: 24px; font-size: .9rem; }
+
+  .answer { display: none; margin-top: 24px; }
+  .answer.show { display: block; }
+  .pinyin { font-size: 2rem; margin: 0 0 4px; color: var(--accent); }
+  .pos { font-size: .8rem; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin: 0 0 10px; }
+  .english { font-size: 1.3rem; margin: 0; }
+
+  .speak-row { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+  .speak {
+    border: 1px solid var(--line);
+    background: var(--card);
+    color: var(--accent);
+    border-radius: 999px;
+    padding: 9px 18px;
+    font-size: .95rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    transition: border-color .12s, background .12s, color .12s;
+  }
+  .speak:hover { border-color: var(--accent); background: var(--sel-bg); }
+  .speak.playing { border-color: var(--amber); color: var(--amber); }
+  .speak[hidden], .speak-row[hidden], #audioSection[hidden] { display: none; }
+
+  .actions { display: none; gap: 12px; margin-top: 16px; }
+  .actions.show { display: flex; }
+  .actions .btn { flex: 1; }
+  .btn.again { background: var(--amber); }
+  .btn.got { background: var(--green); }
+
+  .reveal-row { margin-top: 16px; }
+
+  /* Done screen */
+  .done { text-align: center; }
+  .done .big { font-size: 3rem; margin: 0 0 8px; }
+</style>
+<script>
+  // Apply saved theme before paint to avoid a flash.
+  (function () {
+    var t = localStorage.getItem("theme");
+    if (t) document.documentElement.setAttribute("data-theme", t);
+  })();
+</script>
+</head>
+<body>
+<button id="themeToggle" class="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle dark mode">🌙</button>
+<div class="wrap">
+
+  <!-- START -->
+  <section id="start" class="screen active">
+    <h1>Word Trainer</h1>
+    <p class="sub">Learn Chinese words — flashcard style.</p>
+
+    <p class="label">Which words?</p>
+    <div class="lessons" id="lessonPicker"></div>
+    <p class="rangeInfo" id="rangeInfo"></p>
+
+    <p class="label">Order</p>
+    <div class="toggle" id="orderToggle">
+      <button class="opt sel" data-order="shuffle">Shuffle</button>
+      <button class="opt" data-order="ordered">In order</button>
+    </div>
+
+    <div id="audioSection">
+      <p class="label">Audio</p>
+      <div class="toggle" id="audioToggle">
+        <button class="opt sel" data-audio="on">🔊 Auto-play</button>
+        <button class="opt" data-audio="off">Off</button>
+      </div>
+    </div>
+
+    <button class="btn" id="startBtn">Start</button>
+  </section>
+
+  <!-- CARD -->
+  <section id="study" class="screen">
+    <div class="topbar">
+      <a id="quitBtn">&larr; Quit</a>
+      <span id="progress">0 / 0</span>
+    </div>
+
+    <div class="card" id="card">
+      <p class="word" id="word">你好</p>
+      <div class="answer" id="answer">
+        <p class="pinyin" id="pinyin"></p>
+        <p class="pos" id="pos"></p>
+        <p class="english" id="english"></p>
+        <div class="speak-row" id="speakRow">
+          <button class="speak" id="speakBtn" type="button" title="Replay (R)">🔊 Play</button>
+          <button class="speak" id="speakSlowBtn" type="button" title="Read slowly (S)">🐢 Slow</button>
+        </div>
+      </div>
+      <p class="hint" id="hint">Tap card or press Space to reveal</p>
+    </div>
+
+    <div class="reveal-row" id="revealRow">
+      <button class="btn" id="revealBtn">Reveal</button>
+    </div>
+
+    <div class="actions" id="actions">
+      <button class="btn again" id="againBtn">Again <small>(1)</small></button>
+      <button class="btn got" id="gotBtn">Got it <small>(2)</small></button>
+    </div>
+  </section>
+
+  <!-- DONE -->
+  <section id="done" class="screen">
+    <div class="done">
+      <p class="big">All cleared! 🎉</p>
+      <p class="sub" id="doneSummary"></p>
+      <button class="btn" id="restartBtn">Study again</button>
+    </div>
+  </section>
+
+</div>
+
+<script>
+  // ----- Dark mode toggle -----
+  (function () {
+    const root = document.documentElement;
+    const toggle = document.getElementById("themeToggle");
+    const mql = window.matchMedia("(prefers-color-scheme: dark)");
+    function current() {
+      return root.getAttribute("data-theme") || (mql.matches ? "dark" : "light");
+    }
+    function syncIcon() {
+      toggle.textContent = current() === "dark" ? "☀️" : "🌙";
+    }
+    toggle.addEventListener("click", () => {
+      const next = current() === "dark" ? "light" : "dark";
+      root.setAttribute("data-theme", next);
+      localStorage.setItem("theme", next);
+      syncIcon();
+    });
+    mql.addEventListener("change", () => { if (!root.getAttribute("data-theme")) syncIcon(); });
+    syncIcon();
+  })();
+
+  // ----- Lessons -----
+  const LESSONS = [
+    { id: "L1", label: "Lesson 1 · Greetings & Family" },
+  ];
+
+  // ----- Data: vocabulary (Integrated Chinese, Lessons 1 & 2) -----
+  // w = word, pinyin, pos = part of speech, def = definition, lesson.
+  const WORDS = [
+    // ----- Lesson 1, Dialogue 1 -----
+    { w: "你",     pinyin: "nǐ",          pos: "pr",     def: "you",                                                              lesson: "L1" },
+    { w: "好",     pinyin: "hǎo",         pos: "adj",    def: "fine, good, nice, OK, it's settled",                               lesson: "L1" },
+    { w: "请",     pinyin: "qǐng",        pos: "v",      def: "please (polite form of request); to treat or to invite (somebody)", lesson: "L1" },
+    { w: "问",     pinyin: "wèn",         pos: "v",      def: "to ask (a question)",                                              lesson: "L1" },
+    { w: "贵",     pinyin: "guì",         pos: "adj",    def: "honorable; expensive",                                             lesson: "L1" },
+    { w: "姓",     pinyin: "xìng",        pos: "v/n",    def: "(one's) family name is…; family name",                             lesson: "L1" },
+    { w: "我",     pinyin: "wǒ",          pos: "pr",     def: "I, me",                                                            lesson: "L1" },
+    { w: "呢",     pinyin: "ne",          pos: "qp",     def: "(question particle)",                                              lesson: "L1" },
+    { w: "小姐",   pinyin: "xiǎojiě",     pos: "n",      def: "Miss, young lady",                                                 lesson: "L1" },
+    { w: "叫",     pinyin: "jiào",        pos: "v",      def: "to be called, to call",                                            lesson: "L1" },
+    { w: "什么",   pinyin: "shénme",      pos: "qpr",    def: "what",                                                             lesson: "L1" },
+    { w: "名字",   pinyin: "míngzi",      pos: "n",      def: "name",                                                             lesson: "L1" },
+    { w: "先生",   pinyin: "xiānsheng",   pos: "n",      def: "Mr., husband, teacher",                                            lesson: "L1" },
+    { w: "李友",   pinyin: "Lǐ Yǒu",      pos: "pn",     def: "(a personal name)",                                                lesson: "L1" },
+    { w: "李",     pinyin: "lǐ",          pos: "pn/n",   def: "(a family name); plum",                                            lesson: "L1" },
+    { w: "王朋",   pinyin: "Wáng Péng",   pos: "pn",     def: "(a personal name)",                                                lesson: "L1" },
+    { w: "王",     pinyin: "wáng",        pos: "pn/n",   def: "(a family name); king",                                            lesson: "L1" },
+
+    // ----- Lesson 1, Dialogue 2 -----
+    { w: "是",     pinyin: "shì",         pos: "v",      def: "to be",                                                            lesson: "L1" },
+    { w: "老师",   pinyin: "lǎoshī",      pos: "n",      def: "teacher",                                                          lesson: "L1" },
+    { w: "吗",     pinyin: "ma",          pos: "qp",     def: "(question particle)",                                              lesson: "L1" },
+    { w: "不",     pinyin: "bù",          pos: "adv",    def: "not, no",                                                          lesson: "L1" },
+    { w: "学生",   pinyin: "xuésheng",    pos: "n",      def: "student",                                                          lesson: "L1" },
+    { w: "也",     pinyin: "yě",          pos: "adv",    def: "too, also",                                                        lesson: "L1" },
+    { w: "人",     pinyin: "rén",         pos: "n",      def: "people, person",                                                   lesson: "L1" },
+    { w: "中国",   pinyin: "Zhōngguó",    pos: "pn",     def: "China",                                                            lesson: "L1" },
+    { w: "北京",   pinyin: "Běijīng",     pos: "pn",     def: "Beijing",                                                          lesson: "L1" },
+    { w: "美国",   pinyin: "Měiguó",      pos: "pn",     def: "America",                                                          lesson: "L1" },
+    { w: "纽约",   pinyin: "Niǔyuē",      pos: "pn",     def: "New York",                                                         lesson: "L1" },
+
+    // ----- Lesson 2, Dialogue 1 -----
+    { w: "那",     pinyin: "nà",          pos: "pr",     def: "that",                                                             lesson: "L1" },
+    { w: "的",     pinyin: "de",          pos: "p",      def: "(a possessive or descriptive particle)",                           lesson: "L1" },
+    { w: "照片",   pinyin: "zhàopiàn",    pos: "n",      def: "picture, photo",                                                   lesson: "L1" },
+    { w: "这",     pinyin: "zhè",         pos: "pr",     def: "this",                                                             lesson: "L1" },
+    { w: "爸爸",   pinyin: "bàba",        pos: "n",      def: "father, dad",                                                      lesson: "L1" },
+    { w: "妈妈",   pinyin: "māma",        pos: "n",      def: "mother, mom",                                                      lesson: "L1" },
+    { w: "个",     pinyin: "gè/ge",       pos: "m",      def: "(measure word for many common everyday objects)",                  lesson: "L1" },
+    { w: "女",     pinyin: "nǚ",          pos: "adj",    def: "female",                                                           lesson: "L1" },
+    { w: "孩子",   pinyin: "háizi",       pos: "n",      def: "child",                                                            lesson: "L1" },
+    { w: "谁",     pinyin: "shéi",        pos: "qpr",    def: "who, whom",                                                        lesson: "L1" },
+    { w: "她",     pinyin: "tā",          pos: "pr",     def: "she, her",                                                         lesson: "L1" },
+    { w: "姐姐",   pinyin: "jiějie",      pos: "n",      def: "older sister",                                                     lesson: "L1" },
+    { w: "男",     pinyin: "nán",         pos: "adj",    def: "male",                                                             lesson: "L1" },
+    { w: "弟弟",   pinyin: "dìdi",        pos: "n",      def: "younger brother",                                                  lesson: "L1" },
+    { w: "他",     pinyin: "tā",          pos: "pr",     def: "he, him",                                                          lesson: "L1" },
+    { w: "大哥",   pinyin: "dàgē",        pos: "n",      def: "eldest/oldest brother",                                            lesson: "L1" },
+    { w: "儿子",   pinyin: "érzi",        pos: "n",      def: "son",                                                              lesson: "L1" },
+    { w: "有",     pinyin: "yǒu",         pos: "v",      def: "to have, to exist",                                                lesson: "L1" },
+    { w: "女儿",   pinyin: "nǚ'ér",       pos: "n",      def: "daughter",                                                         lesson: "L1" },
+    { w: "没",     pinyin: "méi",         pos: "adv",    def: "not",                                                              lesson: "L1" },
+    { w: "高文中", pinyin: "Gāo Wénzhōng", pos: "pn",    def: "(a personal name)",                                                lesson: "L1" },
+    { w: "高",     pinyin: "gāo",         pos: "pn/adj", def: "(a family name); tall, high",                                      lesson: "L1" },
+
+    // ----- Lesson 2, Dialogue 2 -----
+    { w: "家",     pinyin: "jiā",         pos: "n",      def: "family, home",                                                     lesson: "L1" },
+    { w: "几",     pinyin: "jǐ",          pos: "nu",     def: "how many, some, a few",                                            lesson: "L1" },
+    { w: "口",     pinyin: "kǒu",         pos: "m",      def: "(measure word for number of family members)",                      lesson: "L1" },
+    { w: "哥哥",   pinyin: "gēge",        pos: "n",      def: "older brother",                                                    lesson: "L1" },
+    { w: "两",     pinyin: "liǎng",       pos: "nu",     def: "two, a couple of",                                                 lesson: "L1" },
+    { w: "妹妹",   pinyin: "mèimei",      pos: "n",      def: "younger sister",                                                   lesson: "L1" },
+    { w: "和",     pinyin: "hé",          pos: "conj",   def: "and",                                                              lesson: "L1" },
+    { w: "大姐",   pinyin: "dàjiě",       pos: "n",      def: "eldest/oldest sister",                                             lesson: "L1" },
+    { w: "二姐",   pinyin: "èrjiě",       pos: "n",      def: "second oldest sister",                                             lesson: "L1" },
+    { w: "做",     pinyin: "zuò",         pos: "v",      def: "to do",                                                            lesson: "L1" },
+    { w: "工作",   pinyin: "gōngzuò",     pos: "n/v",    def: "job; to work",                                                     lesson: "L1" },
+    { w: "律师",   pinyin: "lǜshī",       pos: "n",      def: "lawyer",                                                           lesson: "L1" },
+    { w: "英文",   pinyin: "Yīngwén",     pos: "n",      def: "the English language",                                             lesson: "L1" },
+    { w: "都",     pinyin: "dōu",         pos: "adv",    def: "both, all",                                                        lesson: "L1" },
+    { w: "大学生", pinyin: "dàxuéshēng",  pos: "n",      def: "college student",                                                  lesson: "L1" },
+    { w: "大学",   pinyin: "dàxué",       pos: "n",      def: "university, college",                                              lesson: "L1" },
+    { w: "医生",   pinyin: "yīshēng",     pos: "n",      def: "doctor, physician",                                                lesson: "L1" },
+    { w: "白英爱", pinyin: "Bái Yīng'ài", pos: "pn",     def: "(a personal name)",                                                lesson: "L1" },
+  ];
+
+  // ----- State -----
+  let selectedLesson = "L1";   // lesson id, or "ALL"
+  let order = "shuffle";
+  let autoPlay = true;
+  let queue = [];        // remaining cards this session
+  let totalThisRound = 0;
+  let cleared = 0;
+  let revealed = false;
+  let currentZh = "";
+
+  // ----- Pronunciation: Web Speech API -----
+  const Speech = (() => {
+    const synth = window.speechSynthesis;
+    let voice = null;
+    function pick() {
+      if (!synth) return;
+      const zh = synth.getVoices().filter(v => v.lang && v.lang.toLowerCase().startsWith("zh"));
+      // prefer mainland simplified, then any Chinese voice
+      voice = zh.find(v => /^zh[-_]?(cn|hans)/i.test(v.lang)) || zh[0] || null;
+    }
+    if (synth) { pick(); synth.addEventListener("voiceschanged", pick); }
+    function speak(text, btn, rate) {
+      if (!synth || !text) return;
+      synth.cancel();
+      if (!voice) pick();
+      const u = new SpeechSynthesisUtterance(text);
+      if (voice) u.voice = voice;
+      u.lang = (voice && voice.lang) || "zh-CN";
+      u.rate = rate || 0.9;
+      if (btn) {
+        u.onstart = () => btn.classList.add("playing");
+        const done = () => btn.classList.remove("playing");
+        u.onend = done; u.onerror = done;
+      }
+      synth.speak(u);
+    }
+    return { supported: !!synth, speak };
+  })();
+
+  // ----- Elements -----
+  const screens = {
+    start: document.getElementById("start"),
+    study: document.getElementById("study"),
+    done:  document.getElementById("done"),
+  };
+  const el = {
+    lessonPicker: document.getElementById("lessonPicker"),
+    rangeInfo:  document.getElementById("rangeInfo"),
+    orderToggle:document.getElementById("orderToggle"),
+    audioToggle:document.getElementById("audioToggle"),
+    audioSection:document.getElementById("audioSection"),
+    speakBtn:   document.getElementById("speakBtn"),
+    speakSlowBtn:document.getElementById("speakSlowBtn"),
+    speakRow:   document.getElementById("speakRow"),
+    startBtn:   document.getElementById("startBtn"),
+    progress:   document.getElementById("progress"),
+    card:       document.getElementById("card"),
+    word:       document.getElementById("word"),
+    answer:     document.getElementById("answer"),
+    pinyin:     document.getElementById("pinyin"),
+    pos:        document.getElementById("pos"),
+    english:    document.getElementById("english"),
+    hint:       document.getElementById("hint"),
+    revealRow:  document.getElementById("revealRow"),
+    revealBtn:  document.getElementById("revealBtn"),
+    actions:    document.getElementById("actions"),
+    againBtn:   document.getElementById("againBtn"),
+    gotBtn:     document.getElementById("gotBtn"),
+    quitBtn:    document.getElementById("quitBtn"),
+    doneSummary:document.getElementById("doneSummary"),
+    restartBtn: document.getElementById("restartBtn"),
+  };
+
+  // ----- Setup start screen -----
+  function countFor(id) {
+    return id === "ALL" ? WORDS.length : WORDS.filter(w => w.lesson === id).length;
+  }
+  function labelFor(id) {
+    if (id === "ALL") return "All words";
+    const l = LESSONS.find(l => l.id === id);
+    return l ? l.label : id;
+  }
+  function buildLessonPicker() {
+    LESSONS.forEach(l => {
+      const b = document.createElement("button");
+      b.className = "opt" + (l.id === selectedLesson ? " sel" : "");
+      b.dataset.lesson = l.id;
+      b.textContent = l.label;
+      el.lessonPicker.appendChild(b);
+    });
+    if (LESSONS.length > 1) {
+      const all = document.createElement("button");
+      all.className = "opt all" + (selectedLesson === "ALL" ? " sel" : "");
+      all.dataset.lesson = "ALL";
+      all.textContent = "All words";
+      el.lessonPicker.appendChild(all);
+    }
+  }
+  buildLessonPicker();
+
+  function syncRange() {
+    const count = countFor(selectedLesson);
+    el.rangeInfo.textContent = `${labelFor(selectedLesson)} · ${count} word${count === 1 ? "" : "s"}`;
+  }
+  el.lessonPicker.addEventListener("click", e => {
+    const b = e.target.closest(".opt");
+    if (!b) return;
+    selectedLesson = b.dataset.lesson;
+    [...el.lessonPicker.children].forEach(c => c.classList.toggle("sel", c === b));
+    syncRange();
+  });
+  syncRange();
+
+  el.orderToggle.addEventListener("click", e => {
+    const b = e.target.closest(".opt");
+    if (!b) return;
+    order = b.dataset.order;
+    [...el.orderToggle.children].forEach(c => c.classList.toggle("sel", c === b));
+  });
+
+  el.audioToggle.addEventListener("click", e => {
+    const b = e.target.closest(".opt");
+    if (!b) return;
+    autoPlay = b.dataset.audio === "on";
+    [...el.audioToggle.children].forEach(c => c.classList.toggle("sel", c === b));
+  });
+
+  function show(name) {
+    Object.values(screens).forEach(s => s.classList.remove("active"));
+    screens[name].classList.add("active");
+  }
+
+  function shuffle(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+
+  // ----- Session flow -----
+  function startSession() {
+    queue = selectedLesson === "ALL"
+      ? WORDS.slice()
+      : WORDS.filter(w => w.lesson === selectedLesson);
+    if (order === "shuffle") shuffle(queue);
+    else queue = queue.slice(); // copy
+    totalThisRound = queue.length;
+    cleared = 0;
+    show("study");
+    nextCard();
+  }
+
+  function nextCard() {
+    if (queue.length === 0) {
+      el.doneSummary.textContent = `You cleared ${totalThisRound} word${totalThisRound === 1 ? "" : "s"}.`;
+      show("done");
+      return;
+    }
+    const c = queue[0];
+    revealed = false;
+    currentZh = c.w;
+    el.word.textContent = c.w;
+    el.pinyin.textContent = c.pinyin;
+    el.pos.textContent = c.pos;
+    el.english.textContent = c.def;
+    el.speakBtn.classList.remove("playing");
+    el.speakSlowBtn.classList.remove("playing");
+
+    el.answer.classList.remove("show");
+    el.actions.classList.remove("show");
+    el.revealRow.style.display = "block";
+    el.hint.style.display = "block";
+    updateProgress();
+  }
+
+  function updateProgress() {
+    el.progress.textContent = `${cleared} / ${totalThisRound}`;
+  }
+
+  function reveal() {
+    if (revealed) return;
+    revealed = true;
+    el.answer.classList.add("show");
+    el.actions.classList.add("show");
+    el.revealRow.style.display = "none";
+    el.hint.style.display = "none";
+    if (autoPlay) Speech.speak(currentZh, el.speakBtn);
+  }
+
+  function gotIt() {
+    if (!revealed) return;
+    queue.shift();          // remove from session
+    cleared++;
+    nextCard();
+  }
+
+  function again() {
+    if (!revealed) return;
+    const c = queue.shift();
+    // push back near the end so it returns later this session
+    const insertAt = Math.min(queue.length, 4);
+    queue.splice(insertAt, 0, c);
+    nextCard();
+  }
+
+  // ----- Events -----
+  el.startBtn.addEventListener("click", startSession);
+  el.restartBtn.addEventListener("click", () => show("start"));
+  el.quitBtn.addEventListener("click", () => show("start"));
+  el.card.addEventListener("click", reveal);
+  el.revealBtn.addEventListener("click", reveal);
+  el.gotBtn.addEventListener("click", gotIt);
+  el.againBtn.addEventListener("click", again);
+  const SLOW_RATE = 0.5;
+  el.speakBtn.addEventListener("click", e => {
+    e.stopPropagation();   // don't bubble to the card
+    Speech.speak(currentZh, el.speakBtn);
+  });
+  el.speakSlowBtn.addEventListener("click", e => {
+    e.stopPropagation();
+    Speech.speak(currentZh, el.speakSlowBtn, SLOW_RATE);
+  });
+
+  document.addEventListener("keydown", e => {
+    if (!screens.study.classList.contains("active")) return;
+    if (e.code === "Space") { e.preventDefault(); reveal(); return; }
+    if (!revealed) return;
+    if (e.key === "r" || e.key === "R") { e.preventDefault(); Speech.speak(currentZh, el.speakBtn); return; }
+    if (e.key === "s" || e.key === "S") { e.preventDefault(); Speech.speak(currentZh, el.speakSlowBtn, SLOW_RATE); return; }
+    if (e.key === "1" || e.key === "ArrowLeft")  { e.preventDefault(); again(); }
+    if (e.key === "2" || e.key === "ArrowRight" || e.key === "Enter") { e.preventDefault(); gotIt(); }
+  });
+
+  // ----- Init -----
+  if (!Speech.supported) {           // very old browsers: hide audio UI
+    el.audioSection.hidden = true;
+    el.speakRow.hidden = true;
+    autoPlay = false;
+  }
+</script>
+</body>
+</html>
