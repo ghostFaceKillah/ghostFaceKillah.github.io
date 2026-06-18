@@ -14,6 +14,34 @@
     --green: #16a34a;
     --amber: #d97706;
     --accent: #2563eb;
+    --sel-bg: #eff6ff;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #18181b;
+      --card: #27272a;
+      --ink: #f4f4f5;
+      --muted: #a1a1aa;
+      --line: #3f3f46;
+      --green: #22c55e;
+      --amber: #f59e0b;
+      --accent: #60a5fa;
+      --sel-bg: #1e3a5f;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #18181b;
+    --card: #27272a;
+    --ink: #f4f4f5;
+    --muted: #a1a1aa;
+    --line: #3f3f46;
+    --green: #22c55e;
+    --amber: #f59e0b;
+    --accent: #60a5fa;
+    --sel-bg: #1e3a5f;
+    color-scheme: dark;
   }
   * { box-sizing: border-box; }
   html, body { height: 100%; margin: 0; }
@@ -46,7 +74,28 @@
     transition: border-color .12s, background .12s;
   }
   .opt:hover { border-color: var(--accent); }
-  .opt.sel { border-color: var(--accent); background: #eff6ff; color: var(--accent); font-weight: 600; }
+  .opt.sel { border-color: var(--accent); background: var(--sel-bg); color: var(--accent); font-weight: 600; }
+
+  .theme-toggle {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    border: 1px solid var(--line);
+    background: var(--card);
+    color: var(--ink);
+    font-size: 1.15rem;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    transition: border-color .12s;
+  }
+  .theme-toggle:hover { border-color: var(--accent); }
 
   .range { display: flex; align-items: flex-end; gap: 12px; margin-bottom: 8px; }
   .range label { flex: 1; display: flex; flex-direction: column; gap: 6px; font-size: .8rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
@@ -126,8 +175,16 @@
   .done { text-align: center; }
   .done .big { font-size: 3rem; margin: 0 0 8px; }
 </style>
+<script>
+  // Apply saved theme before paint to avoid a flash.
+  (function () {
+    var t = localStorage.getItem("theme");
+    if (t) document.documentElement.setAttribute("data-theme", t);
+  })();
+</script>
 </head>
 <body>
+<button id="themeToggle" class="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle dark mode">🌙</button>
 <div class="wrap">
 
   <!-- START -->
@@ -195,6 +252,27 @@
 </div>
 
 <script>
+  // ----- Dark mode toggle -----
+  (function () {
+    const root = document.documentElement;
+    const toggle = document.getElementById("themeToggle");
+    const mql = window.matchMedia("(prefers-color-scheme: dark)");
+    function current() {
+      return root.getAttribute("data-theme") || (mql.matches ? "dark" : "light");
+    }
+    function syncIcon() {
+      toggle.textContent = current() === "dark" ? "☀️" : "🌙";
+    }
+    toggle.addEventListener("click", () => {
+      const next = current() === "dark" ? "light" : "dark";
+      root.setAttribute("data-theme", next);
+      localStorage.setItem("theme", next);
+      syncIcon();
+    });
+    mql.addEventListener("change", () => { if (!root.getAttribute("data-theme")) syncIcon(); });
+    syncIcon();
+  })();
+
   // ----- Data: the 40 radicals -----
   const RADICALS = [
     { n: 1,  base: "人", variant: "亻", pinyin: "rén",  english: "person",            examples: "今，他" },
