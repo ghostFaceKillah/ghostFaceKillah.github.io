@@ -159,6 +159,14 @@
   .pos { font-size: .8rem; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin: 0 0 10px; }
   .english { font-size: 1.3rem; margin: 0; }
 
+  .breakdown { font-size: .85rem; color: var(--muted); margin: 14px 0 6px; line-height: 1.5; }
+  .breakdown b { color: var(--ink); font-weight: 600; }
+  .mnemonic { font-size: .98rem; margin: 0; line-height: 1.55; text-align: left; }
+  .mnemonic b { font-weight: 600; }
+  .mnemonic i { font-style: italic; }
+  .mnemonic::before { content: "💡 "; }
+  .breakdown:empty, .mnemonic:empty { display: none; margin: 0; }
+
   .speak-row { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
   .speak {
     border: 1px solid var(--line);
@@ -248,6 +256,8 @@
         <p class="pinyin" id="pinyin"></p>
         <p class="pos" id="pos"></p>
         <p class="english" id="english"></p>
+        <p class="breakdown" id="breakdown"></p>
+        <p class="mnemonic" id="mnemonic"></p>
         <div class="speak-row" id="speakRow">
           <button class="speak" id="speakBtn" type="button" title="Replay (R)">🔊 Play</button>
           <button class="speak" id="speakSlowBtn" type="button" title="Read slowly (S)">🐢 Slow</button>
@@ -329,80 +339,80 @@
   // compiled from the same series' standard vocabulary (core vocab per dialogue).
   const WORDS = [
     // ----- Lesson 1, Dialogue 1 -----
-    { w: "你",     pinyin: "nǐ",          pos: "pr",     def: "you",                                                              lesson: "L1D1" },
-    { w: "好",     pinyin: "hǎo",         pos: "adj",    def: "fine, good, nice, OK, it's settled",                               lesson: "L1D1" },
-    { w: "请",     pinyin: "qǐng",        pos: "v",      def: "please (polite form of request); to treat or to invite (somebody)", lesson: "L1D1" },
-    { w: "问",     pinyin: "wèn",         pos: "v",      def: "to ask (a question)",                                              lesson: "L1D1" },
-    { w: "贵",     pinyin: "guì",         pos: "adj",    def: "honorable; expensive",                                             lesson: "L1D1" },
-    { w: "姓",     pinyin: "xìng",        pos: "v/n",    def: "(one's) family name is…; family name",                             lesson: "L1D1" },
-    { w: "我",     pinyin: "wǒ",          pos: "pr",     def: "I, me",                                                            lesson: "L1D1" },
-    { w: "呢",     pinyin: "ne",          pos: "qp",     def: "(question particle)",                                              lesson: "L1D1" },
-    { w: "小姐",   pinyin: "xiǎojiě",     pos: "n",      def: "Miss, young lady",                                                 lesson: "L1D1" },
-    { w: "叫",     pinyin: "jiào",        pos: "v",      def: "to be called, to call",                                            lesson: "L1D1" },
-    { w: "什么",   pinyin: "shénme",      pos: "qpr",    def: "what",                                                             lesson: "L1D1" },
-    { w: "名字",   pinyin: "míngzi",      pos: "n",      def: "name",                                                             lesson: "L1D1" },
-    { w: "先生",   pinyin: "xiānsheng",   pos: "n",      def: "Mr., husband, teacher",                                            lesson: "L1D1" },
-    { w: "李友",   pinyin: "Lǐ Yǒu",      pos: "pn",     def: "(a personal name)",                                                lesson: "L1D1" },
-    { w: "李",     pinyin: "lǐ",          pos: "pn/n",   def: "(a family name); plum",                                            lesson: "L1D1" },
-    { w: "王朋",   pinyin: "Wáng Péng",   pos: "pn",     def: "(a personal name)",                                                lesson: "L1D1" },
-    { w: "王",     pinyin: "wáng",        pos: "pn/n",   def: "(a family name); king",                                            lesson: "L1D1" },
+    { w: "你",     pinyin: "nǐ",          pos: "pr",     def: "you",                                                              mnem: "A <b>person</b> (亻) standing right in front of you — 你 is “you.” The 尔 on the right carries the “ni” sound.", parts: "亻 person + 尔 (≈ <b>ní</b>, sound)", lesson: "L1D1" },
+    { w: "好",     pinyin: "hǎo",         pos: "adj",    def: "fine, good, nice, OK, it's settled",                               mnem: "A <b>woman</b> (女) holding her <b>child</b> (子) — when mother and child are together, everything is <b>good</b>.", parts: "女 woman + 子 child", lesson: "L1D1" },
+    { w: "请",     pinyin: "qǐng",        pos: "v",      def: "please (polite form of request); to treat or to invite (somebody)", mnem: "You use polite <b>speech</b> (讠) to say “please.” 青 (green/young) gives the “qing” sound.", parts: "讠 speech + 青 (≈ <b>qīng</b>, sound)", lesson: "L1D1" },
+    { w: "问",     pinyin: "wèn",         pos: "v",      def: "to ask (a question)",                                              mnem: "Put your <b>mouth</b> (口) up to the <b>door</b> (门) and <b>ask</b> a question. The door also hints the sound.", parts: "门 door (≈ <b>mén</b>, sound) + 口 mouth", lesson: "L1D1" },
+    { w: "贵",     pinyin: "guì",         pos: "adj",    def: "honorable; expensive",                                             mnem: "Anything sitting on a pile of <b>shells/money</b> (贝) at the bottom is <b>expensive</b> — and worthy of honor.", parts: "… + 贝 cowrie shell (money)", lesson: "L1D1" },
+    { w: "姓",     pinyin: "xìng",        pos: "v/n",    def: "(one's) family name is…; family name",                             mnem: "In ancient times your <b>family name</b> came from the <b>woman</b> (女) you were <b>born</b> (生) to — surnames passed through the mother.", parts: "女 woman + 生 (≈ <b>shēng</b>, born)", lesson: "L1D1" },
+    { w: "我",     pinyin: "wǒ",          pos: "pr",     def: "I, me",                                                            mnem: "<b>I</b> grip my <b>spear</b> (戈) and plant my feet — “me first, this is mine.”", parts: "contains 戈 dagger-axe", lesson: "L1D1" },
+    { w: "呢",     pinyin: "ne",          pos: "qp",     def: "(question particle)",                                              mnem: "A little <b>mouth</b> (口) sound you tack on to bounce a question back: “And you? 你呢?”", parts: "口 mouth + 尼 (≈ <b>ní</b>, sound)", lesson: "L1D1" },
+    { w: "小姐",   pinyin: "xiǎojiě",     pos: "n",      def: "Miss, young lady",                                                 mnem: "A “<b>small older-sister</b>” (小 + 姐) is a young lady — <b>Miss</b>.", parts: "小 small + 姐 older sister", lesson: "L1D1" },
+    { w: "叫",     pinyin: "jiào",        pos: "v",      def: "to be called, to call",                                            mnem: "Open your <b>mouth</b> (口) and <b>call out</b> a name — 叫.", parts: "口 mouth + 丩 (≈ sound)", lesson: "L1D1" },
+    { w: "什么",   pinyin: "shénme",      pos: "qpr",    def: "what",                                                             mnem: "A <b>person</b> (亻) facing <b>ten</b> (十) confusing things throws up their hands: “<b>What</b> is all this?”", parts: "什 (亻 person + 十 ten) + 么", lesson: "L1D1" },
+    { w: "名字",   pinyin: "míngzi",      pos: "n",      def: "name",                                                             mnem: "In the <b>evening</b> dark (夕) you call out with your <b>mouth</b> (口) to <b>name</b> who's there. 字: a <b>child</b> (子) under a <b>roof</b> (宀) is given a written name.", parts: "名 (夕 evening + 口 mouth) + 字 (宀 roof + 子 child)", lesson: "L1D1" },
+    { w: "先生",   pinyin: "xiānsheng",   pos: "n",      def: "Mr., husband, teacher",                                            mnem: "The one “<b>born first</b>” (先 + 生) — the elder, the gentleman: <b>Mr.</b>", parts: "先 first + 生 born", lesson: "L1D1" },
+    { w: "李友",   pinyin: "Lǐ Yǒu",      pos: "pn",     def: "(a personal name)",                                                mnem: "“Li You” = a <b>plum</b> (李) <b>friend</b> (友). Picture a friend handing you a plum.", parts: "李 plum + 友 friend", lesson: "L1D1" },
+    { w: "李",     pinyin: "lǐ",          pos: "pn/n",   def: "(a family name); plum",                                            mnem: "A <b>tree</b> (木) heavy with little <b>fruit/children</b> (子) — the <b>plum</b> tree, and a very common surname.", parts: "木 tree + 子 child", lesson: "L1D1" },
+    { w: "王朋",   pinyin: "Wáng Péng",   pos: "pn",     def: "(a personal name)",                                                mnem: "“Wang Peng” = the <b>king</b> (王) of <b>friends</b> (朋).", parts: "王 king + 朋 friend", lesson: "L1D1" },
+    { w: "王",     pinyin: "wáng",        pos: "pn/n",   def: "(a family name); king",                                            mnem: "The <b>king</b> (王) is the vertical stroke that connects the three horizontals — heaven, humanity and earth.", parts: "three horizontal lines + one vertical", lesson: "L1D1" },
 
     // ----- Lesson 1, Dialogue 2 -----
-    { w: "是",     pinyin: "shì",         pos: "v",      def: "to be",                                                            lesson: "L1D2" },
-    { w: "老师",   pinyin: "lǎoshī",      pos: "n",      def: "teacher",                                                          lesson: "L1D2" },
-    { w: "吗",     pinyin: "ma",          pos: "qp",     def: "(question particle)",                                              lesson: "L1D2" },
-    { w: "不",     pinyin: "bù",          pos: "adv",    def: "not, no",                                                          lesson: "L1D2" },
-    { w: "学生",   pinyin: "xuésheng",    pos: "n",      def: "student",                                                          lesson: "L1D2" },
-    { w: "也",     pinyin: "yě",          pos: "adv",    def: "too, also",                                                        lesson: "L1D2" },
-    { w: "人",     pinyin: "rén",         pos: "n",      def: "people, person",                                                   lesson: "L1D2" },
-    { w: "中国",   pinyin: "Zhōngguó",    pos: "pn",     def: "China",                                                            lesson: "L1D2" },
-    { w: "北京",   pinyin: "Běijīng",     pos: "pn",     def: "Beijing",                                                          lesson: "L1D2" },
-    { w: "美国",   pinyin: "Měiguó",      pos: "pn",     def: "America",                                                          lesson: "L1D2" },
-    { w: "纽约",   pinyin: "Niǔyuē",      pos: "pn",     def: "New York",                                                         lesson: "L1D2" },
+    { w: "是",     pinyin: "shì",         pos: "v",      def: "to be",                                                            mnem: "Under the <b>sun</b> (日), what is <b>correct/upright</b> (正) — that's how it <b>is</b>.", parts: "日 sun + 正 correct", lesson: "L1D2" },
+    { w: "老师",   pinyin: "lǎoshī",      pos: "n",      def: "teacher",                                                          mnem: "An <b>old</b> (老) <b>master</b> (师) — your <b>teacher</b>.", parts: "老 old + 师 master", lesson: "L1D2" },
+    { w: "吗",     pinyin: "ma",          pos: "qp",     def: "(question particle)",                                              mnem: "A <b>mouth</b> (口) beside a <b>horse</b> (马, “ma”) — turns any sentence into a yes/no question.", parts: "口 mouth + 马 (≈ <b>mǎ</b>, sound)", lesson: "L1D2" },
+    { w: "不",     pinyin: "bù",          pos: "adv",    def: "not, no",                                                          mnem: "A bird flying up that hits a ceiling — it can <b>not</b> go any higher.", parts: "whole-character image", lesson: "L1D2" },
+    { w: "学生",   pinyin: "xuésheng",    pos: "n",      def: "student",                                                          mnem: "<b>Study</b> (学) + <b>grow</b> (生) = a <b>student</b>. 学 shows a child under a roof gathering knowledge.", parts: "学 study + 生 born/grow", lesson: "L1D2" },
+    { w: "也",     pinyin: "yě",          pos: "adv",    def: "too, also",                                                        mnem: "A little curling tail you add to a sentence: “me <b>too</b>.”", parts: "whole-character image", lesson: "L1D2" },
+    { w: "人",     pinyin: "rén",         pos: "n",      def: "people, person",                                                   mnem: "Two legs mid-stride — a walking <b>person</b>.", parts: "pictograph", lesson: "L1D2" },
+    { w: "中国",   pinyin: "Zhōngguó",    pos: "pn",     def: "China",                                                            mnem: "The <b>Middle</b> (中, a line through the center of a box) <b>Kingdom</b> (国, jade/king 玉 inside walls 囗) — <b>China</b>.", parts: "中 middle + 国 country", lesson: "L1D2" },
+    { w: "北京",   pinyin: "Běijīng",     pos: "pn",     def: "Beijing",                                                          mnem: "The <b>Northern</b> (北 — two people back-to-back; north is at your back) <b>Capital</b> (京).", parts: "北 north + 京 capital", lesson: "L1D2" },
+    { w: "美国",   pinyin: "Měiguó",      pos: "pn",     def: "America",                                                          mnem: "The “<b>Beautiful</b> (美) <b>Country</b> (国)” — China's name for America. 美 = a <b>big</b> (大) <b>sheep</b> (羊) = beautiful/delicious.", parts: "美 beautiful + 国 country", lesson: "L1D2" },
+    { w: "纽约",   pinyin: "Niǔyuē",      pos: "pn",     def: "New York",                                                         mnem: "Just sound it out: “<b>Niǔ-yuē</b>” ≈ “New York.” The 纟(silk) on both halves is decoration.", parts: "sound transcription (纟silk + …)", lesson: "L1D2" },
 
     // ----- Lesson 2, Dialogue 1 -----
-    { w: "那",     pinyin: "nà",          pos: "pr",     def: "that",                                                             lesson: "L2D1" },
-    { w: "的",     pinyin: "de",          pos: "p",      def: "(a possessive or descriptive particle)",                           lesson: "L2D1" },
-    { w: "照片",   pinyin: "zhàopiàn",    pos: "n",      def: "picture, photo",                                                   lesson: "L2D1" },
-    { w: "这",     pinyin: "zhè",         pos: "pr",     def: "this",                                                             lesson: "L2D1" },
-    { w: "爸爸",   pinyin: "bàba",        pos: "n",      def: "father, dad",                                                      lesson: "L2D1" },
-    { w: "妈妈",   pinyin: "māma",        pos: "n",      def: "mother, mom",                                                      lesson: "L2D1" },
-    { w: "个",     pinyin: "gè/ge",       pos: "m",      def: "(measure word for many common everyday objects)",                  lesson: "L2D1" },
-    { w: "女",     pinyin: "nǚ",          pos: "adj",    def: "female",                                                           lesson: "L2D1" },
-    { w: "孩子",   pinyin: "háizi",       pos: "n",      def: "child",                                                            lesson: "L2D1" },
-    { w: "谁",     pinyin: "shéi",        pos: "qpr",    def: "who, whom",                                                        lesson: "L2D1" },
-    { w: "她",     pinyin: "tā",          pos: "pr",     def: "she, her",                                                         lesson: "L2D1" },
-    { w: "姐姐",   pinyin: "jiějie",      pos: "n",      def: "older sister",                                                     lesson: "L2D1" },
-    { w: "男",     pinyin: "nán",         pos: "adj",    def: "male",                                                             lesson: "L2D1" },
-    { w: "弟弟",   pinyin: "dìdi",        pos: "n",      def: "younger brother",                                                  lesson: "L2D1" },
-    { w: "他",     pinyin: "tā",          pos: "pr",     def: "he, him",                                                          lesson: "L2D1" },
-    { w: "大哥",   pinyin: "dàgē",        pos: "n",      def: "eldest/oldest brother",                                            lesson: "L2D1" },
-    { w: "儿子",   pinyin: "érzi",        pos: "n",      def: "son",                                                              lesson: "L2D1" },
-    { w: "有",     pinyin: "yǒu",         pos: "v",      def: "to have, to exist",                                                lesson: "L2D1" },
-    { w: "女儿",   pinyin: "nǚ'ér",       pos: "n",      def: "daughter",                                                         lesson: "L2D1" },
-    { w: "没",     pinyin: "méi",         pos: "adv",    def: "not",                                                              lesson: "L2D1" },
-    { w: "高文中", pinyin: "Gāo Wénzhōng", pos: "pn",    def: "(a personal name)",                                                lesson: "L2D1" },
-    { w: "高",     pinyin: "gāo",         pos: "pn/adj", def: "(a family name); tall, high",                                      lesson: "L2D1" },
+    { w: "那",     pinyin: "nà",          pos: "pr",     def: "that",                                                             mnem: "<b>That</b> one — over <i>there</i>, off by the <b>city</b> (阝) on the right.", parts: "… + 阝 (city, right)", lesson: "L2D1" },
+    { w: "的",     pinyin: "de",          pos: "p",      def: "(a possessive or descriptive particle)",                           mnem: "A <b>white</b> (白) <b>spoon</b> (勺): the single most common character in Chinese — the “'s” that links owner to thing.", parts: "白 white + 勺 spoon", lesson: "L2D1" },
+    { w: "照片",   pinyin: "zhàopiàn",    pos: "n",      def: "picture, photo",                                                   mnem: "Light <b>shines</b> (照, note the four fire-dots 灬) onto a flat <b>card</b> (片) — a <b>photo</b>.", parts: "照 shine (灬 fire/light) + 片 slice/card", lesson: "L2D1" },
+    { w: "这",     pinyin: "zhè",         pos: "pr",     def: "this",                                                             mnem: "<b>Walk</b> (辶) right up and point: “<b>this</b> one, here.”", parts: "辶 walk + 文", lesson: "L2D1" },
+    { w: "爸爸",   pinyin: "bàba",        pos: "n",      def: "father, dad",                                                      mnem: "<b>Father</b> (父) on top, 巴 (“ba”) below — <b>dad</b>.", parts: "父 father + 巴 (≈ <b>bā</b>, sound)", lesson: "L2D1" },
+    { w: "妈妈",   pinyin: "māma",        pos: "n",      def: "mother, mom",                                                      mnem: "A <b>woman</b> (女) who works like a <b>horse</b> (马, “ma”) for the family — <b>mom</b>.", parts: "女 woman + 马 (≈ <b>mǎ</b>, sound)", lesson: "L2D1" },
+    { w: "个",     pinyin: "gè/ge",       pos: "m",      def: "(measure word for many common everyday objects)",                  mnem: "The all-purpose counter. Picture a little <b>person</b> (人) ticking off items one by one.", parts: "人 person + 丨", lesson: "L2D1" },
+    { w: "女",     pinyin: "nǚ",          pos: "adj",    def: "female",                                                           mnem: "A figure seated with legs crossed and arms folded — the classic sign for <b>woman/female</b>.", parts: "pictograph", lesson: "L2D1" },
+    { w: "孩子",   pinyin: "háizi",       pos: "n",      def: "child",                                                            mnem: "Two <b>child</b> radicals (子, a baby with arms out in swaddling) — a <b>kid</b>.", parts: "孩 (子 child + 亥) + 子 child", lesson: "L2D1" },
+    { w: "谁",     pinyin: "shéi",        pos: "qpr",    def: "who, whom",                                                        mnem: "You <b>speak</b> (讠) toward a <b>bird</b> (隹) in the bushes: “<b>Who's</b> there?”", parts: "讠 speech + 隹 short-tailed bird", lesson: "L2D1" },
+    { w: "她",     pinyin: "tā",          pos: "pr",     def: "she, her",                                                         mnem: "Take “he” and swap in the <b>woman</b> radical (女) — now it's <b>she</b>. 也 keeps the “ta” sound.", parts: "女 woman + 也 also (≈ sound)", lesson: "L2D1" },
+    { w: "姐姐",   pinyin: "jiějie",      pos: "n",      def: "older sister",                                                     mnem: "A <b>woman</b> (女) you place above you (且, “moreover/on top”) — your <b>older sister</b>.", parts: "女 woman + 且", lesson: "L2D1" },
+    { w: "男",     pinyin: "nán",         pos: "adj",    def: "male",                                                             mnem: "The one who puts his <b>strength</b> (力) into the <b>field</b> (田) — <b>male</b>.", parts: "田 field + 力 strength", lesson: "L2D1" },
+    { w: "弟弟",   pinyin: "dìdi",        pos: "n",      def: "younger brother",                                                  mnem: "A string wound in order down a post — the <b>younger</b> one, lower in the sequence: <b>little brother</b>.", parts: "image of cord wound on a stake", lesson: "L2D1" },
+    { w: "他",     pinyin: "tā",          pos: "pr",     def: "he, him",                                                          mnem: "A <b>person</b> (亻) plus 也 (“ta”) — the default <b>he/him</b>.", parts: "亻 person + 也 also (≈ sound)", lesson: "L2D1" },
+    { w: "大哥",   pinyin: "dàgē",        pos: "n",      def: "eldest/oldest brother",                                            mnem: "The “<b>big</b> (大) <b>brother</b> (哥)” — the eldest.", parts: "大 big + 哥 brother", lesson: "L2D1" },
+    { w: "儿子",   pinyin: "érzi",        pos: "n",      def: "son",                                                              mnem: "<b>儿</b> is a pair of little walking legs, <b>子</b> is a child — together, a <b>son</b>.", parts: "儿 child/legs + 子 child", lesson: "L2D1" },
+    { w: "有",     pinyin: "yǒu",         pos: "v",      def: "to have, to exist",                                                mnem: "A <b>hand</b> (𠂇) clutching a piece of <b>meat</b> (月) — you've <b>got</b> something.", parts: "𠂇 hand + 月 (meat)", lesson: "L2D1" },
+    { w: "女儿",   pinyin: "nǚ'ér",       pos: "n",      def: "daughter",                                                         mnem: "A <b>female</b> (女) <b>child</b> (儿) — a <b>daughter</b>.", parts: "女 female + 儿 child", lesson: "L2D1" },
+    { w: "没",     pinyin: "méi",         pos: "adv",    def: "not",                                                              mnem: "Something sinking under the <b>water</b> (氵) until it's gone — you have <b>not</b>.", parts: "氵 water + 殳", lesson: "L2D1" },
+    { w: "高文中", pinyin: "Gāo Wénzhōng", pos: "pn",    def: "(a personal name)",                                                mnem: "“Gao Wenzhong” — <b>Tall</b> (高), <b>cultured</b> (文), <b>centered</b> (中).", parts: "高 tall + 文 culture + 中 middle", lesson: "L2D1" },
+    { w: "高",     pinyin: "gāo",         pos: "pn/adj", def: "(a family name); tall, high",                                      mnem: "A tall watchtower with a roof and a gate — <b>tall, high</b>.", parts: "pictograph of a tower", lesson: "L2D1" },
 
     // ----- Lesson 2, Dialogue 2 -----
-    { w: "家",     pinyin: "jiā",         pos: "n",      def: "family, home",                                                     lesson: "L2D2" },
-    { w: "几",     pinyin: "jǐ",          pos: "nu",     def: "how many, some, a few",                                            lesson: "L2D2" },
-    { w: "口",     pinyin: "kǒu",         pos: "m",      def: "(measure word for number of family members)",                      lesson: "L2D2" },
-    { w: "哥哥",   pinyin: "gēge",        pos: "n",      def: "older brother",                                                    lesson: "L2D2" },
-    { w: "两",     pinyin: "liǎng",       pos: "nu",     def: "two, a couple of",                                                 lesson: "L2D2" },
-    { w: "妹妹",   pinyin: "mèimei",      pos: "n",      def: "younger sister",                                                   lesson: "L2D2" },
-    { w: "和",     pinyin: "hé",          pos: "conj",   def: "and",                                                              lesson: "L2D2" },
-    { w: "大姐",   pinyin: "dàjiě",       pos: "n",      def: "eldest/oldest sister",                                             lesson: "L2D2" },
-    { w: "二姐",   pinyin: "èrjiě",       pos: "n",      def: "second oldest sister",                                             lesson: "L2D2" },
-    { w: "做",     pinyin: "zuò",         pos: "v",      def: "to do",                                                            lesson: "L2D2" },
-    { w: "工作",   pinyin: "gōngzuò",     pos: "n/v",    def: "job; to work",                                                     lesson: "L2D2" },
-    { w: "律师",   pinyin: "lǜshī",       pos: "n",      def: "lawyer",                                                           lesson: "L2D2" },
-    { w: "英文",   pinyin: "Yīngwén",     pos: "n",      def: "the English language",                                             lesson: "L2D2" },
-    { w: "都",     pinyin: "dōu",         pos: "adv",    def: "both, all",                                                        lesson: "L2D2" },
-    { w: "大学生", pinyin: "dàxuéshēng",  pos: "n",      def: "college student",                                                  lesson: "L2D2" },
-    { w: "大学",   pinyin: "dàxué",       pos: "n",      def: "university, college",                                              lesson: "L2D2" },
-    { w: "医生",   pinyin: "yīshēng",     pos: "n",      def: "doctor, physician",                                                lesson: "L2D2" },
-    { w: "白英爱", pinyin: "Bái Yīng'ài", pos: "pn",     def: "(a personal name)",                                                lesson: "L2D2" },
+    { w: "家",     pinyin: "jiā",         pos: "n",      def: "family, home",                                                     mnem: "Under your <b>roof</b> (宀) you keep a <b>pig</b> (豕) — in old China, a house with a pig was a real <b>home</b>.", parts: "宀 roof + 豕 pig", lesson: "L2D2" },
+    { w: "几",     pinyin: "jǐ",          pos: "nu",     def: "how many, some, a few",                                            mnem: "A little stool/table — count the legs: “<b>how many</b>?”", parts: "image of a small table", lesson: "L2D2" },
+    { w: "口",     pinyin: "kǒu",         pos: "m",      def: "(measure word for number of family members)",                      mnem: "An open square = a <b>mouth</b>. Families are counted by mouths to feed.", parts: "pictograph", lesson: "L2D2" },
+    { w: "哥哥",   pinyin: "gēge",        pos: "n",      def: "older brother",                                                    mnem: "Two “can-do” (可) blocks stacked up — the capable, reliable <b>older brother</b>.", parts: "可 + 可 (two stacked)", lesson: "L2D2" },
+    { w: "两",     pinyin: "liǎng",       pos: "nu",     def: "two, a couple of",                                                 mnem: "Look inside — there are <b>two</b> little people (人) standing side by side: a pair.", parts: "contains two 人", lesson: "L2D2" },
+    { w: "妹妹",   pinyin: "mèimei",      pos: "n",      def: "younger sister",                                                   mnem: "A <b>female</b> (女) who is “<b>not yet</b>” (未) grown up — your <b>little sister</b>. 未 also hints the sound.", parts: "女 woman + 未 (≈ <b>wèi</b>, not-yet)", lesson: "L2D2" },
+    { w: "和",     pinyin: "hé",          pos: "conj",   def: "and",                                                              mnem: "<b>Grain</b> (禾) going into every <b>mouth</b> (口) — everyone fed and in harmony, joined together: “<b>and</b>.”", parts: "禾 grain + 口 mouth", lesson: "L2D2" },
+    { w: "大姐",   pinyin: "dàjiě",       pos: "n",      def: "eldest/oldest sister",                                             mnem: "The “<b>big</b> (大) <b>sister</b> (姐)” — eldest.", parts: "大 big + 姐 sister", lesson: "L2D2" },
+    { w: "二姐",   pinyin: "èrjiě",       pos: "n",      def: "second oldest sister",                                             mnem: "The “number-<b>two</b> (二) <b>sister</b> (姐)” — second oldest.", parts: "二 two + 姐 sister", lesson: "L2D2" },
+    { w: "做",     pinyin: "zuò",         pos: "v",      def: "to do",                                                            mnem: "A <b>person</b> (亻) taking action for a reason — to <b>do/make</b>.", parts: "亻 person + 故 (act/reason)", lesson: "L2D2" },
+    { w: "工作",   pinyin: "gōngzuò",     pos: "n/v",    def: "job; to work",                                                     mnem: "<b>工</b> is a carpenter's ruler (labor itself); <b>作</b> is a person making things — together, <b>work</b>.", parts: "工 labor (a tool) + 作 (亻 person + make)", lesson: "L2D2" },
+    { w: "律师",   pinyin: "lǜshī",       pos: "n",      def: "lawyer",                                                           mnem: "A <b>master</b> (师) of the <b>law</b> (律) — a <b>lawyer</b>.", parts: "律 law + 师 master", lesson: "L2D2" },
+    { w: "英文",   pinyin: "Yīngwén",     pos: "n",      def: "the English language",                                             mnem: "The <b>writing</b> (文) of 英 (英国, England) — <b>English</b>.", parts: "英 (England/hero) + 文 writing", lesson: "L2D2" },
+    { w: "都",     pinyin: "dōu",         pos: "adv",    def: "both, all",                                                        mnem: "A whole <b>city</b> (阝) of people, every one of them — “<b>all</b>, both.”", parts: "者 + 阝 city", lesson: "L2D2" },
+    { w: "大学生", pinyin: "dàxuéshēng",  pos: "n",      def: "college student",                                                  mnem: "A “<b>big-study</b> (大学) <b>student</b> (生)” — a college student.", parts: "大学 university + 生 student", lesson: "L2D2" },
+    { w: "大学",   pinyin: "dàxué",       pos: "n",      def: "university, college",                                              mnem: "“<b>Big study</b>” (大 + 学) — <b>university</b>.", parts: "大 big + 学 study", lesson: "L2D2" },
+    { w: "医生",   pinyin: "yīshēng",     pos: "n",      def: "doctor, physician",                                                mnem: "<b>医</b> is a box holding arrows/tools (the cure); add a <b>person</b> (生) — the <b>doctor</b>.", parts: "医 medicine + 生 person", lesson: "L2D2" },
+    { w: "白英爱", pinyin: "Bái Yīng'ài", pos: "pn",     def: "(a personal name)",                                                mnem: "“Bai Ying'ai” — <b>White</b> (白), <b>brave</b> (英), <b>loving</b> (爱).", parts: "白 white + 英 brave + 爱 love", lesson: "L2D2" },
 
     // ----- Lesson 3, Dialogue 1 (Dates and Time) -----
     { w: "九月",   pinyin: "jiǔyuè",      pos: "n",      def: "September",                                                        lesson: "L3D1" },
@@ -1116,6 +1126,8 @@
     pinyin:     document.getElementById("pinyin"),
     pos:        document.getElementById("pos"),
     english:    document.getElementById("english"),
+    breakdown:  document.getElementById("breakdown"),
+    mnemonic:   document.getElementById("mnemonic"),
     hint:       document.getElementById("hint"),
     revealRow:  document.getElementById("revealRow"),
     revealBtn:  document.getElementById("revealBtn"),
@@ -1231,6 +1243,8 @@
     el.pinyin.textContent = c.pinyin;
     el.pos.textContent = c.pos;
     el.english.textContent = c.def;
+    el.breakdown.innerHTML = c.parts || "";
+    el.mnemonic.innerHTML = c.mnem || "";
     el.speakBtn.classList.remove("playing");
     el.speakSlowBtn.classList.remove("playing");
 
