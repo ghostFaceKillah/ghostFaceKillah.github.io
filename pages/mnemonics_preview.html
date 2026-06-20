@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mnemonics Preview — Lessons 1 & 2</title>
+<style>
+  :root {
+    --bg: #f4f4f5;
+    --card: #ffffff;
+    --ink: #18181b;
+    --muted: #71717a;
+    --line: #e4e4e7;
+    --green: #16a34a;
+    --amber: #d97706;
+    --accent: #2563eb;
+    --sel-bg: #eff6ff;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #18181b; --card: #27272a; --ink: #f4f4f5; --muted: #a1a1aa;
+      --line: #3f3f46; --green: #22c55e; --amber: #f59e0b; --accent: #60a5fa;
+      --sel-bg: #1e3a5f; color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #18181b; --card: #27272a; --ink: #f4f4f5; --muted: #a1a1aa;
+    --line: #3f3f46; --green: #22c55e; --amber: #f59e0b; --accent: #60a5fa;
+    --sel-bg: #1e3a5f; color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    padding: 24px 16px 80px;
+    line-height: 1.5;
+  }
+  .wrap { width: 100%; max-width: 760px; margin: 0 auto; }
+
+  h1 { font-size: 1.7rem; margin: 0 0 6px; text-align: center; }
+  .sub { color: var(--muted); text-align: center; margin: 0 0 8px; font-size: .95rem; }
+  .note {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--amber);
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin: 22px 0 30px;
+    font-size: .9rem;
+    color: var(--muted);
+  }
+
+  h2 {
+    font-size: 1.05rem;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: var(--accent);
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 8px;
+    margin: 38px 0 18px;
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: 84px 1fr;
+    gap: 16px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 16px 18px;
+    margin-bottom: 12px;
+  }
+  .glyph { text-align: center; }
+  .glyph .zh { font-size: 3rem; line-height: 1; }
+  .glyph .py { color: var(--accent); font-size: 1rem; margin-top: 6px; }
+
+  .body .def { font-weight: 600; font-size: 1.05rem; margin: 2px 0 8px; }
+  .body .parts {
+    font-size: .9rem; color: var(--muted); margin: 0 0 8px;
+  }
+  .body .parts b { color: var(--ink); font-weight: 600; }
+  .body .mnem { font-size: .98rem; margin: 0; }
+  .body .mnem::before {
+    content: "💡 ";
+  }
+
+  .theme-toggle {
+    position: fixed; top: 16px; right: 16px; width: 40px; height: 40px;
+    border-radius: 10px; border: 1px solid var(--line); background: var(--card);
+    color: var(--ink); font-size: 1.15rem; line-height: 1; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; z-index: 10;
+  }
+  .back { display: inline-block; margin-bottom: 8px; color: var(--muted); text-decoration: none; font-size: .9rem; }
+  .back:hover { color: var(--ink); }
+</style>
+<script>
+  (function () {
+    var t = localStorage.getItem("theme");
+    if (t) document.documentElement.setAttribute("data-theme", t);
+  })();
+</script>
+</head>
+<body>
+<button id="themeToggle" class="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle dark mode">🌙</button>
+<div class="wrap">
+  <a class="back" href="../index.html">&larr; Home</a>
+  <h1>Character Mnemonics — Preview</h1>
+  <p class="sub">Integrated Chinese, Lessons 1 &amp; 2</p>
+  <div class="note">
+    These are <b>memory aids</b>, not always strict historical etymology. Where a part
+    genuinely hints at the sound, it's marked <i>(≈ sound)</i>. The goal is something
+    vivid and sticky — if a different image works better for you, overwrite it. This page
+    is just a sample so you can judge the style before we wire mnemonics into the trainers.
+  </div>
+
+  <div id="content"></div>
+</div>
+
+<script>
+  // ----- Dark mode toggle -----
+  (function () {
+    const root = document.documentElement;
+    const toggle = document.getElementById("themeToggle");
+    const mql = window.matchMedia("(prefers-color-scheme: dark)");
+    const current = () => root.getAttribute("data-theme") || (mql.matches ? "dark" : "light");
+    const syncIcon = () => { toggle.textContent = current() === "dark" ? "☀️" : "🌙"; };
+    toggle.addEventListener("click", () => {
+      const next = current() === "dark" ? "light" : "dark";
+      root.setAttribute("data-theme", next);
+      localStorage.setItem("theme", next);
+      syncIcon();
+    });
+    mql.addEventListener("change", () => { if (!root.getAttribute("data-theme")) syncIcon(); });
+    syncIcon();
+  })();
+
+  // ----- Data: w / pinyin / def / parts (component breakdown) / mnem (mnemonic) -----
+  const DATA = [
+    { group: "Lesson 1 · Dialogue 1 — Greetings" },
+    { w: "你", pinyin: "nǐ", def: "you",
+      parts: "亻 person + 尔 (≈ <b>ní</b>, sound)",
+      mnem: "A <b>person</b> (亻) standing right in front of you — 你 is “you.” The 尔 on the right carries the “ni” sound." },
+    { w: "好", pinyin: "hǎo", def: "good, fine, OK",
+      parts: "女 woman + 子 child",
+      mnem: "A <b>woman</b> (女) holding her <b>child</b> (子) — when mother and child are together, everything is <b>good</b>." },
+    { w: "请", pinyin: "qǐng", def: "please; to invite",
+      parts: "讠 speech + 青 (≈ <b>qīng</b>, sound)",
+      mnem: "You use polite <b>speech</b> (讠) to say “please.” 青 (green/young) gives the “qing” sound." },
+    { w: "问", pinyin: "wèn", def: "to ask",
+      parts: "门 door (≈ <b>mén</b>, sound) + 口 mouth",
+      mnem: "Put your <b>mouth</b> (口) up to the <b>door</b> (门) and <b>ask</b> a question. The door also hints the sound." },
+    { w: "贵", pinyin: "guì", def: "honorable; expensive",
+      parts: "… + 贝 cowrie shell (money)",
+      mnem: "Anything sitting on a pile of <b>shells/money</b> (贝) at the bottom is <b>expensive</b> — and worthy of honor." },
+    { w: "姓", pinyin: "xìng", def: "family name",
+      parts: "女 woman + 生 (≈ <b>shēng</b>, born)",
+      mnem: "In ancient times your <b>family name</b> came from the <b>woman</b> (女) you were <b>born</b> (生) to — surnames passed through the mother." },
+    { w: "我", pinyin: "wǒ", def: "I, me",
+      parts: "contains 戈 dagger-axe",
+      mnem: "<b>I</b> grip my <b>spear</b> (戈) and plant my feet — “me first, this is mine.”" },
+    { w: "呢", pinyin: "ne", def: "(question particle)",
+      parts: "口 mouth + 尼 (≈ <b>ní</b>, sound)",
+      mnem: "A little <b>mouth</b> (口) sound you tack on to bounce a question back: “And you? 你呢?”" },
+    { w: "小姐", pinyin: "xiǎojiě", def: "Miss, young lady",
+      parts: "小 small + 姐 older sister",
+      mnem: "A “<b>small older-sister</b>” (小 + 姐) is a young lady — <b>Miss</b>." },
+    { w: "叫", pinyin: "jiào", def: "to call; to be called",
+      parts: "口 mouth + 丩 (≈ sound)",
+      mnem: "Open your <b>mouth</b> (口) and <b>call out</b> a name — 叫." },
+    { w: "什么", pinyin: "shénme", def: "what",
+      parts: "什 (亻 person + 十 ten) + 么",
+      mnem: "A <b>person</b> (亻) facing <b>ten</b> (十) confusing things throws up their hands: “<b>What</b> is all this?”" },
+    { w: "名字", pinyin: "míngzi", def: "name",
+      parts: "名 (夕 evening + 口 mouth) + 字 (宀 roof + 子 child)",
+      mnem: "In the <b>evening</b> dark (夕) you call out with your <b>mouth</b> (口) to <b>name</b> who's there. 字: a <b>child</b> (子) under a <b>roof</b> (宀) is given a written name." },
+    { w: "先生", pinyin: "xiānsheng", def: "Mr.; husband; teacher",
+      parts: "先 first + 生 born",
+      mnem: "The one “<b>born first</b>” (先 + 生) — the elder, the gentleman: <b>Mr.</b>" },
+    { w: "李友", pinyin: "Lǐ Yǒu", def: "(a personal name)",
+      parts: "李 plum + 友 friend",
+      mnem: "“Li You” = a <b>plum</b> (李) <b>friend</b> (友). Picture a friend handing you a plum." },
+    { w: "李", pinyin: "lǐ", def: "(a family name); plum",
+      parts: "木 tree + 子 child",
+      mnem: "A <b>tree</b> (木) heavy with little <b>fruit/children</b> (子) — the <b>plum</b> tree, and a very common surname." },
+    { w: "王朋", pinyin: "Wáng Péng", def: "(a personal name)",
+      parts: "王 king + 朋 friend",
+      mnem: "“Wang Peng” = the <b>king</b> (王) of <b>friends</b> (朋)." },
+    { w: "王", pinyin: "wáng", def: "(a family name); king",
+      parts: "three horizontal lines + one vertical",
+      mnem: "The <b>king</b> (王) is the vertical stroke that connects the three horizontals — heaven, humanity and earth." },
+
+    { group: "Lesson 1 · Dialogue 2 — Greetings" },
+    { w: "是", pinyin: "shì", def: "to be",
+      parts: "日 sun + 正 correct",
+      mnem: "Under the <b>sun</b> (日), what is <b>correct/upright</b> (正) — that's how it <b>is</b>." },
+    { w: "老师", pinyin: "lǎoshī", def: "teacher",
+      parts: "老 old + 师 master",
+      mnem: "An <b>old</b> (老) <b>master</b> (师) — your <b>teacher</b>." },
+    { w: "吗", pinyin: "ma", def: "(question particle)",
+      parts: "口 mouth + 马 (≈ <b>mǎ</b>, sound)",
+      mnem: "A <b>mouth</b> (口) beside a <b>horse</b> (马, “ma”) — turns any sentence into a yes/no question." },
+    { w: "不", pinyin: "bù", def: "not, no",
+      parts: "whole-character image",
+      mnem: "A bird flying up that hits a ceiling — it can <b>not</b> go any higher." },
+    { w: "学生", pinyin: "xuésheng", def: "student",
+      parts: "学 study + 生 born/grow",
+      mnem: "<b>Study</b> (学) + <b>grow</b> (生) = a <b>student</b>. 学 shows a child under a roof gathering knowledge." },
+    { w: "也", pinyin: "yě", def: "too, also",
+      parts: "whole-character image",
+      mnem: "A little curling tail you add to a sentence: “me <b>too</b>.”" },
+    { w: "人", pinyin: "rén", def: "person, people",
+      parts: "pictograph",
+      mnem: "Two legs mid-stride — a walking <b>person</b>." },
+    { w: "中国", pinyin: "Zhōngguó", def: "China",
+      parts: "中 middle + 国 country",
+      mnem: "The <b>Middle</b> (中, a line through the center of a box) <b>Kingdom</b> (国, jade/king 玉 inside walls 囗) — <b>China</b>." },
+    { w: "北京", pinyin: "Běijīng", def: "Beijing",
+      parts: "北 north + 京 capital",
+      mnem: "The <b>Northern</b> (北 — two people back-to-back; north is at your back) <b>Capital</b> (京)." },
+    { w: "美国", pinyin: "Měiguó", def: "America",
+      parts: "美 beautiful + 国 country",
+      mnem: "The “<b>Beautiful</b> (美) <b>Country</b> (国)” — China's name for America. 美 = a <b>big</b> (大) <b>sheep</b> (羊) = beautiful/delicious." },
+    { w: "纽约", pinyin: "Niǔyuē", def: "New York",
+      parts: "sound transcription (纟silk + …)",
+      mnem: "Just sound it out: “<b>Niǔ-yuē</b>” ≈ “New York.” The 纟(silk) on both halves is decoration." },
+
+    { group: "Lesson 2 · Dialogue 1 — Family" },
+    { w: "那", pinyin: "nà", def: "that",
+      parts: "… + 阝 (city, right)",
+      mnem: "<b>That</b> one — over <i>there</i>, off by the <b>city</b> (阝) on the right." },
+    { w: "的", pinyin: "de", def: "(possessive particle)",
+      parts: "白 white + 勺 spoon",
+      mnem: "A <b>white</b> (白) <b>spoon</b> (勺): the single most common character in Chinese — the “'s” that links owner to thing." },
+    { w: "照片", pinyin: "zhàopiàn", def: "picture, photo",
+      parts: "照 shine (灬 fire/light) + 片 slice/card",
+      mnem: "Light <b>shines</b> (照, note the four fire-dots 灬) onto a flat <b>card</b> (片) — a <b>photo</b>." },
+    { w: "这", pinyin: "zhè", def: "this",
+      parts: "辶 walk + 文",
+      mnem: "<b>Walk</b> (辶) right up and point: “<b>this</b> one, here.”" },
+    { w: "爸爸", pinyin: "bàba", def: "father, dad",
+      parts: "父 father + 巴 (≈ <b>bā</b>, sound)",
+      mnem: "<b>Father</b> (父) on top, 巴 (“ba”) below — <b>dad</b>." },
+    { w: "妈妈", pinyin: "māma", def: "mother, mom",
+      parts: "女 woman + 马 (≈ <b>mǎ</b>, sound)",
+      mnem: "A <b>woman</b> (女) who works like a <b>horse</b> (马, “ma”) for the family — <b>mom</b>." },
+    { w: "个", pinyin: "gè / ge", def: "(general measure word)",
+      parts: "人 person + 丨",
+      mnem: "The all-purpose counter. Picture a little <b>person</b> (人) ticking off items one by one." },
+    { w: "女", pinyin: "nǚ", def: "female",
+      parts: "pictograph",
+      mnem: "A figure seated with legs crossed and arms folded — the classic sign for <b>woman/female</b>." },
+    { w: "孩子", pinyin: "háizi", def: "child",
+      parts: "孩 (子 child + 亥) + 子 child",
+      mnem: "Two <b>child</b> radicals (子, a baby with arms out in swaddling) — a <b>kid</b>." },
+    { w: "谁", pinyin: "shéi", def: "who",
+      parts: "讠 speech + 隹 short-tailed bird",
+      mnem: "You <b>speak</b> (讠) toward a <b>bird</b> (隹) in the bushes: “<b>Who's</b> there?”" },
+    { w: "她", pinyin: "tā", def: "she, her",
+      parts: "女 woman + 也 also (≈ sound)",
+      mnem: "Take “he” and swap in the <b>woman</b> radical (女) — now it's <b>she</b>. 也 keeps the “ta” sound." },
+    { w: "姐姐", pinyin: "jiějie", def: "older sister",
+      parts: "女 woman + 且",
+      mnem: "A <b>woman</b> (女) you place above you (且, “moreover/on top”) — your <b>older sister</b>." },
+    { w: "男", pinyin: "nán", def: "male",
+      parts: "田 field + 力 strength",
+      mnem: "The one who puts his <b>strength</b> (力) into the <b>field</b> (田) — <b>male</b>." },
+    { w: "弟弟", pinyin: "dìdi", def: "younger brother",
+      parts: "image of cord wound on a stake",
+      mnem: "A string wound in order down a post — the <b>younger</b> one, lower in the sequence: <b>little brother</b>." },
+    { w: "他", pinyin: "tā", def: "he, him",
+      parts: "亻 person + 也 also (≈ sound)",
+      mnem: "A <b>person</b> (亻) plus 也 (“ta”) — the default <b>he/him</b>." },
+    { w: "大哥", pinyin: "dàgē", def: "eldest brother",
+      parts: "大 big + 哥 brother",
+      mnem: "The “<b>big</b> (大) <b>brother</b> (哥)” — the eldest." },
+    { w: "儿子", pinyin: "érzi", def: "son",
+      parts: "儿 child/legs + 子 child",
+      mnem: "<b>儿</b> is a pair of little walking legs, <b>子</b> is a child — together, a <b>son</b>." },
+    { w: "有", pinyin: "yǒu", def: "to have, to exist",
+      parts: "𠂇 hand + 月 (meat)",
+      mnem: "A <b>hand</b> (𠂇) clutching a piece of <b>meat</b> (月) — you've <b>got</b> something." },
+    { w: "女儿", pinyin: "nǚ'ér", def: "daughter",
+      parts: "女 female + 儿 child",
+      mnem: "A <b>female</b> (女) <b>child</b> (儿) — a <b>daughter</b>." },
+    { w: "没", pinyin: "méi", def: "not have",
+      parts: "氵 water + 殳",
+      mnem: "Something sinking under the <b>water</b> (氵) until it's gone — you have <b>not</b>." },
+    { w: "高文中", pinyin: "Gāo Wénzhōng", def: "(a personal name)",
+      parts: "高 tall + 文 culture + 中 middle",
+      mnem: "“Gao Wenzhong” — <b>Tall</b> (高), <b>cultured</b> (文), <b>centered</b> (中)." },
+    { w: "高", pinyin: "gāo", def: "(a family name); tall, high",
+      parts: "pictograph of a tower",
+      mnem: "A tall watchtower with a roof and a gate — <b>tall, high</b>." },
+
+    { group: "Lesson 2 · Dialogue 2 — Family" },
+    { w: "家", pinyin: "jiā", def: "family, home",
+      parts: "宀 roof + 豕 pig",
+      mnem: "Under your <b>roof</b> (宀) you keep a <b>pig</b> (豕) — in old China, a house with a pig was a real <b>home</b>." },
+    { w: "几", pinyin: "jǐ", def: "how many; a few",
+      parts: "image of a small table",
+      mnem: "A little stool/table — count the legs: “<b>how many</b>?”" },
+    { w: "口", pinyin: "kǒu", def: "(measure word for family members); mouth",
+      parts: "pictograph",
+      mnem: "An open square = a <b>mouth</b>. Families are counted by mouths to feed." },
+    { w: "哥哥", pinyin: "gēge", def: "older brother",
+      parts: "可 + 可 (two stacked)",
+      mnem: "Two “can-do” (可) blocks stacked up — the capable, reliable <b>older brother</b>." },
+    { w: "两", pinyin: "liǎng", def: "two, a couple",
+      parts: "contains two 人",
+      mnem: "Look inside — there are <b>two</b> little people (人) standing side by side: a pair." },
+    { w: "妹妹", pinyin: "mèimei", def: "younger sister",
+      parts: "女 woman + 未 (≈ <b>wèi</b>, not-yet)",
+      mnem: "A <b>female</b> (女) who is “<b>not yet</b>” (未) grown up — your <b>little sister</b>. 未 also hints the sound." },
+    { w: "和", pinyin: "hé", def: "and",
+      parts: "禾 grain + 口 mouth",
+      mnem: "<b>Grain</b> (禾) going into every <b>mouth</b> (口) — everyone fed and in harmony, joined together: “<b>and</b>.”" },
+    { w: "大姐", pinyin: "dàjiě", def: "eldest sister",
+      parts: "大 big + 姐 sister",
+      mnem: "The “<b>big</b> (大) <b>sister</b> (姐)” — eldest." },
+    { w: "二姐", pinyin: "èrjiě", def: "second oldest sister",
+      parts: "二 two + 姐 sister",
+      mnem: "The “number-<b>two</b> (二) <b>sister</b> (姐)” — second oldest." },
+    { w: "做", pinyin: "zuò", def: "to do, to make",
+      parts: "亻 person + 故 (act/reason)",
+      mnem: "A <b>person</b> (亻) taking action for a reason — to <b>do/make</b>." },
+    { w: "工作", pinyin: "gōngzuò", def: "job; to work",
+      parts: "工 labor (a tool) + 作 (亻 person + make)",
+      mnem: "<b>工</b> is a carpenter's ruler (labor itself); <b>作</b> is a person making things — together, <b>work</b>." },
+    { w: "律师", pinyin: "lǜshī", def: "lawyer",
+      parts: "律 law + 师 master",
+      mnem: "A <b>master</b> (师) of the <b>law</b> (律) — a <b>lawyer</b>." },
+    { w: "英文", pinyin: "Yīngwén", def: "the English language",
+      parts: "英 (England/hero) + 文 writing",
+      mnem: "The <b>writing</b> (文) of 英 (英国, England) — <b>English</b>." },
+    { w: "都", pinyin: "dōu", def: "both, all",
+      parts: "者 + 阝 city",
+      mnem: "A whole <b>city</b> (阝) of people, every one of them — “<b>all</b>, both.”" },
+    { w: "大学生", pinyin: "dàxuéshēng", def: "college student",
+      parts: "大学 university + 生 student",
+      mnem: "A “<b>big-study</b> (大学) <b>student</b> (生)” — a college student." },
+    { w: "大学", pinyin: "dàxué", def: "university, college",
+      parts: "大 big + 学 study",
+      mnem: "“<b>Big study</b>” (大 + 学) — <b>university</b>." },
+    { w: "医生", pinyin: "yīshēng", def: "doctor, physician",
+      parts: "医 medicine + 生 person",
+      mnem: "<b>医</b> is a box holding arrows/tools (the cure); add a <b>person</b> (生) — the <b>doctor</b>." },
+    { w: "白英爱", pinyin: "Bái Yīng'ài", def: "(a personal name)",
+      parts: "白 white + 英 brave + 爱 love",
+      mnem: "“Bai Ying'ai” — <b>White</b> (白), <b>brave</b> (英), <b>loving</b> (爱)." },
+  ];
+
+  // ----- Render -----
+  const root = document.getElementById("content");
+  DATA.forEach(item => {
+    if (item.group) {
+      const h = document.createElement("h2");
+      h.textContent = item.group;
+      root.appendChild(h);
+      return;
+    }
+    const row = document.createElement("div");
+    row.className = "row";
+    row.innerHTML =
+      `<div class="glyph"><div class="zh">${item.w}</div><div class="py">${item.pinyin}</div></div>` +
+      `<div class="body">` +
+        `<p class="def">${item.def}</p>` +
+        `<p class="parts">${item.parts}</p>` +
+        `<p class="mnem">${item.mnem}</p>` +
+      `</div>`;
+    root.appendChild(row);
+  });
+</script>
+</body>
+</html>
