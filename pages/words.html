@@ -235,7 +235,8 @@
     <div id="audioSection">
       <p class="label">Audio</p>
       <div class="toggle" id="audioToggle">
-        <button class="opt sel" data-audio="on">🔊 Auto-play</button>
+        <button class="opt sel" data-audio="tts">🔊 TTS</button>
+        <button class="opt" data-audio="mp3">🎵 MP3</button>
         <button class="opt" data-audio="off">Off</button>
       </div>
     </div>
@@ -261,6 +262,7 @@
         <div class="speak-row" id="speakRow">
           <button class="speak" id="speakBtn" type="button" title="Replay (R)">🔊 Play</button>
           <button class="speak" id="speakSlowBtn" type="button" title="Read slowly (S)">🐢 Slow</button>
+          <button class="speak" id="speakMp3Btn" type="button" title="Play native audio (M)">🎵 MP3</button>
         </div>
       </div>
       <p class="hint" id="hint">Tap card or press Space to reveal</p>
@@ -1066,7 +1068,7 @@
   let selectedLesson = 1;        // lesson number 1–10, or "ALL"
   let selectedDialogue = 1;      // 1, 2, or "BOTH"
   let order = "shuffle";
-  let autoPlay = true;
+  let autoPlay = "tts";
   let queue = [];        // remaining cards this session
   let totalThisRound = 0;
   let cleared = 0;
@@ -1102,6 +1104,26 @@
     return { supported: !!synth, speak };
   })();
 
+  // ----- Pronunciation: MP3 files -----
+  const Mp3Audio = (() => {
+    const BASE = "/audio/words/";
+    let current = null;
+    function play(word, btn) {
+      if (current) { current.pause(); current = null; }
+      const a = new Audio(BASE + encodeURIComponent(word) + ".mp3");
+      if (btn) {
+        a.onplay  = () => btn.classList.add("playing");
+        const done = () => { btn.classList.remove("playing"); if (current === a) current = null; };
+        a.onended = done;
+        a.onerror = done;
+      }
+      current = a;
+      a.play().catch(() => { if (btn) btn.classList.remove("playing"); current = null; });
+    }
+    function stop() { if (current) { current.pause(); current = null; } }
+    return { play, stop };
+  })();
+
   // ----- Elements -----
   const screens = {
     start: document.getElementById("start"),
@@ -1117,6 +1139,7 @@
     audioSection:document.getElementById("audioSection"),
     speakBtn:   document.getElementById("speakBtn"),
     speakSlowBtn:document.getElementById("speakSlowBtn"),
+    speakMp3Btn: document.getElementById("speakMp3Btn"),
     speakRow:   document.getElementById("speakRow"),
     startBtn:   document.getElementById("startBtn"),
     progress:   document.getElementById("progress"),
@@ -1202,7 +1225,7 @@
   el.audioToggle.addEventListener("click", e => {
     const b = e.target.closest(".opt");
     if (!b) return;
-    autoPlay = b.dataset.audio === "on";
+    autoPlay = b.dataset.audio;
     [...el.audioToggle.children].forEach(c => c.classList.toggle("sel", c === b));
   });
 
@@ -1247,6 +1270,8 @@
     el.mnemonic.innerHTML = c.mnem || "";
     el.speakBtn.classList.remove("playing");
     el.speakSlowBtn.classList.remove("playing");
+    el.speakMp3Btn.classList.remove("playing");
+    Mp3Audio.stop();
 
     el.answer.classList.remove("show");
     el.actions.classList.remove("show");
@@ -1266,7 +1291,8 @@
     el.actions.classList.add("show");
     el.revealRow.style.display = "none";
     el.hint.style.display = "none";
-    if (autoPlay) Speech.speak(currentZh, el.speakBtn);
+    if (autoPlay === "tts") Speech.speak(currentZh, el.speakBtn);
+    else if (autoPlay === "mp3") Mp3Audio.play(currentZh, el.speakMp3Btn);
   }
 
   function gotIt() {
@@ -1302,6 +1328,10 @@
     e.stopPropagation();
     Speech.speak(currentZh, el.speakSlowBtn, SLOW_RATE);
   });
+  el.speakMp3Btn.addEventListener("click", e => {
+    e.stopPropagation();
+    Mp3Audio.play(currentZh, el.speakMp3Btn);
+  });
 
   document.addEventListener("keydown", e => {
     if (!screens.study.classList.contains("active")) return;
@@ -1309,15 +1339,17 @@
     if (!revealed) return;
     if (e.key === "r" || e.key === "R") { e.preventDefault(); Speech.speak(currentZh, el.speakBtn); return; }
     if (e.key === "s" || e.key === "S") { e.preventDefault(); Speech.speak(currentZh, el.speakSlowBtn, SLOW_RATE); return; }
+    if (e.key === "m" || e.key === "M") { e.preventDefault(); Mp3Audio.play(currentZh, el.speakMp3Btn); return; }
     if (e.key === "1" || e.key === "ArrowLeft")  { e.preventDefault(); again(); }
     if (e.key === "2" || e.key === "ArrowRight" || e.key === "Enter") { e.preventDefault(); gotIt(); }
   });
 
   // ----- Init -----
-  if (!Speech.supported) {           // very old browsers: hide audio UI
+  if (!Speech.supported) {           // very old browsers: hide TTS UI but keep MP3 button
     el.audioSection.hidden = true;
-    el.speakRow.hidden = true;
-    autoPlay = false;
+    el.speakBtn.hidden = true;
+    el.speakSlowBtn.hidden = true;
+    autoPlay = "off";
   }
 </script>
 </body>
