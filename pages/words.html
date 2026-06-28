@@ -213,12 +213,12 @@
   <!-- START -->
   <section id="start" class="screen active">
     <h1>Word Trainer</h1>
-    <p class="sub">Learn Chinese words — flashcard style. (Integrated Chinese, Lessons 1–20)</p>
+    <p class="sub">Learn Chinese words — flashcard style. (Integrated Chinese Lessons 1–20, plus Food &amp; Common Verbs)</p>
 
     <p class="label">Lesson</p>
     <select class="sel-input" id="lessonSel"></select>
 
-    <p class="label">Dialogue</p>
+    <p class="label" id="dialogueLabel">Dialogue</p>
     <div class="toggle" id="dialogueToggle">
       <button class="opt sel" data-dia="1">Dialogue 1</button>
       <button class="opt" data-dia="2">Dialogue 2</button>
@@ -333,6 +333,13 @@
     { num: 18, theme: "Sports" },
     { num: 19, theme: "Travel" },
     { num: 20, theme: "At the Airport" },
+  ];
+
+  // ----- Topic lessons (standalone themes, not from Integrated Chinese) -----
+  // These have no dialogues; their words carry lesson: "<id>" (e.g. "FOOD").
+  const TOPICS = [
+    { id: "FOOD",  theme: "Food & Drink" },
+    { id: "VERBS", theme: "Common Verbs" },
   ];
 
   // ----- Data: vocabulary (Integrated Chinese, Level 1, Lessons 1–20) -----
@@ -1062,6 +1069,127 @@
     { w: "拿",     pinyin: "ná",          pos: "v",      def: "to carry; to take",                                                mnem: "<b>Joining</b> (合) it into your <b>hand</b> (手) — to <b>take, carry</b>.", parts: "合 join + 手 hand", lesson: "L20D2" },
     { w: "累坏",   pinyin: "lèihuài",     pos: "vc",     def: "to become exhausted",                                              mnem: "<b>Tired</b> (累) to the point of <b>broken</b> (坏) — utterly <b>exhausted</b>.", parts: "累 tired + 坏 broken", lesson: "L20D2" },
     { w: "不得了", pinyin: "bùdéliǎo",    pos: "",       def: "extremely; exceedingly",                                           mnem: "So much you <b>can't finish</b> (不得了) dealing with it — “<b>extremely</b>, terribly.”", parts: "不得 cannot + 了", lesson: "L20D2" },
+
+    // ===== Topic: Food & Drink (not from Integrated Chinese) =====
+    // --- Vegetables ---
+    { w: "蔬菜",   pinyin: "shūcài",      pos: "n",      def: "vegetables",                  mnem: "The <b>grass/plant</b> radical (艹) caps both halves — leafy <b>vegetables</b>.", parts: "艹 grass + 疏 + 采", lesson: "FOOD" },
+    { w: "青菜",   pinyin: "qīngcài",     pos: "n",      def: "green vegetables, bok choy",  mnem: "<b>Green</b> (青) + <b>vegetable</b> (菜) = leafy <b>greens</b>.", parts: "青 green + 菜 vegetable", lesson: "FOOD" },
+    { w: "白菜",   pinyin: "báicài",      pos: "n",      def: "Chinese cabbage, bok choy",   mnem: "<b>White</b> (白) <b>vegetable</b> (菜) — Chinese <b>cabbage</b>.", parts: "白 white + 菜 vegetable", lesson: "FOOD" },
+    { w: "菠菜",   pinyin: "bōcài",       pos: "n",      def: "spinach",                     mnem: "The 'bō' <b>vegetable</b> (菜) — <b>spinach</b>.", parts: "艹 grass + 波 (≈ <b>bō</b>, sound) + 菜", lesson: "FOOD" },
+    { w: "西红柿", pinyin: "xīhóngshì",   pos: "n",      def: "tomato",                      mnem: "A <b>western</b> (西) <b>red</b> (红) persimmon (柿) — the <b>tomato</b>.", parts: "西 west + 红 red + 柿 persimmon", lesson: "FOOD" },
+    { w: "黄瓜",   pinyin: "huángguā",    pos: "n",      def: "cucumber",                    mnem: "A <b>yellow</b> (黄) <b>melon</b> (瓜) — the <b>cucumber</b>.", parts: "黄 yellow + 瓜 melon", lesson: "FOOD" },
+    { w: "茄子",   pinyin: "qiézi",       pos: "n",      def: "eggplant, aubergine",         mnem: "Under the <b>grass</b> (艹) grows the <b>eggplant</b> — also what you say for 'cheese!' in photos.", parts: "艹 grass + 加 (≈ sound) + 子", lesson: "FOOD" },
+    { w: "土豆",   pinyin: "tǔdòu",       pos: "n",      def: "potato",                      mnem: "An <b>earth</b> (土) <b>bean</b> (豆) dug from the ground — the <b>potato</b>.", parts: "土 earth + 豆 bean", lesson: "FOOD" },
+    { w: "萝卜",   pinyin: "luóbo",       pos: "n",      def: "radish, daikon",              mnem: "The white <b>radish</b> — grass-capped (艹) root vegetable.", parts: "艹 grass + 罗 (sound) + 卜", lesson: "FOOD" },
+    { w: "胡萝卜", pinyin: "húluóbo",     pos: "n",      def: "carrot",                      mnem: "The 'foreign' (胡, from abroad) <b>radish</b> (萝卜) — the orange <b>carrot</b>.", parts: "胡 foreign + 萝卜 radish", lesson: "FOOD" },
+    { w: "洋葱",   pinyin: "yángcōng",    pos: "n",      def: "onion",                       mnem: "The <b>foreign/ocean</b> (洋) <b>scallion</b> (葱) — the round <b>onion</b>.", parts: "洋 ocean/foreign + 葱 scallion", lesson: "FOOD" },
+    { w: "大蒜",   pinyin: "dàsuàn",      pos: "n",      def: "garlic",                      mnem: "The <b>big</b> (大) pungent bulb — <b>garlic</b>.", parts: "大 big + 蒜 garlic", lesson: "FOOD" },
+    { w: "辣椒",   pinyin: "làjiāo",      pos: "n",      def: "chili pepper",                mnem: "<b>Spicy</b> (辣) pepper (椒) — the <b>chili</b>.", parts: "辣 spicy + 椒 pepper", lesson: "FOOD" },
+    { w: "蘑菇",   pinyin: "mógu",        pos: "n",      def: "mushroom",                    mnem: "Both halves wear the <b>grass</b> cap (艹) — the <b>mushroom</b>.", parts: "艹 grass + 磨/姑 (sound)", lesson: "FOOD" },
+    { w: "豆腐",   pinyin: "dòufu",       pos: "n",      def: "tofu, bean curd",             mnem: "<b>Bean</b> (豆) that's been curdled/'fermented' (腐) — <b>tofu</b>.", parts: "豆 bean + 腐 ferment", lesson: "FOOD" },
+    { w: "玉米",   pinyin: "yùmǐ",        pos: "n",      def: "corn, maize",                 mnem: "<b>Jade</b> (玉) <b>grain</b> (米) — golden kernels of <b>corn</b>.", parts: "玉 jade + 米 grain", lesson: "FOOD" },
+    { w: "生菜",   pinyin: "shēngcài",    pos: "n",      def: "lettuce",                     mnem: "<b>Raw</b> (生) <b>vegetable</b> (菜) eaten uncooked — <b>lettuce</b>.", parts: "生 raw + 菜 vegetable", lesson: "FOOD" },
+    { w: "沙拉",   pinyin: "shālā",       pos: "n",      def: "salad",                       mnem: "Sound it out: 'shā-lā' ≈ <b>salad</b>.", parts: "sound transcription", lesson: "FOOD" },
+    // --- Fruit ---
+    { w: "水果",   pinyin: "shuǐguǒ",     pos: "n",      def: "fruit",                       mnem: "<b>Water</b>-rich (水) <b>fruit</b> (果) — <b>fruit</b>.", parts: "水 water + 果 fruit", lesson: "FOOD" },
+    { w: "苹果",   pinyin: "píngguǒ",     pos: "n",      def: "apple",                       mnem: "The 'píng' <b>fruit</b> (果) — the <b>apple</b>.", parts: "艹 grass + 平 (≈ <b>píng</b>) + 果 fruit", lesson: "FOOD" },
+    { w: "香蕉",   pinyin: "xiāngjiāo",   pos: "n",      def: "banana",                      mnem: "<b>Fragrant</b> (香) banana-plant (蕉) — the <b>banana</b>.", parts: "香 fragrant + 蕉 banana plant", lesson: "FOOD" },
+    { w: "橙子",   pinyin: "chéngzi",     pos: "n",      def: "orange",                      mnem: "The <b>orange</b> fruit, named for its color (橙).", parts: "木 tree + 登 (sound) + 子", lesson: "FOOD" },
+    { w: "葡萄",   pinyin: "pútáo",       pos: "n",      def: "grape",                       mnem: "Two grass-capped (艹) characters that only ever appear together — <b>grapes</b>.", parts: "艹 grass + 葡 + 萄", lesson: "FOOD" },
+    { w: "西瓜",   pinyin: "xīguā",       pos: "n",      def: "watermelon",                  mnem: "The <b>western</b> (西) <b>melon</b> (瓜) — the <b>watermelon</b>.", parts: "西 west + 瓜 melon", lesson: "FOOD" },
+    { w: "草莓",   pinyin: "cǎoméi",      pos: "n",      def: "strawberry",                  mnem: "A <b>grass/ground</b> (草) berry (莓) — the <b>strawberry</b>.", parts: "草 grass + 莓 berry", lesson: "FOOD" },
+    { w: "梨",     pinyin: "lí",          pos: "n",      def: "pear",                        mnem: "A <b>tree</b> (木) fruit — the <b>pear</b>.", parts: "利 (sound) + 木 tree", lesson: "FOOD" },
+    { w: "桃子",   pinyin: "táozi",       pos: "n",      def: "peach",                       mnem: "A <b>tree</b> (木) fruit with fuzzy skin — the <b>peach</b>.", parts: "木 tree + 兆 (sound) + 子", lesson: "FOOD" },
+    // --- Meat, fish & eggs ---
+    { w: "肉",     pinyin: "ròu",         pos: "n",      def: "meat",                        mnem: "A pictograph of a slab of <b>meat</b> with its marbling lines.", parts: "pictograph", lesson: "FOOD" },
+    { w: "牛肉",   pinyin: "niúròu",      pos: "n",      def: "beef",                        mnem: "<b>Cow</b> (牛) <b>meat</b> (肉) — <b>beef</b>.", parts: "牛 cow + 肉 meat", lesson: "FOOD" },
+    { w: "猪肉",   pinyin: "zhūròu",      pos: "n",      def: "pork",                        mnem: "<b>Pig</b> (猪) <b>meat</b> (肉) — <b>pork</b>.", parts: "猪 pig + 肉 meat", lesson: "FOOD" },
+    { w: "鸡肉",   pinyin: "jīròu",       pos: "n",      def: "chicken (meat)",              mnem: "<b>Chicken</b> (鸡) <b>meat</b> (肉) — <b>chicken</b>.", parts: "鸡 chicken + 肉 meat", lesson: "FOOD" },
+    { w: "羊肉",   pinyin: "yángròu",     pos: "n",      def: "lamb, mutton",                mnem: "<b>Sheep</b> (羊) <b>meat</b> (肉) — <b>lamb/mutton</b>.", parts: "羊 sheep + 肉 meat", lesson: "FOOD" },
+    { w: "鸡蛋",   pinyin: "jīdàn",       pos: "n",      def: "egg",                         mnem: "<b>Chicken</b> (鸡) <b>egg</b> (蛋) — an <b>egg</b>.", parts: "鸡 chicken + 蛋 egg", lesson: "FOOD" },
+    { w: "鱼",     pinyin: "yú",          pos: "n",      def: "fish",                        mnem: "A pictograph of a <b>fish</b> — head, body and tail.", parts: "pictograph", lesson: "FOOD" },
+    { w: "虾",     pinyin: "xiā",         pos: "n",      def: "shrimp, prawn",               mnem: "The <b>critter</b> radical (虫) down (下) by the water — a <b>shrimp</b>.", parts: "虫 critter + 下 (≈ sound)", lesson: "FOOD" },
+    { w: "海鲜",   pinyin: "hǎixiān",     pos: "n",      def: "seafood",                     mnem: "<b>Sea</b> (海) <b>fresh</b> (鲜, note the 鱼 fish) — <b>seafood</b>.", parts: "海 sea + 鲜 fresh (鱼 fish)", lesson: "FOOD" },
+    // --- Staples & bread ---
+    { w: "米饭",   pinyin: "mǐfàn",       pos: "n",      def: "cooked rice",                 mnem: "<b>Grain</b> (米) cooked into a meal (饭) — a bowl of <b>rice</b>.", parts: "米 rice + 饭 cooked meal", lesson: "FOOD" },
+    { w: "面条",   pinyin: "miàntiáo",    pos: "n",      def: "noodles",                     mnem: "<b>Flour</b> (面) in long <b>strips</b> (条) — <b>noodles</b>.", parts: "面 flour + 条 strip", lesson: "FOOD" },
+    { w: "面包",   pinyin: "miànbāo",     pos: "n",      def: "bread",                       mnem: "<b>Flour</b> (面) <b>wrapped/baked</b> (包) — <b>bread</b>.", parts: "面 flour + 包 wrap", lesson: "FOOD" },
+    { w: "馒头",   pinyin: "mántou",      pos: "n",      def: "steamed bun (plain)",         mnem: "The <b>food</b> radical (饣) — a plain steamed <b>bun</b>.", parts: "饣 food + 曼 + 头", lesson: "FOOD" },
+    { w: "包子",   pinyin: "bāozi",       pos: "n",      def: "steamed stuffed bun",         mnem: "A <b>wrapped</b> (包) parcel of dough — a stuffed <b>bun</b>.", parts: "包 wrap + 子", lesson: "FOOD" },
+    { w: "饺子",   pinyin: "jiǎozi",      pos: "n",      def: "dumpling",                    mnem: "The <b>food</b> radical (饣) folded shut — a <b>dumpling</b>.", parts: "饣 food + 交 (≈ sound) + 子", lesson: "FOOD" },
+    { w: "汤",     pinyin: "tāng",        pos: "n",      def: "soup",                        mnem: "Hot <b>water</b> (氵) over a fire — <b>soup</b>.", parts: "氵 water + 昜", lesson: "FOOD" },
+    { w: "粥",     pinyin: "zhōu",        pos: "n",      def: "congee, rice porridge",       mnem: "<b>Rice</b> (米) boiled soft between two bows of steam — <b>congee</b>.", parts: "米 rice flanked by 弓", lesson: "FOOD" },
+    // --- Dairy & drinks ---
+    { w: "牛奶",   pinyin: "niúnǎi",      pos: "n",      def: "milk",                        mnem: "<b>Cow</b> (牛) plus the <b>milk</b> character (奶) — <b>milk</b>.", parts: "牛 cow + 奶 milk", lesson: "FOOD" },
+    { w: "奶酪",   pinyin: "nǎilào",      pos: "n",      def: "cheese",                      mnem: "<b>Milk</b> (奶) turned solid/curd (酪) — <b>cheese</b>.", parts: "奶 milk + 酪 curd", lesson: "FOOD" },
+    { w: "黄油",   pinyin: "huángyóu",    pos: "n",      def: "butter",                      mnem: "<b>Yellow</b> (黄) <b>oil/fat</b> (油) — <b>butter</b>.", parts: "黄 yellow + 油 oil", lesson: "FOOD" },
+    { w: "水",     pinyin: "shuǐ",        pos: "n",      def: "water",                       mnem: "A pictograph of flowing <b>water</b>.", parts: "pictograph", lesson: "FOOD" },
+    { w: "茶",     pinyin: "chá",         pos: "n",      def: "tea",                         mnem: "Leaves (艹) of a <b>tree</b> (木) steeped by a person — <b>tea</b>.", parts: "艹 grass + 人 + 木 tree", lesson: "FOOD" },
+    { w: "咖啡",   pinyin: "kāfēi",       pos: "n",      def: "coffee",                      mnem: "Both halves carry the <b>mouth</b> radical (口) for the foreign sound 'kā-fēi' ≈ <b>coffee</b>.", parts: "口 mouth + sound", lesson: "FOOD" },
+    { w: "果汁",   pinyin: "guǒzhī",      pos: "n",      def: "juice",                       mnem: "<b>Fruit</b> (果) <b>liquid</b> (汁) — <b>juice</b>.", parts: "果 fruit + 汁 (氵 water) juice", lesson: "FOOD" },
+    // --- Seasonings ---
+    { w: "盐",     pinyin: "yán",         pos: "n",      def: "salt",                        mnem: "Brine (卤) drawn into a dish (皿) — <b>salt</b>.", parts: "卤 brine + 皿 dish", lesson: "FOOD" },
+    { w: "糖",     pinyin: "táng",        pos: "n",      def: "sugar, candy",                mnem: "<b>Grain</b> (米) refined sweet — <b>sugar</b>.", parts: "米 rice + 唐 (sound)", lesson: "FOOD" },
+    { w: "油",     pinyin: "yóu",         pos: "n",      def: "oil",                         mnem: "A <b>water</b>-like liquid (氵) pressed from seeds — <b>oil</b>.", parts: "氵 water + 由 (≈ sound)", lesson: "FOOD" },
+    { w: "酱油",   pinyin: "jiàngyóu",    pos: "n",      def: "soy sauce",                   mnem: "<b>Sauce</b> (酱) <b>liquid</b> (油) — <b>soy sauce</b>.", parts: "酱 sauce + 油 liquid", lesson: "FOOD" },
+    { w: "醋",     pinyin: "cù",          pos: "n",      def: "vinegar",                     mnem: "The <b>wine/ferment</b> jar (酉) gone sour — <b>vinegar</b>.", parts: "酉 wine jar + 昔", lesson: "FOOD" },
+
+    // ===== Topic: Common Verbs (not from Integrated Chinese) =====
+    { w: "吃",     pinyin: "chī",         pos: "v",      def: "to eat",                      mnem: "A <b>mouth</b> (口) begging (乞) for food — to <b>eat</b>.", parts: "口 mouth + 乞 beg", lesson: "VERBS" },
+    { w: "喝",     pinyin: "hē",          pos: "v",      def: "to drink",                    mnem: "Open the <b>mouth</b> (口) wide to <b>drink</b>.", parts: "口 mouth + 曷 (sound)", lesson: "VERBS" },
+    { w: "看",     pinyin: "kàn",         pos: "v",      def: "to look, watch, read",        mnem: "A <b>hand</b> (手) shading the <b>eye</b> (目) to <b>look</b> into the distance.", parts: "手 hand + 目 eye", lesson: "VERBS" },
+    { w: "听",     pinyin: "tīng",        pos: "v",      def: "to listen, hear",             mnem: "Tilt the <b>mouth/ear</b> (口) toward the sound — to <b>listen</b>.", parts: "口 mouth + 斤 (sound)", lesson: "VERBS" },
+    { w: "说",     pinyin: "shuō",        pos: "v",      def: "to speak, say",               mnem: "<b>Speech</b> (讠) coming out — to <b>speak/say</b>.", parts: "讠 speech + 兑", lesson: "VERBS" },
+    { w: "读",     pinyin: "dú",          pos: "v",      def: "to read",                     mnem: "Use <b>speech</b> (讠) to sound out words — to <b>read</b> aloud.", parts: "讠 speech + 卖 (sound)", lesson: "VERBS" },
+    { w: "写",     pinyin: "xiě",         pos: "v",      def: "to write",                    mnem: "Under a <b>roof</b> (宀) you set marks on paper — to <b>write</b>.", parts: "宀 roof + 与", lesson: "VERBS" },
+    { w: "走",     pinyin: "zǒu",         pos: "v",      def: "to walk, to go",              mnem: "A figure swinging its legs forward — to <b>walk</b>.", parts: "pictograph of striding", lesson: "VERBS" },
+    { w: "跑",     pinyin: "pǎo",         pos: "v",      def: "to run",                      mnem: "The <b>foot</b> radical (足) plus 包 (sound) — to <b>run</b>.", parts: "足 foot + 包 (≈ sound)", lesson: "VERBS" },
+    { w: "跳",     pinyin: "tiào",        pos: "v",      def: "to jump",                     mnem: "<b>Foot</b> (足) springing up — to <b>jump</b>.", parts: "足 foot + 兆 (sound)", lesson: "VERBS" },
+    { w: "飞",     pinyin: "fēi",         pos: "v",      def: "to fly",                      mnem: "A bird's wings beating — to <b>fly</b>.", parts: "pictograph of wings", lesson: "VERBS" },
+    { w: "游",     pinyin: "yóu",         pos: "v",      def: "to swim; to roam",            mnem: "Moving through <b>water</b> (氵) — to <b>swim</b>.", parts: "氵 water + 斿", lesson: "VERBS" },
+    { w: "坐",     pinyin: "zuò",         pos: "v",      def: "to sit; to travel by",        mnem: "Two <b>people</b> (人人) on the <b>earth</b> (土) — to <b>sit</b>.", parts: "人人 two people + 土 earth", lesson: "VERBS" },
+    { w: "站",     pinyin: "zhàn",        pos: "v",      def: "to stand",                    mnem: "To <b>stand</b> upright (立) at a fixed spot — to <b>stand</b>; a station.", parts: "立 stand + 占", lesson: "VERBS" },
+    { w: "睡",     pinyin: "shuì",        pos: "v",      def: "to sleep",                    mnem: "The <b>eye</b> (目) drooping (垂) — to <b>sleep</b>.", parts: "目 eye + 垂 droop", lesson: "VERBS" },
+    { w: "醒",     pinyin: "xǐng",        pos: "v",      def: "to wake up; to sober up",     mnem: "Once the <b>wine</b> (酉) wears off, your <b>star</b> (星) clears — to <b>wake up</b>.", parts: "酉 wine + 星 (≈ sound)", lesson: "VERBS" },
+    { w: "笑",     pinyin: "xiào",        pos: "v",      def: "to laugh, smile",             mnem: "<b>Bamboo</b> (竹) bending like a face creasing up — to <b>laugh/smile</b>.", parts: "竹 bamboo + 夭", lesson: "VERBS" },
+    { w: "哭",     pinyin: "kū",          pos: "v",      def: "to cry, weep",                mnem: "Two <b>eyes</b> (口口) streaming above a 'dog' (犬) — to <b>cry</b>.", parts: "two 口 + 犬", lesson: "VERBS" },
+    { w: "想",     pinyin: "xiǎng",       pos: "v",      def: "to think; to want; to miss",  mnem: "Looking (相) with the <b>heart</b> (心) — to <b>think / want / miss</b>.", parts: "相 look + 心 heart", lesson: "VERBS" },
+    { w: "知道",   pinyin: "zhīdào",      pos: "v",      def: "to know",                     mnem: "To <b>know</b> (知) the <b>way</b> (道) — to <b>know</b>.", parts: "知 know + 道 way", lesson: "VERBS" },
+    { w: "觉得",   pinyin: "juéde",       pos: "v",      def: "to feel, to think",           mnem: "What you <b>sense</b> (觉) and <b>get</b> (得) — to <b>feel / think</b>.", parts: "觉 sense + 得 get", lesson: "VERBS" },
+    { w: "喜欢",   pinyin: "xǐhuān",      pos: "v",      def: "to like",                     mnem: "<b>Joy</b> (喜) + <b>delight</b> (欢) — to <b>like</b>.", parts: "喜 joy + 欢 delight", lesson: "VERBS" },
+    { w: "爱",     pinyin: "ài",          pos: "v",      def: "to love",                     mnem: "Wrapping someone with your whole <b>heart</b> (心, tucked inside) — to <b>love</b>.", parts: "contains 心 heart", lesson: "VERBS" },
+    { w: "学",     pinyin: "xué",         pos: "v",      def: "to study, to learn",          mnem: "A child under a roof gathering knowledge — to <b>study/learn</b>.", parts: "学 study", lesson: "VERBS" },
+    { w: "教",     pinyin: "jiāo",        pos: "v",      def: "to teach",                    mnem: "Guiding a child with a tap (攵) of the rod — to <b>teach</b>.", parts: "孝 + 攵 tap", lesson: "VERBS" },
+    { w: "做",     pinyin: "zuò",         pos: "v",      def: "to do, to make",              mnem: "A <b>person</b> (亻) putting in the effort — to <b>do / make</b>.", parts: "亻 person + 故", lesson: "VERBS" },
+    { w: "买",     pinyin: "mǎi",         pos: "v",      def: "to buy",                      mnem: "Reaching over the <b>money</b> (贝, in the full form 買) to acquire — to <b>buy</b>.", parts: "simplified of 買 (贝 money)", lesson: "VERBS" },
+    { w: "卖",     pinyin: "mài",         pos: "v",      def: "to sell",                     mnem: "<b>Buy</b> (买) with a lid on top — goods going the other way: to <b>sell</b>.", parts: "十 + 买 buy", lesson: "VERBS" },
+    { w: "给",     pinyin: "gěi",         pos: "v",      def: "to give; for (prep.)",        mnem: "<b>Silk/thread</b> (纟) handed over together (合) — to <b>give</b>.", parts: "纟 silk + 合 join", lesson: "VERBS" },
+    { w: "放",     pinyin: "fàng",        pos: "v",      def: "to put; to release; to set free", mnem: "A tap (攵) that lets something go — to <b>put / release</b>.", parts: "方 (sound) + 攵 tap", lesson: "VERBS" },
+    { w: "开",     pinyin: "kāi",         pos: "v",      def: "to open; to drive; to turn on",   mnem: "Two hands lifting the bar off a gate — to <b>open</b>.", parts: "image of hands + bar", lesson: "VERBS" },
+    { w: "关",     pinyin: "guān",        pos: "v",      def: "to close; to turn off",       mnem: "Shutting the gate (the full form 關 shows a barred gate) — to <b>close</b>.", parts: "simplified of 關 (gate)", lesson: "VERBS" },
+    { w: "找",     pinyin: "zhǎo",        pos: "v",      def: "to look for, to seek",        mnem: "A <b>hand</b> (扌) sweeping with a 'spear' (戈) — to <b>look for</b>.", parts: "扌 hand + 戈", lesson: "VERBS" },
+    { w: "等",     pinyin: "děng",        pos: "v",      def: "to wait",                     mnem: "Sit on <b>bamboo</b> (竹) at the <b>temple</b> (寺) — to <b>wait</b>.", parts: "竹 bamboo + 寺", lesson: "VERBS" },
+    { w: "帮",     pinyin: "bāng",        pos: "v",      def: "to help",                     mnem: "Lending a <b>cloth/hand</b> (巾) to your community (邦) — to <b>help</b>.", parts: "邦 + 巾 cloth", lesson: "VERBS" },
+    { w: "用",     pinyin: "yòng",        pos: "v",      def: "to use",                      mnem: "A pictograph of a bucket put to work — to <b>use</b>.", parts: "pictograph", lesson: "VERBS" },
+    { w: "玩",     pinyin: "wán",         pos: "v",      def: "to play, to have fun",        mnem: "Toying with <b>jade</b> (王/玉) trinkets — to <b>play</b>.", parts: "王 jade + 元 (sound)", lesson: "VERBS" },
+    { w: "唱",     pinyin: "chàng",       pos: "v",      def: "to sing",                     mnem: "A <b>mouth</b> (口) ringing out bright (昌) — to <b>sing</b>.", parts: "口 mouth + 昌 bright", lesson: "VERBS" },
+    { w: "跳舞",   pinyin: "tiàowǔ",      pos: "v",      def: "to dance",                    mnem: "To <b>jump</b> (跳) and <b>dance</b> (舞) — to <b>dance</b>.", parts: "跳 jump + 舞 dance", lesson: "VERBS" },
+    { w: "画",     pinyin: "huà",         pos: "v",      def: "to draw, to paint; a painting", mnem: "A hand drawing a boundary inside a frame — to <b>draw / paint</b>.", parts: "image of a brush + frame", lesson: "VERBS" },
+    { w: "洗",     pinyin: "xǐ",          pos: "v",      def: "to wash",                     mnem: "<b>Water</b> (氵) running over the feet 'first' (先) — to <b>wash</b>.", parts: "氵 water + 先 (≈ sound)", lesson: "VERBS" },
+    { w: "穿",     pinyin: "chuān",       pos: "v",      def: "to wear, to put on",          mnem: "Boring a hole (穴) with a tooth (牙) — to pass <b>through</b>, hence to <b>wear</b>.", parts: "穴 cave + 牙 tooth", lesson: "VERBS" },
+    { w: "带",     pinyin: "dài",         pos: "v",      def: "to bring, to carry; a belt",  mnem: "A sash hung with <b>cloth</b> (巾) — a belt; to <b>bring / carry</b>.", parts: "image of a belt + 巾 cloth", lesson: "VERBS" },
+    { w: "送",     pinyin: "sòng",        pos: "v",      def: "to give (a gift); to see off; to deliver", mnem: "To <b>walk</b> (辶) something over to someone — to <b>give / see off</b>.", parts: "辶 walk + 关", lesson: "VERBS" },
+    { w: "来",     pinyin: "lái",         pos: "v",      def: "to come",                     mnem: "A stalk of ripe grain beckoning — to <b>come</b>.", parts: "pictograph of wheat", lesson: "VERBS" },
+    { w: "去",     pinyin: "qù",          pos: "v",      def: "to go, to leave",             mnem: "Leaving the <b>earth</b> (土) behind — to <b>go / leave</b>.", parts: "土 earth + 厶", lesson: "VERBS" },
+    { w: "回",     pinyin: "huí",         pos: "v",      def: "to return, to go back",       mnem: "A spiral coming back to its center — to <b>return</b>.", parts: "image of a swirl", lesson: "VERBS" },
+    { w: "进",     pinyin: "jìn",         pos: "v",      def: "to enter, to advance",        mnem: "To <b>walk</b> (辶) forward — to <b>enter</b>.", parts: "辶 walk + 井 (≈ sound)", lesson: "VERBS" },
+    { w: "出",     pinyin: "chū",         pos: "v",      def: "to go out, to exit",          mnem: "A sprout pushing up out of the ground — to <b>go out / exit</b>.", parts: "pictograph of sprouting", lesson: "VERBS" },
+    { w: "拉",     pinyin: "lā",          pos: "v",      def: "to pull",                     mnem: "A <b>hand</b> (扌) drawing something to 'stand' toward you (立) — to <b>pull</b>.", parts: "扌 hand + 立 (≈ sound)", lesson: "VERBS" },
+    { w: "推",     pinyin: "tuī",         pos: "v",      def: "to push",                     mnem: "A <b>hand</b> (扌) shoving a <b>bird</b> (隹) forward — to <b>push</b>.", parts: "扌 hand + 隹 (≈ sound)", lesson: "VERBS" },
+    { w: "打",     pinyin: "dǎ",          pos: "v",      def: "to hit; to play (a sport)",   mnem: "A <b>hand</b> (扌) driving a nail (丁) — to <b>hit</b>, and the catch-all 'play'.", parts: "扌 hand + 丁 (≈ sound)", lesson: "VERBS" },
+    { w: "切",     pinyin: "qiē",         pos: "v",      def: "to cut, to slice",            mnem: "A 'seven' (七) shape meeting a <b>knife</b> (刀) — to <b>cut</b>.", parts: "七 (sound) + 刀 knife", lesson: "VERBS" },
+    { w: "煮",     pinyin: "zhǔ",         pos: "v",      def: "to boil, to cook",            mnem: "<b>Fire</b>-dots (灬) under the pot — to <b>boil / cook</b>.", parts: "者 + 灬 fire", lesson: "VERBS" },
+    { w: "炒",     pinyin: "chǎo",        pos: "v",      def: "to stir-fry",                 mnem: "<b>Fire</b> (火) tossing things till the bits (少) crisp — to <b>stir-fry</b>.", parts: "火 fire + 少 (≈ sound)", lesson: "VERBS" },
   ];
 
   // ----- State -----
@@ -1132,6 +1260,7 @@
   };
   const el = {
     lessonSel:  document.getElementById("lessonSel"),
+    dialogueLabel: document.getElementById("dialogueLabel"),
     dialogueToggle: document.getElementById("dialogueToggle"),
     rangeInfo:  document.getElementById("rangeInfo"),
     orderToggle:document.getElementById("orderToggle"),
@@ -1168,7 +1297,15 @@
     const m = /^L(\d+)D(\d+)$/.exec(id);
     return { num: +m[1], dia: +m[2] };
   }
+  // A topic lesson (Food, Verbs, …) uses a plain id rather than "L<n>D<d>".
+  function isTopicId(id) { return !/^L\d+D\d+$/.test(id); }
   function matchesSelection(w) {
+    // When a topic is selected, match only that topic and ignore dialogue.
+    if (typeof selectedLesson === "string" && selectedLesson !== "ALL") {
+      return w.lesson === selectedLesson;
+    }
+    // "All lessons" and numeric lessons cover the Integrated Chinese words only.
+    if (isTopicId(w.lesson)) return false;
     const { num, dia } = parseLesson(w.lesson);
     if (selectedLesson !== "ALL" && num !== selectedLesson) return false;
     if (selectedDialogue !== "BOTH" && dia !== selectedDialogue) return false;
@@ -1180,30 +1317,62 @@
 
   // Populate the lesson dropdown: "All lessons" + one option per lesson.
   function buildLessonSelect() {
+    const icGroup = document.createElement("optgroup");
+    icGroup.label = "Integrated Chinese";
     const all = document.createElement("option");
     all.value = "ALL";
     all.textContent = "All lessons";
-    el.lessonSel.appendChild(all);
+    icGroup.appendChild(all);
     LESSONS.forEach(l => {
       const o = document.createElement("option");
       o.value = String(l.num);
       o.textContent = `Lesson ${l.num} · ${l.theme}`;
-      el.lessonSel.appendChild(o);
+      icGroup.appendChild(o);
     });
+    el.lessonSel.appendChild(icGroup);
+
+    const topicGroup = document.createElement("optgroup");
+    topicGroup.label = "Topics";
+    TOPICS.forEach(t => {
+      const o = document.createElement("option");
+      o.value = t.id;
+      o.textContent = t.theme;
+      topicGroup.appendChild(o);
+    });
+    el.lessonSel.appendChild(topicGroup);
+
     el.lessonSel.value = String(selectedLesson);
   }
   buildLessonSelect();
 
+  // The Dialogue toggle only applies to Integrated Chinese lessons; hide it for topics.
+  function selectedIsTopic() {
+    return typeof selectedLesson === "string" && selectedLesson !== "ALL";
+  }
+  function syncDialogueVisibility() {
+    const hide = selectedIsTopic();
+    el.dialogueLabel.style.display = hide ? "none" : "";
+    el.dialogueToggle.style.display = hide ? "none" : "";
+  }
+  function lessonLabel() {
+    if (selectedLesson === "ALL") return "All lessons";
+    const t = TOPICS.find(t => t.id === selectedLesson);
+    if (t) return t.theme;
+    return `Lesson ${selectedLesson} · ${LESSONS.find(l => l.num === selectedLesson).theme}`;
+  }
   function syncRange() {
     const count = selectedWords().length;
-    const lessonPart = selectedLesson === "ALL"
-      ? "All lessons"
-      : `Lesson ${selectedLesson} · ${LESSONS.find(l => l.num === selectedLesson).theme}`;
-    const diaPart = selectedDialogue === "BOTH" ? "both dialogues" : `Dialogue ${selectedDialogue}`;
-    el.rangeInfo.textContent = `${lessonPart} · ${diaPart} · ${count} word${count === 1 ? "" : "s"}`;
+    const parts = [lessonLabel()];
+    if (!selectedIsTopic()) {
+      parts.push(selectedDialogue === "BOTH" ? "both dialogues" : `Dialogue ${selectedDialogue}`);
+    }
+    parts.push(`${count} word${count === 1 ? "" : "s"}`);
+    el.rangeInfo.textContent = parts.join(" · ");
   }
   el.lessonSel.addEventListener("change", () => {
-    selectedLesson = el.lessonSel.value === "ALL" ? "ALL" : parseInt(el.lessonSel.value, 10);
+    const v = el.lessonSel.value;
+    selectedLesson = /^\d+$/.test(v) ? parseInt(v, 10) : v;
+    syncDialogueVisibility();
     syncRange();
   });
   el.dialogueToggle.addEventListener("click", e => {
@@ -1213,6 +1382,7 @@
     [...el.dialogueToggle.children].forEach(c => c.classList.toggle("sel", c === b));
     syncRange();
   });
+  syncDialogueVisibility();
   syncRange();
 
   el.orderToggle.addEventListener("click", e => {
