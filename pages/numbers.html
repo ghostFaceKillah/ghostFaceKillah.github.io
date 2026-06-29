@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Numbers &amp; Time Trainer</title>
+<style>
+  :root {
+    --bg: #f4f4f5;
+    --card: #ffffff;
+    --ink: #18181b;
+    --muted: #71717a;
+    --line: #e4e4e7;
+    --green: #16a34a;
+    --amber: #d97706;
+    --accent: #2563eb;
+    --sel-bg: #eff6ff;
+    --clock-face: #ffffff;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #18181b;
+      --card: #27272a;
+      --ink: #f4f4f5;
+      --muted: #a1a1aa;
+      --line: #3f3f46;
+      --green: #22c55e;
+      --amber: #f59e0b;
+      --accent: #60a5fa;
+      --sel-bg: #1e3a5f;
+      --clock-face: #1f1f23;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #18181b;
+    --card: #27272a;
+    --ink: #f4f4f5;
+    --muted: #a1a1aa;
+    --line: #3f3f46;
+    --green: #22c55e;
+    --amber: #f59e0b;
+    --accent: #60a5fa;
+    --sel-bg: #1e3a5f;
+    --clock-face: #1f1f23;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+  .wrap { width: 100%; max-width: 560px; }
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  h1 { font-size: 1.6rem; margin: 0 0 4px; text-align: center; }
+  .sub { color: var(--muted); text-align: center; margin: 0 0 28px; font-size: .95rem; }
+
+  .label { font-size: .8rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 0 0 10px; }
+
+  .theme-toggle {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    border: 1px solid var(--line);
+    background: var(--card);
+    color: var(--ink);
+    font-size: 1.15rem;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    transition: border-color .12s;
+  }
+  .theme-toggle:hover { border-color: var(--accent); }
+
+  .toggle { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 28px; }
+  .toggle .opt { flex: 1 1 40%; }
+  .opt {
+    border: 1px solid var(--line);
+    background: var(--card);
+    border-radius: 12px;
+    padding: 14px 10px;
+    font-size: 1rem;
+    cursor: pointer;
+    color: var(--ink);
+    transition: border-color .12s, background .12s;
+  }
+  .opt:hover { border-color: var(--accent); }
+  .opt.sel { border-color: var(--accent); background: var(--sel-bg); color: var(--accent); font-weight: 600; }
+
+  .btn {
+    display: block;
+    width: 100%;
+    border: none;
+    border-radius: 12px;
+    padding: 16px;
+    font-size: 1.05rem;
+    font-weight: 600;
+    cursor: pointer;
+    background: var(--accent);
+    color: #fff;
+    transition: opacity .12s;
+  }
+  .btn:hover { opacity: .9; }
+  .btn.ghost { background: var(--card); color: var(--ink); border: 1px solid var(--line); }
+
+  /* Card screen */
+  .topbar { display: flex; justify-content: space-between; align-items: center; color: var(--muted); font-size: .9rem; margin-bottom: 20px; }
+  .topbar a { color: var(--muted); text-decoration: none; cursor: pointer; }
+  .topbar a:hover { color: var(--ink); }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 36px 24px;
+    text-align: center;
+    cursor: pointer;
+    user-select: none;
+    min-height: 340px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .kindTag { font-size: .75rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin: 0 0 18px; }
+  .prompt-number { font-size: 4.2rem; line-height: 1.05; margin: 0; font-weight: 600; letter-spacing: .01em; }
+  .prompt-time { font-size: 4.6rem; line-height: 1; margin: 0; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .clock-wrap { display: flex; justify-content: center; margin: 0; }
+  .clock-wrap svg { width: 220px; height: 220px; max-width: 70vw; max-height: 70vw; }
+
+  .answer { display: none; margin-top: 22px; }
+  .answer.show { display: block; }
+  .hanzi { font-size: 3rem; line-height: 1.15; margin: 0 0 8px; }
+  .pinyin { font-size: 1.5rem; margin: 0 0 6px; color: var(--accent); }
+  .altread { font-size: .95rem; color: var(--muted); margin: 6px 0 0; }
+  .numeral { font-size: 1rem; color: var(--muted); margin: 10px 0 0; }
+
+  .hint { color: var(--muted); margin-top: 24px; font-size: .9rem; }
+
+  .speak-row { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+  .speak {
+    border: 1px solid var(--line);
+    background: var(--card);
+    color: var(--accent);
+    border-radius: 999px;
+    padding: 9px 18px;
+    font-size: .95rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    transition: border-color .12s, background .12s, color .12s;
+  }
+  .speak:hover { border-color: var(--accent); background: var(--sel-bg); }
+  .speak.playing { border-color: var(--amber); color: var(--amber); }
+  .speak[hidden], .speak-row[hidden], #audioSection[hidden] { display: none; }
+
+  .reveal-row { margin-top: 16px; }
+  .actions { display: none; gap: 12px; margin-top: 16px; }
+  .actions.show { display: flex; }
+  .actions .btn { flex: 1; }
+  .btn.next { background: var(--green); }
+</style>
+<script>
+  // Apply saved theme before paint to avoid a flash.
+  (function () {
+    var t = localStorage.getItem("theme");
+    if (t) document.documentElement.setAttribute("data-theme", t);
+  })();
+</script>
+</head>
+<body>
+<button id="themeToggle" class="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle dark mode">🌙</button>
+<div class="wrap">
+
+  <!-- START -->
+  <section id="start" class="screen active">
+    <h1>Numbers &amp; Time Trainer</h1>
+    <p class="sub">See a number, a clock or a time — say it in Chinese, then reveal the characters &amp; pinyin.</p>
+
+    <p class="label">What to practice</p>
+    <div class="toggle" id="modeToggle">
+      <button class="opt sel" data-mode="mixed">🎲 Mixed</button>
+      <button class="opt" data-mode="numbers">🔢 Numbers</button>
+      <button class="opt" data-mode="clock">🕐 Clock face</button>
+      <button class="opt" data-mode="time">⌚ Digital time</button>
+    </div>
+
+    <div id="rangeSection">
+      <p class="label">How big can numbers get?</p>
+      <div class="toggle" id="rangeToggle">
+        <button class="opt" data-max="99">to 99</button>
+        <button class="opt" data-max="999">to 999</button>
+        <button class="opt sel" data-max="9999">to 9,999</button>
+        <button class="opt" data-max="99999">to 99,999</button>
+        <button class="opt" data-max="1000000">to 1,000,000</button>
+      </div>
+      <p class="sub" style="margin-top:-12px">Small numbers show up far more often than big ones.</p>
+    </div>
+
+    <div id="audioSection">
+      <p class="label">Audio</p>
+      <div class="toggle" id="audioToggle">
+        <button class="opt sel" data-audio="on">🔊 Auto-play</button>
+        <button class="opt" data-audio="off">Off</button>
+      </div>
+    </div>
+
+    <button class="btn" id="startBtn">Start</button>
+  </section>
+
+  <!-- CARD -->
+  <section id="study" class="screen">
+    <div class="topbar">
+      <a id="quitBtn">&larr; Quit</a>
+      <span id="progress">Reviewed: 0</span>
+    </div>
+
+    <div class="card" id="card">
+      <p class="kindTag" id="kindTag"></p>
+      <div id="promptHolder"></div>
+      <div class="answer" id="answer">
+        <p class="hanzi" id="hanzi"></p>
+        <p class="pinyin" id="pinyin"></p>
+        <p class="altread" id="altread"></p>
+        <p class="numeral" id="numeral"></p>
+        <div class="speak-row" id="speakRow">
+          <button class="speak" id="speakBtn" type="button" title="Replay (R)">🔊 Play</button>
+          <button class="speak" id="speakSlowBtn" type="button" title="Read slowly (S)">🐢 Slow</button>
+        </div>
+      </div>
+      <p class="hint" id="hint">Tap card or press Space to reveal</p>
+    </div>
+
+    <div class="reveal-row" id="revealRow">
+      <button class="btn" id="revealBtn">Reveal</button>
+    </div>
+
+    <div class="actions" id="actions">
+      <button class="btn next" id="nextBtn">Next <small>(Space)</small></button>
+    </div>
+  </section>
+
+</div>
+
+<script>
+  // ----- Dark mode toggle -----
+  (function () {
+    const root = document.documentElement;
+    const toggle = document.getElementById("themeToggle");
+    const mql = window.matchMedia("(prefers-color-scheme: dark)");
+    function current() {
+      return root.getAttribute("data-theme") || (mql.matches ? "dark" : "light");
+    }
+    function syncIcon() {
+      toggle.textContent = current() === "dark" ? "☀️" : "🌙";
+    }
+    toggle.addEventListener("click", () => {
+      const next = current() === "dark" ? "light" : "dark";
+      root.setAttribute("data-theme", next);
+      localStorage.setItem("theme", next);
+      syncIcon();
+    });
+    mql.addEventListener("change", () => { if (!root.getAttribute("data-theme")) syncIcon(); });
+    syncIcon();
+  })();
+
+  // ===== Chinese number / time generation =====================================
+
+  const PINYIN = {
+    "零":"líng","一":"yī","二":"èr","两":"liǎng","三":"sān","四":"sì","五":"wǔ",
+    "六":"liù","七":"qī","八":"bā","九":"jiǔ","十":"shí","百":"bǎi","千":"qiān",
+    "万":"wàn","亿":"yì","点":"diǎn","分":"fēn","半":"bàn","刻":"kè","钟":"zhōng"
+  };
+  const DIGIT = ["零","一","二","三","四","五","六","七","八","九"];
+
+  function pinyinOf(hanzi) {
+    return hanzi.split("").map(c => PINYIN[c] || "").filter(Boolean).join(" ");
+  }
+
+  // Convert 0..9999 to characters. `bigUnit` is the 万/亿 suffix that will follow
+  // this group (so a lone "2" before 万 reads 两, not 二).
+  function under10000(n, lead) {
+    if (n === 0) return "";
+    const d = [Math.floor(n / 1000) % 10, Math.floor(n / 100) % 10, Math.floor(n / 10) % 10, n % 10];
+    const units = ["千", "百", "十", ""];
+    let out = "";
+    let started = false;
+    let zeroPending = false;
+    for (let i = 0; i < 4; i++) {
+      const v = d[i];
+      if (v === 0) {
+        if (started) zeroPending = true;
+        continue;
+      }
+      if (zeroPending) { out += "零"; zeroPending = false; }
+      // Bare 十 for 10–19, but only at the very front of the whole number
+      // (e.g. 一万零一十, not 一万零十).
+      if (i === 2 && v === 1 && !started && lead) {
+        out += "十";
+      } else if (v === 2 && (i === 0 || i === 1)) {
+        // 2 before 百 or 千 reads 两.
+        out += "两" + units[i];
+      } else {
+        out += DIGIT[v] + units[i];
+      }
+      started = true;
+    }
+    return out;
+  }
+
+  // Convert 0..99,999,999 to characters (covers numbers up to a million easily).
+  function numToHanzi(n) {
+    if (n === 0) return "零";
+    const groups = [];
+    let t = n, idx = 0;
+    while (t > 0) {
+      groups.unshift({ val: t % 10000, unit: idx });
+      t = Math.floor(t / 10000);
+      idx++;
+    }
+    const bigUnit = ["", "万", "亿"];
+    let out = "";
+    for (let i = 0; i < groups.length; i++) {
+      const g = groups[i];
+      if (g.val === 0) continue;
+      // Insert 零 for an internal gap (group below 1000 that isn't the lead group).
+      if (out !== "" && g.val < 1000) out += "零";
+      // A lone "2" multiplying 万/亿 reads 两 (两万, 两亿).
+      const body = (g.val === 2 && g.unit >= 1) ? "两" : under10000(g.val, out === "");
+      out += body + bigUnit[g.unit];
+    }
+    return out;
+  }
+
+  function numToChinese(n) {
+    const hanzi = numToHanzi(n);
+    return { hanzi, pinyin: pinyinOf(hanzi) };
+  }
+
+  // Time, hours 1–12, minutes 0–59.
+  function timeToChinese(h, m) {
+    const hourHanzi = (h === 2 ? "两" : numToHanzi(h)) + "点";
+    let hanzi, alt = "";
+    if (m === 0) {
+      hanzi = hourHanzi;
+      alt = hourHanzi + "钟";
+    } else if (m === 15) {
+      hanzi = hourHanzi + "一刻";
+      alt = hourHanzi + "十五分";
+    } else if (m === 30) {
+      hanzi = hourHanzi + "半";
+      alt = hourHanzi + "三十分";
+    } else if (m === 45) {
+      hanzi = hourHanzi + "三刻";
+      alt = hourHanzi + "四十五分";
+    } else {
+      const minHanzi = (m < 10 ? "零" + DIGIT[m] : numToHanzi(m)) + "分";
+      hanzi = hourHanzi + minHanzi;
+    }
+    return {
+      hanzi,
+      pinyin: pinyinOf(hanzi),
+      alt: alt ? alt + "  ·  " + pinyinOf(alt) : ""
+    };
+  }
+
+  // ----- Analog clock face (SVG) -----
+  function clockSVG(h, m) {
+    const cx = 100, cy = 100;
+    const pt = (ang, r) => {
+      const a = (ang - 90) * Math.PI / 180;
+      return [cx + r * Math.cos(a), cy + r * Math.sin(a)];
+    };
+    let ticks = "";
+    for (let i = 0; i < 12; i++) {
+      const big = i % 3 === 0;
+      const [x1, y1] = pt(i * 30, 88);
+      const [x2, y2] = pt(i * 30, big ? 74 : 80);
+      ticks += `<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="currentColor" stroke-width="${big ? 3 : 1.5}" stroke-linecap="round"/>`;
+    }
+    const minAng = m * 6;
+    const hourAng = (h % 12) * 30 + m * 0.5;
+    const [mx, my] = pt(minAng, 70);
+    const [hx, hy] = pt(hourAng, 48);
+    return `<svg viewBox="0 0 200 200" role="img" aria-label="clock" style="color:var(--ink)">
+      <circle cx="100" cy="100" r="94" fill="var(--clock-face)" stroke="currentColor" stroke-width="3"/>
+      ${ticks}
+      <line x1="100" y1="100" x2="${hx.toFixed(1)}" y2="${hy.toFixed(1)}" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+      <line x1="100" y1="100" x2="${mx.toFixed(1)}" y2="${my.toFixed(1)}" stroke="var(--accent)" stroke-width="3.5" stroke-linecap="round"/>
+      <circle cx="100" cy="100" r="4.5" fill="currentColor"/>
+    </svg>`;
+  }
+
+  // ----- Weighted random number (small numbers over-represented) -----
+  function randInt(lo, hi) { return lo + Math.floor(Math.random() * (hi - lo + 1)); }
+
+  function randomNumber(max) {
+    // Buckets by magnitude, with weights that decay for larger numbers.
+    const buckets = [
+      { lo: 0,       hi: 9,       w: 26 },
+      { lo: 10,      hi: 99,      w: 30 },
+      { lo: 100,     hi: 999,     w: 18 },
+      { lo: 1000,    hi: 9999,    w: 12 },
+      { lo: 10000,   hi: 99999,   w: 8  },
+      { lo: 100000,  hi: 1000000, w: 6  },
+    ].filter(b => b.lo <= max);
+    let total = 0;
+    for (const b of buckets) { b.cap = Math.min(b.hi, max); total += b.w; }
+    let r = Math.random() * total;
+    for (const b of buckets) {
+      if (r < b.w) return randInt(b.lo, b.cap);
+      r -= b.w;
+    }
+    return randInt(0, max);
+  }
+
+  // Minutes weighted toward teachable values (o'clock, quarters, fives).
+  function randomMinute() {
+    const r = Math.random();
+    if (r < 0.40) return [0, 15, 30, 45][randInt(0, 3)];
+    if (r < 0.72) return randInt(0, 11) * 5;
+    return randInt(0, 59);
+  }
+
+  // ===== Pronunciation (Web Speech API) =======================================
+  const Speech = (() => {
+    const synth = window.speechSynthesis;
+    let voice = null;
+    function pick() {
+      if (!synth) return;
+      const zh = synth.getVoices().filter(v => v.lang && v.lang.toLowerCase().startsWith("zh"));
+      voice = zh.find(v => /^zh[-_]?(cn|hans)/i.test(v.lang)) || zh[0] || null;
+    }
+    if (synth) { pick(); synth.addEventListener("voiceschanged", pick); }
+    function speak(text, btn, rate) {
+      if (!synth || !text) return;
+      synth.cancel();
+      if (!voice) pick();
+      const u = new SpeechSynthesisUtterance(text);
+      if (voice) u.voice = voice;
+      u.lang = (voice && voice.lang) || "zh-CN";
+      u.rate = rate || 0.9;
+      if (btn) {
+        u.onstart = () => btn.classList.add("playing");
+        const done = () => btn.classList.remove("playing");
+        u.onend = done; u.onerror = done;
+      }
+      synth.speak(u);
+    }
+    return { supported: !!synth, speak };
+  })();
+
+  // ===== State & elements =====================================================
+  let mode = "mixed";          // mixed | numbers | clock | time
+  let maxNumber = 9999;
+  let autoPlay = true;
+  let reviewed = 0;
+  let revealed = false;
+  let currentZh = "";          // hanzi string to speak
+
+  const screens = {
+    start: document.getElementById("start"),
+    study: document.getElementById("study"),
+  };
+  const el = {
+    modeToggle:  document.getElementById("modeToggle"),
+    rangeSection:document.getElementById("rangeSection"),
+    rangeToggle: document.getElementById("rangeToggle"),
+    audioToggle: document.getElementById("audioToggle"),
+    audioSection:document.getElementById("audioSection"),
+    startBtn:    document.getElementById("startBtn"),
+    progress:    document.getElementById("progress"),
+    card:        document.getElementById("card"),
+    kindTag:     document.getElementById("kindTag"),
+    promptHolder:document.getElementById("promptHolder"),
+    answer:      document.getElementById("answer"),
+    hanzi:       document.getElementById("hanzi"),
+    pinyin:      document.getElementById("pinyin"),
+    altread:     document.getElementById("altread"),
+    numeral:     document.getElementById("numeral"),
+    speakBtn:    document.getElementById("speakBtn"),
+    speakSlowBtn:document.getElementById("speakSlowBtn"),
+    speakRow:    document.getElementById("speakRow"),
+    hint:        document.getElementById("hint"),
+    revealRow:   document.getElementById("revealRow"),
+    revealBtn:   document.getElementById("revealBtn"),
+    actions:     document.getElementById("actions"),
+    nextBtn:     document.getElementById("nextBtn"),
+    quitBtn:     document.getElementById("quitBtn"),
+  };
+
+  function show(name) {
+    Object.values(screens).forEach(s => s.classList.remove("active"));
+    screens[name].classList.add("active");
+  }
+
+  function syncRangeVisible() {
+    el.rangeSection.style.display = (mode === "numbers" || mode === "mixed") ? "block" : "none";
+  }
+
+  el.modeToggle.addEventListener("click", e => {
+    const b = e.target.closest(".opt");
+    if (!b) return;
+    mode = b.dataset.mode;
+    [...el.modeToggle.children].forEach(c => c.classList.toggle("sel", c === b));
+    syncRangeVisible();
+  });
+  el.rangeToggle.addEventListener("click", e => {
+    const b = e.target.closest(".opt");
+    if (!b) return;
+    maxNumber = parseInt(b.dataset.max, 10);
+    [...el.rangeToggle.children].forEach(c => c.classList.toggle("sel", c === b));
+  });
+  el.audioToggle.addEventListener("click", e => {
+    const b = e.target.closest(".opt");
+    if (!b) return;
+    autoPlay = b.dataset.audio === "on";
+    [...el.audioToggle.children].forEach(c => c.classList.toggle("sel", c === b));
+  });
+  syncRangeVisible();
+
+  // ----- Card flow -----
+  function pickKind() {
+    if (mode === "mixed") return ["numbers", "clock", "time"][randInt(0, 2)];
+    return mode;
+  }
+
+  function buildCard() {
+    const kind = pickKind();
+    revealed = false;
+    el.answer.classList.remove("show");
+    el.actions.classList.remove("show");
+    el.revealRow.style.display = "block";
+    el.hint.style.display = "block";
+    el.speakBtn.classList.remove("playing");
+    el.speakSlowBtn.classList.remove("playing");
+    el.altread.textContent = "";
+    el.numeral.textContent = "";
+
+    if (kind === "numbers") {
+      const n = randomNumber(maxNumber);
+      const r = numToChinese(n);
+      currentZh = r.hanzi;
+      el.kindTag.textContent = "Number — say it in Chinese";
+      el.promptHolder.innerHTML = `<p class="prompt-number">${n.toLocaleString("en-US")}</p>`;
+      el.hanzi.textContent = r.hanzi;
+      el.pinyin.textContent = r.pinyin;
+    } else {
+      const h = randInt(1, 12);
+      const m = randomMinute();
+      const r = timeToChinese(h, m);
+      currentZh = r.hanzi;
+      const digital = h + ":" + String(m).padStart(2, "0");
+      if (kind === "clock") {
+        el.kindTag.textContent = "Clock — say this time in Chinese";
+        el.promptHolder.innerHTML = `<div class="clock-wrap">${clockSVG(h, m)}</div>`;
+        el.numeral.textContent = digital;
+      } else {
+        el.kindTag.textContent = "Time — say it in Chinese";
+        el.promptHolder.innerHTML = `<p class="prompt-time">${digital}</p>`;
+      }
+      el.hanzi.textContent = r.hanzi;
+      el.pinyin.textContent = r.pinyin;
+      el.altread.textContent = r.alt ? "also: " + r.alt : "";
+    }
+    el.progress.textContent = "Reviewed: " + reviewed;
+  }
+
+  function reveal() {
+    if (revealed) return;
+    revealed = true;
+    el.answer.classList.add("show");
+    el.actions.classList.add("show");
+    el.revealRow.style.display = "none";
+    el.hint.style.display = "none";
+    if (autoPlay) Speech.speak(currentZh, el.speakBtn);
+  }
+
+  function next() {
+    reviewed++;
+    buildCard();
+  }
+
+  function startSession() {
+    reviewed = 0;
+    show("study");
+    buildCard();
+  }
+
+  // ----- Events -----
+  const SLOW_RATE = 0.5;
+  el.startBtn.addEventListener("click", startSession);
+  el.quitBtn.addEventListener("click", () => show("start"));
+  el.card.addEventListener("click", () => { if (!revealed) reveal(); });
+  el.revealBtn.addEventListener("click", reveal);
+  el.nextBtn.addEventListener("click", next);
+  el.speakBtn.addEventListener("click", e => { e.stopPropagation(); Speech.speak(currentZh, el.speakBtn); });
+  el.speakSlowBtn.addEventListener("click", e => { e.stopPropagation(); Speech.speak(currentZh, el.speakSlowBtn, SLOW_RATE); });
+
+  document.addEventListener("keydown", e => {
+    if (!screens.study.classList.contains("active")) return;
+    if (e.code === "Space") {
+      e.preventDefault();
+      if (!revealed) reveal(); else next();
+      return;
+    }
+    if (!revealed) return;
+    if (e.key === "Enter" || e.key === "ArrowRight") { e.preventDefault(); next(); return; }
+    if (e.key === "r" || e.key === "R") { e.preventDefault(); Speech.speak(currentZh, el.speakBtn); return; }
+    if (e.key === "s" || e.key === "S") { e.preventDefault(); Speech.speak(currentZh, el.speakSlowBtn, SLOW_RATE); return; }
+  });
+
+  // ----- Init -----
+  if (!Speech.supported) {
+    el.audioSection.hidden = true;
+    el.speakRow.hidden = true;
+    autoPlay = false;
+  }
+</script>
+</body>
+</html>
