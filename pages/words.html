@@ -213,7 +213,7 @@
   <!-- START -->
   <section id="start" class="screen active">
     <h1>Word Trainer</h1>
-    <p class="sub">Learn Chinese words — flashcard style. (Integrated Chinese Lessons 1–20, plus Food &amp; Common Verbs)</p>
+    <p class="sub">Learn Chinese words — flashcard style. (Integrated Chinese Lessons 1–20, plus Food, Common Verbs &amp; Numbers)</p>
 
     <p class="label">Lesson</p>
     <select class="sel-input" id="lessonSel"></select>
@@ -338,8 +338,9 @@
   // ----- Topic lessons (standalone themes, not from Integrated Chinese) -----
   // These have no dialogues; their words carry lesson: "<id>" (e.g. "FOOD").
   const TOPICS = [
-    { id: "FOOD",  theme: "Food & Drink" },
-    { id: "VERBS", theme: "Common Verbs" },
+    { id: "FOOD",    theme: "Food & Drink" },
+    { id: "VERBS",   theme: "Common Verbs" },
+    { id: "NUMBERS", theme: "Numbers" },
   ];
 
   // ----- Data: vocabulary (Integrated Chinese, Level 1, Lessons 1–20) -----
@@ -1190,6 +1191,42 @@
     { w: "切",     pinyin: "qiē",         pos: "v",      def: "to cut, to slice",            mnem: "A 'seven' (七) shape meeting a <b>knife</b> (刀) — to <b>cut</b>.", parts: "七 (sound) + 刀 knife", lesson: "VERBS" },
     { w: "煮",     pinyin: "zhǔ",         pos: "v",      def: "to boil, to cook",            mnem: "<b>Fire</b>-dots (灬) under the pot — to <b>boil / cook</b>.", parts: "者 + 灬 fire", lesson: "VERBS" },
     { w: "炒",     pinyin: "chǎo",        pos: "v",      def: "to stir-fry",                 mnem: "<b>Fire</b> (火) tossing things till the bits (少) crisp — to <b>stir-fry</b>.", parts: "火 fire + 少 (≈ sound)", lesson: "VERBS" },
+
+    // ===== Topic: Numbers (not from Integrated Chinese) =====
+    // --- Digits 0–10 ---
+    { w: "零",     pinyin: "líng",        pos: "nu",     def: "zero",                        mnem: "The <b>rain</b> radical (雨) over 令 — a 'drop' of nothing: <b>zero</b>.", parts: "雨 rain + 令 (sound)", lesson: "NUMBERS" },
+    { w: "一",     pinyin: "yī",          pos: "nu",     def: "one",                         mnem: "A single horizontal stroke — <b>one</b>.", parts: "one stroke", lesson: "NUMBERS" },
+    { w: "二",     pinyin: "èr",          pos: "nu",     def: "two",                         mnem: "<b>Two</b> stacked strokes — <b>two</b>.", parts: "two strokes", lesson: "NUMBERS" },
+    { w: "三",     pinyin: "sān",         pos: "nu",     def: "three",                       mnem: "<b>Three</b> stacked strokes — <b>three</b>.", parts: "three strokes", lesson: "NUMBERS" },
+    { w: "四",     pinyin: "sì",          pos: "nu",     def: "four",                        mnem: "A window box split into parts — the boxed sign for <b>four</b>.", parts: "口 enclosure + 八", lesson: "NUMBERS" },
+    { w: "五",     pinyin: "wǔ",          pos: "nu",     def: "five",                        mnem: "A spool crossing between two lines — <b>five</b>.", parts: "二 + crossed strokes", lesson: "NUMBERS" },
+    { w: "六",     pinyin: "liù",         pos: "nu",     def: "six",                         mnem: "A little roof with two legs — <b>six</b>.", parts: "亠 + 八", lesson: "NUMBERS" },
+    { w: "七",     pinyin: "qī",          pos: "nu",     def: "seven",                       mnem: "A hooked stroke cutting across — <b>seven</b>.", parts: "single hooked stroke", lesson: "NUMBERS" },
+    { w: "八",     pinyin: "bā",          pos: "nu",     def: "eight",                       mnem: "Two strokes splitting apart — <b>eight</b>.", parts: "two splaying strokes", lesson: "NUMBERS" },
+    { w: "九",     pinyin: "jiǔ",         pos: "nu",     def: "nine",                        mnem: "A bent hook reaching for ten — <b>nine</b>.", parts: "撇 + 乙 hook", lesson: "NUMBERS" },
+    { w: "十",     pinyin: "shí",         pos: "nu",     def: "ten",                         mnem: "A complete cross of two strokes — <b>ten</b>.", parts: "一 + 丨 crossed", lesson: "NUMBERS" },
+    // --- Tens & teens ---
+    { w: "十一",   pinyin: "shíyī",       pos: "nu",     def: "eleven",                      mnem: "<b>Ten</b> (十) plus <b>one</b> (一) — <b>eleven</b>.", parts: "十 ten + 一 one", lesson: "NUMBERS" },
+    { w: "十二",   pinyin: "shí'èr",      pos: "nu",     def: "twelve",                      mnem: "<b>Ten</b> (十) plus <b>two</b> (二) — <b>twelve</b>.", parts: "十 ten + 二 two", lesson: "NUMBERS" },
+    { w: "二十",   pinyin: "èrshí",       pos: "nu",     def: "twenty",                      mnem: "<b>Two</b> (二) <b>tens</b> (十) — <b>twenty</b>.", parts: "二 two + 十 ten", lesson: "NUMBERS" },
+    { w: "三十",   pinyin: "sānshí",      pos: "nu",     def: "thirty",                      mnem: "<b>Three</b> (三) <b>tens</b> (十) — <b>thirty</b>.", parts: "三 three + 十 ten", lesson: "NUMBERS" },
+    { w: "五十",   pinyin: "wǔshí",       pos: "nu",     def: "fifty",                       mnem: "<b>Five</b> (五) <b>tens</b> (十) — <b>fifty</b>.", parts: "五 five + 十 ten", lesson: "NUMBERS" },
+    { w: "九十九", pinyin: "jiǔshíjiǔ",   pos: "nu",     def: "ninety-nine",                 mnem: "<b>Nine</b> (九) <b>tens</b> (十) and <b>nine</b> (九) — <b>ninety-nine</b>.", parts: "九 + 十 + 九", lesson: "NUMBERS" },
+    // --- Large units ---
+    { w: "百",     pinyin: "bǎi",         pos: "nu",     def: "hundred",                     mnem: "<b>One</b> (一) capping 白 — a round <b>hundred</b>.", parts: "一 one + 白 (sound)", lesson: "NUMBERS" },
+    { w: "一百",   pinyin: "yìbǎi",       pos: "nu",     def: "one hundred",                 mnem: "<b>One</b> (一) <b>hundred</b> (百) — <b>100</b>.", parts: "一 one + 百 hundred", lesson: "NUMBERS" },
+    { w: "千",     pinyin: "qiān",        pos: "nu",     def: "thousand",                    mnem: "A stroke through 十 — ten tens of tens, a <b>thousand</b>.", parts: "撇 + 十 ten", lesson: "NUMBERS" },
+    { w: "一千",   pinyin: "yìqiān",      pos: "nu",     def: "one thousand",                mnem: "<b>One</b> (一) <b>thousand</b> (千) — <b>1,000</b>.", parts: "一 one + 千 thousand", lesson: "NUMBERS" },
+    { w: "万",     pinyin: "wàn",         pos: "nu",     def: "ten thousand",                mnem: "The big counting unit — <b>ten thousand</b> (a 'myriad').", parts: "一 + 万", lesson: "NUMBERS" },
+    { w: "一万",   pinyin: "yíwàn",       pos: "nu",     def: "ten thousand",                mnem: "<b>One</b> (一) <b>myriad</b> (万) — <b>10,000</b>.", parts: "一 one + 万 myriad", lesson: "NUMBERS" },
+    { w: "亿",     pinyin: "yì",          pos: "nu",     def: "hundred million",             mnem: "A <b>person</b> (亻) beside 乙 — the huge unit, <b>a hundred million</b>.", parts: "亻 person + 乙", lesson: "NUMBERS" },
+    // --- Useful number words ---
+    { w: "两",     pinyin: "liǎng",       pos: "nu",     def: "two (of something); a couple", mnem: "Two people under one roof — the <b>two</b> used before measure words.", parts: "一 roof + 兩", lesson: "NUMBERS" },
+    { w: "半",     pinyin: "bàn",         pos: "nu",     def: "half",                        mnem: "An ox (牛) split down the middle — a <b>half</b>.", parts: "八 split + 牛 ox", lesson: "NUMBERS" },
+    { w: "几",     pinyin: "jǐ",          pos: "nu",     def: "how many; a few",             mnem: "A small bracket shape asking 'how many?' — <b>a few</b>.", parts: "pictograph of a stool", lesson: "NUMBERS" },
+    { w: "多少",   pinyin: "duōshǎo",     pos: "nu",     def: "how many, how much",          mnem: "<b>Many</b> (多) or <b>few</b> (少) — asking <b>how much</b>.", parts: "多 many + 少 few", lesson: "NUMBERS" },
+    { w: "第一",   pinyin: "dìyī",        pos: "nu",     def: "first (ordinal)",             mnem: "The ordinal marker 第 + <b>one</b> (一) — <b>first</b>.", parts: "第 ordinal + 一 one", lesson: "NUMBERS" },
+    { w: "号",     pinyin: "hào",         pos: "n",      def: "number (in a series); day of month", mnem: "A <b>mouth</b> (口) calling out a <b>number</b> in line.", parts: "口 mouth + 丂", lesson: "NUMBERS" },
   ];
 
   // ----- State -----
