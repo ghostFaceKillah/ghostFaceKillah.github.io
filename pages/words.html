@@ -1233,20 +1233,42 @@
   })();
 
   // ----- Pronunciation: MP3 files -----
+  // Native-speaker MP3s live in /audio/words/<word>.mp3 (generate with
+  // tools/gen_audio.py). When a file is missing/404s we fall back to TTS so
+  // the word is still spoken instead of failing silently.
   const Mp3Audio = (() => {
     const BASE = "/audio/words/";
     let current = null;
+    let warned = false;
+    function fallback(word, btn) {
+      if (!warned) {
+        console.warn(
+          "[Word Trainer] Native MP3 audio missing under " + BASE +
+          " — falling back to TTS. Generate the files with tools/gen_audio.py " +
+          "and commit audio/words/*.mp3."
+        );
+        warned = true;
+      }
+      if (Speech.supported) Speech.speak(word, btn);
+      else if (btn) btn.classList.remove("playing");
+    }
     function play(word, btn) {
       if (current) { current.pause(); current = null; }
       const a = new Audio(BASE + encodeURIComponent(word) + ".mp3");
+      let handled = false;          // guard so we fall back at most once per play
+      const fail = () => {
+        if (handled) return;
+        handled = true;
+        if (current === a) current = null;
+        fallback(word, btn);
+      };
       if (btn) {
-        a.onplay  = () => btn.classList.add("playing");
-        const done = () => { btn.classList.remove("playing"); if (current === a) current = null; };
-        a.onended = done;
-        a.onerror = done;
+        a.onplay  = () => { handled = true; btn.classList.add("playing"); };
+        a.onended = () => { btn.classList.remove("playing"); if (current === a) current = null; };
       }
+      a.onerror = fail;
       current = a;
-      a.play().catch(() => { if (btn) btn.classList.remove("playing"); current = null; });
+      a.play().catch(fail);
     }
     function stop() { if (current) { current.pause(); current = null; } }
     return { play, stop };
