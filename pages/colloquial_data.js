@@ -18,7 +18,8 @@ window.COLLOQUIAL_DATA = [
     "en": "one",
     "ex": "我要一杯咖啡。",
     "exPy": "wǒ yào yì bēi kā fēi.",
-    "exEn": "I want one coffee."
+    "exEn": "I want one coffee.",
+    "tone": "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一杯 is yì bēi."
   },
   {
     "rank": 3,
@@ -36,7 +37,8 @@ window.COLLOQUIAL_DATA = [
     "en": "not; no",
     "ex": "我不知道。",
     "exPy": "wǒ bù zhī dào.",
-    "exEn": "I don't know."
+    "exEn": "I don't know.",
+    "tone": "Tone change: 不 becomes bú before a 4th tone, otherwise bù — here 不知 is bù zhī."
   },
   {
     "rank": 5,
@@ -81,7 +83,8 @@ window.COLLOQUIAL_DATA = [
     "en": "I; me",
     "ex": "我很好。",
     "exPy": "wǒ hěn hǎo.",
-    "exEn": "I'm doing well."
+    "exEn": "I'm doing well.",
+    "tone": "Tone change: a 3rd tone before another 3rd tone is pronounced 2nd tone — 我很 is written wǒ hěn but said wó hěn."
   },
   {
     "rank": 10,
@@ -270,7 +273,8 @@ window.COLLOQUIAL_DATA = [
     "en": "can; may (in 可以)",
     "ex": "可以进来吗？",
     "exPy": "kě yǐ jìn lái ma?",
-    "exEn": "May I come in?"
+    "exEn": "May I come in?",
+    "tone": "Tone change: a 3rd tone before another 3rd tone is pronounced 2nd tone — 可以 is written kě yǐ but said ké yǐ."
   },
   {
     "rank": 31,
@@ -288,7 +292,8 @@ window.COLLOQUIAL_DATA = [
     "en": "you",
     "ex": "你好吗？",
     "exPy": "nǐ hǎo ma?",
-    "exEn": "How are you?"
+    "exEn": "How are you?",
+    "tone": "Tone change: a 3rd tone before another 3rd tone is pronounced 2nd tone — 你好 is written nǐ hǎo but said ní hǎo."
   },
   {
     "rank": 33,
@@ -350,7 +355,7 @@ window.COLLOQUIAL_DATA = [
     "py": "dé",
     "en": "to get; to obtain",
     "ex": "我得到了好消息。",
-    "exPy": "wǒ de dào le hǎo xiāo xī.",
+    "exPy": "wǒ dé dào le hǎo xiāo xī.",
     "exEn": "I got good news."
   },
   {
@@ -486,7 +491,8 @@ window.COLLOQUIAL_DATA = [
     "en": "place (in 所以)",
     "ex": "所以我没去。",
     "exPy": "suǒ yǐ wǒ méi qù.",
-    "exEn": "So I didn't go."
+    "exEn": "So I didn't go.",
+    "tone": "Tone change: a 3rd tone before another 3rd tone is pronounced 2nd tone — 所以 is written suǒ yǐ but said suó yǐ."
   },
   {
     "rank": 55,
@@ -891,7 +897,8 @@ window.COLLOQUIAL_DATA = [
     "en": "to think; to want; to miss",
     "ex": "我想你了。",
     "exPy": "wǒ xiǎng nǐ le.",
-    "exEn": "I miss you."
+    "exEn": "I miss you.",
+    "tone": "Tone change: a 3rd tone before another 3rd tone is pronounced 2nd tone — 想你 is written xiǎng nǐ but said xiáng nǐ."
   },
   {
     "rank": 100,
@@ -927,7 +934,8 @@ window.COLLOQUIAL_DATA = [
     "en": "(suffix: one who; or)",
     "ex": "你去或者我去，都行。",
     "exPy": "nǐ qù huò zhě wǒ qù, dōu xíng.",
-    "exEn": "Either you go or I go, both are fine."
+    "exEn": "Either you go or I go, both are fine.",
+    "tone": "Tone change: a 3rd tone before another 3rd tone is pronounced 2nd tone — 者我 is written zhě wǒ but said zhé wǒ."
   },
   {
     "rank": 104,
@@ -972,7 +980,8 @@ window.COLLOQUIAL_DATA = [
     "en": "and; with (formal)",
     "ex": "这与我无关。",
     "exPy": "zhè yǔ wǒ wú guān.",
-    "exEn": "This has nothing to do with me."
+    "exEn": "This has nothing to do with me.",
+    "tone": "Tone change: a 3rd tone before another 3rd tone is pronounced 2nd tone — 与我 is written yǔ wǒ but said yú wǒ."
   },
   {
     "rank": 109,
@@ -980,7 +989,7 @@ window.COLLOQUIAL_DATA = [
     "py": "zhǎng",
     "en": "to grow; long",
     "ex": "你长高了！",
-    "exPy": "nǐ cháng gāo le!",
+    "exPy": "nǐ zhǎng gāo le!",
     "exEn": "You've grown taller!"
   },
   {
@@ -1071,7 +1080,8 @@ window.COLLOQUIAL_DATA = [
     "en": "to make; even if (in 即使)",
     "ex": "即使很累，我也要去。",
     "exPy": "jí shǐ hěn lèi, wǒ yě yào qù.",
-    "exEn": "Even if I'm tired, I'll still go."
+    "exEn": "Even if I'm tired, I'll still go.",
+    "tone": "Tone change: a 3rd tone before another 3rd tone is pronounced 2nd tone — 使很 is written shǐ hěn but said shí hěn."
   },
   {
     "rank": 120,
