@@ -330,9 +330,8 @@
       voice = zh.find(v => /^zh[-_]?(cn|hans)/i.test(v.lang)) || zh[0] || null;
     }
     if (synth) { pick(); synth.addEventListener("voiceschanged", pick); }
-    function speak(text, btn, rate) {
-      if (!synth || !text) return;
-      synth.cancel();
+    function queue(text, btn, rate) {
+      if (!text) return;
       if (!voice) pick();
       const u = new SpeechSynthesisUtterance(text);
       if (voice) u.voice = voice;
@@ -345,7 +344,20 @@
       }
       synth.speak(u);
     }
-    return { supported: !!synth, speak };
+    // Speak one item immediately (cancels anything in progress/queued first).
+    function speak(text, btn, rate) {
+      if (!synth) return;
+      synth.cancel();
+      queue(text, btn, rate);
+    }
+    // Speak several items back-to-back: cancel once, then queue each in
+    // order -- the Web Speech API plays queued utterances sequentially.
+    function speakSequence(items) {
+      if (!synth) return;
+      synth.cancel();
+      items.forEach(({ text, btn, rate }) => queue(text, btn, rate));
+    }
+    return { supported: !!synth, speak, speakSequence };
   })();
   const SLOW_RATE = 0.5;
 
@@ -497,7 +509,12 @@
     el.actions.classList.add("show");
     el.revealRow.style.display = "none";
     el.hint.style.display = "none";
-    if (autoPlay) Speech.speak(current.c, el.speakBtn);
+    if (autoPlay) {
+      Speech.speakSequence([
+        { text: current.c, btn: el.speakBtn },
+        { text: current.ex, btn: el.speakSentBtn },
+      ]);
+    }
   }
 
   function gotIt() {
