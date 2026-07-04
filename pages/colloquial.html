@@ -163,6 +163,9 @@
   .exPy { font-size: 1rem; color: var(--accent); margin: 0 0 4px; }
   .exEn { font-size: .95rem; color: var(--muted); margin: 0; }
 
+  .toneNote { font-size: .85rem; color: var(--amber); margin: 14px 0 0; line-height: 1.45; }
+  .toneNote:empty { display: none; }
+
   .speak-row { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
   .speak {
     border: 1px solid var(--line);
@@ -251,6 +254,7 @@
           <p class="exPy" id="exPy"></p>
           <p class="exEn" id="exEn"></p>
         </div>
+        <p class="toneNote" id="toneNote"></p>
         <div class="speak-row" id="speakRow">
           <button class="speak" id="speakBtn" type="button" title="Replay character (R)">🔊 Char</button>
           <button class="speak" id="speakSlowBtn" type="button" title="Read character slowly (S)">🐢 Slow</button>
@@ -388,6 +392,7 @@
     exZh:       document.getElementById("exZh"),
     exPy:       document.getElementById("exPy"),
     exEn:       document.getElementById("exEn"),
+    toneNote:   document.getElementById("toneNote"),
     hint:       document.getElementById("hint"),
     revealRow:  document.getElementById("revealRow"),
     revealBtn:  document.getElementById("revealBtn"),
@@ -487,6 +492,7 @@
     el.exZh.textContent = current.ex;
     el.exPy.textContent = current.exPy;
     el.exEn.textContent = current.exEn;
+    el.toneNote.textContent = current.tone || "";
     el.speakBtn.classList.remove("playing");
     el.speakSlowBtn.classList.remove("playing");
     el.speakSentBtn.classList.remove("playing");

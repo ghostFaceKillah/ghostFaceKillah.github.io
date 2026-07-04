@@ -66,9 +66,9 @@ def _next_syllable(pairs, idx):
     return None
 
 
-def to_pinyin(zh: str) -> str:
-    """Tone-marked pinyin with polyphone corrections, 不/一 tone sandhi and
-    erhua. Word-spaced, punctuation kept inline."""
+def _corrected(zh: str):
+    """Aligned (char, syllable) pairs after polyphone corrections and the
+    written 不/一 tone-sandhi adjustments."""
     pairs = _aligned(zh)
 
     for idx, (ch, s) in enumerate(pairs):
@@ -77,7 +77,8 @@ def to_pinyin(zh: str) -> str:
         if ch == "地" and idx >= 2 and pairs[idx - 1][0] == pairs[idx - 2][0]:
             s = "de"                     # adverbial particle after a reduplicated adjective (慢慢地)
         elif ch == "长":
-            s = "cháng"
+            nxt_ch = pairs[idx + 1][0] if idx + 1 < len(pairs) else ""
+            s = "zhǎng" if nxt_ch in ("高", "大") else "cháng"   # 长高/长大 = grow
         elif ch == "都" and s == "dū":
             s = "dōu"
         elif ch == "子" and s in ("zǐ", "zī"):
@@ -85,9 +86,11 @@ def to_pinyin(zh: str) -> str:
         elif ch == "好" and s == "hào":
             s = "hǎo"
         elif ch == "得":
-            if pairs[idx - 1:idx] and pairs[idx - 1][0] == "我" \
-                    and idx + 1 < len(pairs) and pairs[idx + 1][0] == "走":
+            nxt_ch = pairs[idx + 1][0] if idx + 1 < len(pairs) else ""
+            if pairs[idx - 1:idx] and pairs[idx - 1][0] == "我" and nxt_ch == "走":
                 s = "děi"
+            elif nxt_ch == "到":
+                s = "dé"                 # 得到 = obtain
             else:
                 s = "de"
         pairs[idx] = (ch, s)
@@ -111,6 +114,14 @@ def to_pinyin(zh: str) -> str:
         else:
             continue
         pairs[idx] = (ch, s)
+
+    return pairs
+
+
+def to_pinyin(zh: str) -> str:
+    """Tone-marked pinyin with polyphone corrections, 不/一 tone sandhi and
+    erhua. Word-spaced, punctuation kept inline."""
+    pairs = _corrected(zh)
 
     toks = []
     for idx, (ch, s) in enumerate(pairs):
@@ -138,6 +149,53 @@ def to_pinyin(zh: str) -> str:
     text = re.sub(r"\s+", " ", out).strip()
     text = text.replace("duì bù qǐ", "duì bu qǐ")
     return text
+
+
+# ===================== Tone-change notes =====================
+# A card gets a short note when its character's tone actually shifts in
+# context: the 一 and 不 sandhi rules, 3rd tone before another 3rd tone,
+# or a polyphone read differently in the example than the citation pinyin.
+
+_3RD_TO_2ND = str.maketrans("ǎěǐǒǔǚ", "áéíóúǘ")
+
+
+def _next_pair(pairs, idx):
+    """First (char, syllable) after idx that is an actual Han syllable."""
+    for ch, s in pairs[idx + 1:]:
+        if s is not None:
+            return ch, s
+    return None, None
+
+
+def tone_note(char: str, citation_py: str, ex: str) -> str | None:
+    pairs = _corrected(ex)
+    idx = next((i for i, (ch, s) in enumerate(pairs)
+                if ch == char and s is not None), None)
+    if idx is None:
+        return None
+    syl = pairs[idx][1]
+    nxt_ch, nxt = _next_pair(pairs, idx)
+
+    if char == "一":
+        here = f"here 一{nxt_ch} is {syl} {nxt}" if nxt else f"here it's {syl}"
+        return ("Tone change: 一 is yī alone or in numbers/dates, "
+                "yí before a 4th tone, yì before 1st/2nd/3rd tones — "
+                + here + ".")
+    if char == "不":
+        here = f"here 不{nxt_ch} is {syl} {nxt}" if nxt else f"here it's {syl}"
+        return ("Tone change: 不 becomes bú before a 4th tone, "
+                "otherwise bù — " + here + ".")
+    # 3rd-tone sandhi needs directly adjacent syllables (no pause between).
+    adj_ch, adj = pairs[idx + 1] if idx + 1 < len(pairs) else (None, None)
+    if _tone(syl) == 3 and adj and _tone(adj) == 3:
+        spoken = syl.translate(_3RD_TO_2ND)
+        return (f"Tone change: a 3rd tone before another 3rd tone is "
+                f"pronounced 2nd tone — {char}{adj_ch} is written "
+                f"{syl} {adj} but said {spoken} {adj}.")
+    if syl != citation_py:
+        return (f"Polyphone: usually read {citation_py}, "
+                f"but {syl} in this sentence.")
+    return None
 
 
 # ===================== BASE500: (rank, character, pinyin) =====================
@@ -418,7 +476,7 @@ def build():
         if entry is None:
             continue
         char, py = chpy
-        out.append({
+        row = {
             "rank": rank,
             "c": char,
             "py": py,
@@ -426,7 +484,11 @@ def build():
             "ex": entry["ex"],
             "exPy": to_pinyin(entry["ex"]),
             "exEn": entry["exEn"],
-        })
+        }
+        note = tone_note(char, py, entry["ex"])
+        if note:
+            row["tone"] = note
+        out.append(row)
     return out
 
 
