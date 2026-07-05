@@ -9,7 +9,9 @@ window.COLLOQUIAL_DATA = [
     "en": "of; 's (possessive particle)",
     "ex": "这是我的手机。",
     "exPy": "zhè shì wǒ de shǒu jī.",
-    "exEn": "This is my phone."
+    "exEn": "This is my phone.",
+    "parts": "白 white + 勺 ladle",
+    "mnem": "A <b>white</b> (白) <b>ladle</b> (勺) — whose is it? Mark the owner with 的: 我的 = mine."
   },
   {
     "rank": 2,
@@ -19,7 +21,9 @@ window.COLLOQUIAL_DATA = [
     "ex": "我要一杯咖啡。",
     "exPy": "wǒ yào yì bēi kā fēi.",
     "exEn": "I want one coffee.",
-    "tone": "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一杯 is yì bēi."
+    "tone": "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一杯 is yì bēi.",
+    "parts": "one stroke",
+    "mnem": "<b>One</b> single stroke — the simplest character there is."
   },
   {
     "rank": 3,
@@ -28,7 +32,9 @@ window.COLLOQUIAL_DATA = [
     "en": "to be; yes",
     "ex": "我是学生。",
     "exPy": "wǒ shì xué shēng.",
-    "exEn": "I am a student."
+    "exEn": "I am a student.",
+    "parts": "日 sun over a straight base",
+    "mnem": "Under the <b>sun</b> (日) everything stands straight and true — “it <b>is</b> so.”"
   },
   {
     "rank": 4,
@@ -38,7 +44,9 @@ window.COLLOQUIAL_DATA = [
     "ex": "我不知道。",
     "exPy": "wǒ bù zhī dào.",
     "exEn": "I don't know.",
-    "tone": "Tone change: 不 becomes bú before a 4th tone, otherwise bù — here 不知 is bù zhī."
+    "tone": "Tone change: 不 becomes bú before a 4th tone, otherwise bù — here 不知 is bù zhī.",
+    "parts": "pictograph: a root blocked by the ground",
+    "mnem": "A seed's root hits solid rock and can't sprout — <b>no</b>, <b>not</b> happening."
   },
   {
     "rank": 5,
@@ -47,7 +55,9 @@ window.COLLOQUIAL_DATA = [
     "en": "(completed action / change particle)",
     "ex": "我吃了。",
     "exPy": "wǒ chī le.",
-    "exEn": "I've eaten."
+    "exEn": "I've eaten.",
+    "parts": "子 child without arms",
+    "mnem": "A <b>child</b> (子) swaddled with its arms wrapped in — nothing left to do: done, finished, 了."
   },
   {
     "rank": 6,
@@ -56,7 +66,9 @@ window.COLLOQUIAL_DATA = [
     "en": "at; in; -ing (progressive)",
     "ex": "我在家。",
     "exPy": "wǒ zài jiā.",
-    "exEn": "I'm at home."
+    "exEn": "I'm at home.",
+    "parts": "才 sprout + 土 earth",
+    "mnem": "A sprout (才) rooted in the <b>earth</b> (土) — it exists somewhere: <b>at</b>, <b>in</b>."
   },
   {
     "rank": 7,
@@ -65,7 +77,9 @@ window.COLLOQUIAL_DATA = [
     "en": "person; people",
     "ex": "他是好人。",
     "exPy": "tā shì hǎo rén.",
-    "exEn": "He's a good person."
+    "exEn": "He's a good person.",
+    "parts": "pictograph: two legs walking",
+    "mnem": "Two legs mid-stride — a <b>person</b> walking."
   },
   {
     "rank": 8,
@@ -74,7 +88,9 @@ window.COLLOQUIAL_DATA = [
     "en": "to have; there is",
     "ex": "你有时间吗？",
     "exPy": "nǐ yǒu shí jiān ma?",
-    "exEn": "Do you have time?"
+    "exEn": "Do you have time?",
+    "parts": "𠂇 hand + 月 meat",
+    "mnem": "A <b>hand</b> (𠂇) holding <b>meat</b> (月) — you <b>have</b> something."
   },
   {
     "rank": 9,
@@ -84,7 +100,9 @@ window.COLLOQUIAL_DATA = [
     "ex": "我很好。",
     "exPy": "wǒ hěn hǎo.",
     "exEn": "I'm doing well.",
-    "tone": "Tone change: a 3rd tone before another 3rd tone is pronounced 2nd tone — 我很 is written wǒ hěn but said wó hěn."
+    "tone": "Tone change: a 3rd tone before another 3rd tone is pronounced 2nd tone — 我很 is written wǒ hěn but said wó hěn.",
+    "parts": "contains 戈 dagger-axe",
+    "mnem": "<b>I</b> grip my <b>spear</b> (戈) and plant my feet — “me first, this is mine.”"
   },
   {
     "rank": 10,
@@ -93,7 +111,9 @@ window.COLLOQUIAL_DATA = [
     "en": "he; him",
     "ex": "他在哪儿？",
     "exPy": "tā zài nǎr?",
-    "exEn": "Where is he?"
+    "exEn": "Where is he?",
+    "parts": "亻 person + 也 also",
+    "mnem": "That <b>person</b> (亻) over there is <b>also</b> (也) one of us — <b>he</b>."
   },
   {
     "rank": 11,
@@ -102,7 +122,9 @@ window.COLLOQUIAL_DATA = [
     "en": "this",
     "ex": "这个多少钱？",
     "exPy": "zhè ge duō shǎo qián?",
-    "exEn": "How much is this?"
+    "exEn": "How much is this?",
+    "parts": "辶 walk + 文 writing",
+    "mnem": "<b>Walk</b> (辶) over to the <b>writing</b> (文) and point right at it — <b>this</b> one."
   },
   {
     "rank": 12,
@@ -111,7 +133,9 @@ window.COLLOQUIAL_DATA = [
     "en": "(general measure word)",
     "ex": "给我一个。",
     "exPy": "gěi wǒ yí gè.",
-    "exEn": "Give me one."
+    "exEn": "Give me one.",
+    "parts": "人 person + 丨 stick",
+    "mnem": "A person holding one bamboo <b>stick</b> (丨) — one generic <b>item</b>: the all-purpose measure word."
   },
   {
     "rank": 13,
@@ -120,7 +144,9 @@ window.COLLOQUIAL_DATA = [
     "en": "(plural marker for pronouns/people)",
     "ex": "你们好！",
     "exPy": "nǐ men hǎo!",
-    "exEn": "Hello, everyone!"
+    "exEn": "Hello, everyone!",
+    "parts": "亻 person + 门 door (≈ <b>mén</b>, sound)",
+    "mnem": "A crowd of <b>people</b> (亻) at the <b>door</b> (门) — the plural marker: 我们, 你们."
   },
   {
     "rank": 14,
@@ -129,7 +155,9 @@ window.COLLOQUIAL_DATA = [
     "en": "middle; China (abbr.)",
     "ex": "我在中国。",
     "exPy": "wǒ zài zhōng guó.",
-    "exEn": "I'm in China."
+    "exEn": "I'm in China.",
+    "parts": "口 box + 丨 line through the center",
+    "mnem": "An arrow through the dead <b>center</b> of the target — <b>middle</b>."
   },
   {
     "rank": 15,
@@ -138,7 +166,9 @@ window.COLLOQUIAL_DATA = [
     "en": "to come",
     "ex": "你快来！",
     "exPy": "nǐ kuài lái!",
-    "exEn": "Come quick!"
+    "exEn": "Come quick!",
+    "parts": "pictograph: a wheat plant",
+    "mnem": "Ripe wheat means guests <b>come</b> for the harvest — 来!"
   },
   {
     "rank": 16,
@@ -147,7 +177,9 @@ window.COLLOQUIAL_DATA = [
     "en": "on; above; to go up",
     "ex": "桌子上有一本书。",
     "exPy": "zhuō zi shàng yǒu yì běn shū.",
-    "exEn": "There's a book on the table."
+    "exEn": "There's a book on the table.",
+    "parts": "a mark above the base line",
+    "mnem": "A flag planted <b>above</b> the ground line — <b>up</b>, on top."
   },
   {
     "rank": 17,
@@ -156,7 +188,9 @@ window.COLLOQUIAL_DATA = [
     "en": "big",
     "ex": "这个太大了。",
     "exPy": "zhè ge tài dà le.",
-    "exEn": "This is too big."
+    "exEn": "This is too big.",
+    "parts": "人 person with arms stretched wide",
+    "mnem": "A person stretching their arms as wide as they can — “it was THIS <b>big</b>!”"
   },
   {
     "rank": 18,
@@ -165,7 +199,9 @@ window.COLLOQUIAL_DATA = [
     "en": "for; because of",
     "ex": "我为你高兴。",
     "exPy": "wǒ wèi nǐ gāo xìng.",
-    "exEn": "I'm happy for you."
+    "exEn": "I'm happy for you.",
+    "parts": "from 爲: a hand leading an elephant",
+    "mnem": "Originally a hand leading an elephant to work — effort <b>for</b> a purpose: 为你 for you."
   },
   {
     "rank": 19,
@@ -174,7 +210,9 @@ window.COLLOQUIAL_DATA = [
     "en": "and; with",
     "ex": "我和你一起去。",
     "exPy": "wǒ hé nǐ yì qǐ qù.",
-    "exEn": "I'll go with you."
+    "exEn": "I'll go with you.",
+    "parts": "禾 grain + 口 mouth",
+    "mnem": "<b>Grain</b> (禾) in every <b>mouth</b> (口) — harmony: this <b>and</b> that, shared together."
   },
   {
     "rank": 20,
@@ -183,7 +221,9 @@ window.COLLOQUIAL_DATA = [
     "en": "country",
     "ex": "你是哪国人？",
     "exPy": "nǐ shì nǎ guó rén?",
-    "exEn": "Which country are you from?"
+    "exEn": "Which country are you from?",
+    "parts": "囗 border + 玉 jade",
+    "mnem": "<b>Jade</b> (玉) treasure locked inside secure <b>borders</b> (囗) — a <b>country</b>."
   },
   {
     "rank": 21,
@@ -192,7 +232,9 @@ window.COLLOQUIAL_DATA = [
     "en": "-ly (adverbial particle)",
     "ex": "他慢慢地走。",
     "exPy": "tā màn màn de zǒu.",
-    "exEn": "He walked slowly."
+    "exEn": "He walked slowly.",
+    "parts": "土 earth + 也",
+    "mnem": "<b>Earth</b> (土) is the base of everything — the ground; as a particle it grounds adverbs: 慢慢地 slowly."
   },
   {
     "rank": 22,
@@ -201,7 +243,9 @@ window.COLLOQUIAL_DATA = [
     "en": "to arrive; to",
     "ex": "我到了。",
     "exPy": "wǒ dào le.",
-    "exEn": "I've arrived."
+    "exEn": "I've arrived.",
+    "parts": "至 arrive + 刂 knife (≈ <b>dāo</b>, sound)",
+    "mnem": "The arrow <b>arrives</b> (至) and the knife (刂) pins the exact spot — you've <b>arrived</b>."
   },
   {
     "rank": 23,
@@ -210,7 +254,9 @@ window.COLLOQUIAL_DATA = [
     "en": "(in 以为: to think, mistakenly)",
     "ex": "我以为你走了。",
     "exPy": "wǒ yǐ wéi nǐ zǒu le.",
-    "exEn": "I thought you'd left."
+    "exEn": "I thought you'd left.",
+    "parts": "a person picking up a tool",
+    "mnem": "Pick up the tool and work <b>by means of</b> it; 以为 = take it (wrongly) to be so."
   },
   {
     "rank": 24,
@@ -219,7 +265,9 @@ window.COLLOQUIAL_DATA = [
     "en": "to say; to speak",
     "ex": "你说什么？",
     "exPy": "nǐ shuō shén me?",
-    "exEn": "What did you say?"
+    "exEn": "What did you say?",
+    "parts": "讠 speech + 兑 exchange",
+    "mnem": "<b>Speech</b> (讠) <b>exchanged</b> (兑) back and forth — to <b>speak</b>."
   },
   {
     "rank": 25,
@@ -228,7 +276,9 @@ window.COLLOQUIAL_DATA = [
     "en": "time; when (in 有时)",
     "ex": "我有时会迟到。",
     "exPy": "wǒ yǒu shí huì chí dào.",
-    "exEn": "I'm sometimes late."
+    "exEn": "I'm sometimes late.",
+    "parts": "日 sun + 寸 inch",
+    "mnem": "Measuring the <b>sun</b> (日) <b>inch</b> (寸) by inch across the sky — <b>time</b>."
   },
   {
     "rank": 26,
@@ -237,7 +287,9 @@ window.COLLOQUIAL_DATA = [
     "en": "to want; will",
     "ex": "我要一杯水。",
     "exPy": "wǒ yào yì bēi shuǐ.",
-    "exEn": "I want a glass of water."
+    "exEn": "I want a glass of water.",
+    "parts": "西 west + 女 woman",
+    "mnem": "The <b>woman</b> (女) from the <b>west</b> (西) knows exactly what she <b>wants</b>."
   },
   {
     "rank": 27,
@@ -246,7 +298,9 @@ window.COLLOQUIAL_DATA = [
     "en": "just; then (emphasis)",
     "ex": "我马上就到。",
     "exPy": "wǒ mǎ shàng jiù dào.",
-    "exEn": "I'll be there right away."
+    "exEn": "I'll be there right away.",
+    "parts": "京 capital + 尤 outstanding",
+    "mnem": "Head straight for the <b>capital</b> (京), no detours — <b>right away</b>, <b>just</b> so: 马上就到."
   },
   {
     "rank": 28,
@@ -255,7 +309,9 @@ window.COLLOQUIAL_DATA = [
     "en": "to go out; to exit",
     "ex": "我们出去吧。",
     "exPy": "wǒ men chū qù ba.",
-    "exEn": "Let's go out."
+    "exEn": "Let's go out.",
+    "parts": "山 mountain stacked on 山 mountain",
+    "mnem": "Climbing <b>mountain</b> (山) after mountain to get <b>out</b> of the valley."
   },
   {
     "rank": 29,
@@ -264,7 +320,9 @@ window.COLLOQUIAL_DATA = [
     "en": "can; to know how to; will",
     "ex": "你会说中文吗？",
     "exPy": "nǐ huì shuō zhōng wén ma?",
-    "exEn": "Can you speak Chinese?"
+    "exEn": "Can you speak Chinese?",
+    "parts": "人 person + 云 cloud",
+    "mnem": "<b>People</b> (人) gathering like <b>clouds</b> (云) — a meeting; skills you've gathered are what you <b>can</b> do."
   },
   {
     "rank": 30,
@@ -274,7 +332,9 @@ window.COLLOQUIAL_DATA = [
     "ex": "可以进来吗？",
     "exPy": "kě yǐ jìn lái ma?",
     "exEn": "May I come in?",
-    "tone": "Tone change: a 3rd tone before another 3rd tone is pronounced 2nd tone — 可以 is written kě yǐ but said ké yǐ."
+    "tone": "Tone change: a 3rd tone before another 3rd tone is pronounced 2nd tone — 可以 is written kě yǐ but said ké yǐ.",
+    "parts": "丁 nail + 口 mouth",
+    "mnem": "The <b>mouth</b> (口) nails it down (丁): “<b>Can</b> do — approved!”"
   },
   {
     "rank": 31,
@@ -283,7 +343,9 @@ window.COLLOQUIAL_DATA = [
     "en": "also; too",
     "ex": "我也是。",
     "exPy": "wǒ yě shì.",
-    "exEn": "Me too."
+    "exEn": "Me too.",
+    "parts": "pictograph: a wriggling snake",
+    "mnem": "Whatever that wriggly thing is — I want one <b>too</b>! 也 = also."
   },
   {
     "rank": 32,
@@ -293,7 +355,9 @@ window.COLLOQUIAL_DATA = [
     "ex": "你好吗？",
     "exPy": "nǐ hǎo ma?",
     "exEn": "How are you?",
-    "tone": "Tone change: a 3rd tone before another 3rd tone is pronounced 2nd tone — 你好 is written nǐ hǎo but said ní hǎo."
+    "tone": "Tone change: a 3rd tone before another 3rd tone is pronounced 2nd tone — 你好 is written nǐ hǎo but said ní hǎo.",
+    "parts": "亻 person + 尔 (≈ <b>ní</b>, sound)",
+    "mnem": "A <b>person</b> (亻) standing right in front of you — 你 is “<b>you</b>.”"
   },
   {
     "rank": 33,
@@ -302,7 +366,9 @@ window.COLLOQUIAL_DATA = [
     "en": "correct; towards",
     "ex": "你说得对。",
     "exPy": "nǐ shuō de duì.",
-    "exEn": "You're right."
+    "exEn": "You're right.",
+    "parts": "又 hand + 寸 inch",
+    "mnem": "A <b>hand</b> (又) measuring to the exact <b>inch</b> (寸) — precisely <b>correct</b>: 对!"
   },
   {
     "rank": 34,
@@ -311,7 +377,9 @@ window.COLLOQUIAL_DATA = [
     "en": "life; to be born (in 生日)",
     "ex": "生日快乐！",
     "exPy": "shēng rì kuài lè!",
-    "exEn": "Happy birthday!"
+    "exEn": "Happy birthday!",
+    "parts": "pictograph: a sprout on the earth",
+    "mnem": "A sprout pushing out of the soil — <b>life</b>, being <b>born</b>: 生日 birth-day."
   },
   {
     "rank": 35,
@@ -320,7 +388,9 @@ window.COLLOQUIAL_DATA = [
     "en": "can; to be able to",
     "ex": "我能帮你吗？",
     "exPy": "wǒ néng bāng nǐ ma?",
-    "exEn": "Can I help you?"
+    "exEn": "Can I help you?",
+    "parts": "pictograph: a bear (月 body + 匕匕 claws)",
+    "mnem": "Originally a <b>bear</b> — strong and capable: <b>can</b>, able to."
   },
   {
     "rank": 36,
@@ -329,7 +399,9 @@ window.COLLOQUIAL_DATA = [
     "en": "and also (in 而且)",
     "ex": "他又高又壮，而且很聪明。",
     "exPy": "tā yòu gāo yòu zhuàng, ér qiě hěn cōng míng.",
-    "exEn": "He's tall and strong, and also very smart."
+    "exEn": "He's tall and strong, and also very smart.",
+    "parts": "pictograph: a beard",
+    "mnem": "A wise man strokes his <b>beard</b> between clauses: “…<b>and</b> moreover…” (而且)."
   },
   {
     "rank": 37,
@@ -338,7 +410,9 @@ window.COLLOQUIAL_DATA = [
     "en": "(noun suffix)",
     "ex": "这是我儿子。",
     "exPy": "zhè shì wǒ ér zi.",
-    "exEn": "This is my son."
+    "exEn": "This is my son.",
+    "parts": "pictograph: a baby with open arms",
+    "mnem": "A swaddled <b>baby</b> with arms out — child; also the little suffix on nouns: 儿子, 桌子."
   },
   {
     "rank": 38,
@@ -347,7 +421,9 @@ window.COLLOQUIAL_DATA = [
     "en": "that",
     "ex": "那是谁？",
     "exPy": "nà shì shuí?",
-    "exEn": "Who is that?"
+    "exEn": "Who is that?",
+    "parts": "刀-shape + 阝 city",
+    "mnem": "Pointing at the <b>city</b> (阝) on the horizon — <b>that</b> one over there."
   },
   {
     "rank": 39,
@@ -356,7 +432,9 @@ window.COLLOQUIAL_DATA = [
     "en": "to get; to obtain",
     "ex": "我得到了好消息。",
     "exPy": "wǒ dé dào le hǎo xiāo xī.",
-    "exEn": "I got good news."
+    "exEn": "I got good news.",
+    "parts": "彳 step + 旦 dawn + 寸 inch",
+    "mnem": "<b>Step</b> (彳) out at <b>dawn</b> (旦) and come home with treasure in <b>hand</b> (寸) — to <b>get</b>: 得到."
   },
   {
     "rank": 40,
@@ -365,7 +443,9 @@ window.COLLOQUIAL_DATA = [
     "en": "(formal: in, at; in 取决于)",
     "ex": "这取决于你。",
     "exPy": "zhè qǔ jué yú nǐ.",
-    "exEn": "It depends on you."
+    "exEn": "It depends on you.",
+    "parts": "a simple signpost",
+    "mnem": "A little signpost pinning a phrase to its place — <b>at/in</b> (formal): 取决于 depends <b>on</b>."
   },
   {
     "rank": 41,
@@ -374,7 +454,9 @@ window.COLLOQUIAL_DATA = [
     "en": "(progressive aspect particle)",
     "ex": "我在等着你。",
     "exPy": "wǒ zài děng zhe nǐ.",
-    "exEn": "I'm waiting for you."
+    "exEn": "I'm waiting for you.",
+    "parts": "羊 sheep + 目 eye",
+    "mnem": "Your <b>eye</b> (目) fixed on the <b>sheep</b> (羊), continuously — the “-ing” particle: 等着 waiting."
   },
   {
     "rank": 42,
@@ -383,7 +465,9 @@ window.COLLOQUIAL_DATA = [
     "en": "under; below; next",
     "ex": "下雨了。",
     "exPy": "xià yǔ le.",
-    "exEn": "It's raining."
+    "exEn": "It's raining.",
+    "parts": "a mark below the base line",
+    "mnem": "A root growing <b>below</b> the ground line — <b>down</b>, under: 下雨 rain comes down."
   },
   {
     "rank": 43,
@@ -392,7 +476,9 @@ window.COLLOQUIAL_DATA = [
     "en": "self (in 自己)",
     "ex": "我自己来。",
     "exPy": "wǒ zì jǐ lái.",
-    "exEn": "I'll do it myself."
+    "exEn": "I'll do it myself.",
+    "parts": "pictograph: a nose",
+    "mnem": "A <b>nose</b> — Chinese speakers point at their nose to say “me”: <b>self</b> (自己)."
   },
   {
     "rank": 44,
@@ -401,7 +487,9 @@ window.COLLOQUIAL_DATA = [
     "en": "(formal connector, in 总之)",
     "ex": "总之，我同意。",
     "exPy": "zǒng zhī, wǒ tóng yì.",
-    "exEn": "In short, I agree."
+    "exEn": "In short, I agree.",
+    "parts": "pictograph: a footprint",
+    "mnem": "A classical <b>footstep</b> linking one thing to the next — the old-style 的: 总之 in a word."
   },
   {
     "rank": 45,
@@ -410,7 +498,9 @@ window.COLLOQUIAL_DATA = [
     "en": "year",
     "ex": "明年见！",
     "exPy": "míng nián jiàn!",
-    "exEn": "See you next year!"
+    "exEn": "See you next year!",
+    "parts": "a person carrying grain",
+    "mnem": "A farmer carrying home the <b>harvest</b> — one harvest = one <b>year</b>."
   },
   {
     "rank": 46,
@@ -419,7 +509,9 @@ window.COLLOQUIAL_DATA = [
     "en": "to pass; (experienced-action particle)",
     "ex": "我去过北京。",
     "exPy": "wǒ qù guò běi jīng.",
-    "exEn": "I've been to Beijing."
+    "exEn": "I've been to Beijing.",
+    "parts": "辶 walk + 寸 inch",
+    "mnem": "<b>Walking</b> (辶) past, inch (寸) by inch — to <b>cross</b>; once crossed it's experience: 去过 have been."
   },
   {
     "rank": 47,
@@ -428,7 +520,9 @@ window.COLLOQUIAL_DATA = [
     "en": "to send; to issue",
     "ex": "我发给你了。",
     "exPy": "wǒ fā gěi nǐ le.",
-    "exEn": "I sent it to you."
+    "exEn": "I sent it to you.",
+    "parts": "又 hand + strokes flying off",
+    "mnem": "A <b>hand</b> (又) letting the arrow fly — to <b>send out</b>: 发消息 send a message."
   },
   {
     "rank": 48,
@@ -437,7 +531,9 @@ window.COLLOQUIAL_DATA = [
     "en": "after; behind",
     "ex": "放学后见。",
     "exPy": "fàng xué hòu jiàn.",
-    "exEn": "See you after school."
+    "exEn": "See you after school.",
+    "parts": "厂 slope + 口 mouth",
+    "mnem": "The voice (口) calling from <b>behind</b> the hill (厂) — <b>after</b>, behind: 以后 afterwards."
   },
   {
     "rank": 49,
@@ -446,7 +542,9 @@ window.COLLOQUIAL_DATA = [
     "en": "to do; to make (in 工作)",
     "ex": "我在工作。",
     "exPy": "wǒ zài gōng zuò.",
-    "exEn": "I'm working."
+    "exEn": "I'm working.",
+    "parts": "亻 person + 乍 (≈ <b>zhà</b>, sound)",
+    "mnem": "A <b>person</b> (亻) springing suddenly (乍) into action — to <b>do</b>, to make: 工作 work."
   },
   {
     "rank": 50,
@@ -455,7 +553,9 @@ window.COLLOQUIAL_DATA = [
     "en": "inside; in",
     "ex": "我在家里。",
     "exPy": "wǒ zài jiā lǐ.",
-    "exEn": "I'm at home (inside)."
+    "exEn": "I'm at home (inside).",
+    "parts": "田 field + 土 earth",
+    "mnem": "<b>Fields</b> (田) on <b>earth</b> (土) — the village you live <b>in</b>: inside."
   },
   {
     "rank": 51,
@@ -464,7 +564,9 @@ window.COLLOQUIAL_DATA = [
     "en": "to use",
     "ex": "你会用这个吗？",
     "exPy": "nǐ huì yòng zhè ge ma?",
-    "exEn": "Do you know how to use this?"
+    "exEn": "Do you know how to use this?",
+    "parts": "pictograph: a bucket",
+    "mnem": "An old wooden bucket — grab it and put it to <b>use</b>."
   },
   {
     "rank": 52,
@@ -473,7 +575,9 @@ window.COLLOQUIAL_DATA = [
     "en": "way; to say (in 知道)",
     "ex": "我知道了。",
     "exPy": "wǒ zhī dào le.",
-    "exEn": "Got it."
+    "exEn": "Got it.",
+    "parts": "辶 walk + 首 head",
+    "mnem": "Your <b>head</b> (首) leading your feet (辶) down the <b>path</b> — the way; 知道 = know the way."
   },
   {
     "rank": 53,
@@ -482,7 +586,9 @@ window.COLLOQUIAL_DATA = [
     "en": "OK; to walk; to be alright",
     "ex": "行，就这么办。",
     "exPy": "xíng, jiù zhè me bàn.",
-    "exEn": "OK, let's do it that way."
+    "exEn": "OK, let's do it that way.",
+    "parts": "pictograph: a crossroads",
+    "mnem": "A <b>crossroads</b> where everything moves — to go; “行!” = it works, OK, let's go."
   },
   {
     "rank": 54,
@@ -492,7 +598,9 @@ window.COLLOQUIAL_DATA = [
     "ex": "所以我没去。",
     "exPy": "suǒ yǐ wǒ méi qù.",
     "exEn": "So I didn't go.",
-    "tone": "Tone change: a 3rd tone before another 3rd tone is pronounced 2nd tone — 所以 is written suǒ yǐ but said suó yǐ."
+    "tone": "Tone change: a 3rd tone before another 3rd tone is pronounced 2nd tone — 所以 is written suǒ yǐ but said suó yǐ.",
+    "parts": "户 door + 斤 axe",
+    "mnem": "The <b>door</b> (户) where the <b>axe</b> (斤) hangs — the <b>place</b>; 所以: from that place follows… <b>so</b>."
   },
   {
     "rank": 55,
@@ -501,7 +609,9 @@ window.COLLOQUIAL_DATA = [
     "en": "so; like that (in 然后)",
     "ex": "然后呢？",
     "exPy": "rán hòu ne?",
-    "exEn": "And then what?"
+    "exEn": "And then what?",
+    "parts": "月 meat + 犬 dog + 灬 fire",
+    "mnem": "Meat roasting over the <b>fire</b> (灬) — “<b>so</b> it is, naturally”; 然后 = after that."
   },
   {
     "rank": 56,
@@ -510,7 +620,9 @@ window.COLLOQUIAL_DATA = [
     "en": "home; family",
     "ex": "我要回家了。",
     "exPy": "wǒ yào huí jiā le.",
-    "exEn": "I'm heading home."
+    "exEn": "I'm heading home.",
+    "parts": "宀 roof + 豕 pig",
+    "mnem": "A <b>pig</b> (豕) under your <b>roof</b> (宀) — wealth and warmth: <b>home</b>."
   },
   {
     "rank": 57,
@@ -519,7 +631,9 @@ window.COLLOQUIAL_DATA = [
     "en": "kind; type; to plant",
     "ex": "这种事很常见。",
     "exPy": "zhè zhǒng shì hěn cháng jiàn.",
-    "exEn": "This kind of thing is common."
+    "exEn": "This kind of thing is common.",
+    "parts": "禾 grain + 中 (≈ <b>zhōng</b>, sound)",
+    "mnem": "Each <b>grain</b> (禾) is its own <b>kind</b> of seed — 这种 this kind; plant it and it's 种 zhòng, to sow."
   },
   {
     "rank": 58,
@@ -528,7 +642,9 @@ window.COLLOQUIAL_DATA = [
     "en": "matter; thing; affair",
     "ex": "没事儿。",
     "exPy": "méi shìr.",
-    "exEn": "It's nothing; no worries."
+    "exEn": "It's nothing; no worries.",
+    "parts": "a hand holding a writing tablet",
+    "mnem": "A hand holding the official record — the <b>matter</b> at hand; 没事 = nothing on record, no worries."
   },
   {
     "rank": 59,
@@ -537,7 +653,9 @@ window.COLLOQUIAL_DATA = [
     "en": "to become; to succeed",
     "ex": "我们成功了！",
     "exPy": "wǒ men chéng gōng le!",
-    "exEn": "We did it!"
+    "exEn": "We did it!",
+    "parts": "戈 weapon, forged complete",
+    "mnem": "The <b>weapon</b> (戈) comes off the forge finished — to <b>become</b>, to succeed: 成功."
   },
   {
     "rank": 60,
@@ -546,7 +664,9 @@ window.COLLOQUIAL_DATA = [
     "en": "square; place (in 地方)",
     "ex": "这个地方真漂亮。",
     "exPy": "zhè ge dì fāng zhēn piào liàng.",
-    "exEn": "This place is really pretty."
+    "exEn": "This place is really pretty.",
+    "parts": "pictograph: a square with corners",
+    "mnem": "A <b>square</b> pointing all four directions — 地方: a place on the map."
   },
   {
     "rank": 61,
@@ -555,7 +675,9 @@ window.COLLOQUIAL_DATA = [
     "en": "many; much",
     "ex": "你多大了？",
     "exPy": "nǐ duō dà le?",
-    "exEn": "How old are you?"
+    "exEn": "How old are you?",
+    "parts": "夕 evening + 夕 evening",
+    "mnem": "<b>Evening</b> (夕) after evening piling up — <b>many</b>, much."
   },
   {
     "rank": 62,
@@ -564,7 +686,9 @@ window.COLLOQUIAL_DATA = [
     "en": "to pass through (in 已经)",
     "ex": "我已经吃了。",
     "exPy": "wǒ yǐ jīng chī le.",
-    "exEn": "I've already eaten."
+    "exEn": "I've already eaten.",
+    "parts": "纟 silk + loom warp",
+    "mnem": "The <b>silk</b> (纟) warp threads of a loom — everything <b>passes through</b> them: 已经 already passed."
   },
   {
     "rank": 63,
@@ -573,7 +697,9 @@ window.COLLOQUIAL_DATA = [
     "en": "(question suffix, in 什么/怎么)",
     "ex": "你在干什么？",
     "exPy": "nǐ zài gàn shén me?",
-    "exEn": "What are you doing?"
+    "exEn": "What are you doing?",
+    "parts": "a tiny silk thread",
+    "mnem": "A tiny dangling <b>thread</b> tacked onto question words: 什么? 怎么?"
   },
   {
     "rank": 64,
@@ -582,7 +708,9 @@ window.COLLOQUIAL_DATA = [
     "en": "to go",
     "ex": "你要去哪儿？",
     "exPy": "nǐ yào qù nǎr?",
-    "exEn": "Where are you going?"
+    "exEn": "Where are you going?",
+    "parts": "土 earth + 厶 private",
+    "mnem": "Pack your <b>private</b> (厶) things and leave this patch of <b>earth</b> (土) — to <b>go</b>."
   },
   {
     "rank": 65,
@@ -591,7 +719,9 @@ window.COLLOQUIAL_DATA = [
     "en": "method (in 办法)",
     "ex": "有什么办法吗？",
     "exPy": "yǒu shén me bàn fǎ ma?",
-    "exEn": "Is there any way to solve this?"
+    "exEn": "Is there any way to solve this?",
+    "parts": "氵 water + 去 go",
+    "mnem": "<b>Law</b> should flow like <b>water</b> (氵) — level and fair; 办法: the way water finds through."
   },
   {
     "rank": 66,
@@ -600,7 +730,9 @@ window.COLLOQUIAL_DATA = [
     "en": "to study; to learn",
     "ex": "我在学中文。",
     "exPy": "wǒ zài xué zhōng wén.",
-    "exEn": "I'm learning Chinese."
+    "exEn": "I'm learning Chinese.",
+    "parts": "hands pouring in + 子 child under a roof",
+    "mnem": "Hands pouring knowledge over a <b>child</b> (子) under the school roof — to <b>learn</b>."
   },
   {
     "rank": 67,
@@ -609,7 +741,9 @@ window.COLLOQUIAL_DATA = [
     "en": "if; like (in 如果)",
     "ex": "如果你忙，就别来了。",
     "exPy": "rú guǒ nǐ máng, jiù bié lái le.",
-    "exEn": "If you're busy, don't bother coming."
+    "exEn": "If you're busy, don't bother coming.",
+    "parts": "女 woman + 口 mouth",
+    "mnem": "Do <b>as</b> the wise woman (女) says (口) — like, as, <b>if</b>: 如果."
   },
   {
     "rank": 68,
@@ -618,7 +752,9 @@ window.COLLOQUIAL_DATA = [
     "en": "all; both",
     "ex": "我们都到了。",
     "exPy": "wǒ men dōu dào le.",
-    "exEn": "We've all arrived."
+    "exEn": "We've all arrived.",
+    "parts": "者 + 阝 city",
+    "mnem": "The capital <b>city</b> (阝) where everyone gathers — <b>all</b>: 我们都."
   },
   {
     "rank": 69,
@@ -627,7 +763,9 @@ window.COLLOQUIAL_DATA = [
     "en": "same; together (in 同学)",
     "ex": "我们是同学。",
     "exPy": "wǒ men shì tóng xué.",
-    "exEn": "We're classmates."
+    "exEn": "We're classmates.",
+    "parts": "一 one + 口 mouth under one frame",
+    "mnem": "Everyone under one roof-frame speaking with <b>one mouth</b> (口) — the <b>same</b>: 同学 study-mates."
   },
   {
     "rank": 70,
@@ -636,7 +774,9 @@ window.COLLOQUIAL_DATA = [
     "en": "now (in 现在)",
     "ex": "你现在在哪儿？",
     "exPy": "nǐ xiàn zài zài nǎr?",
-    "exEn": "Where are you right now?"
+    "exEn": "Where are you right now?",
+    "parts": "王 jade + 见 see",
+    "mnem": "<b>Jade</b> (王) suddenly <b>seen</b> (见) sparkling — it appears right <b>now</b>: 现在."
   },
   {
     "rank": 71,
@@ -645,7 +785,9 @@ window.COLLOQUIAL_DATA = [
     "en": "of course (in 当然); to serve as",
     "ex": "那当然！",
     "exPy": "nà dāng rán!",
-    "exEn": "Of course!"
+    "exEn": "Of course!",
+    "parts": "彐 broom-hand over a base",
+    "mnem": "Pick up the broom and <b>serve as</b> the one in charge — 当医生 work as a doctor; 当然 of course, as one should."
   },
   {
     "rank": 72,
@@ -654,7 +796,9 @@ window.COLLOQUIAL_DATA = [
     "en": "not (have); did not",
     "ex": "我没听懂。",
     "exPy": "wǒ méi tīng dǒng.",
-    "exEn": "I didn't understand."
+    "exEn": "I didn't understand.",
+    "parts": "氵 water + 殳 tool",
+    "mnem": "It sank into the <b>water</b> (氵) — gone: <b>not have</b>, didn't happen: 没有."
   },
   {
     "rank": 73,
@@ -663,7 +807,9 @@ window.COLLOQUIAL_DATA = [
     "en": "to move; to act",
     "ex": "别动！",
     "exPy": "bié dòng!",
-    "exEn": "Don't move!"
+    "exEn": "Don't move!",
+    "parts": "云 cloud + 力 force",
+    "mnem": "<b>Force</b> (力) pushing the <b>clouds</b> (云) across the sky — things <b>move</b>: 别动! don't move!"
   },
   {
     "rank": 74,
@@ -672,7 +818,9 @@ window.COLLOQUIAL_DATA = [
     "en": "face; side; noodles",
     "ex": "我们见面聊吧。",
     "exPy": "wǒ men jiàn miàn liáo ba.",
-    "exEn": "Let's meet up and talk."
+    "exEn": "Let's meet up and talk.",
+    "parts": "pictograph: a face in a frame",
+    "mnem": "A <b>face</b> — face, surface, side; 见面: see each other's faces, meet. (Also noodles: 面条.)"
   },
   {
     "rank": 75,
@@ -681,7 +829,9 @@ window.COLLOQUIAL_DATA = [
     "en": "to rise; up (in 一起)",
     "ex": "我们一起去吧。",
     "exPy": "wǒ men yì qǐ qù ba.",
-    "exEn": "Let's go together."
+    "exEn": "Let's go together.",
+    "parts": "走 walk + 己 self (≈ <b>jǐ</b>, sound)",
+    "mnem": "Get your<b>self</b> (己) up and <b>walking</b> (走) — to <b>rise</b>; 一起 = rise as one, together."
   },
   {
     "rank": 76,
@@ -690,7 +840,9 @@ window.COLLOQUIAL_DATA = [
     "en": "to look; to watch; to read",
     "ex": "你在看什么？",
     "exPy": "nǐ zài kàn shén me?",
-    "exEn": "What are you watching?"
+    "exEn": "What are you watching?",
+    "parts": "手 hand + 目 eye",
+    "mnem": "A <b>hand</b> (手) shading the <b>eyes</b> (目) to peer into the distance — to <b>look</b>."
   },
   {
     "rank": 77,
@@ -699,7 +851,9 @@ window.COLLOQUIAL_DATA = [
     "en": "surely (in 一定); to decide",
     "ex": "我一定会去。",
     "exPy": "wǒ yí dìng huì qù.",
-    "exEn": "I will definitely go."
+    "exEn": "I will definitely go.",
+    "parts": "宀 roof + a straightened base",
+    "mnem": "Everything set straight under the <b>roof</b> (宀) — settled, <b>fixed</b>: 一定 for sure."
   },
   {
     "rank": 78,
@@ -708,7 +862,9 @@ window.COLLOQUIAL_DATA = [
     "en": "day; sky",
     "ex": "今天天气真好。",
     "exPy": "jīn tiān tiān qì zhēn hǎo.",
-    "exEn": "The weather's really nice today."
+    "exEn": "The weather's really nice today.",
+    "parts": "大 big person + 一 line above",
+    "mnem": "The line <b>above</b> even the biggest person (大) — the <b>sky</b>; each sky-cycle is a <b>day</b>."
   },
   {
     "rank": 79,
@@ -717,7 +873,9 @@ window.COLLOQUIAL_DATA = [
     "en": "to divide; minute; point",
     "ex": "还有五分钟。",
     "exPy": "hái yǒu wǔ fēn zhōng.",
-    "exEn": "There are five more minutes."
+    "exEn": "There are five more minutes.",
+    "parts": "八 split + 刀 knife",
+    "mnem": "A <b>knife</b> (刀) cutting a thing in <b>two</b> (八) — to divide; a <b>minute</b> is a slice of the hour."
   },
   {
     "rank": 80,
@@ -726,7 +884,9 @@ window.COLLOQUIAL_DATA = [
     "en": "still; also; even more",
     "ex": "你还好吗？",
     "exPy": "nǐ hái hǎo ma?",
-    "exEn": "Are you okay?"
+    "exEn": "Are you okay?",
+    "parts": "辶 walk + 不 no",
+    "mnem": "<b>Walking</b> (辶) back, “<b>not</b> (不) done yet” — <b>still</b>, also: 还好 still OK."
   },
   {
     "rank": 81,
@@ -735,7 +895,9 @@ window.COLLOQUIAL_DATA = [
     "en": "to enter",
     "ex": "请进！",
     "exPy": "qǐng jìn!",
-    "exEn": "Please come in!"
+    "exEn": "Please come in!",
+    "parts": "辶 walk + 井 well",
+    "mnem": "<b>Walk</b> (辶) toward the <b>well</b> (井) at the village center — to <b>enter</b>: 请进!"
   },
   {
     "rank": 82,
@@ -744,7 +906,9 @@ window.COLLOQUIAL_DATA = [
     "en": "good; well; OK",
     "ex": "好的，没问题！",
     "exPy": "hǎo de, méi wèn tí!",
-    "exEn": "OK, no problem!"
+    "exEn": "OK, no problem!",
+    "parts": "女 woman + 子 child",
+    "mnem": "A <b>woman</b> (女) holding her <b>child</b> (子) — mother and child together: everything is <b>good</b>."
   },
   {
     "rank": 83,
@@ -753,7 +917,9 @@ window.COLLOQUIAL_DATA = [
     "en": "small; little",
     "ex": "这只是小事。",
     "exPy": "zhè zhǐ shì xiǎo shì.",
-    "exEn": "It's just a small thing."
+    "exEn": "It's just a small thing.",
+    "parts": "a hook splitting two tiny dots",
+    "mnem": "One stroke splitting a thing into two tiny bits — <b>small</b>."
   },
   {
     "rank": 84,
@@ -762,7 +928,9 @@ window.COLLOQUIAL_DATA = [
     "en": "part; unit (measure word for films)",
     "ex": "这部电影很好看。",
     "exPy": "zhè bù diàn yǐng hěn hǎo kàn.",
-    "exEn": "This movie is really good."
+    "exEn": "This movie is really good.",
+    "parts": "咅 (≈ sound) + 阝 city",
+    "mnem": "A <b>city</b> (阝) split into districts — a <b>part</b>, a section; also the measure word for films."
   },
   {
     "rank": 85,
@@ -771,7 +939,9 @@ window.COLLOQUIAL_DATA = [
     "en": "actually (in 其实)",
     "ex": "其实我不太喜欢。",
     "exPy": "qí shí wǒ bú tài xǐ huān.",
-    "exEn": "Actually, I don't really like it."
+    "exEn": "Actually, I don't really like it.",
+    "parts": "pictograph: a winnowing basket",
+    "mnem": "Pointing at the basket: “<b>its</b> contents, <b>that</b> one” — 其实: as for the actual facts…"
   },
   {
     "rank": 86,
@@ -780,7 +950,9 @@ window.COLLOQUIAL_DATA = [
     "en": "some; a few",
     "ex": "你要不要吃一些？",
     "exPy": "nǐ yào bú yào chī yì xiē?",
-    "exEn": "Do you want to eat some?"
+    "exEn": "Do you want to eat some?",
+    "parts": "此 this + 二 two",
+    "mnem": "<b>This</b> (此) plus another one or <b>two</b> (二) — <b>some</b>, a few."
   },
   {
     "rank": 87,
@@ -789,7 +961,9 @@ window.COLLOQUIAL_DATA = [
     "en": "main (in 主意)",
     "ex": "这是个好主意！",
     "exPy": "zhè shì gè hǎo zhǔ yì!",
-    "exEn": "That's a good idea!"
+    "exEn": "That's a good idea!",
+    "parts": "丶 flame + 王 king",
+    "mnem": "The <b>flame</b> (丶) burning above the king (王) — the <b>master</b> of the house keeps the lamp; 主意: the master's <b>idea</b>."
   },
   {
     "rank": 88,
@@ -798,7 +972,9 @@ window.COLLOQUIAL_DATA = [
     "en": "kind; way (in 这样/怎么样)",
     "ex": "你觉得怎么样？",
     "exPy": "nǐ jué de zěn me yàng?",
-    "exEn": "What do you think?"
+    "exEn": "What do you think?",
+    "parts": "木 wood + 羊 sheep (≈ <b>yáng</b>, sound)",
+    "mnem": "A <b>wooden</b> (木) mold shaped like a <b>sheep</b> (羊) — a pattern, a <b>way</b>: 怎么样? what's it like?"
   },
   {
     "rank": 89,
@@ -807,7 +983,9 @@ window.COLLOQUIAL_DATA = [
     "en": "reason; sense (in 道理)",
     "ex": "你说得有道理。",
     "exPy": "nǐ shuō de yǒu dào lǐ.",
-    "exEn": "What you said makes sense."
+    "exEn": "What you said makes sense.",
+    "parts": "王 jade + 里 (≈ <b>lǐ</b>, sound)",
+    "mnem": "Carving <b>jade</b> (王) along its natural veins — following the inner <b>logic</b>: 道理 sense."
   },
   {
     "rank": 90,
@@ -816,7 +994,9 @@ window.COLLOQUIAL_DATA = [
     "en": "heart; mind",
     "ex": "别担心。",
     "exPy": "bié dān xīn.",
-    "exEn": "Don't worry."
+    "exEn": "Don't worry.",
+    "parts": "pictograph: a heart",
+    "mnem": "A <b>heart</b> with three drops of blood — heart, mind; 担心 = a weighed-down heart: worry."
   },
   {
     "rank": 91,
@@ -825,7 +1005,9 @@ window.COLLOQUIAL_DATA = [
     "en": "she; her",
     "ex": "她是谁？",
     "exPy": "tā shì shuí?",
-    "exEn": "Who is she?"
+    "exEn": "Who is she?",
+    "parts": "女 woman + 也 also",
+    "mnem": "Just like 他, but with <b>woman</b> (女) — <b>she</b>."
   },
   {
     "rank": 92,
@@ -834,7 +1016,9 @@ window.COLLOQUIAL_DATA = [
     "en": "originally (in 本来)",
     "ex": "我本来想去。",
     "exPy": "wǒ běn lái xiǎng qù.",
-    "exEn": "I originally wanted to go."
+    "exEn": "I originally wanted to go.",
+    "parts": "木 tree + 一 mark at the root",
+    "mnem": "A stroke marking the tree's (木) <b>root</b> — the origin: 本来 = from the root, originally."
   },
   {
     "rank": 93,
@@ -843,7 +1027,9 @@ window.COLLOQUIAL_DATA = [
     "en": "front; before; ago",
     "ex": "你以前来过吗？",
     "exPy": "nǐ yǐ qián lái guò ma?",
-    "exEn": "Have you been here before?"
+    "exEn": "Have you been here before?",
+    "parts": "the prow of a boat cutting ahead",
+    "mnem": "A boat's prow cutting <b>forward</b> — in front, <b>before</b>: 以前 = the stretch already sailed."
   },
   {
     "rank": 94,
@@ -852,7 +1038,9 @@ window.COLLOQUIAL_DATA = [
     "en": "to open; to start; to drive",
     "ex": "快开门！",
     "exPy": "kuài kāi mén!",
-    "exEn": "Open the door, quick!"
+    "exEn": "Open the door, quick!",
+    "parts": "一 bar + 廾 two hands",
+    "mnem": "Two hands (廾) lifting the <b>bar</b> (一) off the door — to <b>open</b>; 开车: open the throttle, drive."
   },
   {
     "rank": 95,
@@ -861,7 +1049,9 @@ window.COLLOQUIAL_DATA = [
     "en": "but; however",
     "ex": "我很累，但是很开心。",
     "exPy": "wǒ hěn lèi, dàn shì hěn kāi xīn.",
-    "exEn": "I'm tired, but happy."
+    "exEn": "I'm tired, but happy.",
+    "parts": "亻 person + 旦 dawn (≈ <b>dàn</b>, sound)",
+    "mnem": "At <b>dawn</b> (旦) the person (亻) adds: “<b>but</b> one more thing…” — 但是."
   },
   {
     "rank": 96,
@@ -870,7 +1060,9 @@ window.COLLOQUIAL_DATA = [
     "en": "because (of) (in 因为)",
     "ex": "因为下雨，我没去。",
     "exPy": "yīn wèi xià yǔ, wǒ méi qù.",
-    "exEn": "I didn't go because it was raining."
+    "exEn": "I didn't go because it was raining.",
+    "parts": "大 person inside 囗 box",
+    "mnem": "The <b>person</b> (大) found inside the sealed box (囗) — there's your <b>cause</b>: 因为 because."
   },
   {
     "rank": 97,
@@ -879,7 +1071,9 @@ window.COLLOQUIAL_DATA = [
     "en": "only; just",
     "ex": "我只是问问。",
     "exPy": "wǒ zhǐ shì wèn wèn.",
-    "exEn": "I'm just asking."
+    "exEn": "I'm just asking.",
+    "parts": "口 mouth + 八 a puff of breath",
+    "mnem": "One mouth (口), one puff (八) — <b>only</b> that, <b>just</b>: 只是."
   },
   {
     "rank": 98,
@@ -888,7 +1082,9 @@ window.COLLOQUIAL_DATA = [
     "en": "from",
     "ex": "你从哪儿来？",
     "exPy": "nǐ cóng nǎr lái?",
-    "exEn": "Where are you from?"
+    "exEn": "Where are you from?",
+    "parts": "人 person + 人 person",
+    "mnem": "One person walking behind another — to follow; where you follow <b>from</b>: 你从哪儿来?"
   },
   {
     "rank": 99,
@@ -898,7 +1094,9 @@ window.COLLOQUIAL_DATA = [
     "ex": "我想你了。",
     "exPy": "wǒ xiǎng nǐ le.",
     "exEn": "I miss you.",
-    "tone": "Tone change: a 3rd tone before another 3rd tone is pronounced 2nd tone — 想你 is written xiǎng nǐ but said xiáng nǐ."
+    "tone": "Tone change: a 3rd tone before another 3rd tone is pronounced 2nd tone — 想你 is written xiǎng nǐ but said xiáng nǐ.",
+    "parts": "木 tree + 目 eye + 心 heart",
+    "mnem": "Your <b>eye</b> (目) on a distant tree (木), your <b>heart</b> (心) underneath — to <b>think</b> of, to <b>miss</b>."
   },
   {
     "rank": 100,
@@ -907,7 +1105,9 @@ window.COLLOQUIAL_DATA = [
     "en": "real; true (in 其实/说实话)",
     "ex": "说实话，我不知道。",
     "exPy": "shuō shí huà, wǒ bù zhī dào.",
-    "exEn": "To be honest, I don't know."
+    "exEn": "To be honest, I don't know.",
+    "parts": "宀 roof + 头 head",
+    "mnem": "Real goods piled head-high (头) under the <b>roof</b> (宀) — solid, <b>real</b>: 其实 actually."
   },
   {
     "rank": 101,
@@ -916,7 +1116,9 @@ window.COLLOQUIAL_DATA = [
     "en": "sun; day",
     "ex": "今天是几月几日？",
     "exPy": "jīn tiān shì jǐ yuè jǐ rì?",
-    "exEn": "What's today's date?"
+    "exEn": "What's today's date?",
+    "parts": "pictograph: the sun",
+    "mnem": "A round <b>sun</b> squared off, spot in the middle — sun, <b>day</b>."
   },
   {
     "rank": 102,
@@ -925,7 +1127,9 @@ window.COLLOQUIAL_DATA = [
     "en": "army; military",
     "ex": "他当过军人。",
     "exPy": "tā dāng guò jūn rén.",
-    "exEn": "He used to be a soldier."
+    "exEn": "He used to be a soldier.",
+    "parts": "冖 cover + 车 chariot",
+    "mnem": "<b>Chariots</b> (车) under camouflage <b>cover</b> (冖) — the <b>army</b>."
   },
   {
     "rank": 103,
@@ -935,7 +1139,9 @@ window.COLLOQUIAL_DATA = [
     "ex": "你去或者我去，都行。",
     "exPy": "nǐ qù huò zhě wǒ qù, dōu xíng.",
     "exEn": "Either you go or I go, both are fine.",
-    "tone": "Tone change: a 3rd tone before another 3rd tone is pronounced 2nd tone — 者我 is written zhě wǒ but said zhé wǒ."
+    "tone": "Tone change: a 3rd tone before another 3rd tone is pronounced 2nd tone — 者我 is written zhě wǒ but said zhé wǒ.",
+    "parts": "耂 old master + 日",
+    "mnem": "The old master (耂) who does the thing — the do-<b>er</b>; 或者: this one <b>or</b> that one."
   },
   {
     "rank": 104,
@@ -944,7 +1150,9 @@ window.COLLOQUIAL_DATA = [
     "en": "meaning; idea (in 意思)",
     "ex": "这是什么意思？",
     "exPy": "zhè shì shén me yì si?",
-    "exEn": "What does this mean?"
+    "exEn": "What does this mean?",
+    "parts": "音 sound + 心 heart",
+    "mnem": "The <b>sound</b> (音) your <b>heart</b> (心) makes — <b>meaning</b>, idea: 意思."
   },
   {
     "rank": 105,
@@ -953,7 +1161,9 @@ window.COLLOQUIAL_DATA = [
     "en": "without; not (formal, in 无所谓)",
     "ex": "无所谓，随便你。",
     "exPy": "wú suǒ wèi, suí biàn nǐ.",
-    "exEn": "Whatever, up to you."
+    "exEn": "Whatever, up to you.",
+    "parts": "a dancer's sweeping arms",
+    "mnem": "A dancer's arms sweeping over emptiness — <b>nothing</b>, without: 无所谓 nothing worth mentioning, whatever."
   },
   {
     "rank": 106,
@@ -962,7 +1172,9 @@ window.COLLOQUIAL_DATA = [
     "en": "strength; effort (in 努力)",
     "ex": "你要努力！",
     "exPy": "nǐ yào nǔ lì!",
-    "exEn": "You need to work hard!"
+    "exEn": "You need to work hard!",
+    "parts": "pictograph: a flexed arm at the plow",
+    "mnem": "A flexed <b>arm</b> straining at the plow — <b>strength</b>: 努力 push your strength."
   },
   {
     "rank": 107,
@@ -971,7 +1183,9 @@ window.COLLOQUIAL_DATA = [
     "en": "it",
     "ex": "它是我的猫。",
     "exPy": "tā shì wǒ de māo.",
-    "exEn": "It's my cat."
+    "exEn": "It's my cat.",
+    "parts": "宀 roof + 匕 (originally a snake)",
+    "mnem": "The thing under the <b>roof</b> (宀) that isn't a person — originally a snake: <b>it</b>."
   },
   {
     "rank": 108,
@@ -981,7 +1195,9 @@ window.COLLOQUIAL_DATA = [
     "ex": "这与我无关。",
     "exPy": "zhè yǔ wǒ wú guān.",
     "exEn": "This has nothing to do with me.",
-    "tone": "Tone change: a 3rd tone before another 3rd tone is pronounced 2nd tone — 与我 is written yǔ wǒ but said yú wǒ."
+    "tone": "Tone change: a 3rd tone before another 3rd tone is pronounced 2nd tone — 与我 is written yǔ wǒ but said yú wǒ.",
+    "parts": "from 與: hands passing something over",
+    "mnem": "Hands passing something across — together <b>with</b>, and: 与我无关 nothing passed to me."
   },
   {
     "rank": 109,
@@ -990,7 +1206,9 @@ window.COLLOQUIAL_DATA = [
     "en": "to grow; long",
     "ex": "你长高了！",
     "exPy": "nǐ zhǎng gāo le!",
-    "exEn": "You've grown taller!"
+    "exEn": "You've grown taller!",
+    "parts": "pictograph: long flowing hair",
+    "mnem": "<b>Long</b> hair streaming — cháng = long; hair keeps <b>growing</b> — zhǎng = grow."
   },
   {
     "rank": 110,
@@ -999,7 +1217,9 @@ window.COLLOQUIAL_DATA = [
     "en": "(object-marker); to hold",
     "ex": "把门关上。",
     "exPy": "bǎ mén guān shàng.",
-    "exEn": "Close the door."
+    "exEn": "Close the door.",
+    "parts": "扌 hand + 巴 (≈ <b>bā</b>, sound)",
+    "mnem": "A <b>hand</b> (扌) gripping the handle — 把 grabs the object and moves it up front: 把门关上."
   },
   {
     "rank": 111,
@@ -1008,7 +1228,9 @@ window.COLLOQUIAL_DATA = [
     "en": "machine (in 手机)",
     "ex": "我手机没电了。",
     "exPy": "wǒ shǒu jī méi diàn le.",
-    "exEn": "My phone's out of battery."
+    "exEn": "My phone's out of battery.",
+    "parts": "木 wood + 几 (≈ <b>jī</b>, sound)",
+    "mnem": "A <b>wooden</b> (木) contraption on a small table (几) — a <b>machine</b>: 手机 = hand-machine, phone."
   },
   {
     "rank": 112,
@@ -1017,7 +1239,9 @@ window.COLLOQUIAL_DATA = [
     "en": "ten",
     "ex": "我要十个饺子。",
     "exPy": "wǒ yào shí gè jiǎo zi.",
-    "exEn": "I'll have ten dumplings."
+    "exEn": "I'll have ten dumplings.",
+    "parts": "a full cross",
+    "mnem": "A complete cross — both directions covered: <b>ten</b>, completeness."
   },
   {
     "rank": 113,
@@ -1026,7 +1250,9 @@ window.COLLOQUIAL_DATA = [
     "en": "people; citizens (in 移民)",
     "ex": "移民很不容易。",
     "exPy": "yí mín hěn bù róng yì.",
-    "exEn": "Immigrating isn't easy."
+    "exEn": "Immigrating isn't easy.",
+    "parts": "pictograph: an old branding mark",
+    "mnem": "The masses marked for service in ancient times — the <b>people</b>: 移民 moving people, immigrants."
   },
   {
     "rank": 114,
@@ -1035,7 +1261,9 @@ window.COLLOQUIAL_DATA = [
     "en": "(ordinal prefix)",
     "ex": "这是我第一次来。",
     "exPy": "zhè shì wǒ dì yī cì lái.",
-    "exEn": "This is my first time here."
+    "exEn": "This is my first time here.",
+    "parts": "⺮ bamboo + 弟 (≈ <b>dì</b>, sound)",
+    "mnem": "<b>Bamboo</b> (⺮) slips numbered in sequence — the ordinal prefix: 第一 first."
   },
   {
     "rank": 115,
@@ -1044,7 +1272,9 @@ window.COLLOQUIAL_DATA = [
     "en": "public (in 公司)",
     "ex": "我在公司加班。",
     "exPy": "wǒ zài gōng sī jiā bān.",
-    "exEn": "I'm working overtime at the office."
+    "exEn": "I'm working overtime at the office.",
+    "parts": "八 divide + 厶 private",
+    "mnem": "<b>Dividing</b> (八) up what was <b>private</b> (厶) — <b>public</b>: 公司 the public office, a company."
   },
   {
     "rank": 116,
@@ -1053,7 +1283,9 @@ window.COLLOQUIAL_DATA = [
     "en": "this (formal, in 因此)",
     "ex": "因此，我们决定取消。",
     "exPy": "yīn cǐ, wǒ men jué dìng qǔ xiāo.",
-    "exEn": "So, we decided to cancel."
+    "exEn": "So, we decided to cancel.",
+    "parts": "止 stop + 匕",
+    "mnem": "Your foot <b>stops</b> (止) right here — <b>this</b> (formal): 因此 therefore."
   },
   {
     "rank": 117,
@@ -1062,7 +1294,9 @@ window.COLLOQUIAL_DATA = [
     "en": "already (in 已经)",
     "ex": "我已经到了。",
     "exPy": "wǒ yǐ jīng dào le.",
-    "exEn": "I've already arrived."
+    "exEn": "I've already arrived.",
+    "parts": "a snake already coiled",
+    "mnem": "The snake has <b>already</b> coiled up for the day — done: 已经."
   },
   {
     "rank": 118,
@@ -1071,7 +1305,9 @@ window.COLLOQUIAL_DATA = [
     "en": "work; labor",
     "ex": "这个工作很有意思。",
     "exPy": "zhè ge gōng zuò hěn yǒu yì si.",
-    "exEn": "This job is interesting."
+    "exEn": "This job is interesting.",
+    "parts": "pictograph: a carpenter's square",
+    "mnem": "A carpenter's square — <b>work</b>, labor: 工作."
   },
   {
     "rank": 119,
@@ -1081,7 +1317,9 @@ window.COLLOQUIAL_DATA = [
     "ex": "即使很累，我也要去。",
     "exPy": "jí shǐ hěn lèi, wǒ yě yào qù.",
     "exEn": "Even if I'm tired, I'll still go.",
-    "tone": "Tone change: a 3rd tone before another 3rd tone is pronounced 2nd tone — 使很 is written shǐ hěn but said shí hěn."
+    "tone": "Tone change: a 3rd tone before another 3rd tone is pronounced 2nd tone — 使很 is written shǐ hěn but said shí hěn.",
+    "parts": "亻 person + 吏 official",
+    "mnem": "The <b>official</b> (吏) standing over a <b>person</b> (亻), making them act — to make, to <b>cause</b>; 即使 even if."
   },
   {
     "rank": 120,
@@ -1090,7 +1328,9 @@ window.COLLOQUIAL_DATA = [
     "en": "feeling; mood (in 心情)",
     "ex": "你今天心情怎么样？",
     "exPy": "nǐ jīn tiān xīn qíng zěn me yàng?",
-    "exEn": "How are you feeling today?"
+    "exEn": "How are you feeling today?",
+    "parts": "忄 heart + 青 (≈ <b>qīng</b>, sound)",
+    "mnem": "What the young green (青) <b>heart</b> (忄) is full of — <b>feelings</b>: 心情 mood."
   },
   {
     "rank": 121,
@@ -1099,7 +1339,9 @@ window.COLLOQUIAL_DATA = [
     "en": "clear; to understand (in 明白)",
     "ex": "我明白了。",
     "exPy": "wǒ míng bái le.",
-    "exEn": "I understand now."
+    "exEn": "I understand now.",
+    "parts": "日 sun + 月 moon",
+    "mnem": "<b>Sun</b> (日) and <b>moon</b> (月) side by side — the brightest things there are: <b>bright</b>, clear: 明白."
   },
   {
     "rank": 122,
@@ -1108,7 +1350,9 @@ window.COLLOQUIAL_DATA = [
     "en": "nature; character (in 性格)",
     "ex": "他性格很好。",
     "exPy": "tā xìng gé hěn hǎo.",
-    "exEn": "He has a good personality."
+    "exEn": "He has a good personality.",
+    "parts": "忄 heart + 生 born (≈ <b>shēng</b>, sound)",
+    "mnem": "The <b>heart</b> (忄) you're <b>born</b> (生) with — your <b>nature</b>: 性格 character."
   },
   {
     "rank": 123,
@@ -1117,7 +1361,9 @@ window.COLLOQUIAL_DATA = [
     "en": "to know (in 知道)",
     "ex": "你知道吗？",
     "exPy": "nǐ zhī dào ma?",
-    "exEn": "Do you know?"
+    "exEn": "Do you know?",
+    "parts": "矢 arrow + 口 mouth",
+    "mnem": "When you <b>know</b>, your words (口) fly straight as <b>arrows</b> (矢) — 知道."
   },
   {
     "rank": 124,
@@ -1126,7 +1372,9 @@ window.COLLOQUIAL_DATA = [
     "en": "whole; entire",
     "ex": "我们全都同意。",
     "exPy": "wǒ men quán dōu tóng yì.",
-    "exEn": "We all agree."
+    "exEn": "We all agree.",
+    "parts": "人 person + 王 jade",
+    "mnem": "A flawless piece of <b>jade</b> (王) held safe in a person's hands — <b>whole</b>, complete: 全都 all of it."
   },
   {
     "rank": 125,
@@ -1135,7 +1383,9 @@ window.COLLOQUIAL_DATA = [
     "en": "three",
     "ex": "我们三个人一起去。",
     "exPy": "wǒ men sān gè rén yì qǐ qù.",
-    "exEn": "The three of us will go together."
+    "exEn": "The three of us will go together.",
+    "parts": "three strokes",
+    "mnem": "Three strokes — <b>three</b>."
   },
   {
     "rank": 126,
@@ -1144,7 +1394,9 @@ window.COLLOQUIAL_DATA = [
     "en": "again; also",
     "ex": "你又迟到了！",
     "exPy": "nǐ yòu chí dào le!",
-    "exEn": "You're late again!"
+    "exEn": "You're late again!",
+    "parts": "pictograph: a right hand",
+    "mnem": "The same right <b>hand</b> reaching out yet <b>again</b> — 又迟到了! late again!"
   },
   {
     "rank": 127,
@@ -1153,7 +1405,9 @@ window.COLLOQUIAL_DATA = [
     "en": "to close; related (in 没关系)",
     "ex": "没关系。",
     "exPy": "méi guān xì.",
-    "exEn": "No worries; it's okay."
+    "exEn": "No worries; it's okay.",
+    "parts": "from 關: a bar across a gate",
+    "mnem": "The bar dropped across the gate — to <b>close</b>; 没关系: no gate between us, no worries."
   },
   {
     "rank": 128,
@@ -1162,7 +1416,9 @@ window.COLLOQUIAL_DATA = [
     "en": "o'clock; a bit; dot",
     "ex": "几点了？",
     "exPy": "jǐ diǎn le?",
-    "exEn": "What time is it?"
+    "exEn": "What time is it?",
+    "parts": "占 (≈ <b>zhàn</b>, sound) + 灬 fire",
+    "mnem": "Tiny <b>flames</b> (灬) — <b>dots</b>; the clock's dots give 几点 what o'clock; a dot of something = 一点儿 a bit."
   },
   {
     "rank": 129,
@@ -1171,7 +1427,9 @@ window.COLLOQUIAL_DATA = [
     "en": "exactly; right now (in 正在)",
     "ex": "我正在吃饭。",
     "exPy": "wǒ zhèng zài chī fàn.",
-    "exEn": "I'm eating right now."
+    "exEn": "I'm eating right now.",
+    "parts": "一 line + 止 foot stopping",
+    "mnem": "Your foot (止) <b>stops</b> exactly at the line (一) — <b>exactly</b> right: 正在 right in the middle of doing."
   },
   {
     "rank": 130,
@@ -1180,7 +1438,9 @@ window.COLLOQUIAL_DATA = [
     "en": "profession (in 作业/毕业)",
     "ex": "你做完作业了吗？",
     "exPy": "nǐ zuò wán zuò yè le ma?",
-    "exEn": "Have you finished your homework?"
+    "exEn": "Have you finished your homework?",
+    "parts": "pictograph: a rack of ceremonial bells",
+    "mnem": "The instrument rack you practice at daily — your <b>trade</b>: 作业 homework, 毕业 graduate."
   },
   {
     "rank": 131,
@@ -1189,7 +1449,9 @@ window.COLLOQUIAL_DATA = [
     "en": "outside; foreign",
     "ex": "外面在下雨。",
     "exPy": "wài miàn zài xià yǔ.",
-    "exEn": "It's raining outside."
+    "exEn": "It's raining outside.",
+    "parts": "夕 evening + 卜 divination",
+    "mnem": "Reading omens (卜) in the <b>evening</b> (夕) was done <b>outside</b> the house — 外面."
   },
   {
     "rank": 132,
@@ -1198,7 +1460,9 @@ window.COLLOQUIAL_DATA = [
     "en": "will (in 将来)",
     "ex": "我将来想当医生。",
     "exPy": "wǒ jiāng lái xiǎng dāng yī shēng.",
-    "exEn": "In the future, I want to be a doctor."
+    "exEn": "In the future, I want to be a doctor.",
+    "parts": "爿 side + 月 + 寸 hand",
+    "mnem": "The general (将军!) plans what his hand (寸) <b>will</b> do next — 将来 the future."
   },
   {
     "rank": 133,
@@ -1207,7 +1471,9 @@ window.COLLOQUIAL_DATA = [
     "en": "two (measure use)",
     "ex": "我要两杯奶茶。",
     "exPy": "wǒ yào liǎng bēi nǎi chá.",
-    "exEn": "I want two milk teas."
+    "exEn": "I want two milk teas.",
+    "parts": "one frame + two figures inside",
+    "mnem": "<b>Two</b> people riding in one cart frame — 两个人; the measure-word twin of 二."
   },
   {
     "rank": 134,
@@ -1216,7 +1482,9 @@ window.COLLOQUIAL_DATA = [
     "en": "tall; high",
     "ex": "他很高。",
     "exPy": "tā hěn gāo.",
-    "exEn": "He's tall."
+    "exEn": "He's tall.",
+    "parts": "pictograph: a tall watchtower",
+    "mnem": "A watchtower with roof upon roof — <b>tall</b>, high."
   },
   {
     "rank": 135,
@@ -1225,7 +1493,9 @@ window.COLLOQUIAL_DATA = [
     "en": "room (in 房间)",
     "ex": "我们的房间在哪儿？",
     "exPy": "wǒ men de fáng jiān zài nǎr?",
-    "exEn": "Where's our room?"
+    "exEn": "Where's our room?",
+    "parts": "门 door + 日 sun",
+    "mnem": "<b>Sunlight</b> (日) slipping through the crack of the <b>door</b> (门) — the space <b>between</b>: 房间 a room."
   },
   {
     "rank": 136,
@@ -1234,7 +1504,9 @@ window.COLLOQUIAL_DATA = [
     "en": "due to (in 由于)",
     "ex": "由于堵车，我迟到了。",
     "exPy": "yóu yú dǔ chē, wǒ chí dào le.",
-    "exEn": "I was late due to traffic."
+    "exEn": "I was late due to traffic.",
+    "parts": "田 field + a sprout poking out",
+    "mnem": "A sprout pushing up <b>from</b> the field (田) — from, <b>due to</b>: 由于."
   },
   {
     "rank": 137,
@@ -1243,7 +1515,9 @@ window.COLLOQUIAL_DATA = [
     "en": "to ask",
     "ex": "我可以问你一个问题吗？",
     "exPy": "wǒ kě yǐ wèn nǐ yí gè wèn tí ma?",
-    "exEn": "Can I ask you a question?"
+    "exEn": "Can I ask you a question?",
+    "parts": "门 door (≈ <b>mén</b>, sound) + 口 mouth",
+    "mnem": "Put your <b>mouth</b> (口) up to the <b>door</b> (门) and <b>ask</b> a question."
   },
   {
     "rank": 138,
@@ -1252,7 +1526,9 @@ window.COLLOQUIAL_DATA = [
     "en": "very",
     "ex": "今天很热。",
     "exPy": "jīn tiān hěn rè.",
-    "exEn": "It's very hot today."
+    "exEn": "It's very hot today.",
+    "parts": "彳 step + 艮 stubborn",
+    "mnem": "A <b>stubborn</b> (艮) determined stride (彳) — emphatically so: <b>very</b>."
   },
   {
     "rank": 139,
@@ -1261,7 +1537,9 @@ window.COLLOQUIAL_DATA = [
     "en": "most; -est",
     "ex": "这是我最喜欢的歌。",
     "exPy": "zhè shì wǒ zuì xǐ huān de gē.",
-    "exEn": "This is my favorite song."
+    "exEn": "This is my favorite song.",
+    "parts": "日 sun + 取 take",
+    "mnem": "<b>Take</b> (取) the top spot under the <b>sun</b> (日) — the <b>most</b>: 最喜欢 favorite."
   },
   {
     "rank": 140,
@@ -1270,6 +1548,8 @@ window.COLLOQUIAL_DATA = [
     "en": "heavy; important (in 重要)",
     "ex": "这件事很重要。",
     "exPy": "zhè jiàn shì hěn zhòng yào.",
-    "exEn": "This matter is very important."
+    "exEn": "This matter is very important.",
+    "parts": "a figure carrying a loaded sack",
+    "mnem": "Bent under a loaded sack — <b>heavy</b>; and what's heavy, matters: 重要 important."
   }
 ];

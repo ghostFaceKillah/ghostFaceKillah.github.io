@@ -157,6 +157,14 @@
   .pinyin { font-size: 1.7rem; margin: 0 0 4px; color: var(--accent); }
   .english { font-size: 1.15rem; margin: 0 0 18px; }
 
+  .breakdown { font-size: .85rem; color: var(--muted); margin: 0 0 6px; line-height: 1.5; }
+  .breakdown b { color: var(--ink); font-weight: 600; }
+  .mnemonic { font-size: .95rem; margin: 0 0 18px; line-height: 1.55; text-align: left; }
+  .mnemonic b { font-weight: 600; }
+  .mnemonic i { font-style: italic; }
+  .mnemonic::before { content: "💡 "; }
+  .breakdown:empty, .mnemonic:empty { display: none; margin: 0; }
+
   .example { border-top: 1px solid var(--line); margin-top: 4px; padding-top: 16px; }
   .example small { display: block; font-size: .75rem; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 8px; }
   .exZh { font-size: 1.4rem; margin: 0 0 4px; }
@@ -248,6 +256,8 @@
       <div class="answer" id="answer">
         <p class="pinyin" id="pinyin"></p>
         <p class="english" id="english"></p>
+        <p class="breakdown" id="breakdown"></p>
+        <p class="mnemonic" id="mnemonic"></p>
         <div class="example">
           <small>Example</small>
           <p class="exZh" id="exZh"></p>
@@ -389,6 +399,8 @@
     answer:     document.getElementById("answer"),
     pinyin:     document.getElementById("pinyin"),
     english:    document.getElementById("english"),
+    breakdown:  document.getElementById("breakdown"),
+    mnemonic:   document.getElementById("mnemonic"),
     exZh:       document.getElementById("exZh"),
     exPy:       document.getElementById("exPy"),
     exEn:       document.getElementById("exEn"),
@@ -489,6 +501,8 @@
     el.hanzi.textContent = current.c;
     el.pinyin.textContent = current.py;
     el.english.textContent = current.en;
+    el.breakdown.innerHTML = current.parts || "";
+    el.mnemonic.innerHTML = current.mnem || "";
     el.exZh.textContent = current.ex;
     el.exPy.textContent = current.exPy;
     el.exEn.textContent = current.exEn;
