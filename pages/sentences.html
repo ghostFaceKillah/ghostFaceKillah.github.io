@@ -210,9 +210,10 @@
     <div class="toggle" id="levelToggle">
       <button class="opt sel" data-level="hsk1">HSK 1</button>
       <button class="opt" data-level="hsk2">HSK 2</button>
+      <button class="opt" data-level="ic1">IC 1&ndash;20</button>
     </div>
 
-    <p class="label">Which sentences?</p>
+    <p class="label" id="rangeLabel">Which sentences?</p>
     <div class="range">
       <label>From
         <select id="fromSel"></select>
@@ -305,12 +306,14 @@
     syncIcon();
   })();
 
-  const DATA = window.SENTENCE_DATA || { hsk1: [], hsk2: [] };
+  const DATA = window.SENTENCE_DATA || { hsk1: [], hsk2: [], ic1: [], ic1_chapters: [] };
 
   // ----- State -----
   let level = "hsk1";
   let rangeFrom = 1;     // 1-based, inclusive
   let rangeTo = 50;      // 1-based, inclusive
+  let lessonFrom = 1;    // IC lesson range (1-based, inclusive)
+  let lessonTo = 1;
   let order = "shuffle";
   let autoPlay = true;
   let queue = [];
@@ -356,6 +359,7 @@
   };
   const el = {
     levelToggle: document.getElementById("levelToggle"),
+    rangeLabel:  document.getElementById("rangeLabel"),
     fromSel:     document.getElementById("fromSel"),
     toSel:       document.getElementById("toSel"),
     rangeInfo:   document.getElementById("rangeInfo"),
@@ -384,9 +388,27 @@
   };
 
   function deck() { return DATA[level] || []; }
+  function isLessonLevel() { return level === "ic1"; }
+  function lessons() { return DATA.ic1_chapters || []; }
 
   // ----- Start screen setup -----
   function buildRangeOptions() {
+    el.fromSel.innerHTML = "";
+    el.toSel.innerHTML = "";
+    el.rangeLabel.textContent = isLessonLevel() ? "Which lessons?" : "Which sentences?";
+
+    if (isLessonLevel()) {
+      const ls = lessons();
+      ls.forEach(c => { el.fromSel.appendChild(lessonOpt(c)); el.toSel.appendChild(lessonOpt(c)); });
+      // keep current selection if still valid, else reset to the first lesson
+      if (!ls.some(c => c.n === lessonFrom)) lessonFrom = ls.length ? ls[0].n : 1;
+      if (!ls.some(c => c.n === lessonTo) || lessonTo < lessonFrom) lessonTo = lessonFrom;
+      el.fromSel.value = lessonFrom;
+      el.toSel.value = lessonTo;
+      syncRange();
+      return;
+    }
+
     const total = deck().length;
     const step = 50;
     const froms = [], tos = [];
@@ -394,8 +416,6 @@
     for (let v = step; v < total; v += step) tos.push(v);
     tos.push(total);
 
-    el.fromSel.innerHTML = "";
-    el.toSel.innerHTML = "";
     froms.forEach(v => el.fromSel.appendChild(opt(v)));
     tos.forEach(v => el.toSel.appendChild(opt(v)));
 
@@ -411,8 +431,30 @@
     o.value = v; o.textContent = "#" + v;
     return o;
   }
+  function lessonOpt(c) {
+    const o = document.createElement("option");
+    o.value = c.n; o.textContent = `${c.n} · ${c.title}`;
+    return o;
+  }
 
   function syncRange() {
+    if (isLessonLevel()) {
+      lessonFrom = parseInt(el.fromSel.value, 10);
+      lessonTo = parseInt(el.toSel.value, 10);
+      if (lessonTo < lessonFrom) {
+        lessonTo = lessonFrom;
+        el.toSel.value = lessonTo;
+      }
+      const cf = lessons().find(c => c.n === lessonFrom);
+      const ct = lessons().find(c => c.n === lessonTo);
+      if (!cf || !ct) { el.rangeInfo.textContent = ""; return; }
+      rangeFrom = cf.from;
+      rangeTo = ct.to;
+      const count = rangeTo - rangeFrom + 1;
+      const span = lessonFrom === lessonTo ? `Lesson ${lessonFrom}` : `Lessons ${lessonFrom}–${lessonTo}`;
+      el.rangeInfo.textContent = `Integrated Chinese · ${span} · ${count} card${count === 1 ? "" : "s"}`;
+      return;
+    }
     rangeFrom = parseInt(el.fromSel.value, 10);
     rangeTo = parseInt(el.toSel.value, 10);
     if (rangeTo < rangeFrom) {

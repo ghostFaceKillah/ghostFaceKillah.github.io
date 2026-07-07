@@ -6004,5 +6004,2013 @@ window.SENTENCE_DATA = {
       "py": "xiè xiè nín jīn tiān lái, qǐng màn zǒu.",
       "en": "Thank you for coming today, take care."
     }
+  ],
+  "ic1": [
+    {
+      "n": 1,
+      "zh": "你好！",
+      "py": "nǐ hǎo!",
+      "en": "Hello!"
+    },
+    {
+      "n": 2,
+      "zh": "请问，你贵姓？",
+      "py": "qǐng wèn, nǐ guì xìng?",
+      "en": "Excuse me, may I ask your family name?"
+    },
+    {
+      "n": 3,
+      "zh": "我姓李。你呢？",
+      "py": "wǒ xìng lǐ. nǐ ne?",
+      "en": "My family name is Li. And you?"
+    },
+    {
+      "n": 4,
+      "zh": "我姓王，叫王朋。",
+      "py": "wǒ xìng wáng, jiào wáng péng.",
+      "en": "My family name is Wang; I'm called Wang Peng."
+    },
+    {
+      "n": 5,
+      "zh": "你叫什么名字？",
+      "py": "nǐ jiào shén me míng zì?",
+      "en": "What's your name?"
+    },
+    {
+      "n": 6,
+      "zh": "我叫李友。",
+      "py": "wǒ jiào lǐ yǒu.",
+      "en": "My name is Li You."
+    },
+    {
+      "n": 7,
+      "zh": "李小姐，你是老师吗？",
+      "py": "lǐ xiǎo jiě, nǐ shì lǎo shī ma?",
+      "en": "Miss Li, are you a teacher?"
+    },
+    {
+      "n": 8,
+      "zh": "我不是老师，我是学生。",
+      "py": "wǒ bú shì lǎo shī, wǒ shì xué shēng.",
+      "en": "I'm not a teacher; I'm a student."
+    },
+    {
+      "n": 9,
+      "zh": "你也是学生吗？",
+      "py": "nǐ yě shì xué shēng ma?",
+      "en": "Are you a student too?"
+    },
+    {
+      "n": 10,
+      "zh": "我也是学生。",
+      "py": "wǒ yě shì xué shēng.",
+      "en": "I'm a student too."
+    },
+    {
+      "n": 11,
+      "zh": "王先生，你是中国人吗？",
+      "py": "wáng xiān shēng, nǐ shì zhōng guó rén ma?",
+      "en": "Mr. Wang, are you Chinese?"
+    },
+    {
+      "n": 12,
+      "zh": "我是中国人，我是北京人。",
+      "py": "wǒ shì zhōng guó rén, wǒ shì běi jīng rén.",
+      "en": "I'm Chinese; I'm from Beijing."
+    },
+    {
+      "n": 13,
+      "zh": "你是美国人吗？",
+      "py": "nǐ shì měi guó rén ma?",
+      "en": "Are you American?"
+    },
+    {
+      "n": 14,
+      "zh": "我是美国人，我是纽约人。",
+      "py": "wǒ shì měi guó rén, wǒ shì niǔ yuē rén.",
+      "en": "I'm American; I'm from New York."
+    },
+    {
+      "n": 15,
+      "zh": "李友是学生，王朋也是学生。",
+      "py": "lǐ yǒu shì xué shēng, wáng péng yě shì xué shēng.",
+      "en": "Li You is a student, and Wang Peng is a student too."
+    },
+    {
+      "n": 16,
+      "zh": "高文中，那是你的照片吗？",
+      "py": "gāo wén zhōng, nà shì nǐ de zhào piān ma?",
+      "en": "Gao Wenzhong, is that your photo?"
+    },
+    {
+      "n": 17,
+      "zh": "这是我爸爸，这是我妈妈。",
+      "py": "zhè shì wǒ bà bà, zhè shì wǒ mā mā.",
+      "en": "This is my dad, and this is my mom."
+    },
+    {
+      "n": 18,
+      "zh": "这个女孩子是谁？",
+      "py": "zhè ge nǚ hái zi shì shuí?",
+      "en": "Who is this girl?"
+    },
+    {
+      "n": 19,
+      "zh": "她是我姐姐。",
+      "py": "tā shì wǒ jiě jiě.",
+      "en": "She is my older sister."
+    },
+    {
+      "n": 20,
+      "zh": "这个男孩子是你弟弟吗？",
+      "py": "zhè ge nán hái zi shì nǐ dì di ma?",
+      "en": "Is this boy your younger brother?"
+    },
+    {
+      "n": 21,
+      "zh": "他不是我弟弟，他是我大哥的儿子。",
+      "py": "tā bú shì wǒ dì di, tā shì wǒ dà gē de ér zi.",
+      "en": "He isn't my younger brother; he's my eldest brother's son."
+    },
+    {
+      "n": 22,
+      "zh": "你大哥有女儿吗？",
+      "py": "nǐ dà gē yǒu nǚ ér ma?",
+      "en": "Does your eldest brother have a daughter?"
+    },
+    {
+      "n": 23,
+      "zh": "他没有女儿。",
+      "py": "tā méi yǒu nǚ ér.",
+      "en": "He doesn't have a daughter."
+    },
+    {
+      "n": 24,
+      "zh": "白英爱，你家有几口人？",
+      "py": "bái yīng ài, nǐ jiā yǒu jǐ kǒu rén?",
+      "en": "Bai Ying'ai, how many people are in your family?"
+    },
+    {
+      "n": 25,
+      "zh": "我家有六口人。",
+      "py": "wǒ jiā yǒu liù kǒu rén.",
+      "en": "There are six people in my family."
+    },
+    {
+      "n": 26,
+      "zh": "你爸爸妈妈做什么工作？",
+      "py": "nǐ bà bà mā mā zuò shén me gōng zuò?",
+      "en": "What work do your mom and dad do?"
+    },
+    {
+      "n": 27,
+      "zh": "我爸爸是律师。",
+      "py": "wǒ bà bà shì lǜ shī.",
+      "en": "My dad is a lawyer."
+    },
+    {
+      "n": 28,
+      "zh": "我妈妈是英文老师。",
+      "py": "wǒ mā mā shì yīng wén lǎo shī.",
+      "en": "My mom is an English teacher."
+    },
+    {
+      "n": 29,
+      "zh": "我哥哥、妹妹都是大学生。",
+      "py": "wǒ gē gē, mèi mèi dōu shì dà xué shēng.",
+      "en": "My older brother and younger sister are both college students."
+    },
+    {
+      "n": 30,
+      "zh": "我妈妈也是老师，我爸爸是医生。",
+      "py": "wǒ mā mā yě shì lǎo shī, wǒ bà bà shì yī shēng.",
+      "en": "My mom is also a teacher; my dad is a doctor."
+    },
+    {
+      "n": 31,
+      "zh": "九月十二号是星期四。",
+      "py": "jiǔ yuè shí èr hào shì xīng qī sì.",
+      "en": "September 12th is a Thursday."
+    },
+    {
+      "n": 32,
+      "zh": "那天是我的生日。",
+      "py": "nà tiān shì wǒ de shēng rì.",
+      "en": "That day is my birthday."
+    },
+    {
+      "n": 33,
+      "zh": "你今年多大？",
+      "py": "nǐ jīn nián duō dà?",
+      "en": "How old are you this year?"
+    },
+    {
+      "n": 34,
+      "zh": "我今年十八岁。",
+      "py": "wǒ jīn nián shí bā suì.",
+      "en": "I'm eighteen this year."
+    },
+    {
+      "n": 35,
+      "zh": "星期四我请你吃晚饭，怎么样？",
+      "py": "xīng qī sì wǒ qǐng nǐ chī wǎn fàn, zěn me yàng?",
+      "en": "Thursday I'll treat you to dinner — how about it?"
+    },
+    {
+      "n": 36,
+      "zh": "太好了！谢谢你。",
+      "py": "tài hǎo le! xiè xiè nǐ.",
+      "en": "Great! Thank you."
+    },
+    {
+      "n": 37,
+      "zh": "你喜欢吃中国菜还是美国菜？",
+      "py": "nǐ xǐ huān chī zhōng guó cài hái shì měi guó cài?",
+      "en": "Do you like Chinese food or American food?"
+    },
+    {
+      "n": 38,
+      "zh": "我是英国人，可是我喜欢吃中国菜。",
+      "py": "wǒ shì yīng guó rén, kě shì wǒ xǐ huān chī zhōng guó cài.",
+      "en": "I'm British, but I like Chinese food."
+    },
+    {
+      "n": 39,
+      "zh": "现在几点？",
+      "py": "xiàn zài jǐ diǎn?",
+      "en": "What time is it now?"
+    },
+    {
+      "n": 40,
+      "zh": "现在六点半。",
+      "py": "xiàn zài liù diǎn bàn.",
+      "en": "It's six thirty now."
+    },
+    {
+      "n": 41,
+      "zh": "我们今天晚上七点半见。",
+      "py": "wǒ men jīn tiān wǎn shàng qī diǎn bàn jiàn.",
+      "en": "Let's meet tonight at seven thirty."
+    },
+    {
+      "n": 42,
+      "zh": "你今天晚上忙不忙？",
+      "py": "nǐ jīn tiān wǎn shàng máng bù máng?",
+      "en": "Are you busy tonight?"
+    },
+    {
+      "n": 43,
+      "zh": "我今天很忙，可是明天不忙。",
+      "py": "wǒ jīn tiān hěn máng, kě shì míng tiān bù máng.",
+      "en": "I'm busy today, but not tomorrow."
+    },
+    {
+      "n": 44,
+      "zh": "我今天晚上有事儿。",
+      "py": "wǒ jīn tiān wǎn shàng yǒu shìr.",
+      "en": "I have something to do tonight."
+    },
+    {
+      "n": 45,
+      "zh": "你认识不认识李友？",
+      "py": "nǐ rèn shí bú rèn shí lǐ yǒu?",
+      "en": "Do you know Li You?"
+    },
+    {
+      "n": 46,
+      "zh": "我认识她，她是我的同学。",
+      "py": "wǒ rèn shí tā, tā shì wǒ de tóng xué.",
+      "en": "I know her; she's my classmate."
+    },
+    {
+      "n": 47,
+      "zh": "白英爱，你周末喜欢做什么？",
+      "py": "bái yīng ài, nǐ zhōu mò xǐ huān zuò shén me?",
+      "en": "Bai Ying'ai, what do you like to do on weekends?"
+    },
+    {
+      "n": 48,
+      "zh": "我喜欢打球、看电视。你呢？",
+      "py": "wǒ xǐ huān dǎ qiú, kàn diàn shì. nǐ ne?",
+      "en": "I like playing ball and watching TV. And you?"
+    },
+    {
+      "n": 49,
+      "zh": "我喜欢唱歌、跳舞，还喜欢听音乐。",
+      "py": "wǒ xǐ huān chàng gē, tiào wǔ, hái xǐ huān tīng yīn yuè.",
+      "en": "I like singing and dancing, and I also like listening to music."
+    },
+    {
+      "n": 50,
+      "zh": "你也喜欢看书，对不对？",
+      "py": "nǐ yě xǐ huān kàn shū, duì bú duì?",
+      "en": "You also like reading, right?"
+    },
+    {
+      "n": 51,
+      "zh": "对，有的时候也喜欢看书。",
+      "py": "duì, yǒu de shí hòu yě xǐ huān kàn shū.",
+      "en": "Right, sometimes I like reading too."
+    },
+    {
+      "n": 52,
+      "zh": "你喜欢不喜欢看电影？",
+      "py": "nǐ xǐ huān bù xǐ huān kàn diàn yǐng?",
+      "en": "Do you like watching movies?"
+    },
+    {
+      "n": 53,
+      "zh": "喜欢，我周末常常看电影。",
+      "py": "xǐ huān, wǒ zhōu mò cháng cháng kàn diàn yǐng.",
+      "en": "I do — I often watch movies on weekends."
+    },
+    {
+      "n": 54,
+      "zh": "我们今天晚上去看一个外国电影，怎么样？",
+      "py": "wǒ men jīn tiān wǎn shàng qù kàn yí gè wài guó diàn yǐng, zěn me yàng?",
+      "en": "Let's go see a foreign movie tonight — how about it?"
+    },
+    {
+      "n": 55,
+      "zh": "高文中，你想不想去打球？",
+      "py": "gāo wén zhōng, nǐ xiǎng bù xiǎng qù dǎ qiú?",
+      "en": "Gao Wenzhong, do you want to go play ball?"
+    },
+    {
+      "n": 56,
+      "zh": "打球？我不喜欢打球。",
+      "py": "dǎ qiú? wǒ bù xǐ huān dǎ qiú.",
+      "en": "Play ball? I don't like playing ball."
+    },
+    {
+      "n": 57,
+      "zh": "那我们去看球，怎么样？",
+      "py": "nà wǒ men qù kàn qiú, zěn me yàng?",
+      "en": "Then let's go watch a ball game — how about that?"
+    },
+    {
+      "n": 58,
+      "zh": "看球？我觉得看球也没有意思。",
+      "py": "kàn qiú? wǒ jué de kàn qiú yě méi yǒu yì si.",
+      "en": "Watch a game? I think watching a game is boring too."
+    },
+    {
+      "n": 59,
+      "zh": "那你这个周末想做什么？",
+      "py": "nà nǐ zhè ge zhōu mò xiǎng zuò shén me?",
+      "en": "Then what do you want to do this weekend?"
+    },
+    {
+      "n": 60,
+      "zh": "我只想吃饭、睡觉。",
+      "py": "wǒ zhǐ xiǎng chī fàn, shuì jiào.",
+      "en": "I just want to eat and sleep."
+    },
+    {
+      "n": 61,
+      "zh": "算了，我去找别人。",
+      "py": "suàn le, wǒ qù zhǎo bié rén.",
+      "en": "Forget it — I'll go find someone else."
+    },
+    {
+      "n": 62,
+      "zh": "谁呀？",
+      "py": "shuí ya?",
+      "en": "Who is it?"
+    },
+    {
+      "n": 63,
+      "zh": "是我，王朋，还有李友。",
+      "py": "shì wǒ, wáng péng, hái yǒu lǐ yǒu.",
+      "en": "It's me, Wang Peng — and Li You too."
+    },
+    {
+      "n": 64,
+      "zh": "请进，请进，快进来！",
+      "py": "qǐng jìn, qǐng jìn, kuài jìn lái!",
+      "en": "Come in, come in! Come on in!"
+    },
+    {
+      "n": 65,
+      "zh": "李友，这是我姐姐，高小音。",
+      "py": "lǐ yǒu, zhè shì wǒ jiě jiě, gāo xiǎo yīn.",
+      "en": "Li You, this is my older sister, Gao Xiaoyin."
+    },
+    {
+      "n": 66,
+      "zh": "认识你们我很高兴。",
+      "py": "rèn shí nǐ men wǒ hěn gāo xìng.",
+      "en": "I'm very happy to meet you."
+    },
+    {
+      "n": 67,
+      "zh": "你们家很大，也很漂亮。",
+      "py": "nǐ men jiā hěn dà, yě hěn piào liàng.",
+      "en": "Your home is big and very pretty."
+    },
+    {
+      "n": 68,
+      "zh": "你们想喝点儿什么？",
+      "py": "nǐ men xiǎng hē diǎnr shén me?",
+      "en": "What would you like to drink?"
+    },
+    {
+      "n": 69,
+      "zh": "喝茶还是喝咖啡？",
+      "py": "hē chá hái shì hē kā fēi?",
+      "en": "Tea or coffee?"
+    },
+    {
+      "n": 70,
+      "zh": "我喝茶吧。",
+      "py": "wǒ hē chá ba.",
+      "en": "I'll have tea."
+    },
+    {
+      "n": 71,
+      "zh": "我要一瓶可乐，可以吗？",
+      "py": "wǒ yào yì píng kě lè, kě yǐ ma?",
+      "en": "I'd like a bottle of cola — is that okay?"
+    },
+    {
+      "n": 72,
+      "zh": "对不起，我们家没有可乐。",
+      "py": "duì bu qǐ, wǒ men jiā méi yǒu kě lè.",
+      "en": "Sorry, we don't have cola at home."
+    },
+    {
+      "n": 73,
+      "zh": "那给我一杯水吧。",
+      "py": "nà gěi wǒ yì bēi shuǐ ba.",
+      "en": "Then give me a glass of water."
+    },
+    {
+      "n": 74,
+      "zh": "昨天晚上，王朋和李友去高文中家玩儿。",
+      "py": "zuó tiān wǎn shàng, wáng péng hé lǐ yǒu qù gāo wén zhōng jiā wánr.",
+      "en": "Last night, Wang Peng and Li You went to Gao Wenzhong's home for a visit."
+    },
+    {
+      "n": 75,
+      "zh": "高小音在学校的图书馆工作。",
+      "py": "gāo xiǎo yīn zài xué xiào de tú shū guǎn gōng zuò.",
+      "en": "Gao Xiaoyin works at the school library."
+    },
+    {
+      "n": 76,
+      "zh": "王朋喝了两杯茶，李友只喝了一杯水。",
+      "py": "wáng péng hē le liǎng bēi chá, lǐ yǒu zhǐ hē le yì bēi shuǐ.",
+      "en": "Wang Peng drank two cups of tea; Li You only drank one glass of water."
+    },
+    {
+      "n": 77,
+      "zh": "他们一起聊天儿、看电视。",
+      "py": "tā men yì qǐ liáo tiānr, kàn diàn shì.",
+      "en": "They chatted and watched TV together."
+    },
+    {
+      "n": 78,
+      "zh": "王朋和李友晚上十二点才回家。",
+      "py": "wáng péng hé lǐ yǒu wǎn shàng shí èr diǎn cái huí jiā.",
+      "en": "Wang Peng and Li You didn't go home until twelve at night."
+    },
+    {
+      "n": 79,
+      "zh": "喂，请问，常老师在吗？",
+      "py": "wèi, qǐng wèn, cháng lǎo shī zài ma?",
+      "en": "Hello, is Teacher Chang there, please?"
+    },
+    {
+      "n": 80,
+      "zh": "我就是。您是哪位？",
+      "py": "wǒ jiù shì. nín shì nǎ wèi?",
+      "en": "Speaking. Who is this?"
+    },
+    {
+      "n": 81,
+      "zh": "常老师，您好，我是李友。",
+      "py": "cháng lǎo shī, nín hǎo, wǒ shì lǐ yǒu.",
+      "en": "Hello, Teacher Chang — this is Li You."
+    },
+    {
+      "n": 82,
+      "zh": "今天下午您有时间吗？我想问您几个问题。",
+      "py": "jīn tiān xià wǔ nín yǒu shí jiān ma? wǒ xiǎng wèn nín jǐ gè wèn tí.",
+      "en": "Do you have time this afternoon? I'd like to ask you a few questions."
+    },
+    {
+      "n": 83,
+      "zh": "对不起，今天下午我要开会。",
+      "py": "duì bu qǐ, jīn tiān xià wǔ wǒ yào kāi huì.",
+      "en": "Sorry, this afternoon I have a meeting."
+    },
+    {
+      "n": 84,
+      "zh": "明天上午我有两节课。",
+      "py": "míng tiān shàng wǔ wǒ yǒu liǎng jié kè.",
+      "en": "Tomorrow morning I have two classes."
+    },
+    {
+      "n": 85,
+      "zh": "下午三点我要给二年级考试。",
+      "py": "xià wǔ sān diǎn wǒ yào gěi èr nián jí kǎo shì.",
+      "en": "At three in the afternoon I have to give the second-year students an exam."
+    },
+    {
+      "n": 86,
+      "zh": "您什么时候有空儿？",
+      "py": "nín shén me shí hòu yǒu kòngr?",
+      "en": "When are you free?"
+    },
+    {
+      "n": 87,
+      "zh": "我四点以后才有空儿。",
+      "py": "wǒ sì diǎn yǐ hòu cái yǒu kòngr.",
+      "en": "I'm not free until after four."
+    },
+    {
+      "n": 88,
+      "zh": "要是您方便，四点半我到您的办公室去，行吗？",
+      "py": "yào shì nín fāng biàn, sì diǎn bàn wǒ dào nín de bàn gōng shì qù, xíng ma?",
+      "en": "If it's convenient for you, I'll come to your office at four thirty — is that all right?"
+    },
+    {
+      "n": 89,
+      "zh": "没问题，我在办公室等你。",
+      "py": "méi wèn tí, wǒ zài bàn gōng shì děng nǐ.",
+      "en": "No problem — I'll wait for you in my office."
+    },
+    {
+      "n": 90,
+      "zh": "谢谢您！别客气。",
+      "py": "xiè xiè nín! bié kè qì.",
+      "en": "Thank you! Don't mention it."
+    },
+    {
+      "n": 91,
+      "zh": "下个星期我要考中文。",
+      "py": "xià gè xīng qī wǒ yào kǎo zhōng wén.",
+      "en": "Next week I have a Chinese exam."
+    },
+    {
+      "n": 92,
+      "zh": "你帮我准备一下，好吗？",
+      "py": "nǐ bāng wǒ zhǔn bèi yí xià, hǎo ma?",
+      "en": "Help me prepare a bit, okay?"
+    },
+    {
+      "n": 93,
+      "zh": "请你跟我说中文，好吗？",
+      "py": "qǐng nǐ gēn wǒ shuō zhōng wén, hǎo ma?",
+      "en": "Please speak Chinese with me, okay?"
+    },
+    {
+      "n": 94,
+      "zh": "好啊，但是你得请我喝咖啡。",
+      "py": "hǎo a, dàn shì nǐ děi qǐng wǒ hē kā fēi.",
+      "en": "Sure, but you have to treat me to coffee."
+    },
+    {
+      "n": 95,
+      "zh": "李友，你上个星期考试考得怎么样？",
+      "py": "lǐ yǒu, nǐ shàng gè xīng qī kǎo shì kǎo de zěn me yàng?",
+      "en": "Li You, how did you do on last week's exam?"
+    },
+    {
+      "n": 96,
+      "zh": "因为你帮我复习，所以考得不错。",
+      "py": "yīn wèi nǐ bāng wǒ fù xí, suǒ yǐ kǎo de bú cuò.",
+      "en": "Because you helped me review, I did pretty well."
+    },
+    {
+      "n": 97,
+      "zh": "我写中国字写得太慢了！",
+      "py": "wǒ xiě zhōng guó zì xiě de tài màn le!",
+      "en": "I write Chinese characters too slowly!"
+    },
+    {
+      "n": 98,
+      "zh": "以后我跟你一起练习写字，好不好？",
+      "py": "yǐ hòu wǒ gēn nǐ yì qǐ liàn xí xiě zì, hǎo bù hǎo?",
+      "en": "From now on I'll practice writing characters with you, okay?"
+    },
+    {
+      "n": 99,
+      "zh": "那太好了！我们现在就写，怎么样？",
+      "py": "nà tài hǎo le! wǒ men xiàn zài jiù xiě, zěn me yàng?",
+      "en": "That's great! Let's write right now — how about it?"
+    },
+    {
+      "n": 100,
+      "zh": "给我一支笔、一张纸。",
+      "py": "gěi wǒ yì zhī bǐ, yì zhāng zhǐ.",
+      "en": "Give me a pen and a sheet of paper."
+    },
+    {
+      "n": 101,
+      "zh": "你教我怎么写这个字吧。",
+      "py": "nǐ jiāo wǒ zěn me xiě zhè ge zì ba.",
+      "en": "Teach me how to write this character."
+    },
+    {
+      "n": 102,
+      "zh": "你写字写得真漂亮。",
+      "py": "nǐ xiě zì xiě de zhēn piào liàng.",
+      "en": "You write characters really beautifully."
+    },
+    {
+      "n": 103,
+      "zh": "你平常来得很早，今天怎么这么晚？",
+      "py": "nǐ píng cháng lái de hěn zǎo, jīn tiān zěn me zhè me wǎn?",
+      "en": "You usually come very early — why so late today?"
+    },
+    {
+      "n": 104,
+      "zh": "我昨天预习中文，早上四点才睡觉。",
+      "py": "wǒ zuó tiān yù xí zhōng wén, zǎo shàng sì diǎn cái shuì jiào.",
+      "en": "I was previewing the Chinese lesson yesterday and didn't go to bed until four in the morning."
+    },
+    {
+      "n": 105,
+      "zh": "我昨天十点就睡了。",
+      "py": "wǒ zuó tiān shí diǎn jiù shuì le.",
+      "en": "I went to bed at ten last night."
+    },
+    {
+      "n": 106,
+      "zh": "今天的语法很容易，生词也不多。",
+      "py": "jīn tiān de yǔ fǎ hěn róng yì, shēng cí yě bù duō.",
+      "en": "Today's grammar is easy, and there aren't many new words either."
+    },
+    {
+      "n": 107,
+      "zh": "我觉得第七课的语法有一点儿难。",
+      "py": "wǒ jué de dì qī kè de yǔ fǎ yǒu yì diǎnr nán.",
+      "en": "I think the grammar in Lesson Seven is a little hard."
+    },
+    {
+      "n": 108,
+      "zh": "你说中文说得真好。",
+      "py": "nǐ shuō zhōng wén shuō de zhēn hǎo.",
+      "en": "You speak Chinese really well."
+    },
+    {
+      "n": 109,
+      "zh": "学中文很有意思。",
+      "py": "xué zhōng wén hěn yǒu yì si.",
+      "en": "Studying Chinese is very interesting."
+    },
+    {
+      "n": 110,
+      "zh": "我早上七点半起床。",
+      "py": "wǒ zǎo shàng qī diǎn bàn qǐ chuáng.",
+      "en": "I get up at seven thirty in the morning."
+    },
+    {
+      "n": 111,
+      "zh": "洗了澡以后，我就吃早饭。",
+      "py": "xǐ le zǎo yǐ hòu, wǒ jiù chī zǎo fàn.",
+      "en": "After showering, I eat breakfast right away."
+    },
+    {
+      "n": 112,
+      "zh": "我常常一边吃饭，一边听录音。",
+      "py": "wǒ cháng cháng yì biān chī fàn, yì biān tīng lù yīn.",
+      "en": "I often listen to recordings while I eat."
+    },
+    {
+      "n": 113,
+      "zh": "我九点到教室去上课。",
+      "py": "wǒ jiǔ diǎn dào jiào shì qù shàng kè.",
+      "en": "At nine I go to the classroom for class."
+    },
+    {
+      "n": 114,
+      "zh": "第一节课是中文，老师教我们发音、生词和语法。",
+      "py": "dì yī jié kè shì zhōng wén, lǎo shī jiāo wǒ men fā yīn, shēng cí hé yǔ fǎ.",
+      "en": "The first class is Chinese; the teacher teaches us pronunciation, new words, and grammar."
+    },
+    {
+      "n": 115,
+      "zh": "这篇课文很有意思。",
+      "py": "zhè piān kè wén hěn yǒu yì si.",
+      "en": "This text is very interesting."
+    },
+    {
+      "n": 116,
+      "zh": "第二节是电脑课，很难。",
+      "py": "dì èr jié shì diàn nǎo kè, hěn nán.",
+      "en": "The second class is computer class — it's hard."
+    },
+    {
+      "n": 117,
+      "zh": "中午我和同学们一起到餐厅去吃午饭。",
+      "py": "zhōng wǔ wǒ hé tóng xué men yì qǐ dào cān tīng qù chī wǔ fàn.",
+      "en": "At noon I go to the cafeteria with my classmates to eat lunch."
+    },
+    {
+      "n": 118,
+      "zh": "我们一边吃，一边练习说中文。",
+      "py": "wǒ men yì biān chī, yì biān liàn xí shuō zhōng wén.",
+      "en": "We practice speaking Chinese while we eat."
+    },
+    {
+      "n": 119,
+      "zh": "下午我到图书馆去上网。",
+      "py": "xià wǔ wǒ dào tú shū guǎn qù shàng wǎng.",
+      "en": "In the afternoon I go to the library to use the internet."
+    },
+    {
+      "n": 120,
+      "zh": "四点王朋来找我打球。",
+      "py": "sì diǎn wáng péng lái zhǎo wǒ dǎ qiú.",
+      "en": "At four, Wang Peng came looking for me to play ball."
+    },
+    {
+      "n": 121,
+      "zh": "我到的时候，她正在做功课。",
+      "py": "wǒ dào de shí hòu, tā zhèng zài zuò gōng kè.",
+      "en": "When I arrived, she was doing homework."
+    },
+    {
+      "n": 122,
+      "zh": "睡觉以前，高文中给我打了一个电话。",
+      "py": "shuì jiào yǐ qián, gāo wén zhōng gěi wǒ dǎ le yí gè diàn huà.",
+      "en": "Before I went to bed, Gao Wenzhong gave me a call."
+    },
+    {
+      "n": 123,
+      "zh": "他告诉我明天要考试。",
+      "py": "tā gào sù wǒ míng tiān yào kǎo shì.",
+      "en": "He told me there's an exam tomorrow."
+    },
+    {
+      "n": 124,
+      "zh": "除了专业课以外，我还得学中文。",
+      "py": "chú le zhuān yè kè yǐ wài, wǒ hái děi xué zhōng wén.",
+      "en": "Besides my major courses, I also have to study Chinese."
+    },
+    {
+      "n": 125,
+      "zh": "下个星期六我们学校有一个音乐会，希望你能来。",
+      "py": "xià gè xīng qī liù wǒ men xué xiào yǒu yí gè yīn yuè huì, xī wàng nǐ néng lái.",
+      "en": "Next Saturday there's a concert at our school — I hope you can come."
+    },
+    {
+      "n": 126,
+      "zh": "小姐，您要买什么衣服？",
+      "py": "xiǎo jiě, nín yào mǎi shén me yī fú?",
+      "en": "Miss, what clothes would you like to buy?"
+    },
+    {
+      "n": 127,
+      "zh": "我想买一件衬衫。",
+      "py": "wǒ xiǎng mǎi yí jiàn chèn shān.",
+      "en": "I'd like to buy a shirt."
+    },
+    {
+      "n": 128,
+      "zh": "您喜欢什么颜色的，黄的还是红的？",
+      "py": "nín xǐ huān shén me yán sè de, huáng de hái shì hóng de?",
+      "en": "What color do you like — yellow or red?"
+    },
+    {
+      "n": 129,
+      "zh": "我喜欢红的。",
+      "py": "wǒ xǐ huān hóng de.",
+      "en": "I like the red one."
+    },
+    {
+      "n": 130,
+      "zh": "我还想买一条裤子。",
+      "py": "wǒ hái xiǎng mǎi yì tiáo kù zi.",
+      "en": "I'd also like to buy a pair of pants."
+    },
+    {
+      "n": 131,
+      "zh": "您穿多大的？大号的、中号的，还是小号的？",
+      "py": "nín chuān duō dà de? dà hào de, zhōng hào de, hái shì xiǎo hào de?",
+      "en": "What size do you wear? Large, medium, or small?"
+    },
+    {
+      "n": 132,
+      "zh": "中号的，不要太贵的，也不要太便宜的。",
+      "py": "zhōng hào de, bú yào tài guì de, yě bú yào tài pián yi de.",
+      "en": "Medium — not too expensive, but not too cheap either."
+    },
+    {
+      "n": 133,
+      "zh": "这条裤子怎么样？",
+      "py": "zhè tiáo kù zi zěn me yàng?",
+      "en": "How about this pair of pants?"
+    },
+    {
+      "n": 134,
+      "zh": "一共多少钱？",
+      "py": "yí gòng duō shǎo qián?",
+      "en": "How much altogether?"
+    },
+    {
+      "n": 135,
+      "zh": "衬衫二十一块五，裤子三十二块九毛九。",
+      "py": "chèn shān èr shí yí kuài wǔ, kù zi sān shí èr kuài jiǔ máo jiǔ.",
+      "en": "The shirt is twenty-one fifty; the pants are thirty-two ninety-nine."
+    },
+    {
+      "n": 136,
+      "zh": "一共五十四块四毛九分。",
+      "py": "yí gòng wǔ shí sì kuài sì máo jiǔ fēn.",
+      "en": "Altogether that's fifty-four forty-nine."
+    },
+    {
+      "n": 137,
+      "zh": "对不起，这双鞋太小了，能不能换一双？",
+      "py": "duì bu qǐ, zhè shuāng xié tài xiǎo le, néng bù néng huàn yì shuāng?",
+      "en": "Excuse me, these shoes are too small — can I exchange them for another pair?"
+    },
+    {
+      "n": 138,
+      "zh": "不行，这双跟那双一样大。",
+      "py": "bù xíng, zhè shuāng gēn nà shuāng yí yàng dà.",
+      "en": "That won't do — this pair is the same size as that pair."
+    },
+    {
+      "n": 139,
+      "zh": "这双鞋大小合适，可是颜色不好。",
+      "py": "zhè shuāng xié dà xiǎo hé shì, kě shì yán sè bù hǎo.",
+      "en": "This pair fits well, but the color isn't good."
+    },
+    {
+      "n": 140,
+      "zh": "有没有咖啡色的？",
+      "py": "yǒu méi yǒu kā fēi sè de?",
+      "en": "Do you have brown ones?"
+    },
+    {
+      "n": 141,
+      "zh": "对不起，这种鞋只有黑的。",
+      "py": "duì bu qǐ, zhè zhǒng xié zhǐ yǒu hēi de.",
+      "en": "Sorry, this kind of shoe only comes in black."
+    },
+    {
+      "n": 142,
+      "zh": "这双鞋样子挺好的，就买这双吧。",
+      "py": "zhè shuāng xié yàng zi tǐng hǎo de, jiù mǎi zhè shuāng ba.",
+      "en": "These shoes look pretty good — I'll take this pair."
+    },
+    {
+      "n": 143,
+      "zh": "李友，寒假你回家吗？",
+      "py": "lǐ yǒu, hán jià nǐ huí jiā ma?",
+      "en": "Li You, are you going home for winter break?"
+    },
+    {
+      "n": 144,
+      "zh": "对，我要回家。",
+      "py": "duì, wǒ yào huí jiā.",
+      "en": "Yes, I'm going home."
+    },
+    {
+      "n": 145,
+      "zh": "飞机票你买了吗？",
+      "py": "fēi jī piào nǐ mǎi le ma?",
+      "en": "Have you bought your plane ticket?"
+    },
+    {
+      "n": 146,
+      "zh": "已经买了，是二十一号的。",
+      "py": "yǐ jīng mǎi le, shì èr shí yī hào de.",
+      "en": "I've already bought it — it's for the 21st."
+    },
+    {
+      "n": 147,
+      "zh": "飞机是几点的？",
+      "py": "fēi jī shì jǐ diǎn de?",
+      "en": "What time is the flight?"
+    },
+    {
+      "n": 148,
+      "zh": "晚上八点的。",
+      "py": "wǎn shàng bā diǎn de.",
+      "en": "Eight in the evening."
+    },
+    {
+      "n": 149,
+      "zh": "你怎么去机场？",
+      "py": "nǐ zěn me qù jī chǎng?",
+      "en": "How are you getting to the airport?"
+    },
+    {
+      "n": 150,
+      "zh": "我想坐公共汽车或者坐地铁。",
+      "py": "wǒ xiǎng zuò gōng gòng qì chē huò zhě zuò dì tiě.",
+      "en": "I'm thinking of taking the bus or the subway."
+    },
+    {
+      "n": 151,
+      "zh": "你先坐汽车，坐三站下车，然后换地铁。",
+      "py": "nǐ xiān zuò qì chē, zuò sān zhàn xià chē, rán hòu huàn dì tiě.",
+      "en": "First take the bus, get off after three stops, then change to the subway."
+    },
+    {
+      "n": 152,
+      "zh": "先坐红线，再换绿线。",
+      "py": "xiān zuò hóng xiàn, zài huàn lǜ xiàn.",
+      "en": "First take the red line, then change to the green line."
+    },
+    {
+      "n": 153,
+      "zh": "不行，不行，太麻烦了，我还是打车吧。",
+      "py": "bù xíng, bù xíng, tài má fán le, wǒ hái shì dǎ chē ba.",
+      "en": "No, no — too much trouble. I'd better just take a taxi."
+    },
+    {
+      "n": 154,
+      "zh": "出租汽车太贵了。",
+      "py": "chū zū qì chē tài guì le.",
+      "en": "Taxis are too expensive."
+    },
+    {
+      "n": 155,
+      "zh": "我开车送你去机场吧。",
+      "py": "wǒ kāi chē sòng nǐ qù jī chǎng ba.",
+      "en": "Let me drive you to the airport."
+    },
+    {
+      "n": 156,
+      "zh": "谢谢你开车送我到机场。",
+      "py": "xiè xiè nǐ kāi chē sòng wǒ dào jī chǎng.",
+      "en": "Thank you for driving me to the airport."
+    },
+    {
+      "n": 157,
+      "zh": "让你花了那么多时间，真不好意思。",
+      "py": "ràng nǐ huā le nà me duō shí jiān, zhēn bù hǎo yì sī.",
+      "en": "I made you spend so much time — I'm really embarrassed."
+    },
+    {
+      "n": 158,
+      "zh": "这儿的人开车开得特别快。",
+      "py": "zhèr de rén kāi chē kāi de tè bié kuài.",
+      "en": "People here drive especially fast."
+    },
+    {
+      "n": 159,
+      "zh": "我在高速公路上开车，真有点儿紧张。",
+      "py": "wǒ zài gāo sù gōng lù shàng kāi chē, zhēn yǒu diǎnr jǐn zhāng.",
+      "en": "Driving on the highway, I get really a bit nervous."
+    },
+    {
+      "n": 160,
+      "zh": "这儿没有公共汽车，也没有地铁，只能自己开车，很不方便。",
+      "py": "zhèr méi yǒu gōng gòng qì chē, yě méi yǒu dì tiě, zhǐ néng zì jǐ kāi chē, hěn bù fāng biàn.",
+      "en": "There are no buses or subway here — you can only drive yourself. It's very inconvenient."
+    },
+    {
+      "n": 161,
+      "zh": "今天天气比昨天好，不下雪了。",
+      "py": "jīn tiān tiān qì bǐ zuó tiān hǎo, bú xià xuě le.",
+      "en": "The weather today is better than yesterday — it's stopped snowing."
+    },
+    {
+      "n": 162,
+      "zh": "明天天气怎么样？",
+      "py": "míng tiān tiān qì zěn me yàng?",
+      "en": "What will the weather be like tomorrow?"
+    },
+    {
+      "n": 163,
+      "zh": "我在网上看了天气预报。",
+      "py": "wǒ zài wǎng shàng kàn le tiān qì yù bào.",
+      "en": "I checked the weather forecast online."
+    },
+    {
+      "n": 164,
+      "zh": "明天天气比今天更好。",
+      "py": "míng tiān tiān qì bǐ jīn tiān gèng hǎo.",
+      "en": "Tomorrow's weather will be even better than today's."
+    },
+    {
+      "n": 165,
+      "zh": "不但不会下雪，而且会暖和一点儿。",
+      "py": "bú dàn bú huì xià xuě, ér qiě huì nuǎn huo yì diǎnr.",
+      "en": "Not only won't it snow, it will even be a bit warmer."
+    },
+    {
+      "n": 166,
+      "zh": "我约了朋友明天去公园滑冰。",
+      "py": "wǒ yuē le péng yǒu míng tiān qù gōng yuán huá bīng.",
+      "en": "I've arranged with a friend to go ice-skating in the park tomorrow."
+    },
+    {
+      "n": 167,
+      "zh": "怎么又下雨了？",
+      "py": "zěn me yòu xià yǔ le?",
+      "en": "How come it's raining again?"
+    },
+    {
+      "n": 168,
+      "zh": "这儿的天气真糟糕。",
+      "py": "zhèr de tiān qì zhēn zāo gāo.",
+      "en": "The weather here is really awful."
+    },
+    {
+      "n": 169,
+      "zh": "下个星期我要去纽约面试。",
+      "py": "xià gè xīng qī wǒ yào qù niǔ yuē miàn shì.",
+      "en": "Next week I'm going to New York for an interview."
+    },
+    {
+      "n": 170,
+      "zh": "这儿冬天很冷，夏天很热。",
+      "py": "zhèr dōng tiān hěn lěng, xià tiān hěn rè.",
+      "en": "Here, winter is very cold and summer is very hot."
+    },
+    {
+      "n": 171,
+      "zh": "加州冬天不冷，夏天不热。",
+      "py": "jiā zhōu dōng tiān bù lěng, xià tiān bú rè.",
+      "en": "In California, winter isn't cold and summer isn't hot."
+    },
+    {
+      "n": 172,
+      "zh": "加州春天暖和，秋天凉快。",
+      "py": "jiā zhōu chūn tiān nuǎn huo, qiū tiān liáng kuài.",
+      "en": "In California, spring is warm and autumn is cool."
+    },
+    {
+      "n": 173,
+      "zh": "今天天气这么好，我们出去玩儿吧。",
+      "py": "jīn tiān tiān qì zhè me hǎo, wǒ men chū qù wánr ba.",
+      "en": "The weather is so nice today — let's go out and have some fun."
+    },
+    {
+      "n": 174,
+      "zh": "你看，外面又下雨了。",
+      "py": "nǐ kàn, wài miàn yòu xià yǔ le.",
+      "en": "Look, it's raining again outside."
+    },
+    {
+      "n": 175,
+      "zh": "天气预报说明天会下雨。",
+      "py": "tiān qì yù bào shuō míng tiān huì xià yǔ.",
+      "en": "The forecast says it will rain tomorrow."
+    },
+    {
+      "n": 176,
+      "zh": "请问，现在还有没有位子？",
+      "py": "qǐng wèn, xiàn zài hái yǒu méi yǒu wèi zi?",
+      "en": "Excuse me, are there any seats left?"
+    },
+    {
+      "n": 177,
+      "zh": "好像一个位子都没有了。",
+      "py": "hǎo xiàng yí gè wèi zi dōu méi yǒu le.",
+      "en": "It seems there isn't a single seat left."
+    },
+    {
+      "n": 178,
+      "zh": "服务员，点菜！",
+      "py": "fú wù yuán, diǎn cài!",
+      "en": "Waiter, we'd like to order!"
+    },
+    {
+      "n": 179,
+      "zh": "你们想吃点儿什么？",
+      "py": "nǐ men xiǎng chī diǎnr shén me?",
+      "en": "What would you like to eat?"
+    },
+    {
+      "n": 180,
+      "zh": "我要一盘饺子，要素的。",
+      "py": "wǒ yào yì pán jiǎo zi, yào sù de.",
+      "en": "I'd like a plate of dumplings — vegetarian ones."
+    },
+    {
+      "n": 181,
+      "zh": "再来一盘家常豆腐，不要放肉。",
+      "py": "zài lái yì pán jiā cháng dòu fǔ, bú yào fàng ròu.",
+      "en": "Also a plate of home-style tofu — don't put any meat in it."
+    },
+    {
+      "n": 182,
+      "zh": "我们都吃素。",
+      "py": "wǒ men dōu chī sù.",
+      "en": "We're both vegetarian."
+    },
+    {
+      "n": 183,
+      "zh": "还要两碗酸辣汤，不要放味精，少放点儿盐。",
+      "py": "hái yào liǎng wǎn suān là tāng, bú yào fàng wèi jīng, shǎo fàng diǎnr yán.",
+      "en": "We also want two bowls of hot-and-sour soup — no MSG, and easy on the salt."
+    },
+    {
+      "n": 184,
+      "zh": "对不起，白菜刚卖完。",
+      "py": "duì bu qǐ, bái cài gāng mài wán.",
+      "en": "Sorry, we just sold out of cabbage."
+    },
+    {
+      "n": 185,
+      "zh": "再来两杯冰茶，我渴死了。",
+      "py": "zài lái liǎng bēi bīng chá, wǒ kě sǐ le.",
+      "en": "And two glasses of iced tea — I'm dying of thirst."
+    },
+    {
+      "n": 186,
+      "zh": "我饿死了，请上菜快一点儿。",
+      "py": "wǒ è sǐ le, qǐng shàng cài kuài yì diǎnr.",
+      "en": "I'm starving — please bring the food a little faster."
+    },
+    {
+      "n": 187,
+      "zh": "师傅，今天晚饭有什么好吃的？",
+      "py": "shī fù, jīn tiān wǎn fàn yǒu shén me hǎo chī de?",
+      "en": "Sir, what's good for dinner today?"
+    },
+    {
+      "n": 188,
+      "zh": "糖醋鱼甜甜的、酸酸的，好吃极了。",
+      "py": "táng cù yú tián tián de, suān suān de, hǎo chī jí le.",
+      "en": "The sweet-and-sour fish is sweet and tangy — extremely tasty."
+    },
+    {
+      "n": 189,
+      "zh": "红烧牛肉刚卖完。",
+      "py": "hóng shāo niú ròu gāng mài wán.",
+      "en": "The soy-braised beef just sold out."
+    },
+    {
+      "n": 190,
+      "zh": "那就来一个凉拌黄瓜吧。",
+      "py": "nà jiù lái yí gè liáng bàn huáng guā ba.",
+      "en": "Then I'll have a cucumber salad."
+    },
+    {
+      "n": 191,
+      "zh": "再来一碗米饭。",
+      "py": "zài lái yì wǎn mǐ fàn.",
+      "en": "And a bowl of rice, please."
+    },
+    {
+      "n": 192,
+      "zh": "请问，你上哪儿去？",
+      "py": "qǐng wèn, nǐ shàng nǎr qù?",
+      "en": "Excuse me, where are you headed?"
+    },
+    {
+      "n": 193,
+      "zh": "我想去学校的电脑中心。",
+      "py": "wǒ xiǎng qù xué xiào de diàn nǎo zhōng xīn.",
+      "en": "I want to go to the school's computer center."
+    },
+    {
+      "n": 194,
+      "zh": "你知道怎么走吗？",
+      "py": "nǐ zhī dào zěn me zǒu ma?",
+      "en": "Do you know how to get there?"
+    },
+    {
+      "n": 195,
+      "zh": "听说电脑中心在运动场旁边。",
+      "py": "tīng shuō diàn nǎo zhōng xīn zài yùn dòng chǎng páng biān.",
+      "en": "I've heard the computer center is next to the sports field."
+    },
+    {
+      "n": 196,
+      "zh": "电脑中心离这儿远不远？",
+      "py": "diàn nǎo zhōng xīn lí zhèr yuǎn bù yuǎn?",
+      "en": "Is the computer center far from here?"
+    },
+    {
+      "n": 197,
+      "zh": "不远，离这儿很近。",
+      "py": "bù yuǎn, lí zhèr hěn jìn.",
+      "en": "Not far — it's very close to here."
+    },
+    {
+      "n": 198,
+      "zh": "你住的地方离运动场很近。",
+      "py": "nǐ zhù de dì fāng lí yùn dòng chǎng hěn jìn.",
+      "en": "The place you live is very close to the sports field."
+    },
+    {
+      "n": 199,
+      "zh": "我没去过中国城，不知道中国城在哪儿。",
+      "py": "wǒ méi qù guò zhōng guó chéng, bù zhī dào zhōng guó chéng zài nǎr.",
+      "en": "I've never been to Chinatown; I don't know where it is."
+    },
+    {
+      "n": 200,
+      "zh": "没问题，你开车，我告诉你怎么走。",
+      "py": "méi wèn tí, nǐ kāi chē, wǒ gào sù nǐ zěn me zǒu.",
+      "en": "No problem — you drive and I'll tell you how to go."
+    },
+    {
+      "n": 201,
+      "zh": "你有地图吗？",
+      "py": "nǐ yǒu dì tú ma?",
+      "en": "Do you have a map?"
+    },
+    {
+      "n": 202,
+      "zh": "从这儿一直往南开。",
+      "py": "cóng zhèr yì zhí wǎng nán kāi.",
+      "en": "From here, drive straight south."
+    },
+    {
+      "n": 203,
+      "zh": "过三个路口，往西一拐就到了。",
+      "py": "guò sān gè lù kǒu, wǎng xī yì guǎi jiù dào le.",
+      "en": "Pass three intersections, turn west, and you're there."
+    },
+    {
+      "n": 204,
+      "zh": "前面红绿灯往右拐。",
+      "py": "qián miàn hóng lǜ dēng wǎng yòu guǎi.",
+      "en": "Turn right at the traffic light ahead."
+    },
+    {
+      "n": 205,
+      "zh": "到了，到了，你看，前面有很多中国字。",
+      "py": "dào le, dào le, nǐ kàn, qián miàn yǒu hěn duō zhōng guó zì.",
+      "en": "We're here! Look — there are lots of Chinese characters up ahead."
+    },
+    {
+      "n": 206,
+      "zh": "那个地方我去过很多次。",
+      "py": "nà ge dì fāng wǒ qù guò hěn duō cì.",
+      "en": "I've been to that place many times."
+    },
+    {
+      "n": 207,
+      "zh": "李友，你做什么呢？",
+      "py": "lǐ yǒu, nǐ zuò shén me ne?",
+      "en": "Li You, what are you doing?"
+    },
+    {
+      "n": 208,
+      "zh": "我在做功课呢。",
+      "py": "wǒ zài zuò gōng kè ne.",
+      "en": "I'm doing homework."
+    },
+    {
+      "n": 209,
+      "zh": "今天晚上我们给小音过生日。",
+      "py": "jīn tiān wǎn shàng wǒ men gěi xiǎo yīn guò shēng rì.",
+      "en": "Tonight we're celebrating Xiaoyin's birthday."
+    },
+    {
+      "n": 210,
+      "zh": "我们晚上在她家开舞会。",
+      "py": "wǒ men wǎn shàng zài tā jiā kāi wǔ huì.",
+      "en": "This evening we're having a party at her place."
+    },
+    {
+      "n": 211,
+      "zh": "我带什么东西？",
+      "py": "wǒ dài shén me dōng xī?",
+      "en": "What should I bring?"
+    },
+    {
+      "n": 212,
+      "zh": "你带一些饮料和水果吧。",
+      "py": "nǐ dài yì xiē yǐn liào hé shuǐ guǒ ba.",
+      "en": "Bring some drinks and fruit."
+    },
+    {
+      "n": 213,
+      "zh": "我们先吃饭，吃完饭再唱歌跳舞。",
+      "py": "wǒ men xiān chī fàn, chī wán fàn zài chàng gē tiào wǔ.",
+      "en": "We'll eat first; after eating we'll sing and dance."
+    },
+    {
+      "n": 214,
+      "zh": "你住的地方离小音家远吗？",
+      "py": "nǐ zhù de dì fāng lí xiǎo yīn jiā yuǎn ma?",
+      "en": "Is your place far from Xiaoyin's home?"
+    },
+    {
+      "n": 215,
+      "zh": "我开车来接你吧。",
+      "py": "wǒ kāi chē lái jiē nǐ ba.",
+      "en": "I'll come pick you up in my car."
+    },
+    {
+      "n": 216,
+      "zh": "小音，祝你生日快乐！",
+      "py": "xiǎo yīn, zhù nǐ shēng rì kuài lè!",
+      "en": "Xiaoyin, happy birthday!"
+    },
+    {
+      "n": 217,
+      "zh": "这是我们给你买的礼物。",
+      "py": "zhè shì wǒ men gěi nǐ mǎi de lǐ wù.",
+      "en": "This is the gift we bought for you."
+    },
+    {
+      "n": 218,
+      "zh": "谢谢你们！快进来吧。",
+      "py": "xiè xiè nǐ men! kuài jìn lái ba.",
+      "en": "Thank you! Come on in."
+    },
+    {
+      "n": 219,
+      "zh": "她是王朋的妹妹王红，刚从北京来。",
+      "py": "tā shì wáng péng de mèi mèi wáng hóng, gāng cóng běi jīng lái.",
+      "en": "She's Wang Peng's younger sister, Wang Hong — she just came from Beijing."
+    },
+    {
+      "n": 220,
+      "zh": "你属什么？",
+      "py": "nǐ shǔ shén me?",
+      "en": "What's your zodiac animal?"
+    },
+    {
+      "n": 221,
+      "zh": "我属狗。",
+      "py": "wǒ shǔ gǒu.",
+      "en": "I was born in the year of the dog."
+    },
+    {
+      "n": 222,
+      "zh": "她长得真可爱。",
+      "py": "tā zhǎng de zhēn kě ài.",
+      "en": "She's really cute."
+    },
+    {
+      "n": 223,
+      "zh": "她的眼睛大大的，很像她妈妈。",
+      "py": "tā de yǎn jīng dà dà de, hěn xiàng tā mā mā.",
+      "en": "Her eyes are big — she looks a lot like her mother."
+    },
+    {
+      "n": 224,
+      "zh": "你怎么了？哪儿不舒服？",
+      "py": "nǐ zěn me le? nǎr bù shū fú?",
+      "en": "What's wrong? Where does it hurt?"
+    },
+    {
+      "n": 225,
+      "zh": "我肚子疼死了。",
+      "py": "wǒ dǔ zi téng sǐ le.",
+      "en": "My stomach is killing me."
+    },
+    {
+      "n": 226,
+      "zh": "你昨天吃什么东西了？",
+      "py": "nǐ zuó tiān chī shén me dōng xī le?",
+      "en": "What did you eat yesterday?"
+    },
+    {
+      "n": 227,
+      "zh": "我吃了一些剩菜。",
+      "py": "wǒ chī le yì xiē shèng cài.",
+      "en": "I ate some leftovers."
+    },
+    {
+      "n": 228,
+      "zh": "你吃坏肚子了。",
+      "py": "nǐ chī huài dǔ zi le.",
+      "en": "You've eaten something that upset your stomach."
+    },
+    {
+      "n": 229,
+      "zh": "要不要打针？",
+      "py": "yào bú yào dǎ zhēn?",
+      "en": "Do I need an injection?"
+    },
+    {
+      "n": 230,
+      "zh": "我不想打针，吃药吧。",
+      "py": "wǒ bù xiǎng dǎ zhēn, chī yào ba.",
+      "en": "I don't want a shot — let's just take medicine."
+    },
+    {
+      "n": 231,
+      "zh": "这种药一天吃三次，一次两片。",
+      "py": "zhè zhǒng yào yì tiān chī sān cì, yí cì liǎng piàn.",
+      "en": "Take this medicine three times a day, two tablets each time."
+    },
+    {
+      "n": 232,
+      "zh": "多喝水，多休息。",
+      "py": "duō hē shuǐ, duō xiū xī.",
+      "en": "Drink more water and rest more."
+    },
+    {
+      "n": 233,
+      "zh": "你的眼睛怎么红红的？",
+      "py": "nǐ de yǎn jīng zěn me hóng hóng de?",
+      "en": "Why are your eyes all red?"
+    },
+    {
+      "n": 234,
+      "zh": "我可能对什么过敏了。",
+      "py": "wǒ kě néng duì shén me guò mǐn le.",
+      "en": "I might be allergic to something."
+    },
+    {
+      "n": 235,
+      "zh": "赶快去看医生吧。",
+      "py": "gǎn kuài qù kàn yī shēng ba.",
+      "en": "Hurry and go see a doctor."
+    },
+    {
+      "n": 236,
+      "zh": "我没有健康保险，看病太贵了。",
+      "py": "wǒ méi yǒu jiàn kāng bǎo xiǎn, kàn bìng tài guì le.",
+      "en": "I don't have health insurance — seeing a doctor is too expensive."
+    },
+    {
+      "n": 237,
+      "zh": "你不去看病，病会越来越重。",
+      "py": "nǐ bú qù kàn bìng, bìng huì yuè lái yuè zhòng.",
+      "en": "If you don't get it treated, the illness will get worse and worse."
+    },
+    {
+      "n": 238,
+      "zh": "我上次生病，没吃药也好了。",
+      "py": "wǒ shàng cì shēng bìng, méi chī yào yě hǎo le.",
+      "en": "Last time I was sick, I got better without taking any medicine."
+    },
+    {
+      "n": 239,
+      "zh": "这个周末学校演一个中国电影，我们一起去看，好吗？",
+      "py": "zhè ge zhōu mò xué xiào yǎn yí gè zhōng guó diàn yǐng, wǒ men yì qǐ qù kàn, hǎo ma?",
+      "en": "This weekend the school is showing a Chinese movie — shall we go see it together?"
+    },
+    {
+      "n": 240,
+      "zh": "听说看电影的人很多，买得到票吗？",
+      "py": "tīng shuō kàn diàn yǐng de rén hěn duō, mǎi de dào piào ma?",
+      "en": "I hear a lot of people go to the movies — can we get tickets?"
+    },
+    {
+      "n": 241,
+      "zh": "票已经买了，我费了很大的力气才买到。",
+      "py": "piào yǐ jīng mǎi le, wǒ fèi le hěn dà de lì qì cái mǎi dào.",
+      "en": "I've already bought the tickets — it took a lot of effort to get them."
+    },
+    {
+      "n": 242,
+      "zh": "好极了！我早就想看这个电影了。",
+      "py": "hǎo jí le! wǒ zǎo jiù xiǎng kàn zhè ge diàn yǐng le.",
+      "en": "Fantastic! I've wanted to see this movie for a long time."
+    },
+    {
+      "n": 243,
+      "zh": "还有别人跟我们一起去吗？",
+      "py": "hái yǒu bié rén gēn wǒ men yì qǐ qù ma?",
+      "en": "Is anyone else going with us?"
+    },
+    {
+      "n": 244,
+      "zh": "没有，就我们俩。",
+      "py": "méi yǒu, jiù wǒ men liǎ.",
+      "en": "No, just the two of us."
+    },
+    {
+      "n": 245,
+      "zh": "我请你吃晚饭，吃完饭以后我们去看电影。",
+      "py": "wǒ qǐng nǐ chī wǎn fàn, chī wán fàn yǐ hòu wǒ men qù kàn diàn yǐng.",
+      "en": "I'll treat you to dinner, and after dinner we'll go see the movie."
+    },
+    {
+      "n": 246,
+      "zh": "那太好了，星期六见！",
+      "py": "nà tài hǎo le, xīng qī liù jiàn!",
+      "en": "That's great — see you Saturday!"
+    },
+    {
+      "n": 247,
+      "zh": "白小姐，你还记得我吗？",
+      "py": "bái xiǎo jiě, nǐ hái jì de wǒ ma?",
+      "en": "Miss Bai, do you still remember me?"
+    },
+    {
+      "n": 248,
+      "zh": "对不起，你是哪位？",
+      "py": "duì bu qǐ, nǐ shì nǎ wèi?",
+      "en": "Sorry — who is this?"
+    },
+    {
+      "n": 249,
+      "zh": "我想请你周末去跳舞。",
+      "py": "wǒ xiǎng qǐng nǐ zhōu mò qù tiào wǔ.",
+      "en": "I'd like to invite you to go dancing this weekend."
+    },
+    {
+      "n": 250,
+      "zh": "这个周末不行，我要打扫房子、整理房间。",
+      "py": "zhè ge zhōu mò bù xíng, wǒ yào dǎ sǎo fáng zi, zhěng lǐ fáng jiān.",
+      "en": "This weekend won't work — I have to clean the house and tidy my room."
+    },
+    {
+      "n": 251,
+      "zh": "下个周末怎么样？",
+      "py": "xià gè zhōu mò zěn me yàng?",
+      "en": "How about next weekend?"
+    },
+    {
+      "n": 252,
+      "zh": "对不起，下个周末我也没有时间。",
+      "py": "duì bu qǐ, xià gè zhōu mò wǒ yě méi yǒu shí jiān.",
+      "en": "Sorry, I don't have time next weekend either."
+    },
+    {
+      "n": 253,
+      "zh": "王朋在学校的宿舍住了两个学期了。",
+      "py": "wáng péng zài xué xiào de sù shè zhù le liǎng gè xué qī le.",
+      "en": "Wang Peng has lived in the school dorm for two semesters."
+    },
+    {
+      "n": 254,
+      "zh": "他觉得宿舍太吵，房间太小。",
+      "py": "tā jué de sù shè tài chǎo, fáng jiān tài xiǎo.",
+      "en": "He thinks the dorm is too noisy and the room too small."
+    },
+    {
+      "n": 255,
+      "zh": "房间太小，连电脑都放不下。",
+      "py": "fáng jiān tài xiǎo, lián diàn nǎo dōu fàng bú xià.",
+      "en": "The room is so small there isn't even space for a computer."
+    },
+    {
+      "n": 256,
+      "zh": "宿舍里没有地方做饭，很不方便。",
+      "py": "sù shè lǐ méi yǒu dì fāng zuò fàn, hěn bù fāng biàn.",
+      "en": "There's nowhere to cook in the dorm — it's very inconvenient."
+    },
+    {
+      "n": 257,
+      "zh": "他想搬出去住。",
+      "py": "tā xiǎng bān chū qù zhù.",
+      "en": "He wants to move out."
+    },
+    {
+      "n": 258,
+      "zh": "你看报纸上的广告了吗？",
+      "py": "nǐ kàn bào zhǐ shàng de guǎng gào le ma?",
+      "en": "Did you see the ad in the newspaper?"
+    },
+    {
+      "n": 259,
+      "zh": "请问，你们有公寓出租吗？",
+      "py": "qǐng wèn, nǐ men yǒu gōng yù chū zū ma?",
+      "en": "Excuse me, do you have an apartment for rent?"
+    },
+    {
+      "n": 260,
+      "zh": "有啊，一房一厅，还带家具。",
+      "py": "yǒu a, yì fáng yì tīng, hái dài jiā jù.",
+      "en": "We do — one bedroom and one living room, and it comes furnished."
+    },
+    {
+      "n": 261,
+      "zh": "客厅里有一套沙发和一张饭桌。",
+      "py": "kè tīng lǐ yǒu yí tào shā fā hé yì zhāng fàn zhuō.",
+      "en": "In the living room there's a sofa set and a dining table."
+    },
+    {
+      "n": 262,
+      "zh": "卧室里有一张床、一张书桌和一个书架。",
+      "py": "wò shì lǐ yǒu yì zhāng chuáng, yì zhāng shū zhuō hé yí gè shū jià.",
+      "en": "In the bedroom there's a bed, a desk, and a bookshelf."
+    },
+    {
+      "n": 263,
+      "zh": "你们那里安静不安静？",
+      "py": "nǐ men nà lǐ ān jìng bù ān jìng?",
+      "en": "Is it quiet where you are?"
+    },
+    {
+      "n": 264,
+      "zh": "非常安静。",
+      "py": "fēi cháng ān jìng.",
+      "en": "Very quiet."
+    },
+    {
+      "n": 265,
+      "zh": "一个月房租多少钱？",
+      "py": "yí gè yuè fáng zū duō shǎo qián?",
+      "en": "How much is the rent per month?"
+    },
+    {
+      "n": 266,
+      "zh": "八百五十块，水电费不用付。",
+      "py": "bā bǎi wǔ shí kuài, shuǐ diàn fèi bú yòng fù.",
+      "en": "Eight hundred fifty — you don't pay for water or electricity."
+    },
+    {
+      "n": 267,
+      "zh": "可以养宠物吗？",
+      "py": "kě yǐ yǎng chǒng wù ma?",
+      "en": "Can I keep pets?"
+    },
+    {
+      "n": 268,
+      "zh": "对不起，我们这儿不许养宠物。",
+      "py": "duì bu qǐ, wǒ men zhèr bù xǔ yǎng chǒng wù.",
+      "en": "Sorry, pets aren't allowed here."
+    },
+    {
+      "n": 269,
+      "zh": "你看，我的肚子越来越大了。",
+      "py": "nǐ kàn, wǒ de dǔ zi yuè lái yuè dà le.",
+      "en": "Look, my belly is getting bigger and bigger."
+    },
+    {
+      "n": 270,
+      "zh": "你平常吃得那么多，又不运动，当然越来越胖了。",
+      "py": "nǐ píng cháng chī de nà me duō, yòu bú yùn dòng, dāng rán yuè lái yuè pàng le.",
+      "en": "You usually eat so much and never exercise — of course you're getting fatter."
+    },
+    {
+      "n": 271,
+      "zh": "那怎么办呢？",
+      "py": "nà zěn me bàn ne?",
+      "en": "Then what should I do?"
+    },
+    {
+      "n": 272,
+      "zh": "最简单的运动是跑步。",
+      "py": "zuì jiǎn dān de yùn dòng shì pǎo bù.",
+      "en": "The simplest exercise is running."
+    },
+    {
+      "n": 273,
+      "zh": "冬天那么冷，夏天那么热，跑步多难受啊！",
+      "py": "dōng tiān nà me lěng, xià tiān nà me rè, pǎo bù duō nán shòu a!",
+      "en": "Winter is so cold and summer so hot — running is so miserable!"
+    },
+    {
+      "n": 274,
+      "zh": "打网球得买网球拍、网球鞋，太贵了。",
+      "py": "dǎ wǎng qiú děi mǎi wǎng qiú pāi, wǎng qiú xié, tài guì le.",
+      "en": "To play tennis you have to buy a racket and tennis shoes — too expensive."
+    },
+    {
+      "n": 275,
+      "zh": "我们去游泳吧。",
+      "py": "wǒ men qù yóu yǒng ba.",
+      "en": "Let's go swimming."
+    },
+    {
+      "n": 276,
+      "zh": "游泳？我怕水，太危险了。",
+      "py": "yóu yǒng? wǒ pà shuǐ, tài wēi xiǎn le.",
+      "en": "Swimming? I'm afraid of water — too dangerous."
+    },
+    {
+      "n": 277,
+      "zh": "为了提高中文水平，我们以后多说中文吧。",
+      "py": "wèi le tí gāo zhōng wén shuǐ píng, wǒ men yǐ hòu duō shuō zhōng wén ba.",
+      "en": "To improve our Chinese, let's speak more Chinese from now on."
+    },
+    {
+      "n": 278,
+      "zh": "你在看什么呢？",
+      "py": "nǐ zài kàn shén me ne?",
+      "en": "What are you watching?"
+    },
+    {
+      "n": 279,
+      "zh": "我在看美式足球赛。",
+      "py": "wǒ zài kàn měi shì zú qiú sài.",
+      "en": "I'm watching an American football game."
+    },
+    {
+      "n": 280,
+      "zh": "足球不是圆的吗？",
+      "py": "zú qiú bú shì yuán de ma?",
+      "en": "Isn't a football round?"
+    },
+    {
+      "n": 281,
+      "zh": "美式足球可以用手抱着球跑。",
+      "py": "měi shì zú qiú kě yǐ yòng shǒu bào zhe qiú pǎo.",
+      "en": "In American football you can run holding the ball in your hands."
+    },
+    {
+      "n": 282,
+      "zh": "你看，那个人又被压在下面了。",
+      "py": "nǐ kàn, nà ge rén yòu bèi yā zài xià miàn le.",
+      "en": "Look, that guy got crushed at the bottom of the pile again."
+    },
+    {
+      "n": 283,
+      "zh": "马上要放假了，这个暑假你有什么计划？",
+      "py": "mǎ shàng yào fàng jià le, zhè ge shǔ jià nǐ yǒu shén me jì huà?",
+      "en": "Vacation is almost here — what are your plans for the summer?"
+    },
+    {
+      "n": 284,
+      "zh": "我想回家看父母。",
+      "py": "wǒ xiǎng huí jiā kàn fù mǔ.",
+      "en": "I want to go home and see my parents."
+    },
+    {
+      "n": 285,
+      "zh": "你去过北京吗？",
+      "py": "nǐ qù guò běi jīng ma?",
+      "en": "Have you been to Beijing?"
+    },
+    {
+      "n": 286,
+      "zh": "北京是中国的首都，也是中国的政治、文化中心。",
+      "py": "běi jīng shì zhōng guó de shǒu dū, yě shì zhōng guó de zhèng zhì, wén huà zhōng xīn.",
+      "en": "Beijing is China's capital, and also its political and cultural center."
+    },
+    {
+      "n": 287,
+      "zh": "北京有很多名胜古迹。",
+      "py": "běi jīng yǒu hěn duō míng shèng gǔ jì.",
+      "en": "Beijing has many famous scenic spots and historic sites."
+    },
+    {
+      "n": 288,
+      "zh": "我给你当导游，怎么样？",
+      "py": "wǒ gěi nǐ dāng dǎo yóu, zěn me yàng?",
+      "en": "I'll be your tour guide — how about it?"
+    },
+    {
+      "n": 289,
+      "zh": "太好了！可是我还没有护照呢。",
+      "py": "tài hǎo le! kě shì wǒ hái méi yǒu hù zhào ne.",
+      "en": "Great! But I don't have a passport yet."
+    },
+    {
+      "n": 290,
+      "zh": "你得赶快办护照，还要办签证。",
+      "py": "nǐ děi gǎn kuài bàn hù zhào, hái yào bàn qiān zhèng.",
+      "en": "You need to get a passport right away, and a visa too."
+    },
+    {
+      "n": 291,
+      "zh": "我们找一家旅行社订机票吧。",
+      "py": "wǒ men zhǎo yì jiā lǚ xíng shè dìng jī piào ba.",
+      "en": "Let's find a travel agency to book the plane tickets."
+    },
+    {
+      "n": 292,
+      "zh": "请问，六月初到北京的机票多少钱？",
+      "py": "qǐng wèn, liù yuè chū dào běi jīng de jī piào duō shǎo qián?",
+      "en": "Excuse me, how much is a ticket to Beijing in early June?"
+    },
+    {
+      "n": 293,
+      "zh": "你要单程票还是往返票？",
+      "py": "nǐ yào dān chéng piào hái shì wǎng fǎn piào?",
+      "en": "Do you want one-way or round-trip?"
+    },
+    {
+      "n": 294,
+      "zh": "往返的多少钱？",
+      "py": "wǎng fǎn de duō shǎo qián?",
+      "en": "How much is round-trip?"
+    },
+    {
+      "n": 295,
+      "zh": "有没有直飞的？",
+      "py": "yǒu méi yǒu zhí fēi de?",
+      "en": "Is there a direct flight?"
+    },
+    {
+      "n": 296,
+      "zh": "要不要转机？",
+      "py": "yào bú yào zhuǎn jī?",
+      "en": "Do I have to change planes?"
+    },
+    {
+      "n": 297,
+      "zh": "我帮您查一下，这家航空公司的票最便宜。",
+      "py": "wǒ bāng nín chá yí xià, zhè jiā háng kōng gōng sī de piào zuì pián yi.",
+      "en": "Let me check for you — this airline's tickets are the cheapest."
+    },
+    {
+      "n": 298,
+      "zh": "小姐，这是我们的机票和护照。",
+      "py": "xiǎo jiě, zhè shì wǒ men de jī piào hé hù zhào.",
+      "en": "Miss, here are our tickets and passports."
+    },
+    {
+      "n": 299,
+      "zh": "你们有几件行李要托运？",
+      "py": "nǐ men yǒu jǐ jiàn xíng lǐ yào tuō yùn?",
+      "en": "How many pieces of luggage do you have to check?"
+    },
+    {
+      "n": 300,
+      "zh": "这个包不托运，我们带上飞机。",
+      "py": "zhè ge bāo bù tuō yùn, wǒ men dài shàng fēi jī.",
+      "en": "We're not checking this bag — we'll carry it onto the plane."
+    },
+    {
+      "n": 301,
+      "zh": "行李超重了吗？",
+      "py": "xíng lǐ chāo zhòng le ma?",
+      "en": "Is the luggage overweight?"
+    },
+    {
+      "n": 302,
+      "zh": "没有，没超重。",
+      "py": "méi yǒu, méi chāo zhòng.",
+      "en": "No, it's not overweight."
+    },
+    {
+      "n": 303,
+      "zh": "这是你们的登机牌。",
+      "py": "zhè shì nǐ men de dēng jī pái.",
+      "en": "Here are your boarding passes."
+    },
+    {
+      "n": 304,
+      "zh": "请到五号登机口上飞机。",
+      "py": "qǐng dào wǔ hào dēng jī kǒu shàng fēi jī.",
+      "en": "Please board at Gate 5."
+    },
+    {
+      "n": 305,
+      "zh": "飞机几点起飞？",
+      "py": "fēi jī jǐ diǎn qǐ fēi?",
+      "en": "What time does the plane take off?"
+    },
+    {
+      "n": 306,
+      "zh": "别哭了，我们秋天就回来。",
+      "py": "bié kū le, wǒ men qiū tiān jiù huí lái.",
+      "en": "Don't cry — we'll be back in the fall."
+    },
+    {
+      "n": 307,
+      "zh": "你们要多保重！",
+      "py": "nǐ men yào duō bǎo zhòng!",
+      "en": "Take good care of yourselves!"
+    },
+    {
+      "n": 308,
+      "zh": "到了北京以后，别忘了给我们打电话。",
+      "py": "dào le běi jīng yǐ hòu, bié wàng le gěi wǒ men dǎ diàn huà.",
+      "en": "After you get to Beijing, don't forget to call us."
+    },
+    {
+      "n": 309,
+      "zh": "路上小心！",
+      "py": "lù shàng xiǎo xīn!",
+      "en": "Be careful on the way!"
+    },
+    {
+      "n": 310,
+      "zh": "爸、妈，我们回来了！",
+      "py": "bà, mā, wǒ men huí lái le!",
+      "en": "Dad, Mom, we're back!"
+    },
+    {
+      "n": 311,
+      "zh": "我来介绍一下，这是我的同学李友。",
+      "py": "wǒ lái jiè shào yí xià, zhè shì wǒ de tóng xué lǐ yǒu.",
+      "en": "Let me introduce — this is my classmate Li You."
+    },
+    {
+      "n": 312,
+      "zh": "欢迎你来北京！路上辛苦了。",
+      "py": "huān yíng nǐ lái běi jīng! lù shàng xīn kǔ le.",
+      "en": "Welcome to Beijing! You must be tired from the trip."
+    },
+    {
+      "n": 313,
+      "zh": "走，我们回家吧，妈给你们做了很多好吃的。",
+      "py": "zǒu, wǒ men huí jiā ba, mā gěi nǐ men zuò le hěn duō hǎo chī de.",
+      "en": "Come on, let's go home — Mom has made you lots of good food."
+    },
+    {
+      "n": 314,
+      "zh": "太好了，我要吃北京烤鸭！",
+      "py": "tài hǎo le, wǒ yào chī běi jīng kǎo yā!",
+      "en": "Wonderful — I want to eat Beijing roast duck!"
+    }
+  ],
+  "ic1_chapters": [
+    {
+      "n": 1,
+      "title": "Greetings",
+      "from": 1,
+      "to": 15
+    },
+    {
+      "n": 2,
+      "title": "Family",
+      "from": 16,
+      "to": 30
+    },
+    {
+      "n": 3,
+      "title": "Time",
+      "from": 31,
+      "to": 46
+    },
+    {
+      "n": 4,
+      "title": "Hobbies",
+      "from": 47,
+      "to": 61
+    },
+    {
+      "n": 5,
+      "title": "Visiting Friends",
+      "from": 62,
+      "to": 78
+    },
+    {
+      "n": 6,
+      "title": "Making Appointments",
+      "from": 79,
+      "to": 94
+    },
+    {
+      "n": 7,
+      "title": "Studying Chinese",
+      "from": 95,
+      "to": 109
+    },
+    {
+      "n": 8,
+      "title": "School Life",
+      "from": 110,
+      "to": 125
+    },
+    {
+      "n": 9,
+      "title": "Shopping",
+      "from": 126,
+      "to": 142
+    },
+    {
+      "n": 10,
+      "title": "Transportation",
+      "from": 143,
+      "to": 160
+    },
+    {
+      "n": 11,
+      "title": "Weather",
+      "from": 161,
+      "to": 175
+    },
+    {
+      "n": 12,
+      "title": "Dining",
+      "from": 176,
+      "to": 191
+    },
+    {
+      "n": 13,
+      "title": "Directions",
+      "from": 192,
+      "to": 206
+    },
+    {
+      "n": 14,
+      "title": "Birthday Party",
+      "from": 207,
+      "to": 223
+    },
+    {
+      "n": 15,
+      "title": "Seeing a Doctor",
+      "from": 224,
+      "to": 238
+    },
+    {
+      "n": 16,
+      "title": "Dating",
+      "from": 239,
+      "to": 252
+    },
+    {
+      "n": 17,
+      "title": "Renting an Apartment",
+      "from": 253,
+      "to": 268
+    },
+    {
+      "n": 18,
+      "title": "Sports",
+      "from": 269,
+      "to": 282
+    },
+    {
+      "n": 19,
+      "title": "Travel",
+      "from": 283,
+      "to": 297
+    },
+    {
+      "n": 20,
+      "title": "At the Airport",
+      "from": 298,
+      "to": 314
+    }
   ]
 };
