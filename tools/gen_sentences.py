@@ -67,18 +67,23 @@ def to_pinyin(zh: str) -> str:
     for idx, (ch, s) in enumerate(pairs):
         if s is None:
             continue
-        if ch == "长":                       # always "long" in this corpus
-            s = "cháng"
-        elif ch == "都" and s == "dū":        # 都 = "all" (dōu), never 首都 here
+        prev_ch = pairs[idx - 1][0] if idx > 0 else ""
+        next_ch = pairs[idx + 1][0] if idx + 1 < len(pairs) else ""
+        if ch == "长":                       # 长得 = "grow/look", otherwise "long"
+            s = "zhǎng" if next_ch == "得" else "cháng"
+        elif ch == "都" and s == "dū" and prev_ch != "首":  # 都 = "all"; keep 首都
             s = "dōu"
         elif ch == "子" and s in ("zǐ", "zī"):  # noun suffix 子 = neutral tone
             s = "zi"
         elif ch == "好" and s == "hào":       # 好好 etc., never the "fond of" reading
             s = "hǎo"
+        elif ch == "空" and (prev_ch == "有" or next_ch == "儿"):
+            s = "kòng"                        # 有空(儿) = free time
+        elif ch == "教" and next_ch in ("我", "你", "他", "她"):
+            s = "jiāo"                        # verb "teach" (教我们), not 教室
         elif ch == "得":                      # 得 as a complement marker = neutral "de"
-            if pairs[idx - 1:idx] and pairs[idx - 1][0] == "我" \
-                    and idx + 1 < len(pairs) and pairs[idx + 1][0] == "走":
-                s = "děi"                     # 我得走 = "I must go"
+            if next_ch in ("走", "请", "学", "赶", "买") and prev_ch != "觉":
+                s = "děi"                     # modal 得 = "must" (我得走, 得请我…)
             else:
                 s = "de"
         pairs[idx] = (ch, s)
@@ -1374,6 +1379,370 @@ HSK2 += [
 ]
 
 
+# ============ Integrated Chinese Level 1 (Lessons 1–20) ============
+# Sentences based on the dialogues of each lesson, staying within the
+# lesson's vocabulary and following the textbook storyline
+# (Wang Peng, Li You, Gao Wenzhong, Bai Ying'ai, ...).
+# Format: (lesson number, theme, [(chinese, english), ...])
+
+IC1 = [
+    (1, "Greetings", [
+        ("你好！", "Hello!"),
+        ("请问，你贵姓？", "Excuse me, may I ask your family name?"),
+        ("我姓李。你呢？", "My family name is Li. And you?"),
+        ("我姓王，叫王朋。", "My family name is Wang; I'm called Wang Peng."),
+        ("你叫什么名字？", "What's your name?"),
+        ("我叫李友。", "My name is Li You."),
+        ("李小姐，你是老师吗？", "Miss Li, are you a teacher?"),
+        ("我不是老师，我是学生。", "I'm not a teacher; I'm a student."),
+        ("你也是学生吗？", "Are you a student too?"),
+        ("我也是学生。", "I'm a student too."),
+        ("王先生，你是中国人吗？", "Mr. Wang, are you Chinese?"),
+        ("我是中国人，我是北京人。", "I'm Chinese; I'm from Beijing."),
+        ("你是美国人吗？", "Are you American?"),
+        ("我是美国人，我是纽约人。", "I'm American; I'm from New York."),
+        ("李友是学生，王朋也是学生。", "Li You is a student, and Wang Peng is a student too."),
+    ]),
+    (2, "Family", [
+        ("高文中，那是你的照片吗？", "Gao Wenzhong, is that your photo?"),
+        ("这是我爸爸，这是我妈妈。", "This is my dad, and this is my mom."),
+        ("这个女孩子是谁？", "Who is this girl?"),
+        ("她是我姐姐。", "She is my older sister."),
+        ("这个男孩子是你弟弟吗？", "Is this boy your younger brother?"),
+        ("他不是我弟弟，他是我大哥的儿子。", "He isn't my younger brother; he's my eldest brother's son."),
+        ("你大哥有女儿吗？", "Does your eldest brother have a daughter?"),
+        ("他没有女儿。", "He doesn't have a daughter."),
+        ("白英爱，你家有几口人？", "Bai Ying'ai, how many people are in your family?"),
+        ("我家有六口人。", "There are six people in my family."),
+        ("你爸爸妈妈做什么工作？", "What work do your mom and dad do?"),
+        ("我爸爸是律师。", "My dad is a lawyer."),
+        ("我妈妈是英文老师。", "My mom is an English teacher."),
+        ("我哥哥、妹妹都是大学生。", "My older brother and younger sister are both college students."),
+        ("我妈妈也是老师，我爸爸是医生。", "My mom is also a teacher; my dad is a doctor."),
+    ]),
+    (3, "Time", [
+        ("九月十二号是星期四。", "September 12th is a Thursday."),
+        ("那天是我的生日。", "That day is my birthday."),
+        ("你今年多大？", "How old are you this year?"),
+        ("我今年十八岁。", "I'm eighteen this year."),
+        ("星期四我请你吃晚饭，怎么样？", "Thursday I'll treat you to dinner — how about it?"),
+        ("太好了！谢谢你。", "Great! Thank you."),
+        ("你喜欢吃中国菜还是美国菜？", "Do you like Chinese food or American food?"),
+        ("我是英国人，可是我喜欢吃中国菜。", "I'm British, but I like Chinese food."),
+        ("现在几点？", "What time is it now?"),
+        ("现在六点半。", "It's six thirty now."),
+        ("我们今天晚上七点半见。", "Let's meet tonight at seven thirty."),
+        ("你今天晚上忙不忙？", "Are you busy tonight?"),
+        ("我今天很忙，可是明天不忙。", "I'm busy today, but not tomorrow."),
+        ("我今天晚上有事儿。", "I have something to do tonight."),
+        ("你认识不认识李友？", "Do you know Li You?"),
+        ("我认识她，她是我的同学。", "I know her; she's my classmate."),
+    ]),
+    (4, "Hobbies", [
+        ("白英爱，你周末喜欢做什么？", "Bai Ying'ai, what do you like to do on weekends?"),
+        ("我喜欢打球、看电视。你呢？", "I like playing ball and watching TV. And you?"),
+        ("我喜欢唱歌、跳舞，还喜欢听音乐。", "I like singing and dancing, and I also like listening to music."),
+        ("你也喜欢看书，对不对？", "You also like reading, right?"),
+        ("对，有的时候也喜欢看书。", "Right, sometimes I like reading too."),
+        ("你喜欢不喜欢看电影？", "Do you like watching movies?"),
+        ("喜欢，我周末常常看电影。", "I do — I often watch movies on weekends."),
+        ("我们今天晚上去看一个外国电影，怎么样？", "Let's go see a foreign movie tonight — how about it?"),
+        ("高文中，你想不想去打球？", "Gao Wenzhong, do you want to go play ball?"),
+        ("打球？我不喜欢打球。", "Play ball? I don't like playing ball."),
+        ("那我们去看球，怎么样？", "Then let's go watch a ball game — how about that?"),
+        ("看球？我觉得看球也没有意思。", "Watch a game? I think watching a game is boring too."),
+        ("那你这个周末想做什么？", "Then what do you want to do this weekend?"),
+        ("我只想吃饭、睡觉。", "I just want to eat and sleep."),
+        ("算了，我去找别人。", "Forget it — I'll go find someone else."),
+    ]),
+    (5, "Visiting Friends", [
+        ("谁呀？", "Who is it?"),
+        ("是我，王朋，还有李友。", "It's me, Wang Peng — and Li You too."),
+        ("请进，请进，快进来！", "Come in, come in! Come on in!"),
+        ("李友，这是我姐姐，高小音。", "Li You, this is my older sister, Gao Xiaoyin."),
+        ("认识你们我很高兴。", "I'm very happy to meet you."),
+        ("你们家很大，也很漂亮。", "Your home is big and very pretty."),
+        ("你们想喝点儿什么？", "What would you like to drink?"),
+        ("喝茶还是喝咖啡？", "Tea or coffee?"),
+        ("我喝茶吧。", "I'll have tea."),
+        ("我要一瓶可乐，可以吗？", "I'd like a bottle of cola — is that okay?"),
+        ("对不起，我们家没有可乐。", "Sorry, we don't have cola at home."),
+        ("那给我一杯水吧。", "Then give me a glass of water."),
+        ("昨天晚上，王朋和李友去高文中家玩儿。", "Last night, Wang Peng and Li You went to Gao Wenzhong's home for a visit."),
+        ("高小音在学校的图书馆工作。", "Gao Xiaoyin works at the school library."),
+        ("王朋喝了两杯茶，李友只喝了一杯水。", "Wang Peng drank two cups of tea; Li You only drank one glass of water."),
+        ("他们一起聊天儿、看电视。", "They chatted and watched TV together."),
+        ("王朋和李友晚上十二点才回家。", "Wang Peng and Li You didn't go home until twelve at night."),
+    ]),
+    (6, "Making Appointments", [
+        ("喂，请问，常老师在吗？", "Hello, is Teacher Chang there, please?"),
+        ("我就是。您是哪位？", "Speaking. Who is this?"),
+        ("常老师，您好，我是李友。", "Hello, Teacher Chang — this is Li You."),
+        ("今天下午您有时间吗？我想问您几个问题。", "Do you have time this afternoon? I'd like to ask you a few questions."),
+        ("对不起，今天下午我要开会。", "Sorry, this afternoon I have a meeting."),
+        ("明天上午我有两节课。", "Tomorrow morning I have two classes."),
+        ("下午三点我要给二年级考试。", "At three in the afternoon I have to give the second-year students an exam."),
+        ("您什么时候有空儿？", "When are you free?"),
+        ("我四点以后才有空儿。", "I'm not free until after four."),
+        ("要是您方便，四点半我到您的办公室去，行吗？", "If it's convenient for you, I'll come to your office at four thirty — is that all right?"),
+        ("没问题，我在办公室等你。", "No problem — I'll wait for you in my office."),
+        ("谢谢您！别客气。", "Thank you! Don't mention it."),
+        ("下个星期我要考中文。", "Next week I have a Chinese exam."),
+        ("你帮我准备一下，好吗？", "Help me prepare a bit, okay?"),
+        ("请你跟我说中文，好吗？", "Please speak Chinese with me, okay?"),
+        ("好啊，但是你得请我喝咖啡。", "Sure, but you have to treat me to coffee."),
+    ]),
+    (7, "Studying Chinese", [
+        ("李友，你上个星期考试考得怎么样？", "Li You, how did you do on last week's exam?"),
+        ("因为你帮我复习，所以考得不错。", "Because you helped me review, I did pretty well."),
+        ("我写中国字写得太慢了！", "I write Chinese characters too slowly!"),
+        ("以后我跟你一起练习写字，好不好？", "From now on I'll practice writing characters with you, okay?"),
+        ("那太好了！我们现在就写，怎么样？", "That's great! Let's write right now — how about it?"),
+        ("给我一支笔、一张纸。", "Give me a pen and a sheet of paper."),
+        ("你教我怎么写这个字吧。", "Teach me how to write this character."),
+        ("你写字写得真漂亮。", "You write characters really beautifully."),
+        ("你平常来得很早，今天怎么这么晚？", "You usually come very early — why so late today?"),
+        ("我昨天预习中文，早上四点才睡觉。", "I was previewing the Chinese lesson yesterday and didn't go to bed until four in the morning."),
+        ("我昨天十点就睡了。", "I went to bed at ten last night."),
+        ("今天的语法很容易，生词也不多。", "Today's grammar is easy, and there aren't many new words either."),
+        ("我觉得第七课的语法有一点儿难。", "I think the grammar in Lesson Seven is a little hard."),
+        ("你说中文说得真好。", "You speak Chinese really well."),
+        ("学中文很有意思。", "Studying Chinese is very interesting."),
+    ]),
+    (8, "School Life", [
+        ("我早上七点半起床。", "I get up at seven thirty in the morning."),
+        ("洗了澡以后，我就吃早饭。", "After showering, I eat breakfast right away."),
+        ("我常常一边吃饭，一边听录音。", "I often listen to recordings while I eat."),
+        ("我九点到教室去上课。", "At nine I go to the classroom for class."),
+        ("第一节课是中文，老师教我们发音、生词和语法。", "The first class is Chinese; the teacher teaches us pronunciation, new words, and grammar."),
+        ("这篇课文很有意思。", "This text is very interesting."),
+        ("第二节是电脑课，很难。", "The second class is computer class — it's hard."),
+        ("中午我和同学们一起到餐厅去吃午饭。", "At noon I go to the cafeteria with my classmates to eat lunch."),
+        ("我们一边吃，一边练习说中文。", "We practice speaking Chinese while we eat."),
+        ("下午我到图书馆去上网。", "In the afternoon I go to the library to use the internet."),
+        ("四点王朋来找我打球。", "At four, Wang Peng came looking for me to play ball."),
+        ("我到的时候，她正在做功课。", "When I arrived, she was doing homework."),
+        ("睡觉以前，高文中给我打了一个电话。", "Before I went to bed, Gao Wenzhong gave me a call."),
+        ("他告诉我明天要考试。", "He told me there's an exam tomorrow."),
+        ("除了专业课以外，我还得学中文。", "Besides my major courses, I also have to study Chinese."),
+        ("下个星期六我们学校有一个音乐会，希望你能来。", "Next Saturday there's a concert at our school — I hope you can come."),
+    ]),
+    (9, "Shopping", [
+        ("小姐，您要买什么衣服？", "Miss, what clothes would you like to buy?"),
+        ("我想买一件衬衫。", "I'd like to buy a shirt."),
+        ("您喜欢什么颜色的，黄的还是红的？", "What color do you like — yellow or red?"),
+        ("我喜欢红的。", "I like the red one."),
+        ("我还想买一条裤子。", "I'd also like to buy a pair of pants."),
+        ("您穿多大的？大号的、中号的，还是小号的？", "What size do you wear? Large, medium, or small?"),
+        ("中号的，不要太贵的，也不要太便宜的。", "Medium — not too expensive, but not too cheap either."),
+        ("这条裤子怎么样？", "How about this pair of pants?"),
+        ("一共多少钱？", "How much altogether?"),
+        ("衬衫二十一块五，裤子三十二块九毛九。", "The shirt is twenty-one fifty; the pants are thirty-two ninety-nine."),
+        ("一共五十四块四毛九分。", "Altogether that's fifty-four forty-nine."),
+        ("对不起，这双鞋太小了，能不能换一双？", "Excuse me, these shoes are too small — can I exchange them for another pair?"),
+        ("不行，这双跟那双一样大。", "That won't do — this pair is the same size as that pair."),
+        ("这双鞋大小合适，可是颜色不好。", "This pair fits well, but the color isn't good."),
+        ("有没有咖啡色的？", "Do you have brown ones?"),
+        ("对不起，这种鞋只有黑的。", "Sorry, this kind of shoe only comes in black."),
+        ("这双鞋样子挺好的，就买这双吧。", "These shoes look pretty good — I'll take this pair."),
+    ]),
+    (10, "Transportation", [
+        ("李友，寒假你回家吗？", "Li You, are you going home for winter break?"),
+        ("对，我要回家。", "Yes, I'm going home."),
+        ("飞机票你买了吗？", "Have you bought your plane ticket?"),
+        ("已经买了，是二十一号的。", "I've already bought it — it's for the 21st."),
+        ("飞机是几点的？", "What time is the flight?"),
+        ("晚上八点的。", "Eight in the evening."),
+        ("你怎么去机场？", "How are you getting to the airport?"),
+        ("我想坐公共汽车或者坐地铁。", "I'm thinking of taking the bus or the subway."),
+        ("你先坐汽车，坐三站下车，然后换地铁。", "First take the bus, get off after three stops, then change to the subway."),
+        ("先坐红线，再换绿线。", "First take the red line, then change to the green line."),
+        ("不行，不行，太麻烦了，我还是打车吧。", "No, no — too much trouble. I'd better just take a taxi."),
+        ("出租汽车太贵了。", "Taxis are too expensive."),
+        ("我开车送你去机场吧。", "Let me drive you to the airport."),
+        ("谢谢你开车送我到机场。", "Thank you for driving me to the airport."),
+        ("让你花了那么多时间，真不好意思。", "I made you spend so much time — I'm really embarrassed."),
+        ("这儿的人开车开得特别快。", "People here drive especially fast."),
+        ("我在高速公路上开车，真有点儿紧张。", "Driving on the highway, I get really a bit nervous."),
+        ("这儿没有公共汽车，也没有地铁，只能自己开车，很不方便。", "There are no buses or subway here — you can only drive yourself. It's very inconvenient."),
+    ]),
+    (11, "Weather", [
+        ("今天天气比昨天好，不下雪了。", "The weather today is better than yesterday — it's stopped snowing."),
+        ("明天天气怎么样？", "What will the weather be like tomorrow?"),
+        ("我在网上看了天气预报。", "I checked the weather forecast online."),
+        ("明天天气比今天更好。", "Tomorrow's weather will be even better than today's."),
+        ("不但不会下雪，而且会暖和一点儿。", "Not only won't it snow, it will even be a bit warmer."),
+        ("我约了朋友明天去公园滑冰。", "I've arranged with a friend to go ice-skating in the park tomorrow."),
+        ("怎么又下雨了？", "How come it's raining again?"),
+        ("这儿的天气真糟糕。", "The weather here is really awful."),
+        ("下个星期我要去纽约面试。", "Next week I'm going to New York for an interview."),
+        ("这儿冬天很冷，夏天很热。", "Here, winter is very cold and summer is very hot."),
+        ("加州冬天不冷，夏天不热。", "In California, winter isn't cold and summer isn't hot."),
+        ("加州春天暖和，秋天凉快。", "In California, spring is warm and autumn is cool."),
+        ("今天天气这么好，我们出去玩儿吧。", "The weather is so nice today — let's go out and have some fun."),
+        ("你看，外面又下雨了。", "Look, it's raining again outside."),
+        ("天气预报说明天会下雨。", "The forecast says it will rain tomorrow."),
+    ]),
+    (12, "Dining", [
+        ("请问，现在还有没有位子？", "Excuse me, are there any seats left?"),
+        ("好像一个位子都没有了。", "It seems there isn't a single seat left."),
+        ("服务员，点菜！", "Waiter, we'd like to order!"),
+        ("你们想吃点儿什么？", "What would you like to eat?"),
+        ("我要一盘饺子，要素的。", "I'd like a plate of dumplings — vegetarian ones."),
+        ("再来一盘家常豆腐，不要放肉。", "Also a plate of home-style tofu — don't put any meat in it."),
+        ("我们都吃素。", "We're both vegetarian."),
+        ("还要两碗酸辣汤，不要放味精，少放点儿盐。", "We also want two bowls of hot-and-sour soup — no MSG, and easy on the salt."),
+        ("对不起，白菜刚卖完。", "Sorry, we just sold out of cabbage."),
+        ("再来两杯冰茶，我渴死了。", "And two glasses of iced tea — I'm dying of thirst."),
+        ("我饿死了，请上菜快一点儿。", "I'm starving — please bring the food a little faster."),
+        ("师傅，今天晚饭有什么好吃的？", "Sir, what's good for dinner today?"),
+        ("糖醋鱼甜甜的、酸酸的，好吃极了。", "The sweet-and-sour fish is sweet and tangy — extremely tasty."),
+        ("红烧牛肉刚卖完。", "The soy-braised beef just sold out."),
+        ("那就来一个凉拌黄瓜吧。", "Then I'll have a cucumber salad."),
+        ("再来一碗米饭。", "And a bowl of rice, please."),
+    ]),
+    (13, "Directions", [
+        ("请问，你上哪儿去？", "Excuse me, where are you headed?"),
+        ("我想去学校的电脑中心。", "I want to go to the school's computer center."),
+        ("你知道怎么走吗？", "Do you know how to get there?"),
+        ("听说电脑中心在运动场旁边。", "I've heard the computer center is next to the sports field."),
+        ("电脑中心离这儿远不远？", "Is the computer center far from here?"),
+        ("不远，离这儿很近。", "Not far — it's very close to here."),
+        ("你住的地方离运动场很近。", "The place you live is very close to the sports field."),
+        ("我没去过中国城，不知道中国城在哪儿。", "I've never been to Chinatown; I don't know where it is."),
+        ("没问题，你开车，我告诉你怎么走。", "No problem — you drive and I'll tell you how to go."),
+        ("你有地图吗？", "Do you have a map?"),
+        ("从这儿一直往南开。", "From here, drive straight south."),
+        ("过三个路口，往西一拐就到了。", "Pass three intersections, turn west, and you're there."),
+        ("前面红绿灯往右拐。", "Turn right at the traffic light ahead."),
+        ("到了，到了，你看，前面有很多中国字。", "We're here! Look — there are lots of Chinese characters up ahead."),
+        ("那个地方我去过很多次。", "I've been to that place many times."),
+    ]),
+    (14, "Birthday Party", [
+        ("李友，你做什么呢？", "Li You, what are you doing?"),
+        ("我在做功课呢。", "I'm doing homework."),
+        ("今天晚上我们给小音过生日。", "Tonight we're celebrating Xiaoyin's birthday."),
+        ("我们晚上在她家开舞会。", "This evening we're having a party at her place."),
+        ("我带什么东西？", "What should I bring?"),
+        ("你带一些饮料和水果吧。", "Bring some drinks and fruit."),
+        ("我们先吃饭，吃完饭再唱歌跳舞。", "We'll eat first; after eating we'll sing and dance."),
+        ("你住的地方离小音家远吗？", "Is your place far from Xiaoyin's home?"),
+        ("我开车来接你吧。", "I'll come pick you up in my car."),
+        ("小音，祝你生日快乐！", "Xiaoyin, happy birthday!"),
+        ("这是我们给你买的礼物。", "This is the gift we bought for you."),
+        ("谢谢你们！快进来吧。", "Thank you! Come on in."),
+        ("她是王朋的妹妹王红，刚从北京来。", "She's Wang Peng's younger sister, Wang Hong — she just came from Beijing."),
+        ("你属什么？", "What's your zodiac animal?"),
+        ("我属狗。", "I was born in the year of the dog."),
+        ("她长得真可爱。", "She's really cute."),
+        ("她的眼睛大大的，很像她妈妈。", "Her eyes are big — she looks a lot like her mother."),
+    ]),
+    (15, "Seeing a Doctor", [
+        ("你怎么了？哪儿不舒服？", "What's wrong? Where does it hurt?"),
+        ("我肚子疼死了。", "My stomach is killing me."),
+        ("你昨天吃什么东西了？", "What did you eat yesterday?"),
+        ("我吃了一些剩菜。", "I ate some leftovers."),
+        ("你吃坏肚子了。", "You've eaten something that upset your stomach."),
+        ("要不要打针？", "Do I need an injection?"),
+        ("我不想打针，吃药吧。", "I don't want a shot — let's just take medicine."),
+        ("这种药一天吃三次，一次两片。", "Take this medicine three times a day, two tablets each time."),
+        ("多喝水，多休息。", "Drink more water and rest more."),
+        ("你的眼睛怎么红红的？", "Why are your eyes all red?"),
+        ("我可能对什么过敏了。", "I might be allergic to something."),
+        ("赶快去看医生吧。", "Hurry and go see a doctor."),
+        ("我没有健康保险，看病太贵了。", "I don't have health insurance — seeing a doctor is too expensive."),
+        ("你不去看病，病会越来越重。", "If you don't get it treated, the illness will get worse and worse."),
+        ("我上次生病，没吃药也好了。", "Last time I was sick, I got better without taking any medicine."),
+    ]),
+    (16, "Dating", [
+        ("这个周末学校演一个中国电影，我们一起去看，好吗？", "This weekend the school is showing a Chinese movie — shall we go see it together?"),
+        ("听说看电影的人很多，买得到票吗？", "I hear a lot of people go to the movies — can we get tickets?"),
+        ("票已经买了，我费了很大的力气才买到。", "I've already bought the tickets — it took a lot of effort to get them."),
+        ("好极了！我早就想看这个电影了。", "Fantastic! I've wanted to see this movie for a long time."),
+        ("还有别人跟我们一起去吗？", "Is anyone else going with us?"),
+        ("没有，就我们俩。", "No, just the two of us."),
+        ("我请你吃晚饭，吃完饭以后我们去看电影。", "I'll treat you to dinner, and after dinner we'll go see the movie."),
+        ("那太好了，星期六见！", "That's great — see you Saturday!"),
+        ("白小姐，你还记得我吗？", "Miss Bai, do you still remember me?"),
+        ("对不起，你是哪位？", "Sorry — who is this?"),
+        ("我想请你周末去跳舞。", "I'd like to invite you to go dancing this weekend."),
+        ("这个周末不行，我要打扫房子、整理房间。", "This weekend won't work — I have to clean the house and tidy my room."),
+        ("下个周末怎么样？", "How about next weekend?"),
+        ("对不起，下个周末我也没有时间。", "Sorry, I don't have time next weekend either."),
+    ]),
+    (17, "Renting an Apartment", [
+        ("王朋在学校的宿舍住了两个学期了。", "Wang Peng has lived in the school dorm for two semesters."),
+        ("他觉得宿舍太吵，房间太小。", "He thinks the dorm is too noisy and the room too small."),
+        ("房间太小，连电脑都放不下。", "The room is so small there isn't even space for a computer."),
+        ("宿舍里没有地方做饭，很不方便。", "There's nowhere to cook in the dorm — it's very inconvenient."),
+        ("他想搬出去住。", "He wants to move out."),
+        ("你看报纸上的广告了吗？", "Did you see the ad in the newspaper?"),
+        ("请问，你们有公寓出租吗？", "Excuse me, do you have an apartment for rent?"),
+        ("有啊，一房一厅，还带家具。", "We do — one bedroom and one living room, and it comes furnished."),
+        ("客厅里有一套沙发和一张饭桌。", "In the living room there's a sofa set and a dining table."),
+        ("卧室里有一张床、一张书桌和一个书架。", "In the bedroom there's a bed, a desk, and a bookshelf."),
+        ("你们那里安静不安静？", "Is it quiet where you are?"),
+        ("非常安静。", "Very quiet."),
+        ("一个月房租多少钱？", "How much is the rent per month?"),
+        ("八百五十块，水电费不用付。", "Eight hundred fifty — you don't pay for water or electricity."),
+        ("可以养宠物吗？", "Can I keep pets?"),
+        ("对不起，我们这儿不许养宠物。", "Sorry, pets aren't allowed here."),
+    ]),
+    (18, "Sports", [
+        ("你看，我的肚子越来越大了。", "Look, my belly is getting bigger and bigger."),
+        ("你平常吃得那么多，又不运动，当然越来越胖了。", "You usually eat so much and never exercise — of course you're getting fatter."),
+        ("那怎么办呢？", "Then what should I do?"),
+        ("最简单的运动是跑步。", "The simplest exercise is running."),
+        ("冬天那么冷，夏天那么热，跑步多难受啊！", "Winter is so cold and summer so hot — running is so miserable!"),
+        ("打网球得买网球拍、网球鞋，太贵了。", "To play tennis you have to buy a racket and tennis shoes — too expensive."),
+        ("我们去游泳吧。", "Let's go swimming."),
+        ("游泳？我怕水，太危险了。", "Swimming? I'm afraid of water — too dangerous."),
+        ("为了提高中文水平，我们以后多说中文吧。", "To improve our Chinese, let's speak more Chinese from now on."),
+        ("你在看什么呢？", "What are you watching?"),
+        ("我在看美式足球赛。", "I'm watching an American football game."),
+        ("足球不是圆的吗？", "Isn't a football round?"),
+        ("美式足球可以用手抱着球跑。", "In American football you can run holding the ball in your hands."),
+        ("你看，那个人又被压在下面了。", "Look, that guy got crushed at the bottom of the pile again."),
+    ]),
+    (19, "Travel", [
+        ("马上要放假了，这个暑假你有什么计划？", "Vacation is almost here — what are your plans for the summer?"),
+        ("我想回家看父母。", "I want to go home and see my parents."),
+        ("你去过北京吗？", "Have you been to Beijing?"),
+        ("北京是中国的首都，也是中国的政治、文化中心。", "Beijing is China's capital, and also its political and cultural center."),
+        ("北京有很多名胜古迹。", "Beijing has many famous scenic spots and historic sites."),
+        ("我给你当导游，怎么样？", "I'll be your tour guide — how about it?"),
+        ("太好了！可是我还没有护照呢。", "Great! But I don't have a passport yet."),
+        ("你得赶快办护照，还要办签证。", "You need to get a passport right away, and a visa too."),
+        ("我们找一家旅行社订机票吧。", "Let's find a travel agency to book the plane tickets."),
+        ("请问，六月初到北京的机票多少钱？", "Excuse me, how much is a ticket to Beijing in early June?"),
+        ("你要单程票还是往返票？", "Do you want one-way or round-trip?"),
+        ("往返的多少钱？", "How much is round-trip?"),
+        ("有没有直飞的？", "Is there a direct flight?"),
+        ("要不要转机？", "Do I have to change planes?"),
+        ("我帮您查一下，这家航空公司的票最便宜。", "Let me check for you — this airline's tickets are the cheapest."),
+    ]),
+    (20, "At the Airport", [
+        ("小姐，这是我们的机票和护照。", "Miss, here are our tickets and passports."),
+        ("你们有几件行李要托运？", "How many pieces of luggage do you have to check?"),
+        ("这个包不托运，我们带上飞机。", "We're not checking this bag — we'll carry it onto the plane."),
+        ("行李超重了吗？", "Is the luggage overweight?"),
+        ("没有，没超重。", "No, it's not overweight."),
+        ("这是你们的登机牌。", "Here are your boarding passes."),
+        ("请到五号登机口上飞机。", "Please board at Gate 5."),
+        ("飞机几点起飞？", "What time does the plane take off?"),
+        ("别哭了，我们秋天就回来。", "Don't cry — we'll be back in the fall."),
+        ("你们要多保重！", "Take good care of yourselves!"),
+        ("到了北京以后，别忘了给我们打电话。", "After you get to Beijing, don't forget to call us."),
+        ("路上小心！", "Be careful on the way!"),
+        ("爸、妈，我们回来了！", "Dad, Mom, we're back!"),
+        ("我来介绍一下，这是我的同学李友。", "Let me introduce — this is my classmate Li You."),
+        ("欢迎你来北京！路上辛苦了。", "Welcome to Beijing! You must be tired from the trip."),
+        ("走，我们回家吧，妈给你们做了很多好吃的。", "Come on, let's go home — Mom has made you lots of good food."),
+        ("太好了，我要吃北京烤鸭！", "Wonderful — I want to eat Beijing roast duck!"),
+    ]),
+]
+
+
 # ===================== Build output =====================
 
 def build(pairs):
@@ -1383,8 +1752,27 @@ def build(pairs):
     return items
 
 
+def build_ic1():
+    """Flat sentence list plus per-lesson index ranges (1-based, inclusive)."""
+    items, lessons = [], []
+    n = 1
+    for num, theme, sentences in IC1:
+        start = n
+        for zh, en in sentences:
+            items.append({"n": n, "zh": zh, "py": to_pinyin(zh), "en": en})
+            n += 1
+        lessons.append({"n": num, "title": theme, "from": start, "to": n - 1})
+    return items, lessons
+
+
 def main():
-    data = {"hsk1": build(HSK1), "hsk2": build(HSK2)}
+    ic1_items, ic1_lessons = build_ic1()
+    data = {
+        "hsk1": build(HSK1),
+        "hsk2": build(HSK2),
+        "ic1": ic1_items,
+        "ic1_chapters": ic1_lessons,
+    }
     body = json.dumps(data, ensure_ascii=False, indent=2)
     js = ("// Auto-generated by tools/gen_sentences.py — do not edit by hand.\n"
           "// Pinyin produced with pypinyin (tone marks).\n"
@@ -1392,7 +1780,8 @@ def main():
     with open(OUT, "w", encoding="utf-8") as f:
         f.write(js)
     print("Wrote", OUT)
-    print("HSK1:", len(data["hsk1"]), "HSK2:", len(data["hsk2"]))
+    print("HSK1:", len(data["hsk1"]), "HSK2:", len(data["hsk2"]),
+          "IC1:", len(ic1_items), "sentences in", len(ic1_lessons), "lessons")
 
 
 if __name__ == "__main__":
