@@ -78,7 +78,10 @@ window.SENTENCE_DATA = {
       "n": 13,
       "zh": "我不是老师。",
       "py": "wǒ bú shì lǎo shī.",
-      "en": "I am not a teacher."
+      "en": "I am not a teacher.",
+      "notes": [
+        "Tone change: 不 becomes bú before a 4th tone, otherwise bù — here 不是 is bú shì."
+      ]
     },
     {
       "n": 14,
@@ -120,13 +123,19 @@ window.SENTENCE_DATA = {
       "n": 20,
       "zh": "不客气。",
       "py": "bú kè qì.",
-      "en": "You're welcome."
+      "en": "You're welcome.",
+      "notes": [
+        "Tone change: 不 becomes bú before a 4th tone, otherwise bù — here 不客 is bú kè."
+      ]
     },
     {
       "n": 21,
       "zh": "对不起。",
       "py": "duì bu qǐ.",
-      "en": "I'm sorry."
+      "en": "I'm sorry.",
+      "notes": [
+        "Tone change: in 对不起 the 不 is toneless — duì bu qǐ."
+      ]
     },
     {
       "n": 22,
@@ -180,7 +189,10 @@ window.SENTENCE_DATA = {
       "n": 30,
       "zh": "我不认识她。",
       "py": "wǒ bú rèn shí tā.",
-      "en": "I don't know her."
+      "en": "I don't know her.",
+      "notes": [
+        "Tone change: 不 becomes bú before a 4th tone, otherwise bù — here 不认 is bú rèn."
+      ]
     },
     {
       "n": 31,
@@ -204,7 +216,10 @@ window.SENTENCE_DATA = {
       "n": 34,
       "zh": "这是一本书。",
       "py": "zhè shì yì běn shū.",
-      "en": "This is a book."
+      "en": "This is a book.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一本 is yì běn."
+      ]
     },
     {
       "n": 35,
@@ -228,7 +243,10 @@ window.SENTENCE_DATA = {
       "n": 38,
       "zh": "我会说一点儿汉语。",
       "py": "wǒ huì shuō yì diǎnr hàn yǔ.",
-      "en": "I can speak a little Chinese."
+      "en": "I can speak a little Chinese.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一点 is yì diǎn."
+      ]
     },
     {
       "n": 39,
@@ -258,13 +276,19 @@ window.SENTENCE_DATA = {
       "n": 43,
       "zh": "我有一个儿子。",
       "py": "wǒ yǒu yí gè ér zi.",
-      "en": "I have a son."
+      "en": "I have a son.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一个 is yí gè."
+      ]
     },
     {
       "n": 44,
       "zh": "我有一个女儿。",
       "py": "wǒ yǒu yí gè nǚ ér.",
-      "en": "I have a daughter."
+      "en": "I have a daughter.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一个 is yí gè."
+      ]
     },
     {
       "n": 45,
@@ -336,7 +360,10 @@ window.SENTENCE_DATA = {
       "n": 56,
       "zh": "我有一个猫。",
       "py": "wǒ yǒu yí gè māo.",
-      "en": "I have a cat."
+      "en": "I have a cat.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一个 is yí gè."
+      ]
     },
     {
       "n": 57,
@@ -348,7 +375,10 @@ window.SENTENCE_DATA = {
       "n": 58,
       "zh": "我的朋友有一个小狗。",
       "py": "wǒ de péng yǒu yǒu yí gè xiǎo gǒu.",
-      "en": "My friend has a little dog."
+      "en": "My friend has a little dog.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一个 is yí gè."
+      ]
     },
     {
       "n": 59,
@@ -366,7 +396,10 @@ window.SENTENCE_DATA = {
       "n": 61,
       "zh": "一、二、三、四、五。",
       "py": "yí, èr, sān, sì, wǔ.",
-      "en": "One, two, three, four, five."
+      "en": "One, two, three, four, five.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一二 is yí èr."
+      ]
     },
     {
       "n": 62,
@@ -426,13 +459,19 @@ window.SENTENCE_DATA = {
       "n": 71,
       "zh": "一个苹果三块钱。",
       "py": "yí gè píng guǒ sān kuài qián.",
-      "en": "One apple is three yuan."
+      "en": "One apple is three yuan.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一个 is yí gè."
+      ]
     },
     {
       "n": 72,
       "zh": "我有一百块钱。",
       "py": "wǒ yǒu yì bǎi kuài qián.",
-      "en": "I have one hundred yuan."
+      "en": "I have one hundred yuan.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一百 is yì bǎi."
+      ]
     },
     {
       "n": 73,
@@ -456,7 +495,10 @@ window.SENTENCE_DATA = {
       "n": 76,
       "zh": "教室里有多少个学生？",
       "py": "jiào shì lǐ yǒu duō shǎo gè xué shēng?",
-      "en": "How many students are in the classroom?"
+      "en": "How many students are in the classroom?",
+      "notes": [
+        "Polyphone: 教 is jiào in 教室 (classroom), but jiāo as the verb \"to teach\"."
+      ]
     },
     {
       "n": 77,
@@ -612,7 +654,10 @@ window.SENTENCE_DATA = {
       "n": 102,
       "zh": "他十点钟睡觉。",
       "py": "tā shí diǎn zhōng shuì jiào.",
-      "en": "He goes to sleep at ten o'clock."
+      "en": "He goes to sleep at ten o'clock.",
+      "notes": [
+        "Polyphone: 觉 is jiào in 睡觉 (to sleep), but jué in 觉得 (to feel / think)."
+      ]
     },
     {
       "n": 103,
@@ -690,7 +735,10 @@ window.SENTENCE_DATA = {
       "n": 115,
       "zh": "我想买一些水果。",
       "py": "wǒ xiǎng mǎi yì xiē shuǐ guǒ.",
-      "en": "I want to buy some fruit."
+      "en": "I want to buy some fruit.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一些 is yì xiē."
+      ]
     },
     {
       "n": 116,
@@ -792,13 +840,19 @@ window.SENTENCE_DATA = {
       "n": 132,
       "zh": "我想喝一杯茶。",
       "py": "wǒ xiǎng hē yì bēi chá.",
-      "en": "I want to drink a cup of tea."
+      "en": "I want to drink a cup of tea.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一杯 is yì bēi."
+      ]
     },
     {
       "n": 133,
       "zh": "请给我一杯水。",
       "py": "qǐng gěi wǒ yì bēi shuǐ.",
-      "en": "Please give me a glass of water."
+      "en": "Please give me a glass of water.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一杯 is yì bēi."
+      ]
     },
     {
       "n": 134,
@@ -816,7 +870,10 @@ window.SENTENCE_DATA = {
       "n": 136,
       "zh": "我们一起吃饭吧。",
       "py": "wǒ men yì qǐ chī fàn ba.",
-      "en": "Let's eat together."
+      "en": "Let's eat together.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一起 is yì qǐ."
+      ]
     },
     {
       "n": 137,
@@ -834,7 +891,10 @@ window.SENTENCE_DATA = {
       "n": 139,
       "zh": "我买了一些菜。",
       "py": "wǒ mǎi le yì xiē cài.",
-      "en": "I bought some vegetables."
+      "en": "I bought some vegetables.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一些 is yì xiē."
+      ]
     },
     {
       "n": 140,
@@ -852,7 +912,10 @@ window.SENTENCE_DATA = {
       "n": 142,
       "zh": "我想吃一点儿米饭。",
       "py": "wǒ xiǎng chī yì diǎnr mǐ fàn.",
-      "en": "I want to eat a little rice."
+      "en": "I want to eat a little rice.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一点 is yì diǎn."
+      ]
     },
     {
       "n": 143,
@@ -906,7 +969,10 @@ window.SENTENCE_DATA = {
       "n": 151,
       "zh": "我看见了一个小猫。",
       "py": "wǒ kàn jiàn le yí gè xiǎo māo.",
-      "en": "I saw a little cat."
+      "en": "I saw a little cat.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一个 is yí gè."
+      ]
     },
     {
       "n": 152,
@@ -960,7 +1026,10 @@ window.SENTENCE_DATA = {
       "n": 160,
       "zh": "我想买一件衣服。",
       "py": "wǒ xiǎng mǎi yí jiàn yī fú.",
-      "en": "I want to buy a piece of clothing."
+      "en": "I want to buy a piece of clothing.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一件 is yí jiàn."
+      ]
     },
     {
       "n": 161,
@@ -996,7 +1065,10 @@ window.SENTENCE_DATA = {
       "n": 166,
       "zh": "我不能去，对不起。",
       "py": "wǒ bù néng qù, duì bu qǐ.",
-      "en": "I can't go, sorry."
+      "en": "I can't go, sorry.",
+      "notes": [
+        "Tone change: in 对不起 the 不 is toneless — duì bu qǐ."
+      ]
     },
     {
       "n": 167,
@@ -1074,7 +1146,10 @@ window.SENTENCE_DATA = {
       "n": 179,
       "zh": "老师在教室里。",
       "py": "lǎo shī zài jiào shì lǐ.",
-      "en": "The teacher is in the classroom."
+      "en": "The teacher is in the classroom.",
+      "notes": [
+        "Polyphone: 教 is jiào in 教室 (classroom), but jiāo as the verb \"to teach\"."
+      ]
     },
     {
       "n": 180,
@@ -1116,7 +1191,10 @@ window.SENTENCE_DATA = {
       "n": 186,
       "zh": "前面有一个商店。",
       "py": "qián miàn yǒu yí gè shāng diàn.",
-      "en": "There is a store ahead."
+      "en": "There is a store ahead.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一个 is yí gè."
+      ]
     },
     {
       "n": 187,
@@ -1158,19 +1236,28 @@ window.SENTENCE_DATA = {
       "n": 193,
       "zh": "我家有一个大桌子。",
       "py": "wǒ jiā yǒu yí gè dà zhuō zi.",
-      "en": "My home has a big table."
+      "en": "My home has a big table.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一个 is yí gè."
+      ]
     },
     {
       "n": 194,
       "zh": "教室里有几个桌子？",
       "py": "jiào shì lǐ yǒu jǐ gè zhuō zi?",
-      "en": "How many tables are in the classroom?"
+      "en": "How many tables are in the classroom?",
+      "notes": [
+        "Polyphone: 教 is jiào in 教室 (classroom), but jiāo as the verb \"to teach\"."
+      ]
     },
     {
       "n": 195,
       "zh": "椅子上有一本书。",
       "py": "yǐ zi shàng yǒu yì běn shū.",
-      "en": "There is a book on the chair."
+      "en": "There is a book on the chair.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一本 is yì běn."
+      ]
     },
     {
       "n": 196,
@@ -1236,7 +1323,10 @@ window.SENTENCE_DATA = {
       "n": 206,
       "zh": "今天的天气不太好。",
       "py": "jīn tiān de tiān qì bú tài hǎo.",
-      "en": "The weather is not very good today."
+      "en": "The weather is not very good today.",
+      "notes": [
+        "Tone change: 不 becomes bú before a 4th tone, otherwise bù — here 不太 is bú tài."
+      ]
     },
     {
       "n": 207,
@@ -1554,7 +1644,10 @@ window.SENTENCE_DATA = {
       "n": 259,
       "zh": "老师在教室里写字。",
       "py": "lǎo shī zài jiào shì lǐ xiě zì.",
-      "en": "The teacher is writing characters in the classroom."
+      "en": "The teacher is writing characters in the classroom.",
+      "notes": [
+        "Polyphone: 教 is jiào in 教室 (classroom), but jiāo as the verb \"to teach\"."
+      ]
     },
     {
       "n": 260,
@@ -1638,7 +1731,10 @@ window.SENTENCE_DATA = {
       "n": 273,
       "zh": "这件衣服一百块钱。",
       "py": "zhè jiàn yī fú yì bǎi kuài qián.",
-      "en": "This piece of clothing is one hundred yuan."
+      "en": "This piece of clothing is one hundred yuan.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一百 is yì bǎi."
+      ]
     },
     {
       "n": 274,
@@ -1662,7 +1758,10 @@ window.SENTENCE_DATA = {
       "n": 277,
       "zh": "我买了一些水果和茶。",
       "py": "wǒ mǎi le yì xiē shuǐ guǒ hé chá.",
-      "en": "I bought some fruit and tea."
+      "en": "I bought some fruit and tea.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一些 is yì xiē."
+      ]
     },
     {
       "n": 278,
@@ -1674,7 +1773,10 @@ window.SENTENCE_DATA = {
       "n": 279,
       "zh": "这本书不贵。",
       "py": "zhè běn shū bú guì.",
-      "en": "This book is not expensive."
+      "en": "This book is not expensive.",
+      "notes": [
+        "Tone change: 不 becomes bú before a 4th tone, otherwise bù — here 不贵 is bú guì."
+      ]
     },
     {
       "n": 280,
@@ -1692,7 +1794,10 @@ window.SENTENCE_DATA = {
       "n": 282,
       "zh": "我想买一个电脑。",
       "py": "wǒ xiǎng mǎi yí gè diàn nǎo.",
-      "en": "I want to buy a computer."
+      "en": "I want to buy a computer.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一个 is yí gè."
+      ]
     },
     {
       "n": 283,
@@ -1776,13 +1881,19 @@ window.SENTENCE_DATA = {
       "n": 296,
       "zh": "我想睡觉。",
       "py": "wǒ xiǎng shuì jiào.",
-      "en": "I want to sleep."
+      "en": "I want to sleep.",
+      "notes": [
+        "Polyphone: 觉 is jiào in 睡觉 (to sleep), but jué in 觉得 (to feel / think)."
+      ]
     },
     {
       "n": 297,
       "zh": "我每天晚上十点睡觉。",
       "py": "wǒ měi tiān wǎn shàng shí diǎn shuì jiào.",
-      "en": "I go to sleep at ten every night."
+      "en": "I go to sleep at ten every night.",
+      "notes": [
+        "Polyphone: 觉 is jiào in 睡觉 (to sleep), but jué in 觉得 (to feel / think)."
+      ]
     },
     {
       "n": 298,
@@ -1812,7 +1923,10 @@ window.SENTENCE_DATA = {
       "n": 302,
       "zh": "我有点儿累，想睡觉。",
       "py": "wǒ yǒu diǎnr lèi, xiǎng shuì jiào.",
-      "en": "I'm a little tired and want to sleep."
+      "en": "I'm a little tired and want to sleep.",
+      "notes": [
+        "Polyphone: 觉 is jiào in 睡觉 (to sleep), but jué in 觉得 (to feel / think)."
+      ]
     },
     {
       "n": 303,
@@ -1824,13 +1938,19 @@ window.SENTENCE_DATA = {
       "n": 304,
       "zh": "你想休息一下吗？",
       "py": "nǐ xiǎng xiū xī yí xià ma?",
-      "en": "Do you want to rest a little?"
+      "en": "Do you want to rest a little?",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一下 is yí xià."
+      ]
     },
     {
       "n": 305,
       "zh": "我中午想睡一会儿。",
       "py": "wǒ zhōng wǔ xiǎng shuì yí huìr.",
-      "en": "I want to sleep for a while at noon."
+      "en": "I want to sleep for a while at noon.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一会 is yí huì."
+      ]
     },
     {
       "n": 306,
@@ -1848,7 +1968,10 @@ window.SENTENCE_DATA = {
       "n": 308,
       "zh": "我和妈妈一起去商店。",
       "py": "wǒ hé mā mā yì qǐ qù shāng diàn.",
-      "en": "Mom and I go to the store together."
+      "en": "Mom and I go to the store together.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一起 is yì qǐ."
+      ]
     },
     {
       "n": 309,
@@ -1866,7 +1989,10 @@ window.SENTENCE_DATA = {
       "n": 311,
       "zh": "我有一些问题。",
       "py": "wǒ yǒu yì xiē wèn tí.",
-      "en": "I have some questions."
+      "en": "I have some questions.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一些 is yì xiē."
+      ]
     },
     {
       "n": 312,
@@ -1884,7 +2010,10 @@ window.SENTENCE_DATA = {
       "n": 314,
       "zh": "我想问你一个问题。",
       "py": "wǒ xiǎng wèn nǐ yí gè wèn tí.",
-      "en": "I want to ask you a question."
+      "en": "I want to ask you a question.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一个 is yí gè."
+      ]
     },
     {
       "n": 315,
@@ -1896,7 +2025,10 @@ window.SENTENCE_DATA = {
       "n": 316,
       "zh": "他是一个很好的人。",
       "py": "tā shì yí gè hěn hǎo de rén.",
-      "en": "He is a very good person."
+      "en": "He is a very good person.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一个 is yí gè."
+      ]
     },
     {
       "n": 317,
@@ -1920,7 +2052,10 @@ window.SENTENCE_DATA = {
       "n": 320,
       "zh": "他不在家。",
       "py": "tā bú zài jiā.",
-      "en": "He is not at home."
+      "en": "He is not at home.",
+      "notes": [
+        "Tone change: 不 becomes bú before a 4th tone, otherwise bù — here 不在 is bú zài."
+      ]
     },
     {
       "n": 321,
@@ -1944,7 +2079,10 @@ window.SENTENCE_DATA = {
       "n": 324,
       "zh": "我喜欢和朋友一起吃饭。",
       "py": "wǒ xǐ huān hé péng yǒu yì qǐ chī fàn.",
-      "en": "I like eating with friends."
+      "en": "I like eating with friends.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一起 is yì qǐ."
+      ]
     },
     {
       "n": 325,
@@ -1962,7 +2100,10 @@ window.SENTENCE_DATA = {
       "n": 327,
       "zh": "我们一起去看电影，怎么样？",
       "py": "wǒ men yì qǐ qù kàn diàn yǐng, zěn me yàng?",
-      "en": "Let's go see a movie together, how about it?"
+      "en": "Let's go see a movie together, how about it?",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一起 is yì qǐ."
+      ]
     },
     {
       "n": 328,
@@ -2016,7 +2157,10 @@ window.SENTENCE_DATA = {
       "n": 336,
       "zh": "我现在不能去，请等一下。",
       "py": "wǒ xiàn zài bù néng qù, qǐng děng yí xià.",
-      "en": "I can't go now, please wait a moment."
+      "en": "I can't go now, please wait a moment.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一下 is yí xià."
+      ]
     },
     {
       "n": 337,
@@ -2028,13 +2172,19 @@ window.SENTENCE_DATA = {
       "n": 338,
       "zh": "请你说慢一点儿。",
       "py": "qǐng nǐ shuō màn yì diǎnr.",
-      "en": "Please speak a little slower."
+      "en": "Please speak a little slower.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一点 is yì diǎn."
+      ]
     },
     {
       "n": 339,
       "zh": "我听不懂，请你再说一次。",
       "py": "wǒ tīng bù dǒng, qǐng nǐ zài shuō yí cì.",
-      "en": "I don't understand, please say it again."
+      "en": "I don't understand, please say it again.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一次 is yí cì."
+      ]
     },
     {
       "n": 340,
@@ -2046,7 +2196,10 @@ window.SENTENCE_DATA = {
       "n": 341,
       "zh": "你今天怎么不去学校？",
       "py": "nǐ jīn tiān zěn me bú qù xué xiào?",
-      "en": "Why aren't you going to school today?"
+      "en": "Why aren't you going to school today?",
+      "notes": [
+        "Tone change: 不 becomes bú before a 4th tone, otherwise bù — here 不去 is bú qù."
+      ]
     },
     {
       "n": 342,
@@ -2058,7 +2211,10 @@ window.SENTENCE_DATA = {
       "n": 343,
       "zh": "不要去，太冷了。",
       "py": "bú yào qù, tài lěng le.",
-      "en": "Don't go, it's too cold."
+      "en": "Don't go, it's too cold.",
+      "notes": [
+        "Tone change: 不 becomes bú before a 4th tone, otherwise bù — here 不要 is bú yào."
+      ]
     },
     {
       "n": 344,
@@ -2094,13 +2250,19 @@ window.SENTENCE_DATA = {
       "n": 349,
       "zh": "晚上我和家人一起吃饭。",
       "py": "wǎn shàng wǒ hé jiā rén yì qǐ chī fàn.",
-      "en": "In the evening I eat with my family."
+      "en": "In the evening I eat with my family.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一起 is yì qǐ."
+      ]
     },
     {
       "n": 350,
       "zh": "我每天看一点儿电视。",
       "py": "wǒ měi tiān kàn yì diǎnr diàn shì.",
-      "en": "I watch a little TV every day."
+      "en": "I watch a little TV every day.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一点 is yì diǎn."
+      ]
     },
     {
       "n": 351,
@@ -2148,13 +2310,19 @@ window.SENTENCE_DATA = {
       "n": 358,
       "zh": "我现在去睡觉。",
       "py": "wǒ xiàn zài qù shuì jiào.",
-      "en": "I'm going to sleep now."
+      "en": "I'm going to sleep now.",
+      "notes": [
+        "Polyphone: 觉 is jiào in 睡觉 (to sleep), but jué in 觉得 (to feel / think)."
+      ]
     },
     {
       "n": 359,
       "zh": "我每天读一本书。",
       "py": "wǒ měi tiān dú yì běn shū.",
-      "en": "I read a book every day."
+      "en": "I read a book every day.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一本 is yì běn."
+      ]
     },
     {
       "n": 360,
@@ -2184,13 +2352,19 @@ window.SENTENCE_DATA = {
       "n": 364,
       "zh": "桌子上有一个杯子。",
       "py": "zhuō zi shàng yǒu yí gè bēi zi.",
-      "en": "There is a cup on the table."
+      "en": "There is a cup on the table.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一个 is yí gè."
+      ]
     },
     {
       "n": 365,
       "zh": "我想买一个新电脑。",
       "py": "wǒ xiǎng mǎi yí gè xīn diàn nǎo.",
-      "en": "I want to buy a new computer."
+      "en": "I want to buy a new computer.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一个 is yí gè."
+      ]
     },
     {
       "n": 366,
@@ -2250,7 +2424,10 @@ window.SENTENCE_DATA = {
       "n": 375,
       "zh": "我不认识这个字。",
       "py": "wǒ bú rèn shí zhè ge zì.",
-      "en": "I don't recognize this character."
+      "en": "I don't recognize this character.",
+      "notes": [
+        "Tone change: 不 becomes bú before a 4th tone, otherwise bù — here 不认 is bú rèn."
+      ]
     },
     {
       "n": 376,
@@ -2316,19 +2493,28 @@ window.SENTENCE_DATA = {
       "n": 386,
       "zh": "这是不是你的猫？",
       "py": "zhè shì bú shì nǐ de māo?",
-      "en": "Is this your cat or not?"
+      "en": "Is this your cat or not?",
+      "notes": [
+        "Tone change: 不 becomes bú before a 4th tone, otherwise bù — here 不是 is bú shì."
+      ]
     },
     {
       "n": 387,
       "zh": "这不是我的猫。",
       "py": "zhè bú shì wǒ de māo.",
-      "en": "This is not my cat."
+      "en": "This is not my cat.",
+      "notes": [
+        "Tone change: 不 becomes bú before a 4th tone, otherwise bù — here 不是 is bú shì."
+      ]
     },
     {
       "n": 388,
       "zh": "你认识不认识他？",
       "py": "nǐ rèn shí bú rèn shí tā?",
-      "en": "Do you know him or not?"
+      "en": "Do you know him or not?",
+      "notes": [
+        "Tone change: 不 becomes bú before a 4th tone, otherwise bù — here 不认 is bú rèn."
+      ]
     },
     {
       "n": 389,
@@ -2340,13 +2526,19 @@ window.SENTENCE_DATA = {
       "n": 390,
       "zh": "你去不去商店？",
       "py": "nǐ qù bú qù shāng diàn?",
-      "en": "Are you going to the store or not?"
+      "en": "Are you going to the store or not?",
+      "notes": [
+        "Tone change: 不 becomes bú before a 4th tone, otherwise bù — here 不去 is bú qù."
+      ]
     },
     {
       "n": 391,
       "zh": "我去，我们一起去吧。",
       "py": "wǒ qù, wǒ men yì qǐ qù ba.",
-      "en": "I'm going, let's go together."
+      "en": "I'm going, let's go together.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一起 is yì qǐ."
+      ]
     },
     {
       "n": 392,
@@ -2436,7 +2628,10 @@ window.SENTENCE_DATA = {
       "n": 406,
       "zh": "他是一个很高兴的人。",
       "py": "tā shì yí gè hěn gāo xìng de rén.",
-      "en": "He is a very cheerful person."
+      "en": "He is a very cheerful person.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一个 is yí gè."
+      ]
     },
     {
       "n": 407,
@@ -2502,25 +2697,37 @@ window.SENTENCE_DATA = {
       "n": 417,
       "zh": "你会不会说汉语？",
       "py": "nǐ huì bú huì shuō hàn yǔ?",
-      "en": "Can you speak Chinese?"
+      "en": "Can you speak Chinese?",
+      "notes": [
+        "Tone change: 不 becomes bú before a 4th tone, otherwise bù — here 不会 is bú huì."
+      ]
     },
     {
       "n": 418,
       "zh": "我会一点儿。",
       "py": "wǒ huì yì diǎnr.",
-      "en": "I can a little."
+      "en": "I can a little.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一点 is yì diǎn."
+      ]
     },
     {
       "n": 419,
       "zh": "这个我不会做。",
       "py": "zhè ge wǒ bú huì zuò.",
-      "en": "I can't do this."
+      "en": "I can't do this.",
+      "notes": [
+        "Tone change: 不 becomes bú before a 4th tone, otherwise bù — here 不会 is bú huì."
+      ]
     },
     {
       "n": 420,
       "zh": "我能喝一点儿茶吗？",
       "py": "wǒ néng hē yì diǎnr chá ma?",
-      "en": "Can I have a little tea?"
+      "en": "Can I have a little tea?",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一点 is yì diǎn."
+      ]
     },
     {
       "n": 421,
@@ -2556,7 +2763,10 @@ window.SENTENCE_DATA = {
       "n": 426,
       "zh": "他来中国一年了。",
       "py": "tā lái zhōng guó yì nián le.",
-      "en": "He has been in China for a year."
+      "en": "He has been in China for a year.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一年 is yì nián."
+      ]
     },
     {
       "n": 427,
@@ -2610,7 +2820,10 @@ window.SENTENCE_DATA = {
       "n": 435,
       "zh": "他不在，我有点儿不高兴。",
       "py": "tā bú zài, wǒ yǒu diǎnr bù gāo xìng.",
-      "en": "He's not here, I'm a little unhappy."
+      "en": "He's not here, I'm a little unhappy.",
+      "notes": [
+        "Tone change: 不 becomes bú before a 4th tone, otherwise bù — here 不在 is bú zài."
+      ]
     },
     {
       "n": 436,
@@ -2658,7 +2871,10 @@ window.SENTENCE_DATA = {
       "n": 443,
       "zh": "对不起，我来晚了。",
       "py": "duì bu qǐ, wǒ lái wǎn le.",
-      "en": "Sorry, I'm late."
+      "en": "Sorry, I'm late.",
+      "notes": [
+        "Tone change: in 对不起 the 不 is toneless — duì bu qǐ."
+      ]
     },
     {
       "n": 444,
@@ -2682,7 +2898,10 @@ window.SENTENCE_DATA = {
       "n": 447,
       "zh": "请等一下，我现在来。",
       "py": "qǐng děng yí xià, wǒ xiàn zài lái.",
-      "en": "Please wait a moment, I'm coming now."
+      "en": "Please wait a moment, I'm coming now.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一下 is yí xià."
+      ]
     },
     {
       "n": 448,
@@ -2730,7 +2949,10 @@ window.SENTENCE_DATA = {
       "n": 455,
       "zh": "我们一家人都在北京。",
       "py": "wǒ men yì jiā rén dōu zài běi jīng.",
-      "en": "Our whole family is in Beijing."
+      "en": "Our whole family is in Beijing.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一家 is yì jiā."
+      ]
     },
     {
       "n": 456,
@@ -2742,7 +2964,10 @@ window.SENTENCE_DATA = {
       "n": 457,
       "zh": "明天我不去学校，我去看朋友。",
       "py": "míng tiān wǒ bú qù xué xiào, wǒ qù kàn péng yǒu.",
-      "en": "I'm not going to school tomorrow, I'm visiting a friend."
+      "en": "I'm not going to school tomorrow, I'm visiting a friend.",
+      "notes": [
+        "Tone change: 不 becomes bú before a 4th tone, otherwise bù — here 不去 is bú qù."
+      ]
     },
     {
       "n": 458,
@@ -2760,13 +2985,19 @@ window.SENTENCE_DATA = {
       "n": 460,
       "zh": "我们晚上一起看电视吧。",
       "py": "wǒ men wǎn shàng yì qǐ kàn diàn shì ba.",
-      "en": "Let's watch TV together this evening."
+      "en": "Let's watch TV together this evening.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一起 is yì qǐ."
+      ]
     },
     {
       "n": 461,
       "zh": "我想给妈妈买一些水果。",
       "py": "wǒ xiǎng gěi mā mā mǎi yì xiē shuǐ guǒ.",
-      "en": "I want to buy some fruit for Mom."
+      "en": "I want to buy some fruit for Mom.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一些 is yì xiē."
+      ]
     },
     {
       "n": 462,
@@ -2784,7 +3015,10 @@ window.SENTENCE_DATA = {
       "n": 464,
       "zh": "我们的老师今天不在学校。",
       "py": "wǒ men de lǎo shī jīn tiān bú zài xué xiào.",
-      "en": "Our teacher is not at school today."
+      "en": "Our teacher is not at school today.",
+      "notes": [
+        "Tone change: 不 becomes bú before a 4th tone, otherwise bù — here 不在 is bú zài."
+      ]
     },
     {
       "n": 465,
@@ -2838,7 +3072,10 @@ window.SENTENCE_DATA = {
       "n": 473,
       "zh": "我想喝一点儿热茶。",
       "py": "wǒ xiǎng hē yì diǎnr rè chá.",
-      "en": "I'd like a little hot tea."
+      "en": "I'd like a little hot tea.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一点 is yì diǎn."
+      ]
     },
     {
       "n": 474,
@@ -2886,7 +3123,10 @@ window.SENTENCE_DATA = {
       "n": 481,
       "zh": "我每天上午都喝一杯茶。",
       "py": "wǒ měi tiān shàng wǔ dōu hē yì bēi chá.",
-      "en": "I drink a cup of tea every morning."
+      "en": "I drink a cup of tea every morning.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一杯 is yì bēi."
+      ]
     },
     {
       "n": 482,
@@ -2904,7 +3144,10 @@ window.SENTENCE_DATA = {
       "n": 484,
       "zh": "请你写一下你的名字。",
       "py": "qǐng nǐ xiě yí xià nǐ de míng zì.",
-      "en": "Please write your name."
+      "en": "Please write your name.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一下 is yí xià."
+      ]
     },
     {
       "n": 485,
@@ -2922,13 +3165,19 @@ window.SENTENCE_DATA = {
       "n": 487,
       "zh": "我们一起去医院看朋友吧。",
       "py": "wǒ men yì qǐ qù yī yuàn kàn péng yǒu ba.",
-      "en": "Let's go to the hospital to visit a friend."
+      "en": "Let's go to the hospital to visit a friend.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一起 is yì qǐ."
+      ]
     },
     {
       "n": 488,
       "zh": "这个字我会写，那个字我不会。",
       "py": "zhè ge zì wǒ huì xiě, nà ge zì wǒ bú huì.",
-      "en": "I can write this character, but not that one."
+      "en": "I can write this character, but not that one.",
+      "notes": [
+        "Tone change: 不 becomes bú before a 4th tone, otherwise bù — here 不会 is bú huì."
+      ]
     },
     {
       "n": 489,
@@ -2970,7 +3219,10 @@ window.SENTENCE_DATA = {
       "n": 495,
       "zh": "我们家后面有一个小商店。",
       "py": "wǒ men jiā hòu miàn yǒu yí gè xiǎo shāng diàn.",
-      "en": "There is a little store behind our house."
+      "en": "There is a little store behind our house.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一个 is yí gè."
+      ]
     },
     {
       "n": 496,
@@ -2988,7 +3240,10 @@ window.SENTENCE_DATA = {
       "n": 498,
       "zh": "我喜欢和爸爸妈妈一起去商店。",
       "py": "wǒ xǐ huān hé bà bà mā mā yì qǐ qù shāng diàn.",
-      "en": "I like going to the store with my parents."
+      "en": "I like going to the store with my parents.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一起 is yì qǐ."
+      ]
     },
     {
       "n": 499,
@@ -3038,7 +3293,10 @@ window.SENTENCE_DATA = {
       "n": 6,
       "zh": "这件衣服比那件便宜。",
       "py": "zhè jiàn yī fú bǐ nà jiàn pián yi.",
-      "en": "This piece of clothing is cheaper than that one."
+      "en": "This piece of clothing is cheaper than that one.",
+      "notes": [
+        "Polyphone: 便 is pián in 便宜 (cheap), but biàn in 方便 (convenient)."
+      ]
     },
     {
       "n": 7,
@@ -3050,7 +3308,10 @@ window.SENTENCE_DATA = {
       "n": 8,
       "zh": "这本书比那本贵一点儿。",
       "py": "zhè běn shū bǐ nà běn guì yì diǎnr.",
-      "en": "This book is a little more expensive than that one."
+      "en": "This book is a little more expensive than that one.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一点 is yì diǎn."
+      ]
     },
     {
       "n": 9,
@@ -3068,7 +3329,10 @@ window.SENTENCE_DATA = {
       "n": 11,
       "zh": "我觉得咖啡比茶好喝。",
       "py": "wǒ jué de kā fēi bǐ chá hǎo hē.",
-      "en": "I think coffee tastes better than tea."
+      "en": "I think coffee tastes better than tea.",
+      "notes": [
+        "Polyphone: 觉 is jué in 觉得 (to feel / think), but jiào in 睡觉 (to sleep)."
+      ]
     },
     {
       "n": 12,
@@ -3260,7 +3524,10 @@ window.SENTENCE_DATA = {
       "n": 43,
       "zh": "我们正在上课，请等一下。",
       "py": "wǒ men zhèng zài shàng kè, qǐng děng yí xià.",
-      "en": "We are in class, please wait a moment."
+      "en": "We are in class, please wait a moment.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一下 is yí xià."
+      ]
     },
     {
       "n": 44,
@@ -3320,7 +3587,10 @@ window.SENTENCE_DATA = {
       "n": 53,
       "zh": "他穿着一件红色的衣服。",
       "py": "tā chuān zhe yí jiàn hóng sè de yī fú.",
-      "en": "He is wearing a red piece of clothing."
+      "en": "He is wearing a red piece of clothing.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一件 is yí jiàn."
+      ]
     },
     {
       "n": 54,
@@ -3350,7 +3620,10 @@ window.SENTENCE_DATA = {
       "n": 58,
       "zh": "我们一起去踢足球吧。",
       "py": "wǒ men yì qǐ qù tī zú qiú ba.",
-      "en": "Let's go play soccer together."
+      "en": "Let's go play soccer together.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一起 is yì qǐ."
+      ]
     },
     {
       "n": 59,
@@ -3392,7 +3665,10 @@ window.SENTENCE_DATA = {
       "n": 65,
       "zh": "我不太会跳舞。",
       "py": "wǒ bú tài huì tiào wǔ.",
-      "en": "I'm not very good at dancing."
+      "en": "I'm not very good at dancing.",
+      "notes": [
+        "Tone change: 不 becomes bú before a 4th tone, otherwise bù — here 不太 is bú tài."
+      ]
     },
     {
       "n": 66,
@@ -3416,7 +3692,10 @@ window.SENTENCE_DATA = {
       "n": 69,
       "zh": "跑步以后我觉得很累。",
       "py": "pǎo bù yǐ hòu wǒ jué de hěn lèi.",
-      "en": "After running I feel very tired."
+      "en": "After running I feel very tired.",
+      "notes": [
+        "Polyphone: 觉 is jué in 觉得 (to feel / think), but jiào in 睡觉 (to sleep)."
+      ]
     },
     {
       "n": 70,
@@ -3428,7 +3707,10 @@ window.SENTENCE_DATA = {
       "n": 71,
       "zh": "请帮我一下。",
       "py": "qǐng bāng wǒ yí xià.",
-      "en": "Please help me a little."
+      "en": "Please help me a little.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一下 is yí xià."
+      ]
     },
     {
       "n": 72,
@@ -3446,7 +3728,10 @@ window.SENTENCE_DATA = {
       "n": 74,
       "zh": "我给你介绍一下我的朋友。",
       "py": "wǒ gěi nǐ jiè shào yí xià wǒ de péng yǒu.",
-      "en": "Let me introduce my friend to you."
+      "en": "Let me introduce my friend to you.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一下 is yí xià."
+      ]
     },
     {
       "n": 75,
@@ -3476,19 +3761,28 @@ window.SENTENCE_DATA = {
       "n": 79,
       "zh": "妈妈不让孩子看太多电视。",
       "py": "mā mā bú ràng hái zi kàn tài duō diàn shì.",
-      "en": "Mom doesn't let the children watch too much TV."
+      "en": "Mom doesn't let the children watch too much TV.",
+      "notes": [
+        "Tone change: 不 becomes bú before a 4th tone, otherwise bù — here 不让 is bú ràng."
+      ]
     },
     {
       "n": 80,
       "zh": "你能帮我找一下我的手机吗？",
       "py": "nǐ néng bāng wǒ zhǎo yí xià wǒ de shǒu jī ma?",
-      "en": "Can you help me find my phone?"
+      "en": "Can you help me find my phone?",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一下 is yí xià."
+      ]
     },
     {
       "n": 81,
       "zh": "请给我一杯咖啡。",
       "py": "qǐng gěi wǒ yì bēi kā fēi.",
-      "en": "Please give me a cup of coffee."
+      "en": "Please give me a cup of coffee.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一杯 is yì bēi."
+      ]
     },
     {
       "n": 82,
@@ -3500,7 +3794,10 @@ window.SENTENCE_DATA = {
       "n": 83,
       "zh": "他给了我一本书。",
       "py": "tā gěi le wǒ yì běn shū.",
-      "en": "He gave me a book."
+      "en": "He gave me a book.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一本 is yì běn."
+      ]
     },
     {
       "n": 84,
@@ -3512,25 +3809,37 @@ window.SENTENCE_DATA = {
       "n": 85,
       "zh": "我来介绍一下，这是我哥哥。",
       "py": "wǒ lái jiè shào yí xià, zhè shì wǒ gē gē.",
-      "en": "Let me introduce: this is my older brother."
+      "en": "Let me introduce: this is my older brother.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一下 is yí xià."
+      ]
     },
     {
       "n": 86,
       "zh": "我觉得这个电影很好看。",
       "py": "wǒ jué de zhè ge diàn yǐng hěn hǎo kàn.",
-      "en": "I think this movie is really good."
+      "en": "I think this movie is really good.",
+      "notes": [
+        "Polyphone: 觉 is jué in 觉得 (to feel / think), but jiào in 睡觉 (to sleep)."
+      ]
     },
     {
       "n": 87,
       "zh": "你觉得怎么样？",
       "py": "nǐ jué de zěn me yàng?",
-      "en": "What do you think?"
+      "en": "What do you think?",
+      "notes": [
+        "Polyphone: 觉 is jué in 觉得 (to feel / think), but jiào in 睡觉 (to sleep)."
+      ]
     },
     {
       "n": 88,
       "zh": "我觉得汉语很有意思。",
       "py": "wǒ jué de hàn yǔ hěn yǒu yì si.",
-      "en": "I think Chinese is very interesting."
+      "en": "I think Chinese is very interesting.",
+      "notes": [
+        "Polyphone: 觉 is jué in 觉得 (to feel / think), but jiào in 睡觉 (to sleep)."
+      ]
     },
     {
       "n": 89,
@@ -3584,7 +3893,10 @@ window.SENTENCE_DATA = {
       "n": 97,
       "zh": "我觉得这件衣服太贵了。",
       "py": "wǒ jué de zhè jiàn yī fú tài guì le.",
-      "en": "I think this piece of clothing is too expensive."
+      "en": "I think this piece of clothing is too expensive.",
+      "notes": [
+        "Polyphone: 觉 is jué in 觉得 (to feel / think), but jiào in 睡觉 (to sleep)."
+      ]
     },
     {
       "n": 98,
@@ -3620,7 +3932,10 @@ window.SENTENCE_DATA = {
       "n": 103,
       "zh": "他有一个黑色的猫。",
       "py": "tā yǒu yí gè hēi sè de māo.",
-      "en": "He has a black cat."
+      "en": "He has a black cat.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一个 is yí gè."
+      ]
     },
     {
       "n": 104,
@@ -3644,7 +3959,10 @@ window.SENTENCE_DATA = {
       "n": 107,
       "zh": "我想买一件红色的衣服。",
       "py": "wǒ xiǎng mǎi yí jiàn hóng sè de yī fú.",
-      "en": "I want to buy a red piece of clothing."
+      "en": "I want to buy a red piece of clothing.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一件 is yí jiàn."
+      ]
     },
     {
       "n": 108,
@@ -3656,7 +3974,10 @@ window.SENTENCE_DATA = {
       "n": 109,
       "zh": "他穿着一件黑色的衣服。",
       "py": "tā chuān zhe yí jiàn hēi sè de yī fú.",
-      "en": "He is wearing a black piece of clothing."
+      "en": "He is wearing a black piece of clothing.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一件 is yí jiàn."
+      ]
     },
     {
       "n": 110,
@@ -3686,7 +4007,10 @@ window.SENTENCE_DATA = {
       "n": 114,
       "zh": "我今天觉得很累。",
       "py": "wǒ jīn tiān jué de hěn lèi.",
-      "en": "I feel very tired today."
+      "en": "I feel very tired today.",
+      "notes": [
+        "Polyphone: 觉 is jué in 觉得 (to feel / think), but jiào in 睡觉 (to sleep)."
+      ]
     },
     {
       "n": 115,
@@ -3746,7 +4070,10 @@ window.SENTENCE_DATA = {
       "n": 124,
       "zh": "妈妈身体不太好。",
       "py": "mā mā shēn tǐ bú tài hǎo.",
-      "en": "Mom's health isn't very good."
+      "en": "Mom's health isn't very good.",
+      "notes": [
+        "Tone change: 不 becomes bú before a 4th tone, otherwise bù — here 不太 is bú tài."
+      ]
     },
     {
       "n": 125,
@@ -3794,7 +4121,10 @@ window.SENTENCE_DATA = {
       "n": 132,
       "zh": "我们住在一个很好的宾馆。",
       "py": "wǒ men zhù zài yí gè hěn hǎo de bīn guǎn.",
-      "en": "We are staying at a very nice hotel."
+      "en": "We are staying at a very nice hotel.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一个 is yí gè."
+      ]
     },
     {
       "n": 133,
@@ -3884,7 +4214,10 @@ window.SENTENCE_DATA = {
       "n": 147,
       "zh": "他在一家大公司工作。",
       "py": "tā zài yì jiā dà gōng sī gōng zuò.",
-      "en": "He works at a big company."
+      "en": "He works at a big company.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一家 is yì jiā."
+      ]
     },
     {
       "n": 148,
@@ -3908,13 +4241,19 @@ window.SENTENCE_DATA = {
       "n": 151,
       "zh": "这个问题我不会回答。",
       "py": "zhè ge wèn tí wǒ bú huì huí dá.",
-      "en": "I don't know how to answer this question."
+      "en": "I don't know how to answer this question.",
+      "notes": [
+        "Tone change: 不 becomes bú before a 4th tone, otherwise bù — here 不会 is bú huì."
+      ]
     },
     {
       "n": 152,
       "zh": "老师问了我一个问题。",
       "py": "lǎo shī wèn le wǒ yí gè wèn tí.",
-      "en": "The teacher asked me a question."
+      "en": "The teacher asked me a question.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一个 is yí gè."
+      ]
     },
     {
       "n": 153,
@@ -3926,13 +4265,19 @@ window.SENTENCE_DATA = {
       "n": 154,
       "zh": "这道题我不会做。",
       "py": "zhè dào tí wǒ bú huì zuò.",
-      "en": "I don't know how to do this problem."
+      "en": "I don't know how to do this problem.",
+      "notes": [
+        "Tone change: 不 becomes bú before a 4th tone, otherwise bù — here 不会 is bú huì."
+      ]
     },
     {
       "n": 155,
       "zh": "我们的教室在学校里。",
       "py": "wǒ men de jiào shì zài xué xiào lǐ.",
-      "en": "Our classroom is in the school."
+      "en": "Our classroom is in the school.",
+      "notes": [
+        "Polyphone: 教 is jiào in 教室 (classroom), but jiāo as the verb \"to teach\"."
+      ]
     },
     {
       "n": 156,
@@ -4010,7 +4355,10 @@ window.SENTENCE_DATA = {
       "n": 168,
       "zh": "现在还早，再睡一会儿吧。",
       "py": "xiàn zài hái zǎo, zài shuì yí huìr ba.",
-      "en": "It's still early, sleep a little longer."
+      "en": "It's still early, sleep a little longer.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一会 is yí huì."
+      ]
     },
     {
       "n": 169,
@@ -4034,7 +4382,11 @@ window.SENTENCE_DATA = {
       "n": 172,
       "zh": "我一回家就睡觉了。",
       "py": "wǒ yì huí jiā jiù shuì jiào le.",
-      "en": "I went to sleep as soon as I got home."
+      "en": "I went to sleep as soon as I got home.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一回 is yì huí.",
+        "Polyphone: 觉 is jiào in 睡觉 (to sleep), but jué in 觉得 (to feel / think)."
+      ]
     },
     {
       "n": 173,
@@ -4052,7 +4404,10 @@ window.SENTENCE_DATA = {
       "n": 175,
       "zh": "请再说一次。",
       "py": "qǐng zài shuō yí cì.",
-      "en": "Please say it again."
+      "en": "Please say it again.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一次 is yí cì."
+      ]
     },
     {
       "n": 176,
@@ -4076,7 +4431,10 @@ window.SENTENCE_DATA = {
       "n": 179,
       "zh": "从这儿到那儿不太远。",
       "py": "cóng zhèr dào nàr bú tài yuǎn.",
-      "en": "It's not too far from here to there."
+      "en": "It's not too far from here to there.",
+      "notes": [
+        "Tone change: 不 becomes bú before a 4th tone, otherwise bù — here 不太 is bú tài."
+      ]
     },
     {
       "n": 180,
@@ -4112,7 +4470,10 @@ window.SENTENCE_DATA = {
       "n": 185,
       "zh": "我不太喜欢吃羊肉。",
       "py": "wǒ bú tài xǐ huān chī yáng ròu.",
-      "en": "I don't really like eating mutton."
+      "en": "I don't really like eating mutton.",
+      "notes": [
+        "Tone change: 不 becomes bú before a 4th tone, otherwise bù — here 不太 is bú tài."
+      ]
     },
     {
       "n": 186,
@@ -4124,7 +4485,10 @@ window.SENTENCE_DATA = {
       "n": 187,
       "zh": "来一杯咖啡，谢谢。",
       "py": "lái yì bēi kā fēi, xiè xiè.",
-      "en": "A cup of coffee, please."
+      "en": "A cup of coffee, please.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一杯 is yì bēi."
+      ]
     },
     {
       "n": 188,
@@ -4136,7 +4500,10 @@ window.SENTENCE_DATA = {
       "n": 189,
       "zh": "服务员，这个菜不太好吃。",
       "py": "fú wù yuán, zhè ge cài bú tài hǎo chī.",
-      "en": "Waiter, this dish isn't very tasty."
+      "en": "Waiter, this dish isn't very tasty.",
+      "notes": [
+        "Tone change: 不 becomes bú before a 4th tone, otherwise bù — here 不太 is bú tài."
+      ]
     },
     {
       "n": 190,
@@ -4160,13 +4527,19 @@ window.SENTENCE_DATA = {
       "n": 193,
       "zh": "这个西瓜很大，也很便宜。",
       "py": "zhè ge xī guā hěn dà, yě hěn pián yi.",
-      "en": "This watermelon is big and cheap."
+      "en": "This watermelon is big and cheap.",
+      "notes": [
+        "Polyphone: 便 is pián in 便宜 (cheap), but biàn in 方便 (convenient)."
+      ]
     },
     {
       "n": 194,
       "zh": "我每天早上都喝一杯牛奶。",
       "py": "wǒ měi tiān zǎo shàng dōu hē yì bēi niú nǎi.",
-      "en": "I drink a glass of milk every morning."
+      "en": "I drink a glass of milk every morning.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一杯 is yì bēi."
+      ]
     },
     {
       "n": 195,
@@ -4178,7 +4551,10 @@ window.SENTENCE_DATA = {
       "n": 196,
       "zh": "我觉得羊肉比鸡肉好吃。",
       "py": "wǒ jué de yáng ròu bǐ jī ròu hǎo chī.",
-      "en": "I think mutton is tastier than chicken."
+      "en": "I think mutton is tastier than chicken.",
+      "notes": [
+        "Polyphone: 觉 is jué in 觉得 (to feel / think), but jiào in 睡觉 (to sleep)."
+      ]
     },
     {
       "n": 197,
@@ -4208,7 +4584,11 @@ window.SENTENCE_DATA = {
       "n": 201,
       "zh": "这件衣服太贵了，便宜一点儿吧。",
       "py": "zhè jiàn yī fú tài guì le, pián yi yì diǎnr ba.",
-      "en": "This is too expensive, make it cheaper."
+      "en": "This is too expensive, make it cheaper.",
+      "notes": [
+        "Polyphone: 便 is pián in 便宜 (cheap), but biàn in 方便 (convenient).",
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一点 is yì diǎn."
+      ]
     },
     {
       "n": 202,
@@ -4220,19 +4600,28 @@ window.SENTENCE_DATA = {
       "n": 203,
       "zh": "这个手机一千块钱。",
       "py": "zhè ge shǒu jī yì qiān kuài qián.",
-      "en": "This phone is one thousand yuan."
+      "en": "This phone is one thousand yuan.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一千 is yì qiān."
+      ]
     },
     {
       "n": 204,
       "zh": "那本书很便宜，五块钱。",
       "py": "nà běn shū hěn pián yi, wǔ kuài qián.",
-      "en": "That book is cheap, five yuan."
+      "en": "That book is cheap, five yuan.",
+      "notes": [
+        "Polyphone: 便 is pián in 便宜 (cheap), but biàn in 方便 (convenient)."
+      ]
     },
     {
       "n": 205,
       "zh": "我想买一块手表。",
       "py": "wǒ xiǎng mǎi yí kuài shǒu biǎo.",
-      "en": "I want to buy a watch."
+      "en": "I want to buy a watch.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一块 is yí kuài."
+      ]
     },
     {
       "n": 206,
@@ -4244,13 +4633,19 @@ window.SENTENCE_DATA = {
       "n": 207,
       "zh": "商店里的东西很多，也很便宜。",
       "py": "shāng diàn lǐ de dōng xī hěn duō, yě hěn pián yi.",
-      "en": "The store has many things, and they're cheap."
+      "en": "The store has many things, and they're cheap.",
+      "notes": [
+        "Polyphone: 便 is pián in 便宜 (cheap), but biàn in 方便 (convenient)."
+      ]
     },
     {
       "n": 208,
       "zh": "这个太贵，那个太便宜。",
       "py": "zhè ge tài guì, nà ge tài pián yi.",
-      "en": "This one is too expensive, that one is too cheap."
+      "en": "This one is too expensive, that one is too cheap.",
+      "notes": [
+        "Polyphone: 便 is pián in 便宜 (cheap), but biàn in 方便 (convenient)."
+      ]
     },
     {
       "n": 209,
@@ -4274,13 +4669,19 @@ window.SENTENCE_DATA = {
       "n": 212,
       "zh": "两块钱一个。",
       "py": "liǎng kuài qián yí gè.",
-      "en": "Two yuan each."
+      "en": "Two yuan each.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一个 is yí gè."
+      ]
     },
     {
       "n": 213,
       "zh": "我买了一件新衣服。",
       "py": "wǒ mǎi le yí jiàn xīn yī fú.",
-      "en": "I bought a new piece of clothing."
+      "en": "I bought a new piece of clothing.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一件 is yí jiàn."
+      ]
     },
     {
       "n": 214,
@@ -4292,7 +4693,10 @@ window.SENTENCE_DATA = {
       "n": 215,
       "zh": "便宜的东西也很好。",
       "py": "pián yi de dōng xī yě hěn hǎo.",
-      "en": "Cheap things can also be good."
+      "en": "Cheap things can also be good.",
+      "notes": [
+        "Polyphone: 便 is pián in 便宜 (cheap), but biàn in 方便 (convenient)."
+      ]
     },
     {
       "n": 216,
@@ -4316,7 +4720,10 @@ window.SENTENCE_DATA = {
       "n": 219,
       "zh": "我要去机场，请快一点儿。",
       "py": "wǒ yào qù jī chǎng, qǐng kuài yì diǎnr.",
-      "en": "I need to go to the airport, please hurry."
+      "en": "I need to go to the airport, please hurry.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一点 is yì diǎn."
+      ]
     },
     {
       "n": 220,
@@ -4328,7 +4735,11 @@ window.SENTENCE_DATA = {
       "n": 221,
       "zh": "我们要不要一起去？",
       "py": "wǒ men yào bú yào yì qǐ qù?",
-      "en": "Shall we go together?"
+      "en": "Shall we go together?",
+      "notes": [
+        "Tone change: 不 becomes bú before a 4th tone, otherwise bù — here 不要 is bú yào.",
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一起 is yì qǐ."
+      ]
     },
     {
       "n": 222,
@@ -4340,13 +4751,19 @@ window.SENTENCE_DATA = {
       "n": 223,
       "zh": "我想休息一下，可以吗？",
       "py": "wǒ xiǎng xiū xī yí xià, kě yǐ ma?",
-      "en": "I'd like to rest a bit, is that okay?"
+      "en": "I'd like to rest a bit, is that okay?",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一下 is yí xià."
+      ]
     },
     {
       "n": 224,
       "zh": "我们可以再等一会儿。",
       "py": "wǒ men kě yǐ zài děng yí huìr.",
-      "en": "We can wait a little longer."
+      "en": "We can wait a little longer.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一会 is yí huì."
+      ]
     },
     {
       "n": 225,
@@ -4364,7 +4781,10 @@ window.SENTENCE_DATA = {
       "n": 227,
       "zh": "别走，再坐一会儿吧。",
       "py": "bié zǒu, zài zuò yí huìr ba.",
-      "en": "Don't go, sit a little longer."
+      "en": "Don't go, sit a little longer.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一会 is yí huì."
+      ]
     },
     {
       "n": 228,
@@ -4388,7 +4808,10 @@ window.SENTENCE_DATA = {
       "n": 231,
       "zh": "我有一个哥哥和一个妹妹。",
       "py": "wǒ yǒu yí gè gē gē hé yí gè mèi mèi.",
-      "en": "I have an older brother and a younger sister."
+      "en": "I have an older brother and a younger sister.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一个 is yí gè."
+      ]
     },
     {
       "n": 232,
@@ -4412,13 +4835,20 @@ window.SENTENCE_DATA = {
       "n": 235,
       "zh": "我妻子在一家公司上班。",
       "py": "wǒ qī zi zài yì jiā gōng sī shàng bān.",
-      "en": "My wife works at a company."
+      "en": "My wife works at a company.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一家 is yì jiā."
+      ]
     },
     {
       "n": 236,
       "zh": "我们一家人都很快乐。",
       "py": "wǒ men yì jiā rén dōu hěn kuài lè.",
-      "en": "Our whole family is very happy."
+      "en": "Our whole family is very happy.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一家 is yì jiā.",
+        "Polyphone: 乐 is lè when it means \"happy\" (快乐, 可乐), but yuè in 音乐 (music)."
+      ]
     },
     {
       "n": 237,
@@ -4442,7 +4872,10 @@ window.SENTENCE_DATA = {
       "n": 240,
       "zh": "大家一起吃饭，真高兴。",
       "py": "dà jiā yì qǐ chī fàn, zhēn gāo xìng.",
-      "en": "Everyone eating together, it's so nice."
+      "en": "Everyone eating together, it's so nice.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一起 is yì qǐ."
+      ]
     },
     {
       "n": 241,
@@ -4460,19 +4893,28 @@ window.SENTENCE_DATA = {
       "n": 243,
       "zh": "我和哥哥一起去打篮球。",
       "py": "wǒ hé gē gē yì qǐ qù dǎ lán qiú.",
-      "en": "My older brother and I go play basketball together."
+      "en": "My older brother and I go play basketball together.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一起 is yì qǐ."
+      ]
     },
     {
       "n": 244,
       "zh": "妈妈让弟弟早点儿睡觉。",
       "py": "mā mā ràng dì di zǎo diǎnr shuì jiào.",
-      "en": "Mom tells my younger brother to sleep early."
+      "en": "Mom tells my younger brother to sleep early.",
+      "notes": [
+        "Polyphone: 觉 is jiào in 睡觉 (to sleep), but jué in 觉得 (to feel / think)."
+      ]
     },
     {
       "n": 245,
       "zh": "生日快乐！",
       "py": "shēng rì kuài lè!",
-      "en": "Happy birthday!"
+      "en": "Happy birthday!",
+      "notes": [
+        "Polyphone: 乐 is lè when it means \"happy\" (快乐, 可乐), but yuè in 音乐 (music)."
+      ]
     },
     {
       "n": 246,
@@ -4562,7 +5004,10 @@ window.SENTENCE_DATA = {
       "n": 260,
       "zh": "今天天气不错，我们去旅游吧。",
       "py": "jīn tiān tiān qì bú cuò, wǒ men qù lǚ yóu ba.",
-      "en": "The weather is good today, let's go traveling."
+      "en": "The weather is good today, let's go traveling.",
+      "notes": [
+        "Tone change: 不 becomes bú before a 4th tone, otherwise bù — here 不错 is bú cuò."
+      ]
     },
     {
       "n": 261,
@@ -4580,7 +5025,10 @@ window.SENTENCE_DATA = {
       "n": 263,
       "zh": "对不起，我来晚了，路上人太多了。",
       "py": "duì bu qǐ, wǒ lái wǎn le, lù shàng rén tài duō le.",
-      "en": "Sorry I'm late, there were too many people on the road."
+      "en": "Sorry I'm late, there were too many people on the road.",
+      "notes": [
+        "Tone change: in 对不起 the 不 is toneless — duì bu qǐ."
+      ]
     },
     {
       "n": 264,
@@ -4592,13 +5040,19 @@ window.SENTENCE_DATA = {
       "n": 265,
       "zh": "好长时间不见，你最近怎么样？",
       "py": "hǎo cháng shí jiān bú jiàn, nǐ zuì jìn zěn me yàng?",
-      "en": "Long time no see, how have you been?"
+      "en": "Long time no see, how have you been?",
+      "notes": [
+        "Tone change: 不 becomes bú before a 4th tone, otherwise bù — here 不见 is bú jiàn."
+      ]
     },
     {
       "n": 266,
       "zh": "我最近很忙，但是很快乐。",
       "py": "wǒ zuì jìn hěn máng, dàn shì hěn kuài lè.",
-      "en": "I've been busy lately, but happy."
+      "en": "I've been busy lately, but happy.",
+      "notes": [
+        "Polyphone: 乐 is lè when it means \"happy\" (快乐, 可乐), but yuè in 音乐 (music)."
+      ]
     },
     {
       "n": 267,
@@ -4640,7 +5094,10 @@ window.SENTENCE_DATA = {
       "n": 273,
       "zh": "我们很长时间没见了，一起吃个饭吧。",
       "py": "wǒ men hěn cháng shí jiān méi jiàn le, yì qǐ chī gè fàn ba.",
-      "en": "We haven't seen each other in a long time, let's have a meal."
+      "en": "We haven't seen each other in a long time, let's have a meal.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一起 is yì qǐ."
+      ]
     },
     {
       "n": 274,
@@ -4652,7 +5109,10 @@ window.SENTENCE_DATA = {
       "n": 275,
       "zh": "时间不早了，我得走了。",
       "py": "shí jiān bù zǎo le, wǒ děi zǒu le.",
-      "en": "It's getting late, I have to go."
+      "en": "It's getting late, I have to go.",
+      "notes": [
+        "Polyphone: 得 is děi when it means \"must / have to\"; as the verb complement particle (说得很好) it is neutral de."
+      ]
     },
     {
       "n": 276,
@@ -4670,7 +5130,10 @@ window.SENTENCE_DATA = {
       "n": 278,
       "zh": "这个孩子真快乐。",
       "py": "zhè ge hái zi zhēn kuài lè.",
-      "en": "This child is really happy."
+      "en": "This child is really happy.",
+      "notes": [
+        "Polyphone: 乐 is lè when it means \"happy\" (快乐, 可乐), but yuè in 音乐 (music)."
+      ]
     },
     {
       "n": 279,
@@ -4688,7 +5151,10 @@ window.SENTENCE_DATA = {
       "n": 281,
       "zh": "请你说得慢一点儿。",
       "py": "qǐng nǐ shuō de màn yì diǎnr.",
-      "en": "Please speak a little slower."
+      "en": "Please speak a little slower.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一点 is yì diǎn."
+      ]
     },
     {
       "n": 282,
@@ -4712,7 +5178,11 @@ window.SENTENCE_DATA = {
       "n": 285,
       "zh": "这个手机不错，也不贵。",
       "py": "zhè ge shǒu jī bú cuò, yě bú guì.",
-      "en": "This phone is good and not expensive."
+      "en": "This phone is good and not expensive.",
+      "notes": [
+        "Tone change: 不 becomes bú before a 4th tone, otherwise bù — here 不错 is bú cuò.",
+        "Tone change: 不 becomes bú before a 4th tone, otherwise bù — here 不贵 is bú guì."
+      ]
     },
     {
       "n": 286,
@@ -4742,19 +5212,30 @@ window.SENTENCE_DATA = {
       "n": 290,
       "zh": "我觉得有点儿累，想休息一下。",
       "py": "wǒ jué de yǒu diǎnr lèi, xiǎng xiū xī yí xià.",
-      "en": "I feel a little tired and want to rest."
+      "en": "I feel a little tired and want to rest.",
+      "notes": [
+        "Polyphone: 觉 is jué in 觉得 (to feel / think), but jiào in 睡觉 (to sleep).",
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一下 is yí xià."
+      ]
     },
     {
       "n": 291,
       "zh": "他真是一个快乐的人。",
       "py": "tā zhēn shì yí gè kuài lè de rén.",
-      "en": "He really is a happy person."
+      "en": "He really is a happy person.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一个 is yí gè.",
+        "Polyphone: 乐 is lè when it means \"happy\" (快乐, 可乐), but yuè in 音乐 (music)."
+      ]
     },
     {
       "n": 292,
       "zh": "今天的题不太多。",
       "py": "jīn tiān de tí bú tài duō.",
-      "en": "There aren't too many questions today."
+      "en": "There aren't too many questions today.",
+      "notes": [
+        "Tone change: 不 becomes bú before a 4th tone, otherwise bù — here 不太 is bú tài."
+      ]
     },
     {
       "n": 293,
@@ -4790,7 +5271,10 @@ window.SENTENCE_DATA = {
       "n": 298,
       "zh": "我找不到我的手机了。",
       "py": "wǒ zhǎo bú dào wǒ de shǒu jī le.",
-      "en": "I can't find my phone."
+      "en": "I can't find my phone.",
+      "notes": [
+        "Tone change: 不 becomes bú before a 4th tone, otherwise bù — here 不到 is bú dào."
+      ]
     },
     {
       "n": 299,
@@ -4808,7 +5292,10 @@ window.SENTENCE_DATA = {
       "n": 301,
       "zh": "起床以后，我先喝一杯水。",
       "py": "qǐ chuáng yǐ hòu, wǒ xiān hē yì bēi shuǐ.",
-      "en": "After getting up, I drink a glass of water first."
+      "en": "After getting up, I drink a glass of water first.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一杯 is yì bēi."
+      ]
     },
     {
       "n": 302,
@@ -4826,19 +5313,28 @@ window.SENTENCE_DATA = {
       "n": 304,
       "zh": "我们休息一下，再开始吧。",
       "py": "wǒ men xiū xī yí xià, zài kāi shǐ ba.",
-      "en": "Let's rest a bit and then start again."
+      "en": "Let's rest a bit and then start again.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一下 is yí xià."
+      ]
     },
     {
       "n": 305,
       "zh": "他笑着走进了教室。",
       "py": "tā xiào zhe zǒu jìn le jiào shì.",
-      "en": "He walked into the classroom smiling."
+      "en": "He walked into the classroom smiling.",
+      "notes": [
+        "Polyphone: 教 is jiào in 教室 (classroom), but jiāo as the verb \"to teach\"."
+      ]
     },
     {
       "n": 306,
       "zh": "请等一下，我现在出来。",
       "py": "qǐng děng yí xià, wǒ xiàn zài chū lái.",
-      "en": "Please wait a moment, I'm coming out now."
+      "en": "Please wait a moment, I'm coming out now.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一下 is yí xià."
+      ]
     },
     {
       "n": 307,
@@ -4874,7 +5370,10 @@ window.SENTENCE_DATA = {
       "n": 312,
       "zh": "请给我一件红色的。",
       "py": "qǐng gěi wǒ yí jiàn hóng sè de.",
-      "en": "Please give me a red one."
+      "en": "Please give me a red one.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一件 is yí jiàn."
+      ]
     },
     {
       "n": 313,
@@ -4928,13 +5427,19 @@ window.SENTENCE_DATA = {
       "n": 321,
       "zh": "一年有十二个月。",
       "py": "yì nián yǒu shí èr gè yuè.",
-      "en": "There are twelve months in a year."
+      "en": "There are twelve months in a year.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一年 is yì nián."
+      ]
     },
     {
       "n": 322,
       "zh": "一个星期有七天。",
       "py": "yí gè xīng qī yǒu qī tiān.",
-      "en": "There are seven days in a week."
+      "en": "There are seven days in a week.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一个 is yí gè."
+      ]
     },
     {
       "n": 323,
@@ -4970,7 +5475,10 @@ window.SENTENCE_DATA = {
       "n": 328,
       "zh": "我想问你一个问题。",
       "py": "wǒ xiǎng wèn nǐ yí gè wèn tí.",
-      "en": "I want to ask you a question."
+      "en": "I want to ask you a question.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一个 is yí gè."
+      ]
     },
     {
       "n": 329,
@@ -4982,7 +5490,10 @@ window.SENTENCE_DATA = {
       "n": 330,
       "zh": "你为什么不告诉我？",
       "py": "nǐ wèi shén me bú gào sù wǒ?",
-      "en": "Why didn't you tell me?"
+      "en": "Why didn't you tell me?",
+      "notes": [
+        "Tone change: 不 becomes bú before a 4th tone, otherwise bù — here 不告 is bú gào."
+      ]
     },
     {
       "n": 331,
@@ -5072,7 +5583,10 @@ window.SENTENCE_DATA = {
       "n": 345,
       "zh": "晚上我们一起去看电影吧。",
       "py": "wǎn shàng wǒ men yì qǐ qù kàn diàn yǐng ba.",
-      "en": "Let's go see a movie together tonight."
+      "en": "Let's go see a movie together tonight.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一起 is yì qǐ."
+      ]
     },
     {
       "n": 346,
@@ -5108,13 +5622,19 @@ window.SENTENCE_DATA = {
       "n": 351,
       "zh": "不上班的时候我想休息几天。",
       "py": "bú shàng bān de shí hòu wǒ xiǎng xiū xī jǐ tiān.",
-      "en": "When I'm not working I want to rest for a few days."
+      "en": "When I'm not working I want to rest for a few days.",
+      "notes": [
+        "Tone change: 不 becomes bú before a 4th tone, otherwise bù — here 不上 is bú shàng."
+      ]
     },
     {
       "n": 352,
       "zh": "我想给妈妈买一件新衣服。",
       "py": "wǒ xiǎng gěi mā mā mǎi yí jiàn xīn yī fú.",
-      "en": "I want to buy Mom a new piece of clothing."
+      "en": "I want to buy Mom a new piece of clothing.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一件 is yí jiàn."
+      ]
     },
     {
       "n": 353,
@@ -5132,7 +5652,10 @@ window.SENTENCE_DATA = {
       "n": 355,
       "zh": "我想以后做一名医生。",
       "py": "wǒ xiǎng yǐ hòu zuò yì míng yī shēng.",
-      "en": "I want to be a doctor in the future."
+      "en": "I want to be a doctor in the future.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一名 is yì míng."
+      ]
     },
     {
       "n": 356,
@@ -5150,7 +5673,10 @@ window.SENTENCE_DATA = {
       "n": 358,
       "zh": "我觉得学习汉语很有意思。",
       "py": "wǒ jué de xué xí hàn yǔ hěn yǒu yì si.",
-      "en": "I think studying Chinese is very interesting."
+      "en": "I think studying Chinese is very interesting.",
+      "notes": [
+        "Polyphone: 觉 is jué in 觉得 (to feel / think), but jiào in 睡觉 (to sleep)."
+      ]
     },
     {
       "n": 359,
@@ -5210,7 +5736,10 @@ window.SENTENCE_DATA = {
       "n": 368,
       "zh": "这次旅游让我很快乐。",
       "py": "zhè cì lǚ yóu ràng wǒ hěn kuài lè.",
-      "en": "This trip made me very happy."
+      "en": "This trip made me very happy.",
+      "notes": [
+        "Polyphone: 乐 is lè when it means \"happy\" (快乐, 可乐), but yuè in 音乐 (music)."
+      ]
     },
     {
       "n": 369,
@@ -5222,7 +5751,11 @@ window.SENTENCE_DATA = {
       "n": 370,
       "zh": "能帮助别人，我觉得很快乐。",
       "py": "néng bāng zhù bié rén, wǒ jué de hěn kuài lè.",
-      "en": "I feel happy being able to help others."
+      "en": "I feel happy being able to help others.",
+      "notes": [
+        "Polyphone: 觉 is jué in 觉得 (to feel / think), but jiào in 睡觉 (to sleep).",
+        "Polyphone: 乐 is lè when it means \"happy\" (快乐, 可乐), but yuè in 音乐 (music)."
+      ]
     },
     {
       "n": 371,
@@ -5246,7 +5779,10 @@ window.SENTENCE_DATA = {
       "n": 374,
       "zh": "学校的旁边有一个商店。",
       "py": "xué xiào de páng biān yǒu yí gè shāng diàn.",
-      "en": "There is a store next to the school."
+      "en": "There is a store next to the school.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一个 is yí gè."
+      ]
     },
     {
       "n": 375,
@@ -5282,7 +5818,10 @@ window.SENTENCE_DATA = {
       "n": 380,
       "zh": "教室外边有很多学生。",
       "py": "jiào shì wài biān yǒu hěn duō xué shēng.",
-      "en": "There are many students outside the classroom."
+      "en": "There are many students outside the classroom.",
+      "notes": [
+        "Polyphone: 教 is jiào in 教室 (classroom), but jiāo as the verb \"to teach\"."
+      ]
     },
     {
       "n": 381,
@@ -5360,19 +5899,28 @@ window.SENTENCE_DATA = {
       "n": 393,
       "zh": "我看得懂，但是说得不太好。",
       "py": "wǒ kàn de dǒng, dàn shì shuō de bú tài hǎo.",
-      "en": "I can read it, but I don't speak it very well."
+      "en": "I can read it, but I don't speak it very well.",
+      "notes": [
+        "Tone change: 不 becomes bú before a 4th tone, otherwise bù — here 不太 is bú tài."
+      ]
     },
     {
       "n": 394,
       "zh": "学了一年，我会说很多了。",
       "py": "xué le yì nián, wǒ huì shuō hěn duō le.",
-      "en": "After a year of study, I can say a lot now."
+      "en": "After a year of study, I can say a lot now.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一年 is yì nián."
+      ]
     },
     {
       "n": 395,
       "zh": "我想多认识一些中国朋友。",
       "py": "wǒ xiǎng duō rèn shí yì xiē zhōng guó péng yǒu.",
-      "en": "I want to get to know more Chinese friends."
+      "en": "I want to get to know more Chinese friends.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一些 is yì xiē."
+      ]
     },
     {
       "n": 396,
@@ -5432,7 +5980,10 @@ window.SENTENCE_DATA = {
       "n": 405,
       "zh": "我要一个鸡蛋面，谢谢。",
       "py": "wǒ yào yí gè jī dàn miàn, xiè xiè.",
-      "en": "I'll have an egg noodle, thank you."
+      "en": "I'll have an egg noodle, thank you.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一个 is yí gè."
+      ]
     },
     {
       "n": 406,
@@ -5444,19 +5995,28 @@ window.SENTENCE_DATA = {
       "n": 407,
       "zh": "一共多少钱？",
       "py": "yí gòng duō shǎo qián?",
-      "en": "How much is it altogether?"
+      "en": "How much is it altogether?",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一共 is yí gòng."
+      ]
     },
     {
       "n": 408,
       "zh": "一共三十五块。",
       "py": "yí gòng sān shí wǔ kuài.",
-      "en": "Thirty-five yuan in total."
+      "en": "Thirty-five yuan in total.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一共 is yí gòng."
+      ]
     },
     {
       "n": 409,
       "zh": "请等一下，我去给您找。",
       "py": "qǐng děng yí xià, wǒ qù gěi nín zhǎo.",
-      "en": "Please wait a moment, I'll go get it for you."
+      "en": "Please wait a moment, I'll go get it for you.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一下 is yí xià."
+      ]
     },
     {
       "n": 410,
@@ -5480,13 +6040,19 @@ window.SENTENCE_DATA = {
       "n": 413,
       "zh": "这个可以便宜点儿吗？",
       "py": "zhè ge kě yǐ pián yi diǎnr ma?",
-      "en": "Can this be a bit cheaper?"
+      "en": "Can this be a bit cheaper?",
+      "notes": [
+        "Polyphone: 便 is pián in 便宜 (cheap), but biàn in 方便 (convenient)."
+      ]
     },
     {
       "n": 414,
       "zh": "好的，给您便宜五块。",
       "py": "hǎo de, gěi nín pián yi wǔ kuài.",
-      "en": "Okay, I'll give you five yuan off."
+      "en": "Okay, I'll give you five yuan off.",
+      "notes": [
+        "Polyphone: 便 is pián in 便宜 (cheap), but biàn in 方便 (convenient)."
+      ]
     },
     {
       "n": 415,
@@ -5498,13 +6064,19 @@ window.SENTENCE_DATA = {
       "n": 416,
       "zh": "早上好，今天天气真不错。",
       "py": "zǎo shàng hǎo, jīn tiān tiān qì zhēn bú cuò.",
-      "en": "Good morning, the weather is really nice today."
+      "en": "Good morning, the weather is really nice today.",
+      "notes": [
+        "Tone change: 不 becomes bú before a 4th tone, otherwise bù — here 不错 is bú cuò."
+      ]
     },
     {
       "n": 417,
       "zh": "他一边吃饭一边看电视。",
       "py": "tā yì biān chī fàn yì biān kàn diàn shì.",
-      "en": "He eats while watching TV."
+      "en": "He eats while watching TV.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一边 is yì biān."
+      ]
     },
     {
       "n": 418,
@@ -5546,7 +6118,10 @@ window.SENTENCE_DATA = {
       "n": 424,
       "zh": "我们一起唱歌，一起跳舞。",
       "py": "wǒ men yì qǐ chàng gē, yì qǐ tiào wǔ.",
-      "en": "We sing and dance together."
+      "en": "We sing and dance together.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一起 is yì qǐ."
+      ]
     },
     {
       "n": 425,
@@ -5570,7 +6145,10 @@ window.SENTENCE_DATA = {
       "n": 428,
       "zh": "我们在宾馆休息了一会儿。",
       "py": "wǒ men zài bīn guǎn xiū xī le yí huìr.",
-      "en": "We rested for a while at the hotel."
+      "en": "We rested for a while at the hotel.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一会 is yí huì."
+      ]
     },
     {
       "n": 429,
@@ -5612,7 +6190,10 @@ window.SENTENCE_DATA = {
       "n": 435,
       "zh": "我觉得这个宾馆很好。",
       "py": "wǒ jué de zhè ge bīn guǎn hěn hǎo.",
-      "en": "I think this hotel is very good."
+      "en": "I think this hotel is very good.",
+      "notes": [
+        "Polyphone: 觉 is jué in 觉得 (to feel / think), but jiào in 睡觉 (to sleep)."
+      ]
     },
     {
       "n": 436,
@@ -5630,7 +6211,10 @@ window.SENTENCE_DATA = {
       "n": 438,
       "zh": "我们一起准备晚上的饭吧。",
       "py": "wǒ men yì qǐ zhǔn bèi wǎn shàng de fàn ba.",
-      "en": "Let's prepare dinner together."
+      "en": "Let's prepare dinner together.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一起 is yì qǐ."
+      ]
     },
     {
       "n": 439,
@@ -5672,7 +6256,10 @@ window.SENTENCE_DATA = {
       "n": 445,
       "zh": "我每天早上都看一会儿报纸。",
       "py": "wǒ měi tiān zǎo shàng dōu kàn yí huìr bào zhǐ.",
-      "en": "I read the newspaper for a while every morning."
+      "en": "I read the newspaper for a while every morning.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一会 is yí huì."
+      ]
     },
     {
       "n": 446,
@@ -5684,13 +6271,19 @@ window.SENTENCE_DATA = {
       "n": 447,
       "zh": "我们坐在一起，喝茶说话。",
       "py": "wǒ men zuò zài yì qǐ, hē chá shuō huà.",
-      "en": "We sit together, drinking tea and chatting."
+      "en": "We sit together, drinking tea and chatting.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一起 is yì qǐ."
+      ]
     },
     {
       "n": 448,
       "zh": "他给我介绍了一个新朋友。",
       "py": "tā gěi wǒ jiè shào le yí gè xīn péng yǒu.",
-      "en": "He introduced me to a new friend."
+      "en": "He introduced me to a new friend.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一个 is yí gè."
+      ]
     },
     {
       "n": 449,
@@ -5702,7 +6295,10 @@ window.SENTENCE_DATA = {
       "n": 450,
       "zh": "学习虽然累，但是我很快乐。",
       "py": "xué xí suī rán lèi, dàn shì wǒ hěn kuài lè.",
-      "en": "Studying is tiring, but I'm happy."
+      "en": "Studying is tiring, but I'm happy.",
+      "notes": [
+        "Polyphone: 乐 is lè when it means \"happy\" (快乐, 可乐), but yuè in 音乐 (music)."
+      ]
     },
     {
       "n": 451,
@@ -5732,7 +6328,10 @@ window.SENTENCE_DATA = {
       "n": 455,
       "zh": "等天气好了，我们一起去旅游。",
       "py": "děng tiān qì hǎo le, wǒ men yì qǐ qù lǚ yóu.",
-      "en": "When the weather gets nice, let's go traveling together."
+      "en": "When the weather gets nice, let's go traveling together.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一起 is yì qǐ."
+      ]
     },
     {
       "n": 456,
@@ -5768,7 +6367,10 @@ window.SENTENCE_DATA = {
       "n": 461,
       "zh": "我们的新教室很大，也很新。",
       "py": "wǒ men de xīn jiào shì hěn dà, yě hěn xīn.",
-      "en": "Our new classroom is big and new."
+      "en": "Our new classroom is big and new.",
+      "notes": [
+        "Polyphone: 教 is jiào in 教室 (classroom), but jiāo as the verb \"to teach\"."
+      ]
     },
     {
       "n": 462,
@@ -5798,13 +6400,19 @@ window.SENTENCE_DATA = {
       "n": 466,
       "zh": "他从公司回家要一个小时。",
       "py": "tā cóng gōng sī huí jiā yào yí gè xiǎo shí.",
-      "en": "It takes him an hour to get home from the company."
+      "en": "It takes him an hour to get home from the company.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一个 is yí gè."
+      ]
     },
     {
       "n": 467,
       "zh": "我觉得你今天看起来很高兴。",
       "py": "wǒ jué de nǐ jīn tiān kàn qǐ lái hěn gāo xìng.",
-      "en": "I think you look very happy today."
+      "en": "I think you look very happy today.",
+      "notes": [
+        "Polyphone: 觉 is jué in 觉得 (to feel / think), but jiào in 睡觉 (to sleep)."
+      ]
     },
     {
       "n": 468,
@@ -5822,7 +6430,10 @@ window.SENTENCE_DATA = {
       "n": 470,
       "zh": "谢谢大家，今天我真的很快乐。",
       "py": "xiè xiè dà jiā, jīn tiān wǒ zhēn de hěn kuài lè.",
-      "en": "Thank you everyone, I'm really happy today."
+      "en": "Thank you everyone, I'm really happy today.",
+      "notes": [
+        "Polyphone: 乐 is lè when it means \"happy\" (快乐, 可乐), but yuè in 音乐 (music)."
+      ]
     },
     {
       "n": 471,
@@ -5834,7 +6445,10 @@ window.SENTENCE_DATA = {
       "n": 472,
       "zh": "我每天坐公共汽车上班，要一个小时。",
       "py": "wǒ měi tiān zuò gōng gòng qì chē shàng bān, yào yí gè xiǎo shí.",
-      "en": "I take the bus to work every day; it takes an hour."
+      "en": "I take the bus to work every day; it takes an hour.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一个 is yí gè."
+      ]
     },
     {
       "n": 473,
@@ -5900,7 +6514,10 @@ window.SENTENCE_DATA = {
       "n": 483,
       "zh": "他给我介绍了一个公司。",
       "py": "tā gěi wǒ jiè shào le yí gè gōng sī.",
-      "en": "He introduced me to a company."
+      "en": "He introduced me to a company.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一个 is yí gè."
+      ]
     },
     {
       "n": 484,
@@ -5924,13 +6541,19 @@ window.SENTENCE_DATA = {
       "n": 487,
       "zh": "他身体不太好，常常生病。",
       "py": "tā shēn tǐ bú tài hǎo, cháng cháng shēng bìng.",
-      "en": "He isn't very healthy and often gets sick."
+      "en": "He isn't very healthy and often gets sick.",
+      "notes": [
+        "Tone change: 不 becomes bú before a 4th tone, otherwise bù — here 不太 is bú tài."
+      ]
     },
     {
       "n": 488,
       "zh": "我们一起准备晚上的考试吧。",
       "py": "wǒ men yì qǐ zhǔn bèi wǎn shàng de kǎo shì ba.",
-      "en": "Let's prepare for tonight's exam together."
+      "en": "Let's prepare for tonight's exam together.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一起 is yì qǐ."
+      ]
     },
     {
       "n": 489,
@@ -5978,7 +6601,10 @@ window.SENTENCE_DATA = {
       "n": 496,
       "zh": "这个手机不贵，也很漂亮。",
       "py": "zhè ge shǒu jī bú guì, yě hěn piào liàng.",
-      "en": "This phone isn't expensive and is pretty."
+      "en": "This phone isn't expensive and is pretty.",
+      "notes": [
+        "Tone change: 不 becomes bú before a 4th tone, otherwise bù — here 不贵 is bú guì."
+      ]
     },
     {
       "n": 497,
@@ -6052,7 +6678,10 @@ window.SENTENCE_DATA = {
       "n": 8,
       "zh": "我不是老师，我是学生。",
       "py": "wǒ bú shì lǎo shī, wǒ shì xué shēng.",
-      "en": "I'm not a teacher; I'm a student."
+      "en": "I'm not a teacher; I'm a student.",
+      "notes": [
+        "Tone change: 不 becomes bú before a 4th tone, otherwise bù — here 不是 is bú shì."
+      ]
     },
     {
       "n": 9,
@@ -6130,7 +6759,10 @@ window.SENTENCE_DATA = {
       "n": 21,
       "zh": "他不是我弟弟，他是我大哥的儿子。",
       "py": "tā bú shì wǒ dì di, tā shì wǒ dà gē de ér zi.",
-      "en": "He isn't my younger brother; he's my eldest brother's son."
+      "en": "He isn't my younger brother; he's my eldest brother's son.",
+      "notes": [
+        "Tone change: 不 becomes bú before a 4th tone, otherwise bù — here 不是 is bú shì."
+      ]
     },
     {
       "n": 22,
@@ -6274,7 +6906,10 @@ window.SENTENCE_DATA = {
       "n": 45,
       "zh": "你认识不认识李友？",
       "py": "nǐ rèn shí bú rèn shí lǐ yǒu?",
-      "en": "Do you know Li You?"
+      "en": "Do you know Li You?",
+      "notes": [
+        "Tone change: 不 becomes bú before a 4th tone, otherwise bù — here 不认 is bú rèn."
+      ]
     },
     {
       "n": 46,
@@ -6298,13 +6933,19 @@ window.SENTENCE_DATA = {
       "n": 49,
       "zh": "我喜欢唱歌、跳舞，还喜欢听音乐。",
       "py": "wǒ xǐ huān chàng gē, tiào wǔ, hái xǐ huān tīng yīn yuè.",
-      "en": "I like singing and dancing, and I also like listening to music."
+      "en": "I like singing and dancing, and I also like listening to music.",
+      "notes": [
+        "Polyphone: 乐 is yuè in 音乐 (music), but lè when it means \"happy\" (快乐, 可乐)."
+      ]
     },
     {
       "n": 50,
       "zh": "你也喜欢看书，对不对？",
       "py": "nǐ yě xǐ huān kàn shū, duì bú duì?",
-      "en": "You also like reading, right?"
+      "en": "You also like reading, right?",
+      "notes": [
+        "Tone change: 不 becomes bú before a 4th tone, otherwise bù — here 不对 is bú duì."
+      ]
     },
     {
       "n": 51,
@@ -6328,7 +6969,10 @@ window.SENTENCE_DATA = {
       "n": 54,
       "zh": "我们今天晚上去看一个外国电影，怎么样？",
       "py": "wǒ men jīn tiān wǎn shàng qù kàn yí gè wài guó diàn yǐng, zěn me yàng?",
-      "en": "Let's go see a foreign movie tonight — how about it?"
+      "en": "Let's go see a foreign movie tonight — how about it?",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一个 is yí gè."
+      ]
     },
     {
       "n": 55,
@@ -6352,7 +6996,10 @@ window.SENTENCE_DATA = {
       "n": 58,
       "zh": "看球？我觉得看球也没有意思。",
       "py": "kàn qiú? wǒ jué de kàn qiú yě méi yǒu yì si.",
-      "en": "Watch a game? I think watching a game is boring too."
+      "en": "Watch a game? I think watching a game is boring too.",
+      "notes": [
+        "Polyphone: 觉 is jué in 觉得 (to feel / think), but jiào in 睡觉 (to sleep)."
+      ]
     },
     {
       "n": 59,
@@ -6364,7 +7011,10 @@ window.SENTENCE_DATA = {
       "n": 60,
       "zh": "我只想吃饭、睡觉。",
       "py": "wǒ zhǐ xiǎng chī fàn, shuì jiào.",
-      "en": "I just want to eat and sleep."
+      "en": "I just want to eat and sleep.",
+      "notes": [
+        "Polyphone: 觉 is jiào in 睡觉 (to sleep), but jué in 觉得 (to feel / think)."
+      ]
     },
     {
       "n": 61,
@@ -6430,19 +7080,30 @@ window.SENTENCE_DATA = {
       "n": 71,
       "zh": "我要一瓶可乐，可以吗？",
       "py": "wǒ yào yì píng kě lè, kě yǐ ma?",
-      "en": "I'd like a bottle of cola — is that okay?"
+      "en": "I'd like a bottle of cola — is that okay?",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一瓶 is yì píng.",
+        "Polyphone: 乐 is lè when it means \"happy\" (快乐, 可乐), but yuè in 音乐 (music)."
+      ]
     },
     {
       "n": 72,
       "zh": "对不起，我们家没有可乐。",
       "py": "duì bu qǐ, wǒ men jiā méi yǒu kě lè.",
-      "en": "Sorry, we don't have cola at home."
+      "en": "Sorry, we don't have cola at home.",
+      "notes": [
+        "Tone change: in 对不起 the 不 is toneless — duì bu qǐ.",
+        "Polyphone: 乐 is lè when it means \"happy\" (快乐, 可乐), but yuè in 音乐 (music)."
+      ]
     },
     {
       "n": 73,
       "zh": "那给我一杯水吧。",
       "py": "nà gěi wǒ yì bēi shuǐ ba.",
-      "en": "Then give me a glass of water."
+      "en": "Then give me a glass of water.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一杯 is yì bēi."
+      ]
     },
     {
       "n": 74,
@@ -6460,13 +7121,19 @@ window.SENTENCE_DATA = {
       "n": 76,
       "zh": "王朋喝了两杯茶，李友只喝了一杯水。",
       "py": "wáng péng hē le liǎng bēi chá, lǐ yǒu zhǐ hē le yì bēi shuǐ.",
-      "en": "Wang Peng drank two cups of tea; Li You only drank one glass of water."
+      "en": "Wang Peng drank two cups of tea; Li You only drank one glass of water.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一杯 is yì bēi."
+      ]
     },
     {
       "n": 77,
       "zh": "他们一起聊天儿、看电视。",
       "py": "tā men yì qǐ liáo tiānr, kàn diàn shì.",
-      "en": "They chatted and watched TV together."
+      "en": "They chatted and watched TV together.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一起 is yì qǐ."
+      ]
     },
     {
       "n": 78,
@@ -6502,7 +7169,10 @@ window.SENTENCE_DATA = {
       "n": 83,
       "zh": "对不起，今天下午我要开会。",
       "py": "duì bu qǐ, jīn tiān xià wǔ wǒ yào kāi huì.",
-      "en": "Sorry, this afternoon I have a meeting."
+      "en": "Sorry, this afternoon I have a meeting.",
+      "notes": [
+        "Tone change: in 对不起 the 不 is toneless — duì bu qǐ."
+      ]
     },
     {
       "n": 84,
@@ -6520,19 +7190,28 @@ window.SENTENCE_DATA = {
       "n": 86,
       "zh": "您什么时候有空儿？",
       "py": "nín shén me shí hòu yǒu kòngr?",
-      "en": "When are you free?"
+      "en": "When are you free?",
+      "notes": [
+        "Polyphone: 空 is kòng when it means \"free time\" (有空儿), but kōng for \"empty / air\" (航空)."
+      ]
     },
     {
       "n": 87,
       "zh": "我四点以后才有空儿。",
       "py": "wǒ sì diǎn yǐ hòu cái yǒu kòngr.",
-      "en": "I'm not free until after four."
+      "en": "I'm not free until after four.",
+      "notes": [
+        "Polyphone: 空 is kòng when it means \"free time\" (有空儿), but kōng for \"empty / air\" (航空)."
+      ]
     },
     {
       "n": 88,
       "zh": "要是您方便，四点半我到您的办公室去，行吗？",
       "py": "yào shì nín fāng biàn, sì diǎn bàn wǒ dào nín de bàn gōng shì qù, xíng ma?",
-      "en": "If it's convenient for you, I'll come to your office at four thirty — is that all right?"
+      "en": "If it's convenient for you, I'll come to your office at four thirty — is that all right?",
+      "notes": [
+        "Polyphone: 便 is biàn in 方便 (convenient), but pián in 便宜 (cheap)."
+      ]
     },
     {
       "n": 89,
@@ -6556,7 +7235,10 @@ window.SENTENCE_DATA = {
       "n": 92,
       "zh": "你帮我准备一下，好吗？",
       "py": "nǐ bāng wǒ zhǔn bèi yí xià, hǎo ma?",
-      "en": "Help me prepare a bit, okay?"
+      "en": "Help me prepare a bit, okay?",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一下 is yí xià."
+      ]
     },
     {
       "n": 93,
@@ -6568,7 +7250,10 @@ window.SENTENCE_DATA = {
       "n": 94,
       "zh": "好啊，但是你得请我喝咖啡。",
       "py": "hǎo a, dàn shì nǐ děi qǐng wǒ hē kā fēi.",
-      "en": "Sure, but you have to treat me to coffee."
+      "en": "Sure, but you have to treat me to coffee.",
+      "notes": [
+        "Polyphone: 得 is děi when it means \"must / have to\"; as the verb complement particle (说得很好) it is neutral de."
+      ]
     },
     {
       "n": 95,
@@ -6580,7 +7265,10 @@ window.SENTENCE_DATA = {
       "n": 96,
       "zh": "因为你帮我复习，所以考得不错。",
       "py": "yīn wèi nǐ bāng wǒ fù xí, suǒ yǐ kǎo de bú cuò.",
-      "en": "Because you helped me review, I did pretty well."
+      "en": "Because you helped me review, I did pretty well.",
+      "notes": [
+        "Tone change: 不 becomes bú before a 4th tone, otherwise bù — here 不错 is bú cuò."
+      ]
     },
     {
       "n": 97,
@@ -6592,7 +7280,10 @@ window.SENTENCE_DATA = {
       "n": 98,
       "zh": "以后我跟你一起练习写字，好不好？",
       "py": "yǐ hòu wǒ gēn nǐ yì qǐ liàn xí xiě zì, hǎo bù hǎo?",
-      "en": "From now on I'll practice writing characters with you, okay?"
+      "en": "From now on I'll practice writing characters with you, okay?",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一起 is yì qǐ."
+      ]
     },
     {
       "n": 99,
@@ -6604,13 +7295,20 @@ window.SENTENCE_DATA = {
       "n": 100,
       "zh": "给我一支笔、一张纸。",
       "py": "gěi wǒ yì zhī bǐ, yì zhāng zhǐ.",
-      "en": "Give me a pen and a sheet of paper."
+      "en": "Give me a pen and a sheet of paper.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一支 is yì zhī.",
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一张 is yì zhāng."
+      ]
     },
     {
       "n": 101,
       "zh": "你教我怎么写这个字吧。",
       "py": "nǐ jiāo wǒ zěn me xiě zhè ge zì ba.",
-      "en": "Teach me how to write this character."
+      "en": "Teach me how to write this character.",
+      "notes": [
+        "Polyphone: 教 is jiāo as the verb \"to teach\", but jiào in 教室 (classroom)."
+      ]
     },
     {
       "n": 102,
@@ -6628,7 +7326,10 @@ window.SENTENCE_DATA = {
       "n": 104,
       "zh": "我昨天预习中文，早上四点才睡觉。",
       "py": "wǒ zuó tiān yù xí zhōng wén, zǎo shàng sì diǎn cái shuì jiào.",
-      "en": "I was previewing the Chinese lesson yesterday and didn't go to bed until four in the morning."
+      "en": "I was previewing the Chinese lesson yesterday and didn't go to bed until four in the morning.",
+      "notes": [
+        "Polyphone: 觉 is jiào in 睡觉 (to sleep), but jué in 觉得 (to feel / think)."
+      ]
     },
     {
       "n": 105,
@@ -6646,7 +7347,11 @@ window.SENTENCE_DATA = {
       "n": 107,
       "zh": "我觉得第七课的语法有一点儿难。",
       "py": "wǒ jué de dì qī kè de yǔ fǎ yǒu yì diǎnr nán.",
-      "en": "I think the grammar in Lesson Seven is a little hard."
+      "en": "I think the grammar in Lesson Seven is a little hard.",
+      "notes": [
+        "Polyphone: 觉 is jué in 觉得 (to feel / think), but jiào in 睡觉 (to sleep).",
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一点 is yì diǎn."
+      ]
     },
     {
       "n": 108,
@@ -6676,19 +7381,28 @@ window.SENTENCE_DATA = {
       "n": 112,
       "zh": "我常常一边吃饭，一边听录音。",
       "py": "wǒ cháng cháng yì biān chī fàn, yì biān tīng lù yīn.",
-      "en": "I often listen to recordings while I eat."
+      "en": "I often listen to recordings while I eat.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一边 is yì biān."
+      ]
     },
     {
       "n": 113,
       "zh": "我九点到教室去上课。",
       "py": "wǒ jiǔ diǎn dào jiào shì qù shàng kè.",
-      "en": "At nine I go to the classroom for class."
+      "en": "At nine I go to the classroom for class.",
+      "notes": [
+        "Polyphone: 教 is jiào in 教室 (classroom), but jiāo as the verb \"to teach\"."
+      ]
     },
     {
       "n": 114,
       "zh": "第一节课是中文，老师教我们发音、生词和语法。",
       "py": "dì yī jié kè shì zhōng wén, lǎo shī jiāo wǒ men fā yīn, shēng cí hé yǔ fǎ.",
-      "en": "The first class is Chinese; the teacher teaches us pronunciation, new words, and grammar."
+      "en": "The first class is Chinese; the teacher teaches us pronunciation, new words, and grammar.",
+      "notes": [
+        "Polyphone: 教 is jiāo as the verb \"to teach\", but jiào in 教室 (classroom)."
+      ]
     },
     {
       "n": 115,
@@ -6706,13 +7420,19 @@ window.SENTENCE_DATA = {
       "n": 117,
       "zh": "中午我和同学们一起到餐厅去吃午饭。",
       "py": "zhōng wǔ wǒ hé tóng xué men yì qǐ dào cān tīng qù chī wǔ fàn.",
-      "en": "At noon I go to the cafeteria with my classmates to eat lunch."
+      "en": "At noon I go to the cafeteria with my classmates to eat lunch.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一起 is yì qǐ."
+      ]
     },
     {
       "n": 118,
       "zh": "我们一边吃，一边练习说中文。",
       "py": "wǒ men yì biān chī, yì biān liàn xí shuō zhōng wén.",
-      "en": "We practice speaking Chinese while we eat."
+      "en": "We practice speaking Chinese while we eat.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一边 is yì biān."
+      ]
     },
     {
       "n": 119,
@@ -6736,7 +7456,11 @@ window.SENTENCE_DATA = {
       "n": 122,
       "zh": "睡觉以前，高文中给我打了一个电话。",
       "py": "shuì jiào yǐ qián, gāo wén zhōng gěi wǒ dǎ le yí gè diàn huà.",
-      "en": "Before I went to bed, Gao Wenzhong gave me a call."
+      "en": "Before I went to bed, Gao Wenzhong gave me a call.",
+      "notes": [
+        "Polyphone: 觉 is jiào in 睡觉 (to sleep), but jué in 觉得 (to feel / think).",
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一个 is yí gè."
+      ]
     },
     {
       "n": 123,
@@ -6748,13 +7472,20 @@ window.SENTENCE_DATA = {
       "n": 124,
       "zh": "除了专业课以外，我还得学中文。",
       "py": "chú le zhuān yè kè yǐ wài, wǒ hái děi xué zhōng wén.",
-      "en": "Besides my major courses, I also have to study Chinese."
+      "en": "Besides my major courses, I also have to study Chinese.",
+      "notes": [
+        "Polyphone: 得 is děi when it means \"must / have to\"; as the verb complement particle (说得很好) it is neutral de."
+      ]
     },
     {
       "n": 125,
       "zh": "下个星期六我们学校有一个音乐会，希望你能来。",
       "py": "xià gè xīng qī liù wǒ men xué xiào yǒu yí gè yīn yuè huì, xī wàng nǐ néng lái.",
-      "en": "Next Saturday there's a concert at our school — I hope you can come."
+      "en": "Next Saturday there's a concert at our school — I hope you can come.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一个 is yí gè.",
+        "Polyphone: 乐 is yuè in 音乐 (music), but lè when it means \"happy\" (快乐, 可乐)."
+      ]
     },
     {
       "n": 126,
@@ -6766,7 +7497,10 @@ window.SENTENCE_DATA = {
       "n": 127,
       "zh": "我想买一件衬衫。",
       "py": "wǒ xiǎng mǎi yí jiàn chèn shān.",
-      "en": "I'd like to buy a shirt."
+      "en": "I'd like to buy a shirt.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一件 is yí jiàn."
+      ]
     },
     {
       "n": 128,
@@ -6784,7 +7518,10 @@ window.SENTENCE_DATA = {
       "n": 130,
       "zh": "我还想买一条裤子。",
       "py": "wǒ hái xiǎng mǎi yì tiáo kù zi.",
-      "en": "I'd also like to buy a pair of pants."
+      "en": "I'd also like to buy a pair of pants.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一条 is yì tiáo."
+      ]
     },
     {
       "n": 131,
@@ -6796,7 +7533,11 @@ window.SENTENCE_DATA = {
       "n": 132,
       "zh": "中号的，不要太贵的，也不要太便宜的。",
       "py": "zhōng hào de, bú yào tài guì de, yě bú yào tài pián yi de.",
-      "en": "Medium — not too expensive, but not too cheap either."
+      "en": "Medium — not too expensive, but not too cheap either.",
+      "notes": [
+        "Tone change: 不 becomes bú before a 4th tone, otherwise bù — here 不要 is bú yào.",
+        "Polyphone: 便 is pián in 便宜 (cheap), but biàn in 方便 (convenient)."
+      ]
     },
     {
       "n": 133,
@@ -6808,31 +7549,47 @@ window.SENTENCE_DATA = {
       "n": 134,
       "zh": "一共多少钱？",
       "py": "yí gòng duō shǎo qián?",
-      "en": "How much altogether?"
+      "en": "How much altogether?",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一共 is yí gòng."
+      ]
     },
     {
       "n": 135,
       "zh": "衬衫二十一块五，裤子三十二块九毛九。",
       "py": "chèn shān èr shí yí kuài wǔ, kù zi sān shí èr kuài jiǔ máo jiǔ.",
-      "en": "The shirt is twenty-one fifty; the pants are thirty-two ninety-nine."
+      "en": "The shirt is twenty-one fifty; the pants are thirty-two ninety-nine.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一块 is yí kuài."
+      ]
     },
     {
       "n": 136,
       "zh": "一共五十四块四毛九分。",
       "py": "yí gòng wǔ shí sì kuài sì máo jiǔ fēn.",
-      "en": "Altogether that's fifty-four forty-nine."
+      "en": "Altogether that's fifty-four forty-nine.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一共 is yí gòng."
+      ]
     },
     {
       "n": 137,
       "zh": "对不起，这双鞋太小了，能不能换一双？",
       "py": "duì bu qǐ, zhè shuāng xié tài xiǎo le, néng bù néng huàn yì shuāng?",
-      "en": "Excuse me, these shoes are too small — can I exchange them for another pair?"
+      "en": "Excuse me, these shoes are too small — can I exchange them for another pair?",
+      "notes": [
+        "Tone change: in 对不起 the 不 is toneless — duì bu qǐ.",
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一双 is yì shuāng."
+      ]
     },
     {
       "n": 138,
       "zh": "不行，这双跟那双一样大。",
       "py": "bù xíng, zhè shuāng gēn nà shuāng yí yàng dà.",
-      "en": "That won't do — this pair is the same size as that pair."
+      "en": "That won't do — this pair is the same size as that pair.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一样 is yí yàng."
+      ]
     },
     {
       "n": 139,
@@ -6850,7 +7607,10 @@ window.SENTENCE_DATA = {
       "n": 141,
       "zh": "对不起，这种鞋只有黑的。",
       "py": "duì bu qǐ, zhè zhǒng xié zhǐ yǒu hēi de.",
-      "en": "Sorry, this kind of shoe only comes in black."
+      "en": "Sorry, this kind of shoe only comes in black.",
+      "notes": [
+        "Tone change: in 对不起 the 不 is toneless — duì bu qǐ."
+      ]
     },
     {
       "n": 142,
@@ -6964,13 +7724,19 @@ window.SENTENCE_DATA = {
       "n": 160,
       "zh": "这儿没有公共汽车，也没有地铁，只能自己开车，很不方便。",
       "py": "zhèr méi yǒu gōng gòng qì chē, yě méi yǒu dì tiě, zhǐ néng zì jǐ kāi chē, hěn bù fāng biàn.",
-      "en": "There are no buses or subway here — you can only drive yourself. It's very inconvenient."
+      "en": "There are no buses or subway here — you can only drive yourself. It's very inconvenient.",
+      "notes": [
+        "Polyphone: 便 is biàn in 方便 (convenient), but pián in 便宜 (cheap)."
+      ]
     },
     {
       "n": 161,
       "zh": "今天天气比昨天好，不下雪了。",
       "py": "jīn tiān tiān qì bǐ zuó tiān hǎo, bú xià xuě le.",
-      "en": "The weather today is better than yesterday — it's stopped snowing."
+      "en": "The weather today is better than yesterday — it's stopped snowing.",
+      "notes": [
+        "Tone change: 不 becomes bú before a 4th tone, otherwise bù — here 不下 is bú xià."
+      ]
     },
     {
       "n": 162,
@@ -6994,7 +7760,12 @@ window.SENTENCE_DATA = {
       "n": 165,
       "zh": "不但不会下雪，而且会暖和一点儿。",
       "py": "bú dàn bú huì xià xuě, ér qiě huì nuǎn huo yì diǎnr.",
-      "en": "Not only won't it snow, it will even be a bit warmer."
+      "en": "Not only won't it snow, it will even be a bit warmer.",
+      "notes": [
+        "Tone change: 不 becomes bú before a 4th tone, otherwise bù — here 不但 is bú dàn.",
+        "Tone change: 不 becomes bú before a 4th tone, otherwise bù — here 不会 is bú huì.",
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一点 is yì diǎn."
+      ]
     },
     {
       "n": 166,
@@ -7030,7 +7801,10 @@ window.SENTENCE_DATA = {
       "n": 171,
       "zh": "加州冬天不冷，夏天不热。",
       "py": "jiā zhōu dōng tiān bù lěng, xià tiān bú rè.",
-      "en": "In California, winter isn't cold and summer isn't hot."
+      "en": "In California, winter isn't cold and summer isn't hot.",
+      "notes": [
+        "Tone change: 不 becomes bú before a 4th tone, otherwise bù — here 不热 is bú rè."
+      ]
     },
     {
       "n": 172,
@@ -7066,7 +7840,10 @@ window.SENTENCE_DATA = {
       "n": 177,
       "zh": "好像一个位子都没有了。",
       "py": "hǎo xiàng yí gè wèi zi dōu méi yǒu le.",
-      "en": "It seems there isn't a single seat left."
+      "en": "It seems there isn't a single seat left.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一个 is yí gè."
+      ]
     },
     {
       "n": 178,
@@ -7084,13 +7861,20 @@ window.SENTENCE_DATA = {
       "n": 180,
       "zh": "我要一盘饺子，要素的。",
       "py": "wǒ yào yì pán jiǎo zi, yào sù de.",
-      "en": "I'd like a plate of dumplings — vegetarian ones."
+      "en": "I'd like a plate of dumplings — vegetarian ones.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一盘 is yì pán."
+      ]
     },
     {
       "n": 181,
       "zh": "再来一盘家常豆腐，不要放肉。",
       "py": "zài lái yì pán jiā cháng dòu fǔ, bú yào fàng ròu.",
-      "en": "Also a plate of home-style tofu — don't put any meat in it."
+      "en": "Also a plate of home-style tofu — don't put any meat in it.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一盘 is yì pán.",
+        "Tone change: 不 becomes bú before a 4th tone, otherwise bù — here 不要 is bú yào."
+      ]
     },
     {
       "n": 182,
@@ -7102,13 +7886,19 @@ window.SENTENCE_DATA = {
       "n": 183,
       "zh": "还要两碗酸辣汤，不要放味精，少放点儿盐。",
       "py": "hái yào liǎng wǎn suān là tāng, bú yào fàng wèi jīng, shǎo fàng diǎnr yán.",
-      "en": "We also want two bowls of hot-and-sour soup — no MSG, and easy on the salt."
+      "en": "We also want two bowls of hot-and-sour soup — no MSG, and easy on the salt.",
+      "notes": [
+        "Tone change: 不 becomes bú before a 4th tone, otherwise bù — here 不要 is bú yào."
+      ]
     },
     {
       "n": 184,
       "zh": "对不起，白菜刚卖完。",
       "py": "duì bu qǐ, bái cài gāng mài wán.",
-      "en": "Sorry, we just sold out of cabbage."
+      "en": "Sorry, we just sold out of cabbage.",
+      "notes": [
+        "Tone change: in 对不起 the 不 is toneless — duì bu qǐ."
+      ]
     },
     {
       "n": 185,
@@ -7120,7 +7910,10 @@ window.SENTENCE_DATA = {
       "n": 186,
       "zh": "我饿死了，请上菜快一点儿。",
       "py": "wǒ è sǐ le, qǐng shàng cài kuài yì diǎnr.",
-      "en": "I'm starving — please bring the food a little faster."
+      "en": "I'm starving — please bring the food a little faster.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一点 is yì diǎn."
+      ]
     },
     {
       "n": 187,
@@ -7144,13 +7937,19 @@ window.SENTENCE_DATA = {
       "n": 190,
       "zh": "那就来一个凉拌黄瓜吧。",
       "py": "nà jiù lái yí gè liáng bàn huáng guā ba.",
-      "en": "Then I'll have a cucumber salad."
+      "en": "Then I'll have a cucumber salad.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一个 is yí gè."
+      ]
     },
     {
       "n": 191,
       "zh": "再来一碗米饭。",
       "py": "zài lái yì wǎn mǐ fàn.",
-      "en": "And a bowl of rice, please."
+      "en": "And a bowl of rice, please.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一碗 is yì wǎn."
+      ]
     },
     {
       "n": 192,
@@ -7216,13 +8015,19 @@ window.SENTENCE_DATA = {
       "n": 202,
       "zh": "从这儿一直往南开。",
       "py": "cóng zhèr yì zhí wǎng nán kāi.",
-      "en": "From here, drive straight south."
+      "en": "From here, drive straight south.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一直 is yì zhí."
+      ]
     },
     {
       "n": 203,
       "zh": "过三个路口，往西一拐就到了。",
       "py": "guò sān gè lù kǒu, wǎng xī yì guǎi jiù dào le.",
-      "en": "Pass three intersections, turn west, and you're there."
+      "en": "Pass three intersections, turn west, and you're there.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一拐 is yì guǎi."
+      ]
     },
     {
       "n": 204,
@@ -7276,7 +8081,10 @@ window.SENTENCE_DATA = {
       "n": 212,
       "zh": "你带一些饮料和水果吧。",
       "py": "nǐ dài yì xiē yǐn liào hé shuǐ guǒ ba.",
-      "en": "Bring some drinks and fruit."
+      "en": "Bring some drinks and fruit.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一些 is yì xiē."
+      ]
     },
     {
       "n": 213,
@@ -7300,7 +8108,10 @@ window.SENTENCE_DATA = {
       "n": 216,
       "zh": "小音，祝你生日快乐！",
       "py": "xiǎo yīn, zhù nǐ shēng rì kuài lè!",
-      "en": "Xiaoyin, happy birthday!"
+      "en": "Xiaoyin, happy birthday!",
+      "notes": [
+        "Polyphone: 乐 is lè when it means \"happy\" (快乐, 可乐), but yuè in 音乐 (music)."
+      ]
     },
     {
       "n": 217,
@@ -7336,7 +8147,10 @@ window.SENTENCE_DATA = {
       "n": 222,
       "zh": "她长得真可爱。",
       "py": "tā zhǎng de zhēn kě ài.",
-      "en": "She's really cute."
+      "en": "She's really cute.",
+      "notes": [
+        "Polyphone: 长 is zhǎng in 长得 (\"to grow / look\"); when it means \"long\" it is cháng."
+      ]
     },
     {
       "n": 223,
@@ -7366,7 +8180,10 @@ window.SENTENCE_DATA = {
       "n": 227,
       "zh": "我吃了一些剩菜。",
       "py": "wǒ chī le yì xiē shèng cài.",
-      "en": "I ate some leftovers."
+      "en": "I ate some leftovers.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一些 is yì xiē."
+      ]
     },
     {
       "n": 228,
@@ -7378,7 +8195,10 @@ window.SENTENCE_DATA = {
       "n": 229,
       "zh": "要不要打针？",
       "py": "yào bú yào dǎ zhēn?",
-      "en": "Do I need an injection?"
+      "en": "Do I need an injection?",
+      "notes": [
+        "Tone change: 不 becomes bú before a 4th tone, otherwise bù — here 不要 is bú yào."
+      ]
     },
     {
       "n": 230,
@@ -7390,7 +8210,11 @@ window.SENTENCE_DATA = {
       "n": 231,
       "zh": "这种药一天吃三次，一次两片。",
       "py": "zhè zhǒng yào yì tiān chī sān cì, yí cì liǎng piàn.",
-      "en": "Take this medicine three times a day, two tablets each time."
+      "en": "Take this medicine three times a day, two tablets each time.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一天 is yì tiān.",
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一次 is yí cì."
+      ]
     },
     {
       "n": 232,
@@ -7426,7 +8250,10 @@ window.SENTENCE_DATA = {
       "n": 237,
       "zh": "你不去看病，病会越来越重。",
       "py": "nǐ bú qù kàn bìng, bìng huì yuè lái yuè zhòng.",
-      "en": "If you don't get it treated, the illness will get worse and worse."
+      "en": "If you don't get it treated, the illness will get worse and worse.",
+      "notes": [
+        "Tone change: 不 becomes bú before a 4th tone, otherwise bù — here 不去 is bú qù."
+      ]
     },
     {
       "n": 238,
@@ -7438,7 +8265,11 @@ window.SENTENCE_DATA = {
       "n": 239,
       "zh": "这个周末学校演一个中国电影，我们一起去看，好吗？",
       "py": "zhè ge zhōu mò xué xiào yǎn yí gè zhōng guó diàn yǐng, wǒ men yì qǐ qù kàn, hǎo ma?",
-      "en": "This weekend the school is showing a Chinese movie — shall we go see it together?"
+      "en": "This weekend the school is showing a Chinese movie — shall we go see it together?",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一个 is yí gè.",
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一起 is yì qǐ."
+      ]
     },
     {
       "n": 240,
@@ -7462,7 +8293,10 @@ window.SENTENCE_DATA = {
       "n": 243,
       "zh": "还有别人跟我们一起去吗？",
       "py": "hái yǒu bié rén gēn wǒ men yì qǐ qù ma?",
-      "en": "Is anyone else going with us?"
+      "en": "Is anyone else going with us?",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一起 is yì qǐ."
+      ]
     },
     {
       "n": 244,
@@ -7492,7 +8326,10 @@ window.SENTENCE_DATA = {
       "n": 248,
       "zh": "对不起，你是哪位？",
       "py": "duì bu qǐ, nǐ shì nǎ wèi?",
-      "en": "Sorry — who is this?"
+      "en": "Sorry — who is this?",
+      "notes": [
+        "Tone change: in 对不起 the 不 is toneless — duì bu qǐ."
+      ]
     },
     {
       "n": 249,
@@ -7516,7 +8353,10 @@ window.SENTENCE_DATA = {
       "n": 252,
       "zh": "对不起，下个周末我也没有时间。",
       "py": "duì bu qǐ, xià gè zhōu mò wǒ yě méi yǒu shí jiān.",
-      "en": "Sorry, I don't have time next weekend either."
+      "en": "Sorry, I don't have time next weekend either.",
+      "notes": [
+        "Tone change: in 对不起 the 不 is toneless — duì bu qǐ."
+      ]
     },
     {
       "n": 253,
@@ -7528,19 +8368,28 @@ window.SENTENCE_DATA = {
       "n": 254,
       "zh": "他觉得宿舍太吵，房间太小。",
       "py": "tā jué de sù shè tài chǎo, fáng jiān tài xiǎo.",
-      "en": "He thinks the dorm is too noisy and the room too small."
+      "en": "He thinks the dorm is too noisy and the room too small.",
+      "notes": [
+        "Polyphone: 觉 is jué in 觉得 (to feel / think), but jiào in 睡觉 (to sleep)."
+      ]
     },
     {
       "n": 255,
       "zh": "房间太小，连电脑都放不下。",
       "py": "fáng jiān tài xiǎo, lián diàn nǎo dōu fàng bú xià.",
-      "en": "The room is so small there isn't even space for a computer."
+      "en": "The room is so small there isn't even space for a computer.",
+      "notes": [
+        "Tone change: 不 becomes bú before a 4th tone, otherwise bù — here 不下 is bú xià."
+      ]
     },
     {
       "n": 256,
       "zh": "宿舍里没有地方做饭，很不方便。",
       "py": "sù shè lǐ méi yǒu dì fāng zuò fàn, hěn bù fāng biàn.",
-      "en": "There's nowhere to cook in the dorm — it's very inconvenient."
+      "en": "There's nowhere to cook in the dorm — it's very inconvenient.",
+      "notes": [
+        "Polyphone: 便 is biàn in 方便 (convenient), but pián in 便宜 (cheap)."
+      ]
     },
     {
       "n": 257,
@@ -7564,19 +8413,31 @@ window.SENTENCE_DATA = {
       "n": 260,
       "zh": "有啊，一房一厅，还带家具。",
       "py": "yǒu a, yì fáng yì tīng, hái dài jiā jù.",
-      "en": "We do — one bedroom and one living room, and it comes furnished."
+      "en": "We do — one bedroom and one living room, and it comes furnished.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一房 is yì fáng.",
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一厅 is yì tīng."
+      ]
     },
     {
       "n": 261,
       "zh": "客厅里有一套沙发和一张饭桌。",
       "py": "kè tīng lǐ yǒu yí tào shā fā hé yì zhāng fàn zhuō.",
-      "en": "In the living room there's a sofa set and a dining table."
+      "en": "In the living room there's a sofa set and a dining table.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一套 is yí tào.",
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一张 is yì zhāng."
+      ]
     },
     {
       "n": 262,
       "zh": "卧室里有一张床、一张书桌和一个书架。",
       "py": "wò shì lǐ yǒu yì zhāng chuáng, yì zhāng shū zhuō hé yí gè shū jià.",
-      "en": "In the bedroom there's a bed, a desk, and a bookshelf."
+      "en": "In the bedroom there's a bed, a desk, and a bookshelf.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一张 is yì zhāng.",
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一个 is yí gè."
+      ]
     },
     {
       "n": 263,
@@ -7594,13 +8455,19 @@ window.SENTENCE_DATA = {
       "n": 265,
       "zh": "一个月房租多少钱？",
       "py": "yí gè yuè fáng zū duō shǎo qián?",
-      "en": "How much is the rent per month?"
+      "en": "How much is the rent per month?",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一个 is yí gè."
+      ]
     },
     {
       "n": 266,
       "zh": "八百五十块，水电费不用付。",
       "py": "bā bǎi wǔ shí kuài, shuǐ diàn fèi bú yòng fù.",
-      "en": "Eight hundred fifty — you don't pay for water or electricity."
+      "en": "Eight hundred fifty — you don't pay for water or electricity.",
+      "notes": [
+        "Tone change: 不 becomes bú before a 4th tone, otherwise bù — here 不用 is bú yòng."
+      ]
     },
     {
       "n": 267,
@@ -7612,7 +8479,10 @@ window.SENTENCE_DATA = {
       "n": 268,
       "zh": "对不起，我们这儿不许养宠物。",
       "py": "duì bu qǐ, wǒ men zhèr bù xǔ yǎng chǒng wù.",
-      "en": "Sorry, pets aren't allowed here."
+      "en": "Sorry, pets aren't allowed here.",
+      "notes": [
+        "Tone change: in 对不起 the 不 is toneless — duì bu qǐ."
+      ]
     },
     {
       "n": 269,
@@ -7624,7 +8494,10 @@ window.SENTENCE_DATA = {
       "n": 270,
       "zh": "你平常吃得那么多，又不运动，当然越来越胖了。",
       "py": "nǐ píng cháng chī de nà me duō, yòu bú yùn dòng, dāng rán yuè lái yuè pàng le.",
-      "en": "You usually eat so much and never exercise — of course you're getting fatter."
+      "en": "You usually eat so much and never exercise — of course you're getting fatter.",
+      "notes": [
+        "Tone change: 不 becomes bú before a 4th tone, otherwise bù — here 不运 is bú yùn."
+      ]
     },
     {
       "n": 271,
@@ -7648,7 +8521,10 @@ window.SENTENCE_DATA = {
       "n": 274,
       "zh": "打网球得买网球拍、网球鞋，太贵了。",
       "py": "dǎ wǎng qiú děi mǎi wǎng qiú pāi, wǎng qiú xié, tài guì le.",
-      "en": "To play tennis you have to buy a racket and tennis shoes — too expensive."
+      "en": "To play tennis you have to buy a racket and tennis shoes — too expensive.",
+      "notes": [
+        "Polyphone: 得 is děi when it means \"must / have to\"; as the verb complement particle (说得很好) it is neutral de."
+      ]
     },
     {
       "n": 275,
@@ -7684,7 +8560,10 @@ window.SENTENCE_DATA = {
       "n": 280,
       "zh": "足球不是圆的吗？",
       "py": "zú qiú bú shì yuán de ma?",
-      "en": "Isn't a football round?"
+      "en": "Isn't a football round?",
+      "notes": [
+        "Tone change: 不 becomes bú before a 4th tone, otherwise bù — here 不是 is bú shì."
+      ]
     },
     {
       "n": 281,
@@ -7720,7 +8599,10 @@ window.SENTENCE_DATA = {
       "n": 286,
       "zh": "北京是中国的首都，也是中国的政治、文化中心。",
       "py": "běi jīng shì zhōng guó de shǒu dū, yě shì zhōng guó de zhèng zhì, wén huà zhōng xīn.",
-      "en": "Beijing is China's capital, and also its political and cultural center."
+      "en": "Beijing is China's capital, and also its political and cultural center.",
+      "notes": [
+        "Polyphone: 都 is dū in 首都 (capital), but dōu when it means \"all / both\"."
+      ]
     },
     {
       "n": 287,
@@ -7744,13 +8626,19 @@ window.SENTENCE_DATA = {
       "n": 290,
       "zh": "你得赶快办护照，还要办签证。",
       "py": "nǐ děi gǎn kuài bàn hù zhào, hái yào bàn qiān zhèng.",
-      "en": "You need to get a passport right away, and a visa too."
+      "en": "You need to get a passport right away, and a visa too.",
+      "notes": [
+        "Polyphone: 得 is děi when it means \"must / have to\"; as the verb complement particle (说得很好) it is neutral de."
+      ]
     },
     {
       "n": 291,
       "zh": "我们找一家旅行社订机票吧。",
       "py": "wǒ men zhǎo yì jiā lǚ xíng shè dìng jī piào ba.",
-      "en": "Let's find a travel agency to book the plane tickets."
+      "en": "Let's find a travel agency to book the plane tickets.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一家 is yì jiā."
+      ]
     },
     {
       "n": 292,
@@ -7780,13 +8668,21 @@ window.SENTENCE_DATA = {
       "n": 296,
       "zh": "要不要转机？",
       "py": "yào bú yào zhuǎn jī?",
-      "en": "Do I have to change planes?"
+      "en": "Do I have to change planes?",
+      "notes": [
+        "Tone change: 不 becomes bú before a 4th tone, otherwise bù — here 不要 is bú yào."
+      ]
     },
     {
       "n": 297,
       "zh": "我帮您查一下，这家航空公司的票最便宜。",
       "py": "wǒ bāng nín chá yí xià, zhè jiā háng kōng gōng sī de piào zuì pián yi.",
-      "en": "Let me check for you — this airline's tickets are the cheapest."
+      "en": "Let me check for you — this airline's tickets are the cheapest.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一下 is yí xià.",
+        "Polyphone: 空 is kōng in 航空 (aviation, \"air\"), but kòng when it means \"free time\" (有空儿).",
+        "Polyphone: 便 is pián in 便宜 (cheap), but biàn in 方便 (convenient)."
+      ]
     },
     {
       "n": 298,
@@ -7870,7 +8766,10 @@ window.SENTENCE_DATA = {
       "n": 311,
       "zh": "我来介绍一下，这是我的同学李友。",
       "py": "wǒ lái jiè shào yí xià, zhè shì wǒ de tóng xué lǐ yǒu.",
-      "en": "Let me introduce — this is my classmate Li You."
+      "en": "Let me introduce — this is my classmate Li You.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一下 is yí xià."
+      ]
     },
     {
       "n": 312,

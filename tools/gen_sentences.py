@@ -58,9 +58,9 @@ def _next_syllable(pairs, idx):
     return None
 
 
-def to_pinyin(zh: str) -> str:
-    """Tone-marked pinyin with correct polyphone readings, 不/一 tone
-    sandhi and erhua. Word-spaced, punctuation kept inline."""
+def _corrected(zh: str):
+    """Aligned (char, syllable) pairs after polyphone corrections and the
+    written 不/一 tone-sandhi adjustments."""
     pairs = _aligned(zh)
 
     # --- polyphone corrections ---
@@ -109,6 +109,14 @@ def to_pinyin(zh: str) -> str:
             continue
         pairs[idx] = (ch, s)
 
+    return pairs
+
+
+def to_pinyin(zh: str) -> str:
+    """Tone-marked pinyin with correct polyphone readings, 不/一 tone
+    sandhi and erhua. Word-spaced, punctuation kept inline."""
+    pairs = _corrected(zh)
+
     # --- build output, merging erhua ---
     toks = []
     for idx, (ch, s) in enumerate(pairs):
@@ -138,6 +146,70 @@ def to_pinyin(zh: str) -> str:
     # fixed expressions where 不 is conventionally toneless
     text = text.replace("duì bù qǐ", "duì bu qǐ")
     return text
+
+
+# ===================== Polyphone / tone-change notes =====================
+# A sentence gets short notes when a reading rule actually plays out in it:
+# the 一 and 不 tone sandhi, and polyphones whose other reading a learner
+# is likely to know (觉, 得, 长, 乐, 都, 空, 教, 便).  Each note states the
+# rule and how it applies in this sentence.
+
+# (char, syllable used here) -> note.  Only readings that are easy to get
+# wrong are listed; the everyday reading of frequent particles (e.g. the
+# complement 得 = de) is deliberately not flagged on every card.
+POLY_NOTES = {
+    ("觉", "jiào"): "Polyphone: 觉 is jiào in 睡觉 (to sleep), but jué in 觉得 (to feel / think).",
+    ("觉", "jué"):  "Polyphone: 觉 is jué in 觉得 (to feel / think), but jiào in 睡觉 (to sleep).",
+    ("得", "děi"):  "Polyphone: 得 is děi when it means \"must / have to\"; as the verb complement particle (说得很好) it is neutral de.",
+    # 长 = cháng ("long") is unambiguous in context, so only zhǎng is flagged.
+    ("长", "zhǎng"): "Polyphone: 长 is zhǎng in 长得 (\"to grow / look\"); when it means \"long\" it is cháng.",
+    ("乐", "lè"):   "Polyphone: 乐 is lè when it means \"happy\" (快乐, 可乐), but yuè in 音乐 (music).",
+    ("乐", "yuè"):  "Polyphone: 乐 is yuè in 音乐 (music), but lè when it means \"happy\" (快乐, 可乐).",
+    ("都", "dū"):   "Polyphone: 都 is dū in 首都 (capital), but dōu when it means \"all / both\".",
+    ("空", "kòng"): "Polyphone: 空 is kòng when it means \"free time\" (有空儿), but kōng for \"empty / air\" (航空).",
+    ("空", "kōng"): "Polyphone: 空 is kōng in 航空 (aviation, \"air\"), but kòng when it means \"free time\" (有空儿).",
+    ("教", "jiāo"): "Polyphone: 教 is jiāo as the verb \"to teach\", but jiào in 教室 (classroom).",
+    ("教", "jiào"): "Polyphone: 教 is jiào in 教室 (classroom), but jiāo as the verb \"to teach\".",
+    ("便", "pián"): "Polyphone: 便 is pián in 便宜 (cheap), but biàn in 方便 (convenient).",
+    ("便", "biàn"): "Polyphone: 便 is biàn in 方便 (convenient), but pián in 便宜 (cheap).",
+}
+
+def _next_hanzi(pairs, idx):
+    """First (char, syllable) after idx that is an actual Han syllable."""
+    for ch, s in pairs[idx + 1:]:
+        if s is not None:
+            return ch, s
+    return "", ""
+
+
+def polyphone_notes(zh: str):
+    """Ordered, de-duplicated notes for the rules at play in this sentence."""
+    pairs = _corrected(zh)
+    notes = []
+
+    def add(note):
+        if note and note not in notes:
+            notes.append(note)
+
+    if "对不起" in zh:
+        add("Tone change: in 对不起 the 不 is toneless — duì bu qǐ.")
+
+    for idx, (ch, s) in enumerate(pairs):
+        if s is None:
+            continue
+        if ch == "一" and s in ("yí", "yì"):
+            nxt_ch, nxt = _next_hanzi(pairs, idx)
+            add("Tone change: 一 is yī alone or in numbers/dates, "
+                "yí before a 4th tone, yì before 1st/2nd/3rd tones — "
+                f"here 一{nxt_ch} is {s} {nxt}.")
+        elif ch == "不" and s == "bú":
+            nxt_ch, nxt = _next_hanzi(pairs, idx)
+            add("Tone change: 不 becomes bú before a 4th tone, otherwise bù — "
+                f"here 不{nxt_ch} is bú {nxt}.")
+        elif (ch, s) in POLY_NOTES:
+            add(POLY_NOTES[(ch, s)])
+
+    return notes
 
 
 # Each entry: (chinese, english)
@@ -1745,11 +1817,16 @@ IC1 = [
 
 # ===================== Build output =====================
 
+def _item(n, zh, en):
+    row = {"n": n, "zh": zh, "py": to_pinyin(zh), "en": en}
+    notes = polyphone_notes(zh)
+    if notes:
+        row["notes"] = notes
+    return row
+
+
 def build(pairs):
-    items = []
-    for i, (zh, en) in enumerate(pairs, start=1):
-        items.append({"n": i, "zh": zh, "py": to_pinyin(zh), "en": en})
-    return items
+    return [_item(i, zh, en) for i, (zh, en) in enumerate(pairs, start=1)]
 
 
 def build_ic1():
@@ -1759,7 +1836,7 @@ def build_ic1():
     for num, theme, sentences in IC1:
         start = n
         for zh, en in sentences:
-            items.append({"n": n, "zh": zh, "py": to_pinyin(zh), "en": en})
+            items.append(_item(n, zh, en))
             n += 1
         lessons.append({"n": num, "title": theme, "from": start, "to": n - 1})
     return items, lessons
