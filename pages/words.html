@@ -213,7 +213,7 @@
   <!-- START -->
   <section id="start" class="screen active">
     <h1>Word Trainer</h1>
-    <p class="sub">Learn Chinese words — flashcard style. (Integrated Chinese Lessons 1–20, plus Food, Common Verbs &amp; Numbers)</p>
+    <p class="sub">Learn Chinese words — flashcard style. (Integrated Chinese Lessons 1–20, plus Food, Common Verbs, Numbers &amp; Tutor Notes)</p>
 
     <p class="label">Lesson</p>
     <select class="sel-input" id="lessonSel"></select>
@@ -341,6 +341,7 @@
     { id: "FOOD",    theme: "Food & Drink" },
     { id: "VERBS",   theme: "Common Verbs" },
     { id: "NUMBERS", theme: "Numbers" },
+    { id: "TUTOR",   theme: "Tutor Notes" },
   ];
 
   // ----- Data: vocabulary (Integrated Chinese, Level 1, Lessons 1–20) -----
@@ -1227,6 +1228,13 @@
     { w: "多少",   pinyin: "duōshǎo",     pos: "nu",     def: "how many, how much",          mnem: "<b>Many</b> (多) or <b>few</b> (少) — asking <b>how much</b>.", parts: "多 many + 少 few", lesson: "NUMBERS" },
     { w: "第一",   pinyin: "dìyī",        pos: "nu",     def: "first (ordinal)",             mnem: "The ordinal marker 第 + <b>one</b> (一) — <b>first</b>.", parts: "第 ordinal + 一 one", lesson: "NUMBERS" },
     { w: "号",     pinyin: "hào",         pos: "n",      def: "number (in a series); day of month", mnem: "A <b>mouth</b> (口) calling out a <b>number</b> in line.", parts: "口 mouth + 丂", lesson: "NUMBERS" },
+
+    // ----- Topic: Tutor Notes (vocab picked up in tutoring sessions) -----
+    { w: "工程师", pinyin: "gōngchéngshī", pos: "n",    def: "engineer",                    mnem: "A <b>work</b> (工) <b>procedure</b> (程) run by a <b>master</b> (师) — the <b>engineer</b>.", parts: "工 work + 程 procedure + 师 master", lesson: "TUTOR" },
+    { w: "工程",   pinyin: "gōngchéng",   pos: "n",      def: "engineering; project",       mnem: "<b>Work</b> (工) that follows a set <b>procedure</b> (程) — an engineering <b>project</b>.", parts: "工 work + 程 procedure", lesson: "TUTOR" },
+    { w: "软件",   pinyin: "ruǎnjiàn",    pos: "n",      def: "software",                   mnem: "The <b>soft</b> (软) <b>item</b> (件) inside the machine — <b>software</b>. (Hardware is 硬件, the “hard item.”)", parts: "软 soft + 件 item", lesson: "TUTOR" },
+    { w: "波兰",   pinyin: "Bōlán",       pos: "pn",     def: "Poland",                     mnem: "<b>Waves</b> (波) of <b>orchids</b> (兰) — pure sound-borrowing for <b>Po-land</b>. Tones 1 + 2: Bō-lán.", parts: "波 wave (≈ <b>bō</b>) + 兰 orchid (≈ <b>lán</b>)", lesson: "TUTOR" },
+    { w: "爸爸妈妈", pinyin: "bàba māma", pos: "n",      def: "mom and dad; one's parents",  mnem: "Everyday Chinese just says both: <b>dad</b> (爸爸) + <b>mom</b> (妈妈) = <b>parents</b>.", parts: "爸爸 dad + 妈妈 mom", lesson: "TUTOR" },
   ];
 
   // ----- State -----
