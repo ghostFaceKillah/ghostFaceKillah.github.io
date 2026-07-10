@@ -100,6 +100,15 @@ def _corrected(zh: str):
             s = "zhī"                    # measure word after a number (两只猫)
         elif ch == "着" and idx and pairs[idx - 1][0] == "不":
             s = "zháo"                   # potential complement (睡不着)
+        elif ch == "西" and idx and pairs[idx - 1][0] == "东":
+            s = "xi"                     # 东西 (thing): neutral second syllable
+        elif ch == "生" and idx and pairs[idx - 1][0] == "先":
+            s = "sheng"                  # 先生 (Mr./sir): neutral second syllable
+        elif ch == "教":
+            nxt_ch = pairs[idx + 1][0] if idx + 1 < len(pairs) else ""
+            prev_ch = pairs[idx - 1][0] if idx else ""
+            if nxt_ch in "我你他她大" and prev_ch != "请":
+                s = "jiāo"               # verb: teach someone (教我) — but 请教 stays jiào
         elif ch == "得":
             nxt_ch = pairs[idx + 1][0] if idx + 1 < len(pairs) else ""
             if pairs[idx - 1:idx] and pairs[idx - 1][0] == "我" and nxt_ch == "走":
@@ -122,8 +131,8 @@ def _corrected(zh: str):
                     nxt_ch = c2
                     break
             nxt = _next_syllable(pairs, idx)
-            if prev in ("第", "期") or nxt_ch in ("月", "号") or nxt is None:
-                s = "yī"
+            if prev in ("第", "期", "比") or nxt_ch in ("月", "号") or nxt is None:
+                s = "yī"                 # ordinal/date/score (二比一) keeps yī
             else:
                 s = "yí" if _tone(nxt) == 4 else "yì"
         else:
@@ -208,6 +217,9 @@ def tone_note(char: str, citation_py: str, ex: str) -> str | None:
                 f"pronounced 2nd tone — {char}{adj_ch} is written "
                 f"{syl} {adj} but said {spoken} {adj}.")
     if syl != citation_py:
+        if _tone(syl) == 5:
+            return (f"Neutral tone: usually {citation_py}, but toneless "
+                    f"({syl}) in this word.")
         return (f"Polyphone: usually read {citation_py}, "
                 f"but {syl} in this sentence.")
     return None
@@ -481,6 +493,70 @@ add(70, [
     ("very", "今天很热。", "It's very hot today."),
     ("most; -est", "这是我最喜欢的歌。", "This is my favorite song."),
     ("heavy; important (in 重要)", "这件事很重要。", "This matter is very important."),
+])
+
+# --- Batch 3: ranks 141-200 ---
+add(141, [
+    ("moreover; (并不: really not)", "这件事我并不知道。", "I really didn't know about this."),
+    ("thing; object (in 礼物/动物)", "这是给你的礼物。", "This is a gift for you."),
+    ("hand", "吃饭前先洗手。", "Wash your hands before eating."),
+    ("should (in 应该)", "你应该早点儿睡。", "You should go to bed earlier."),
+    ("war; battle (in 战争/挑战)", "这是个大挑战。", "This is a big challenge."),
+    ("towards; to face", "一直向前走。", "Keep going straight ahead."),
+    ("head", "我头疼。", "I have a headache."),
+    ("writing; language (in 中文)", "你的中文越来越好了！", "Your Chinese keeps getting better!"),
+    ("body (in 身体)", "多注意身体！", "Take care of your health!"),
+    ("politics; government (in 政府)", "我不太懂政治。", "I don't really get politics."),
+    ("beautiful; America (abbr.)", "这里的风景太美了！", "The scenery here is so beautiful!"),
+    ("each other (in 互相)", "我们互相帮助。", "We help each other."),
+    ("to see; to meet", "明天见！", "See you tomorrow!"),
+    ("(passive marker): by", "我的蛋糕被吃了！", "My cake got eaten!"),
+    ("benefit; smooth (in 顺利)", "祝你一切顺利！", "Hope everything goes smoothly for you!"),
+    ("what (in 什么)", "你想吃什么？", "What do you want to eat?"),
+    ("two", "我住二楼。", "I live on the second floor."),
+    ("to wait; etc.", "别等我了，你们先吃。", "Don't wait for me — you guys eat first."),
+    ("to produce (in 产品)", "这是我们的新产品。", "This is our new product."),
+    ("or (in 或者)", "咖啡或者茶都可以。", "Coffee or tea — either works."),
+    ("new", "我买了一双新鞋。", "I bought a new pair of shoes."),
+    ("self (in 自己)", "你自己看吧。", "See for yourself."),
+    ("to make; system (in 制造/控制)", "这是中国制造的。", "This is made in China."),
+    ("body (in 身体/身上)", "我身上没带钱。", "I don't have any money on me."),
+    ("fruit; result (in 水果/如果)", "多吃点儿水果。", "Eat more fruit."),
+    ("to add", "请再加一双筷子。", "One more pair of chopsticks, please."),
+    ("west; (in 东西: thing)", "我去买点儿东西。", "I'm going out to buy some stuff."),
+    ("(transliteration syllable)", "他是俄罗斯人。", "He's Russian."),
+    ("month; moon", "我下个月搬家。", "I'm moving next month."),
+    ("speech; words (in 说话/电话)", "我能跟你说句话吗？", "Can I have a word with you?"),
+    ("to fit; to combine (in 合适)", "这条裤子很合适。", "These pants fit just right."),
+    ("to return; to go back", "我先回家了。", "I'm heading home."),
+    ("especially (in 特别)", "今天特别冷。", "It's especially cold today."),
+    ("generation; era (in 时代); to substitute", "时代变了。", "Times have changed."),
+    ("inside; within", "一周内给你答复。", "I'll get back to you within a week."),
+    ("letter; to believe (in 相信)", "我相信你！", "I believe in you!"),
+    ("watch; form; to express (in 手表/表示)", "我的手表停了。", "My watch has stopped."),
+    ("to change; -ization (in 变化/文化)", "这几年变化很大。", "A lot has changed these past few years."),
+    ("old; (friendly prefix: 老师, 老板)", "这是一张老照片。", "This is an old photo."),
+    ("to give; for", "妈妈给我买了新手机。", "Mom bought me a new phone."),
+    ("world (in 世界)", "我想环游世界。", "I want to travel around the world."),
+    ("(polite measure word for people); position", "这位是我的老师。", "This is my teacher."),
+    ("(measure word for times)", "我去过一次。", "I've been there once."),
+    ("degree", "今天三十八度！", "It's 38 degrees today!"),
+    ("door", "出门别忘了带钥匙。", "Don't forget your keys when you go out."),
+    ("duty (in 任务); any (in 任何)", "有任何问题都可以问我。", "Ask me if you have any questions at all."),
+    ("often (in 经常/常常)", "我经常来这儿。", "I come here all the time."),
+    ("first; before", "你先走吧。", "You go ahead."),
+    ("sea; ocean", "我们去海边玩儿吧！", "Let's go to the beach!"),
+    ("to go through; to connect", "电话打不通。", "The call won't go through."),
+    ("to teach", "你能教我吗？", "Can you teach me?"),
+    ("child; -r ending (in 女儿/哪儿)", "他们有一个女儿。", "They have a daughter."),
+    ("original; (原来: so it turns out)", "原来是你啊！", "Oh, so it was you!"),
+    ("east; (in 东西: thing)", "东边有个超市。", "There's a supermarket to the east."),
+    ("sound; voice", "小点儿声！", "Keep it down!"),
+    ("to carry; to raise; to remind (in 提醒)", "你提醒我一下。", "Remind me, will you?"),
+    ("to stand; right away (in 立刻)", "我立刻就去。", "I'll go right away."),
+    ("to reach; (in 来得及: there's still time)", "还来得及吗？", "Is there still time?"),
+    ("to compare; than", "今天比昨天热。", "Today's hotter than yesterday."),
+    ("member; staff (in 服务员)", "服务员，买单！", "Waiter — the check, please!"),
 ])
 
 
@@ -770,6 +846,126 @@ MNEMONICS = {
            "<b>Take</b> (取) the top spot under the <b>sun</b> (日) — the <b>most</b>: 最喜欢 favorite."),
     "重": ("a figure carrying a loaded sack",
            "Bent under a loaded sack — <b>heavy</b>; and what's heavy, matters: 重要 important."),
+    "并": ("from 竝: two people standing side by side",
+           "Two figures standing shoulder to shoulder — joined, <b>moreover</b>; dig both heels in and it's 并不: <i>really</i> not."),
+    "物": ("牛 cow + 勿 (≈ <b>wù</b>, sound)",
+           "In the old days your <b>cows</b> (牛) were your goods — <b>things</b>: 礼物 gift, 动物 animal."),
+    "手": ("pictograph: a palm with five fingers",
+           "A palm with fingers spread — <b>hand</b>: 洗手 wash up, 手机 the hand-machine."),
+    "应": ("广 shelter + a tucked-in heart",
+           "Under the family roof (广) you do what the heart says you ought to — <b>should</b>: 应该."),
+    "战": ("占 (≈ <b>zhàn</b>, sound) + 戈 weapon",
+           "Claiming ground (占) with <b>weapons</b> (戈) — <b>war</b>; 挑战: throwing down the gauntlet."),
+    "向": ("pictograph: a window under a roof",
+           "The house's one window faces the light — the <b>direction</b> you're headed: 向前 forward."),
+    "头": ("丶丶 two drops + 大 big",
+           "Two beads of sweat rolling off a <b>big</b> (大) <b>head</b> — 头疼: headache."),
+    "文": ("pictograph: a figure with tattooed chest",
+           "Ancient tattoo patterns became <b>writing</b> — 中文 Chinese, 文化 culture."),
+    "体": ("亻 person + 本 root",
+           "A <b>person's</b> (亻) <b>root</b> (本) is their <b>body</b> — 身体: look after it."),
+    "政": ("正 correct (≈ <b>zhèng</b>, sound) + 攵 hand with rod",
+           "<b>Correcting</b> (正) the realm with the rod (攵) — <b>governing</b>: 政府 government."),
+    "美": ("羊 sheep + 大 big",
+           "A <b>big</b> (大) plump <b>sheep</b> (羊) was the finest thing you could own — <b>beautiful</b>; 美国: the beautiful country, America."),
+    "相": ("木 tree + 目 eye",
+           "An <b>eye</b> (目) sizing up a <b>tree</b> (木) — inspecting: looking at <b>each other</b> (互相), or into the camera (照相, xiàng)."),
+    "见": ("目 eye on 儿 legs (from 見)",
+           "An <b>eye</b> on legs, running out to <b>meet</b> you — 明天见: see you tomorrow!"),
+    "被": ("衤 clothing + 皮 skin (≈ sound)",
+           "The <b>blanket</b> (衤) pulled up over your skin (皮) — things done <i>to</i> you while you sleep: the passive marker."),
+    "利": ("禾 grain + 刂 knife",
+           "A sharp <b>knife</b> (刂) through ripe <b>grain</b> (禾) — a clean cut: <b>profit</b>, and 顺利: everything going smoothly."),
+    "什": ("亻 person + 十 ten",
+           "Ten (十) <b>people</b> (亻) all asking at once — <b>what</b>? 什么?"),
+    "二": ("two strokes",
+           "Two strokes — <b>two</b>. (With measure words switch to 两: 两个人.)"),
+    "等": ("⺮ bamboo + 寺 temple",
+           "<b>Waiting</b> by the temple (寺) in the bamboo (⺮) grove — 等一下: hold on a moment."),
+    "产": ("立 stand + 厂 factory",
+           "<b>Standing</b> (立) at the <b>factory</b> (厂) gate as goods roll out — <b>producing</b>: 产品 products."),
+    "或": ("戈 weapon guarding 口 a border post",
+           "A guard with a <b>weapon</b> (戈) at the border post (口): friend <b>or</b> foe? 或者: one or the other."),
+    "新": ("立 + 木 standing wood + 斤 axe",
+           "The <b>axe</b> (斤) bites into standing <b>wood</b> (木) — freshly cut: <b>new</b>."),
+    "己": ("pictograph: a loose rope end",
+           "A loose rope end curling back on it<b>self</b> — 自己: oneself."),
+    "制": ("a cloth pattern + 刂 knife",
+           "<b>Cutting</b> (刂) cloth to the pattern — to <b>manufacture</b>: 中国制造, made in China."),
+    "身": ("pictograph: a torso in profile",
+           "A torso drawn in profile, belly out — the <b>body</b>: 身上 on you, 身体 your health."),
+    "果": ("a round fruit hanging in 木 a tree",
+           "A round <b>fruit</b> in the <b>tree</b> (木) — and what grows from your choices is the <b>result</b>: 如果 if…, 结果 the outcome."),
+    "加": ("力 strength + 口 mouth",
+           "<b>Add</b> your voice (口) to your <b>strength</b> (力) — 加油! “Add fuel!” — you've got this!"),
+    "西": ("pictograph: a bird settling into its nest",
+           "A bird settles into its nest as the sun sets in the <b>west</b> — 西; odd couple with east: 东西, “stuff.”"),
+    "斯": ("其 basket + 斤 axe",
+           "Basket (其) and <b>axe</b> (斤) just carry the sound <b>sī</b> — the syllable of foreign names: 俄罗斯 Russia, 特斯拉 Tesla."),
+    "月": ("pictograph: a crescent moon",
+           "A crescent <b>moon</b> — one moon-cycle is a <b>month</b>: 下个月 next month."),
+    "话": ("讠 speech + 舌 tongue",
+           "<b>Speech</b> (讠) rolling off the <b>tongue</b> (舌) — <b>words</b>: 说话 talk, 电话 phone."),
+    "合": ("人 + 一 a lid + 口 a jar's mouth",
+           "A lid sitting snug on the jar's <b>mouth</b> (口) — it <b>fits</b>: 合适 just right."),
+    "回": ("pictograph: a spiral",
+           "A spiral turning back on itself — <b>return</b>: 回家 head home."),
+    "特": ("牛 ox + 寺 temple",
+           "The temple (寺) <b>ox</b> (牛), picked out of the whole herd — <b>special</b>: 特别 especially."),
+    "代": ("亻 person + 弋 stake",
+           "One <b>person</b> (亻) takes over another's post (弋) — to <b>substitute</b>; each changing of the guard is a <b>generation</b>: 时代 an era."),
+    "内": ("人 person entering 冂 a doorway",
+           "A <b>person</b> (人) stepping in through the doorway (冂) — <b>inside</b>, within."),
+    "信": ("亻 person + 言 words",
+           "A <b>person</b> (亻) standing by their <b>word</b> (言) — <b>trust</b>: 相信 believe; words you can carry far: a letter."),
+    "表": ("毛 fur worn over 衣 clothes",
+           "The fur coat worn on the <b>outside</b> — the surface: what shows (表示 express), and the dial that shows the time (手表 watch)."),
+    "化": ("亻 person + 匕 person flipped over",
+           "A person (亻) flipped head over heels (匕) — <b>transformed</b>: 变化 change, 文化 culture."),
+    "老": ("耂: an elder leaning on a cane",
+           "An elder leaning on a cane — <b>old</b>; slap it warmly on people: 老师 teacher, 老板 boss, 老王 good old Wang."),
+    "给": ("纟 silk + 合 fit (≈ sound)",
+           "Handing over <b>silk</b> (纟) that <b>fits</b> (合) the order — to <b>give</b>: 给你! here you go!"),
+    "世": ("three 十 tens joined",
+           "Three tens (十) tied together — thirty years, one generation's <b>world</b>: 世界."),
+    "位": ("亻 person + 立 stand",
+           "Where a <b>person</b> (亻) <b>stands</b> (立) — their <b>place</b>; count honored guests by it: 这位, 几位?"),
+    "次": ("冫 ice + 欠 yawn",
+           "Shivering (冫) and yawning (欠) — not your best run; there's always a next <b>time</b>: 下次."),
+    "度": ("广 roof + 廿 + 又 hand",
+           "A <b>hand</b> (又) marking off units under the workshop roof (广) — <b>degrees</b>: 三十八度, 38°."),
+    "门": ("pictograph: a double door",
+           "Two swinging saloon <b>doors</b> — 门; 出门: out the door you go."),
+    "任": ("亻 person + 壬 load (≈ <b>rén</b>, sound)",
+           "A <b>person</b> (亻) shouldering the load (壬) — a <b>duty</b>: 任务; whoever picks it up — <b>any</b>one: 任何."),
+    "常": ("尚 (≈ sound) over 巾 cloth",
+           "The banner cloth (巾) that always flies over camp — <b>constant</b>, <b>often</b>: 经常."),
+    "先": ("止 foot over 儿 legs",
+           "One foot (止) already out ahead of the walker (儿) — <b>first</b>: 你先走, after you."),
+    "海": ("氵 water + 每 every (≈ sound)",
+           "<b>Every</b> (每) stream (氵) finds its way to the <b>sea</b> — 海; 上海: the city on the sea."),
+    "通": ("辶 walk + 甬 passage (≈ sound)",
+           "<b>Walking</b> (辶) clean through the passage (甬) — it <b>goes through</b>: 打不通, the call won't connect."),
+    "教": ("孝 filial + 攵 hand with rod",
+           "The elder's rod (攵) guiding the young (孝) — to <b>teach</b>: jiāo when you teach someone, jiào in 教室 classroom."),
+    "儿": ("pictograph: a child's legs",
+           "Just the little legs of a <b>child</b> — 儿子 son, 女儿 daughter; up north it clips onto words as the -r sound: 哪儿, 一点儿."),
+    "原": ("厂 cliff + 泉 spring",
+           "The <b>spring</b> (泉) welling up under the <b>cliff</b> (厂) — the <b>source</b>: 原来, “so <i>that's</i> how it started!”"),
+    "东": ("from 東: the sun caught in a tree",
+           "The rising sun tangled in the <b>tree</b>'s branches — <b>east</b>; paired with west it makes 东西: stuff."),
+    "声": ("the top half of 磬, a chime-stone",
+           "A stone chime struck at dawn — <b>sound</b>, voice: 小点儿声, keep it down."),
+    "提": ("扌 hand + 是 (≈ <b>tí</b>, sound)",
+           "A <b>hand</b> (扌) lifting it up — <b>raise</b> a bag, a question (提问), or someone's memory (提醒 remind)."),
+    "立": ("pictograph: a person standing on the ground",
+           "Feet planted on the ground line, arms out — <b>standing</b>; no sitting around: 立刻, right away."),
+    "及": ("a hand catching a runner from behind",
+           "A hand catching the runner just in time — to <b>reach</b>: 来得及, there's still time!"),
+    "比": ("two people side by side",
+           "Two runners shoulder to shoulder — <b>comparing</b>: 他比我高, he's taller than me."),
+    "员": ("口 mouth + 贝 money-shell",
+           "The <b>mouth</b> (口) that counts the <b>money</b> (贝) — <b>staff</b>: 服务员, the waiter."),
 }
 
 
@@ -1148,6 +1344,268 @@ LESSONS = {
              "ex": "我有点儿累。", "en": "I'm a bit tired."},
             {"h": "点菜", "g": "to order food — “point at” the menu",
              "ex": "我们点菜吧！", "en": "Let's order!"},
+        ],
+    },
+    "应": {
+        "uses": [
+            {"h": "应该", "g": "“should, ought to”",
+             "ex": "你应该多休息。", "en": "You should rest more."},
+            {"h": "应该", "g": "also “should = probably”, for good guesses",
+             "ex": "他应该快到了。", "en": "He should be arriving soon."},
+            {"h": "答应", "g": "yìng (4th tone) — 答应 “to agree, to promise”",
+             "ex": "他答应我了。", "en": "He promised me."},
+        ],
+    },
+    "相": {
+        "uses": [
+            {"h": "互相", "g": "xiāng — “each other, mutually”",
+             "ex": "我们互相学习。", "en": "We learn from each other."},
+            {"h": "相信", "g": "xiāng — 相信 “to believe, to trust”",
+             "ex": "我相信他说的话。", "en": "I believe what he says."},
+            {"h": "照相", "g": "xiàng (4th tone) — 照相 “to take photos”",
+             "ex": "我们去照相吧！", "en": "Let's go take photos!"},
+        ],
+    },
+    "见": {
+        "uses": [
+            {"h": "看见 / 听见", "py": "kàn jiàn / tīng jiàn",
+             "g": "verb + 见 = actually perceived it: see, hear",
+             "ex": "你听见了吗？", "en": "Did you hear that?"},
+            {"h": "见面", "g": "“to meet up” (with 跟: 跟朋友见面)",
+             "ex": "我们好久没见面了。", "en": "We haven't met up in ages."},
+            {"h": "再见", "g": "farewells: 再见, 明天见, 回头见",
+             "ex": "回头见！", "en": "See you later!"},
+        ],
+    },
+    "被": {
+        "intro": "The passive marker — how Chinese says something happened TO someone or something.",
+        "uses": [
+            {"h": "被 + verb", "py": "bèi + verb", "g": "“got …-ed” — the doer can be left out",
+             "ex": "我的伞被拿走了。", "en": "My umbrella got taken."},
+            {"h": "被 + doer + verb", "py": "bèi + doer + verb", "g": "name the culprit between 被 and the verb",
+             "ex": "手机被弟弟弄坏了。", "en": "The phone got broken by my little brother."},
+            {"g": "classic flavor: bad news — 被骗 scammed, 被淋湿 soaked, 被吃了 eaten",
+             "ex": "我被骗了！", "en": "I got scammed!"},
+            {"h": "被子", "g": "totally different word: 被子 “quilt, comforter”",
+             "ex": "被子真暖和。", "en": "The quilt is really warm."},
+        ],
+    },
+    "二": {
+        "uses": [
+            {"g": "counting and ordinals: 二楼, 第二",
+             "ex": "这是我第二次来。", "en": "This is my second time here."},
+            {"g": "二 vs 两: with measure words say 两 (两个人, 两杯) — 二 is for numbers, floors, ordinals."},
+            {"g": "playful slang: 二 = goofy, a bit dim",
+             "ex": "他有点儿二。", "en": "He's a bit of a goof."},
+        ],
+    },
+    "等": {
+        "uses": [
+            {"g": "“to wait (for)”",
+             "ex": "我在楼下等你。", "en": "I'll wait for you downstairs."},
+            {"h": "等等", "g": "“hold on!” — also 等一下, 等一会儿",
+             "ex": "等等，我马上来！", "en": "Hold on, I'm coming!"},
+            {"h": "……等等", "py": "… děng děng", "g": "at the end of a list: “and so on”",
+             "ex": "我喜欢面条、饺子等等。", "en": "I like noodles, dumplings and so on."},
+        ],
+    },
+    "或": {
+        "uses": [
+            {"h": "或者", "g": "“or” — in statements, where either option is fine",
+             "ex": "周六或者周日都行。", "en": "Saturday or Sunday both work."},
+            {"g": "in questions “or” is 还是 instead",
+             "ex": "你坐地铁还是打车？", "en": "Are you taking the metro or a cab?"},
+        ],
+    },
+    "果": {
+        "uses": [
+            {"h": "水果", "g": "“fruit” — also 苹果 apple, 果汁 juice",
+             "ex": "我买了一些水果。", "en": "I bought some fruit."},
+            {"h": "如果", "g": "“if”",
+             "ex": "如果有问题，随时找我。", "en": "If anything comes up, find me anytime."},
+            {"h": "结果", "g": "“in the end, as it turned out”",
+             "ex": "结果他没来。", "en": "In the end he didn't show."},
+        ],
+    },
+    "加": {
+        "uses": [
+            {"g": "“to add”",
+             "ex": "加点儿糖吧。", "en": "Add a bit of sugar."},
+            {"h": "加油", "g": "“come on! you got this!” — literally “add fuel”",
+             "ex": "加油，你可以的！", "en": "Come on, you've got this!"},
+            {"h": "加班", "g": "“to work overtime”",
+             "ex": "我今晚要加班。", "en": "I have to work overtime tonight."},
+            {"h": "参加", "g": "“to take part, to join”",
+             "ex": "你参加吗？", "en": "Are you joining?"},
+        ],
+    },
+    "西": {
+        "uses": [
+            {"g": "“west” — 西边 the west side",
+             "ex": "往西走五分钟。", "en": "Walk west for five minutes."},
+            {"h": "东西", "g": "dōngxi (neutral xi) — “thing, stuff”: east-and-west covers everything",
+             "ex": "这是什么东西？", "en": "What is this thing?"},
+            {"h": "西餐", "g": "西 = Western: 西餐 Western food, 西方 the West",
+             "ex": "今晚吃西餐怎么样？", "en": "How about Western food tonight?"},
+        ],
+    },
+    "月": {
+        "uses": [
+            {"g": "months are just number + 月: 一月, 二月 … 十二月",
+             "ex": "我八月去中国。", "en": "I'm going to China in August."},
+            {"h": "上个月 / 下个月", "py": "shàng gè yuè / xià gè yuè", "g": "“last month / next month”",
+             "ex": "上个月我去了上海。", "en": "Last month I went to Shanghai."},
+            {"h": "月亮", "g": "“the moon”",
+             "ex": "今晚的月亮真圆。", "en": "The moon is really full tonight."},
+        ],
+    },
+    "话": {
+        "uses": [
+            {"h": "说话", "g": "“to talk, to speak”",
+             "ex": "他不爱说话。", "en": "He's not much of a talker."},
+            {"h": "电话", "g": "“phone (call)” — 打电话 make a call",
+             "ex": "有空给我打电话。", "en": "Call me when you're free."},
+            {"h": "……的话", "py": "… de huà", "g": "tacked on the end of a condition: “if …”",
+             "ex": "你去的话，叫上我。", "en": "If you go, count me in."},
+        ],
+    },
+    "回": {
+        "uses": [
+            {"h": "回家 / 回国", "py": "huí jiā / huí guó", "g": "“go back” home / to your country",
+             "ex": "你什么时候回国？", "en": "When are you going back home (to your country)?"},
+            {"h": "回来 / 回去", "py": "huí lái / huí qù", "g": "“come back / go back” — direction relative to the speaker",
+             "ex": "你几点回来？", "en": "What time are you coming back?"},
+            {"h": "怎么回事", "g": "回 as a measure word for “matters”: 怎么回事 = what's going on?",
+             "ex": "这是怎么回事？", "en": "What's going on here?"},
+        ],
+    },
+    "信": {
+        "uses": [
+            {"h": "相信 / 信", "py": "xiāng xìn / xìn", "g": "“to believe, to trust”",
+             "ex": "我不信！", "en": "I don't buy it!"},
+            {"h": "短信", "g": "“text message” — 发短信 send a text",
+             "ex": "给我发个短信。", "en": "Send me a text."},
+            {"g": "the original meaning: “a letter”",
+             "ex": "我收到了一封信。", "en": "I got a letter."},
+            {"h": "自信", "g": "“confident” — believing in yourself",
+             "ex": "自信一点儿！", "en": "Be more confident!"},
+        ],
+    },
+    "老": {
+        "uses": [
+            {"g": "“old”",
+             "ex": "我们都老了。", "en": "We're all getting old."},
+            {"h": "老师 / 老板", "py": "lǎo shī / lǎo bǎn", "g": "friendly prefix for people: teacher, boss, 老外 foreigner",
+             "ex": "我们老板人很好。", "en": "Our boss is really nice."},
+            {"h": "老王", "g": "老 + surname = “good old …”, for friends",
+             "ex": "老王，好久不见！", "en": "Wang! Long time no see!"},
+            {"h": "老是", "g": "“always (doing something annoying)”",
+             "ex": "你怎么老是玩手机？", "en": "Why are you always on your phone?"},
+        ],
+    },
+    "给": {
+        "uses": [
+            {"g": "“to give”",
+             "ex": "给你！", "en": "Here you go!"},
+            {"h": "给 + person + verb", "py": "gěi + person + verb", "g": "doing something FOR someone",
+             "ex": "我给你做了早饭。", "en": "I made you breakfast."},
+            {"g": "marks the receiver of calls and messages: 给我打电话, 给他发短信",
+             "ex": "我晚点儿给你打电话。", "en": "I'll call you a bit later."},
+        ],
+    },
+    "位": {
+        "uses": [
+            {"g": "polite measure word for people: 这位, 那位, 各位",
+             "ex": "请问几位？", "en": "How many (people), please?"},
+            {"h": "位子", "g": "“seat, spot”",
+             "ex": "这个位子有人吗？", "en": "Is this seat taken?"},
+            {"h": "各位", "g": "“everyone” — addressing a group",
+             "ex": "各位，我们开始吧。", "en": "Everyone, let's begin."},
+        ],
+    },
+    "次": {
+        "uses": [
+            {"h": "第一次", "g": "counting times: 一次 once, 第一次 the first time",
+             "ex": "这是我第一次坐飞机。", "en": "It's my first time flying."},
+            {"h": "下次 / 上次", "py": "xià cì / shàng cì", "g": "“next time / last time”",
+             "ex": "下次我请你。", "en": "Next time it's on me."},
+            {"h": "每次", "g": "“every time”",
+             "ex": "每次都是你赢。", "en": "You win every time."},
+        ],
+    },
+    "门": {
+        "uses": [
+            {"g": "“door”",
+             "ex": "门没锁。", "en": "The door's not locked."},
+            {"h": "出门", "g": "“to head out, to leave the house”",
+             "ex": "我马上出门。", "en": "I'm heading out right now."},
+            {"h": "门口", "g": "“the doorway, the entrance”",
+             "ex": "五点，门口见！", "en": "Five o'clock — meet at the entrance!"},
+            {"g": "measure word for school subjects: 一门课 a course",
+             "ex": "我这学期有五门课。", "en": "I have five classes this semester."},
+        ],
+    },
+    "常": {
+        "uses": [
+            {"h": "经常 / 常常", "py": "jīng cháng / cháng cháng", "g": "“often”",
+             "ex": "我们常常一起吃饭。", "en": "We often eat together."},
+            {"h": "平常", "g": "“usually, normally”",
+             "ex": "你平常几点起床？", "en": "When do you usually get up?"},
+            {"h": "正常", "g": "“normal”",
+             "ex": "这很正常，别担心。", "en": "That's totally normal — don't worry."},
+            {"h": "非常", "g": "“extremely, very”",
+             "ex": "非常感谢！", "en": "Thank you so much!"},
+        ],
+    },
+    "先": {
+        "uses": [
+            {"h": "先……再……", "py": "xiān … zài …", "g": "“first …, then …”",
+             "ex": "先吃饭，再看电影。", "en": "Eat first, then the movie."},
+            {"g": "politeness: let the other person go first",
+             "ex": "您先请！", "en": "After you!"},
+            {"h": "先生", "g": "“Mr. / sir” (xiānsheng, neutral second syllable)",
+             "ex": "先生，您的咖啡。", "en": "Sir, your coffee."},
+        ],
+    },
+    "教": {
+        "uses": [
+            {"g": "jiāo (1st tone) — the verb: to teach someone something",
+             "ex": "我教你一句中文。", "en": "Let me teach you a Chinese phrase."},
+            {"h": "教室", "g": "jiào (4th tone) in nouns: 教室 classroom, 教师 teacher",
+             "ex": "教室在三楼。", "en": "The classroom is on the third floor."},
+            {"h": "请教", "g": "jiào — 请教 “may I pick your brain” (polite)",
+             "ex": "我想请教你一个问题。", "en": "I'd like to ask your advice on something."},
+        ],
+    },
+    "儿": {
+        "uses": [
+            {"h": "儿子 / 女儿", "py": "ér zi / nǚ ér", "g": "“son / daughter”",
+             "ex": "我儿子三岁了。", "en": "My son is three."},
+            {"g": "the northern -r ending on everyday words: 哪儿, 这儿, 一点儿, 玩儿",
+             "ex": "这儿真不错！", "en": "This place is really nice!"},
+            {"g": "southerners often skip it: 哪里/这里 instead of 哪儿/这儿."},
+        ],
+    },
+    "东": {
+        "uses": [
+            {"g": "“east” — 东边 the east side",
+             "ex": "太阳从东边升起。", "en": "The sun rises in the east."},
+            {"h": "东西", "g": "dōngxi — “thing, stuff”",
+             "ex": "你的东西别忘了拿。", "en": "Don't forget your stuff."},
+            {"h": "房东", "g": "“landlord” — the master of the eastern seat",
+             "ex": "我的房东人挺好的。", "en": "My landlord's pretty nice."},
+        ],
+    },
+    "比": {
+        "uses": [
+            {"h": "A 比 B + adj", "py": "A bǐ B + adj", "g": "comparisons: “A is more … than B”",
+             "ex": "他比我高。", "en": "He's taller than me."},
+            {"g": "add the amount after the adjective",
+             "ex": "他比我大两岁。", "en": "He's two years older than me."},
+            {"h": "比如", "g": "“for example”",
+             "ex": "我喜欢运动，比如跑步。", "en": "I like sports — running, for example."},
+            {"g": "scores: X 比 X",
+             "ex": "我们二比一赢了！", "en": "We won two to one!"},
         ],
     },
 }
