@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Usage Trainer</title>
+<style>
+  :root {
+    --bg: #f4f4f5;
+    --card: #ffffff;
+    --ink: #18181b;
+    --muted: #71717a;
+    --line: #e4e4e7;
+    --green: #16a34a;
+    --amber: #d97706;
+    --red: #dc2626;
+    --accent: #2563eb;
+    --sel-bg: #eff6ff;
+    --green-bg: #f0fdf4;
+    --red-bg: #fef2f2;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #18181b;
+      --card: #27272a;
+      --ink: #f4f4f5;
+      --muted: #a1a1aa;
+      --line: #3f3f46;
+      --green: #22c55e;
+      --amber: #f59e0b;
+      --red: #f87171;
+      --accent: #60a5fa;
+      --sel-bg: #1e3a5f;
+      --green-bg: #14321f;
+      --red-bg: #3b1d1d;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #18181b;
+    --card: #27272a;
+    --ink: #f4f4f5;
+    --muted: #a1a1aa;
+    --line: #3f3f46;
+    --green: #22c55e;
+    --amber: #f59e0b;
+    --red: #f87171;
+    --accent: #60a5fa;
+    --sel-bg: #1e3a5f;
+    --green-bg: #14321f;
+    --red-bg: #3b1d1d;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  html, body { min-height: 100%; margin: 0; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 24px;
+  }
+  .wrap { width: 100%; max-width: 560px; }
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  h1 { font-size: 1.6rem; margin: 0 0 4px; text-align: center; }
+  .sub { color: var(--muted); text-align: center; margin: 0 0 28px; font-size: .95rem; }
+
+  .label { font-size: .8rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 0 0 10px; }
+
+  .opt {
+    border: 1px solid var(--line);
+    background: var(--card);
+    border-radius: 12px;
+    padding: 14px 10px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: border-color .12s, background .12s;
+    color: var(--ink);
+  }
+  .opt:hover { border-color: var(--accent); }
+  .opt.sel { border-color: var(--accent); background: var(--sel-bg); color: var(--accent); font-weight: 600; }
+
+  .theme-toggle {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    border: 1px solid var(--line);
+    background: var(--card);
+    color: var(--ink);
+    font-size: 1.15rem;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    transition: border-color .12s;
+  }
+  .theme-toggle:hover { border-color: var(--accent); }
+
+  .sel-input {
+    width: 100%;
+    border: 1px solid var(--line);
+    background: var(--card);
+    color: var(--ink);
+    border-radius: 12px;
+    padding: 14px 12px;
+    font-size: 1rem;
+    cursor: pointer;
+    appearance: none;
+    margin-bottom: 16px;
+  }
+  .sel-input:focus { outline: none; border-color: var(--accent); }
+  .rangeInfo { color: var(--muted); font-size: .9rem; margin: 0 0 24px; text-align: center; min-height: 1.2em; }
+
+  .toggle { display: flex; gap: 10px; margin-bottom: 28px; }
+  .toggle .opt { flex: 1; }
+
+  .btn {
+    display: block;
+    width: 100%;
+    border: none;
+    border-radius: 12px;
+    padding: 16px;
+    font-size: 1.05rem;
+    font-weight: 600;
+    cursor: pointer;
+    background: var(--accent);
+    color: #fff;
+    transition: opacity .12s;
+  }
+  .btn:hover { opacity: .9; }
+  .btn.ghost { background: var(--card); color: var(--ink); border: 1px solid var(--line); }
+
+  /* Pronunciation notes on the start screen */
+  .notes {
+    margin-top: 28px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: var(--card);
+    padding: 4px 16px;
+  }
+  .notes summary { cursor: pointer; padding: 10px 0; font-weight: 600; font-size: .95rem; }
+  .notes ul { margin: 4px 0 14px; padding-left: 20px; }
+  .notes li { margin: 0 0 10px; font-size: .92rem; line-height: 1.5; }
+  .notes b { font-weight: 600; }
+
+  /* Quiz screen */
+  .topbar { display: flex; justify-content: space-between; align-items: center; color: var(--muted); font-size: .9rem; margin-bottom: 20px; }
+  .topbar a { color: var(--muted); text-decoration: none; cursor: pointer; }
+  .topbar a:hover { color: var(--ink); }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 28px 24px;
+    user-select: none;
+  }
+  .setTag { font-size: .8rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 0 0 14px; text-align: center; }
+  .frame { color: var(--muted); font-size: 1rem; margin: 0 0 10px; text-align: center; }
+  .q { font-size: 1.9rem; line-height: 1.35; margin: 0 0 22px; text-align: center; }
+  .q .blank { color: var(--accent); font-weight: 700; }
+
+  .choices { display: flex; flex-direction: column; gap: 10px; }
+  .choice {
+    border: 1px solid var(--line);
+    background: var(--card);
+    color: var(--ink);
+    border-radius: 12px;
+    padding: 14px 16px;
+    font-size: 1.15rem;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color .12s, background .12s;
+  }
+  .choice:hover { border-color: var(--accent); }
+  .choice:disabled { cursor: default; }
+  .choice.correct { border-color: var(--green); background: var(--green-bg); font-weight: 600; }
+  .choice.wrong { border-color: var(--red); background: var(--red-bg); }
+  .choice .key { color: var(--muted); font-size: .8rem; margin-right: 8px; }
+
+  .explain { display: none; margin-top: 22px; border-top: 1px solid var(--line); padding-top: 18px; }
+  .explain.show { display: block; }
+  .verdict { font-weight: 700; font-size: 1.05rem; margin: 0 0 10px; }
+  .verdict.good { color: var(--green); }
+  .verdict.bad { color: var(--red); }
+  .zh { font-size: 1.7rem; margin: 0 0 2px; text-align: center; }
+  .py { font-size: 1.1rem; color: var(--accent); margin: 0 0 2px; text-align: center; }
+  .en { font-size: .95rem; color: var(--muted); margin: 0 0 12px; text-align: center; }
+  .why { font-size: .95rem; line-height: 1.5; margin: 0 0 10px; }
+  .rule { font-size: .88rem; color: var(--muted); line-height: 1.5; margin: 0; }
+  .rule::before { content: "📖 "; }
+
+  .speak-row { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+  .speak {
+    border: 1px solid var(--line);
+    background: var(--card);
+    color: var(--accent);
+    border-radius: 999px;
+    padding: 9px 18px;
+    font-size: .95rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    transition: border-color .12s, background .12s, color .12s;
+  }
+  .speak:hover { border-color: var(--accent); background: var(--sel-bg); }
+  .speak.playing { border-color: var(--amber); color: var(--amber); }
+
+  .nextRow { display: none; margin-top: 16px; }
+  .nextRow.show { display: block; }
+
+  .done { text-align: center; }
+  .done .big { font-size: 3rem; margin: 0 0 8px; }
+</style>
+<script>
+  // Apply saved theme before paint to avoid a flash.
+  (function () {
+    var t = localStorage.getItem("theme");
+    if (t) document.documentElement.setAttribute("data-theme", t);
+  })();
+</script>
+</head>
+<body>
+<button id="themeToggle" class="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle dark mode">🌙</button>
+<div class="wrap">
+
+  <!-- START -->
+  <section id="start" class="screen active">
+    <h1>Usage Trainer</h1>
+    <p class="sub">Pick the right word — the judgment calls a tutor corrects: 你 vs 您, 几 vs 多少, 口 vs 个, spoken zhèi/nèi, adverb placement, and the tone changes of 一.</p>
+
+    <p class="label">Drill</p>
+    <select class="sel-input" id="drillSel"></select>
+    <p class="rangeInfo" id="rangeInfo"></p>
+
+    <p class="label">Order</p>
+    <div class="toggle" id="orderToggle">
+      <button class="opt sel" data-order="shuffle">Shuffle</button>
+      <button class="opt" data-order="ordered">In order</button>
+    </div>
+
+    <div id="audioSection">
+      <p class="label">Audio</p>
+      <div class="toggle" id="audioToggle">
+        <button class="opt sel" data-audio="tts">🔊 TTS</button>
+        <button class="opt" data-audio="off">Off</button>
+      </div>
+    </div>
+
+    <button class="btn" id="startBtn">Start</button>
+
+    <details class="notes">
+      <summary>🎧 Pronunciation notes from tutoring</summary>
+      <ul>
+        <li><b>Chinese r</b> (as in 人 rén) sits between an English <i>r</i> and a Polish <i>ż</i> — start from ż and relax it.</li>
+        <li><b>Question 吗</b> is neutral tone, but it rides high — it sounds close to a 1st tone: 你好吗?</li>
+        <li><b>工 gōng</b>: really round and push the mouth forward on the <i>-ong</i>.</li>
+        <li><b>大学生</b>: give 生 its full 1st tone (dà xué shēng) — it sounds nicer than the lazy near-neutral 生 of casual 学生.</li>
+        <li><b>你哪</b>: when emphasizing, the 哪 is said high, almost like a 1st tone.</li>
+        <li><b>对对对</b>: to agree, natives fire off 对 duì (4th tone) in quick bursts — duì duì duì.</li>
+        <li><b>波兰 Bōlán</b> (Poland): tones 1 + 2.</li>
+      </ul>
+    </details>
+  </section>
+
+  <!-- QUIZ -->
+  <section id="study" class="screen">
+    <div class="topbar">
+      <a id="quitBtn">&larr; Quit</a>
+      <span id="progress">0 / 0</span>
+    </div>
+
+    <div class="card">
+      <p class="setTag" id="setTag"></p>
+      <p class="frame" id="frame"></p>
+      <p class="q" id="question"></p>
+      <div class="choices" id="choices"></div>
+
+      <div class="explain" id="explain">
+        <p class="verdict" id="verdict"></p>
+        <p class="zh" id="zh"></p>
+        <p class="py" id="py"></p>
+        <p class="en" id="en"></p>
+        <p class="why" id="why"></p>
+        <p class="rule" id="rule"></p>
+        <div class="speak-row" id="speakRow">
+          <button class="speak" id="speakBtn" type="button" title="Replay (R)">🔊 Play</button>
+          <button class="speak" id="speakSlowBtn" type="button" title="Read slowly (S)">🐢 Slow</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="nextRow" id="nextRow">
+      <button class="btn" id="nextBtn">Next <small>(Space)</small></button>
+    </div>
+  </section>
+
+  <!-- DONE -->
+  <section id="done" class="screen">
+    <div class="done">
+      <p class="big">All cleared! 🎉</p>
+      <p class="sub" id="doneSummary"></p>
+      <button class="btn" id="restartBtn">Train again</button>
+    </div>
+  </section>
+
+</div>
+
+<script>
+  // ----- Dark mode toggle -----
+  (function () {
+    const root = document.documentElement;
+    const toggle = document.getElementById("themeToggle");
+    const mql = window.matchMedia("(prefers-color-scheme: dark)");
+    function current() {
+      return root.getAttribute("data-theme") || (mql.matches ? "dark" : "light");
+    }
+    function syncIcon() {
+      toggle.textContent = current() === "dark" ? "☀️" : "🌙";
+    }
+    toggle.addEventListener("click", () => {
+      const next = current() === "dark" ? "light" : "dark";
+      root.setAttribute("data-theme", next);
+      localStorage.setItem("theme", next);
+      syncIcon();
+    });
+    mql.addEventListener("change", () => { if (!root.getAttribute("data-theme")) syncIcon(); });
+    syncIcon();
+  })();
+
+  // ----- Drill sets: each has a rule shown after every answer -----
+  const SETS = [
+    { id: "NI_NIN", title: "你 vs 您 — plain vs polite “you”",
+      rule: "您 nín is the polite form of 你 nǐ — use it for teachers, bosses, elders and respected strangers; use 你 with friends, family and peers. The polite way to ask a surname is 您贵姓? — the casual way is 你姓什么?" },
+    { id: "JI_DUOSHAO", title: "几 vs 多少 — asking “how many”",
+      rule: "几 jǐ expects a small answer (under 10) and must be followed by a measure word: 几个人? 多少 duōshao works for any number and the measure word is optional: 多少人? or 多少个人?" },
+    { id: "KOU_GE", title: "口 vs 个 — counting people",
+      rule: "Counting people with 口 kǒu implies they belong to one family — mouths at one table: 我家有五口人. For people in general use 个: 三个人, 二十个学生." },
+    { id: "ZHE_NA", title: "zhè/nà vs zhèi/nèi — textbook vs street",
+      rule: "In relaxed speech, 这 before a measure word is usually said zhèi and 那 is nèi: zhèi ge, nèi ge. The dictionary readings zhè / nà are for careful or formal speech — and they're what textbooks print." },
+    { id: "ADV", title: "Adverb placement — 都 / 也 before the verb",
+      rule: "Adverbs like 都 dōu (all, both) and 也 yě (also) come directly before the verb, never after it: 我们都是学生, 我也是工程师." },
+    { id: "YI_TONE", title: "一 tone changes",
+      rule: "一 is 1st tone (yī) when counting and in ordinals and dates: 一二三, 第一, 一月. Before a 4th tone it becomes 2nd tone: yí ge. Before a 1st, 2nd or 3rd tone it becomes 4th tone: yì zhāng, yì píng, yì qǐ." },
+  ];
+
+  // ----- Drill items -----
+  // set = SETS id; frame = English context (optional); q = prompt, ___ is the blank;
+  // opts = choices; a = index of the correct one; zh/py/en = full answer to show & speak.
+  const ITEMS = [
+    // --- 你 vs 您 ---
+    { set: "NI_NIN", frame: "Speaking to your teacher…", q: "___ 好！", opts: ["你 nǐ", "您 nín"], a: 1,
+      zh: "您好！", py: "nín hǎo!", en: "Hello! (polite)",
+      why: "Teachers get the respectful 您." },
+    { set: "NI_NIN", frame: "Asking your boss's surname…", q: "___ 贵姓？", opts: ["你 nǐ", "您 nín"], a: 1,
+      zh: "您贵姓？", py: "nín guì xìng?", en: "What is your (honorable) surname?",
+      why: "贵姓 is honorific — it pairs with 您, never with plain 你." },
+    { set: "NI_NIN", frame: "Chatting with a classmate…", q: "___ 叫什么名字？", opts: ["你 nǐ", "您 nín"], a: 0,
+      zh: "你叫什么名字？", py: "nǐ jiào shén me míng zi?", en: "What's your name?",
+      why: "Peers get plain 你 — 您 would sound stiff between classmates." },
+    { set: "NI_NIN", frame: "Which is the polite way to ask a surname?", q: "", opts: ["您贵姓？", "你姓什么？"], a: 0,
+      zh: "您贵姓？", py: "nín guì xìng?", en: "What is your (honorable) surname?",
+      why: "您贵姓 is the formal formula; 你姓什么 is the everyday version." },
+    { set: "NI_NIN", frame: "Asking an elderly stranger…", q: "请问，___ 是王老师吗？", opts: ["你 nǐ", "您 nín"], a: 1,
+      zh: "请问，您是王老师吗？", py: "qǐng wèn, nín shì wáng lǎo shī ma?", en: "Excuse me, are you Teacher Wang?",
+      why: "Elders and strangers you respect get 您." },
+    { set: "NI_NIN", frame: "Texting a good friend…", q: "___ 好吗？", opts: ["你 nǐ", "您 nín"], a: 0,
+      zh: "你好吗？", py: "nǐ hǎo ma?", en: "How are you?",
+      why: "Friends get 你 — no ceremony needed." },
+
+    // --- 几 vs 多少 ---
+    { set: "JI_DUOSHAO", frame: "Families are small…", q: "你家有 ___ 口人？", opts: ["几 jǐ", "多少 duōshao"], a: 0,
+      zh: "你家有几口人？", py: "nǐ jiā yǒu jǐ kǒu rén?", en: "How many people are in your family?",
+      why: "A family is fewer than ten people, and the measure word 口 follows — classic 几." },
+    { set: "JI_DUOSHAO", frame: "A university has thousands of students…", q: "你们大学有 ___ 学生？", opts: ["几 jǐ", "多少 duōshao"], a: 1,
+      zh: "你们大学有多少学生？", py: "nǐ men dà xué yǒu duō shao xué shēng?", en: "How many students does your university have?",
+      why: "A big number — too big for 几. And notice 多少 goes straight to the noun, no measure word needed." },
+    { set: "JI_DUOSHAO", frame: "Which is correct?", q: "", opts: ["几人？", "几个人？"], a: 1,
+      zh: "几个人？", py: "jǐ ge rén?", en: "How many people?",
+      why: "几 must be followed by a measure word — 几个人, never bare 几人." },
+    { set: "JI_DUOSHAO", frame: "Which one can drop the measure word?", q: "", opts: ["几 jǐ", "多少 duōshao"], a: 1,
+      zh: "多少人？", py: "duō shao rén?", en: "How many people?",
+      why: "多少人 and 多少个人 are both fine; 几 always keeps its measure word." },
+    { set: "JI_DUOSHAO", frame: "Asking the time…", q: "现在 ___ 点？", opts: ["几 jǐ", "多少 duōshao"], a: 0,
+      zh: "现在几点？", py: "xiàn zài jǐ diǎn?", en: "What time is it now?",
+      why: "Clock hours run 1–12 — a small number, so it's 几点." },
+    { set: "JI_DUOSHAO", frame: "Asking the price of a phone…", q: "这个手机 ___ 钱？", opts: ["几 jǐ", "多少 duōshao"], a: 1,
+      zh: "这个手机多少钱？", py: "zhè ge shǒu jī duō shao qián?", en: "How much is this phone?",
+      why: "Prices can be any size — 多少钱 is the fixed way to ask “how much.”" },
+
+    // --- 口 vs 个 ---
+    { set: "KOU_GE", frame: "Talking about my family…", q: "我家有五 ___ 人。", opts: ["口 kǒu", "个 gè"], a: 0,
+      zh: "我家有五口人。", py: "wǒ jiā yǒu wǔ kǒu rén.", en: "There are five people in my family.",
+      why: "Family members are counted with 口 — mouths at one table." },
+    { set: "KOU_GE", frame: "Talking about my class…", q: "我们班有二十 ___ 学生。", opts: ["口 kǒu", "个 gè"], a: 1,
+      zh: "我们班有二十个学生。", py: "wǒ men bān yǒu èr shí ge xué shēng.", en: "There are twenty students in our class.",
+      why: "Classmates aren't one family — plain 个." },
+    { set: "KOU_GE", frame: "Asking about their family…", q: "他们家有几 ___ 人？", opts: ["口 kǒu", "个 gè"], a: 0,
+      zh: "他们家有几口人？", py: "tā men jiā yǒu jǐ kǒu rén?", en: "How many people are in their family?",
+      why: "Asking about a household, so 口." },
+    { set: "KOU_GE", frame: "Three strangers over there…", q: "那儿有三 ___ 人。", opts: ["口 kǒu", "个 gè"], a: 1,
+      zh: "那儿有三个人。", py: "nàr yǒu sān ge rén.", en: "There are three people over there.",
+      why: "Random people get 个 — 口 would claim they're one household." },
+
+    // --- zhè/nà vs zhèi/nèi ---
+    { set: "ZHE_NA", frame: "Chatting with friends, 这个 usually sounds like…", q: "", opts: ["zhè ge", "zhèi ge"], a: 1,
+      zh: "这个", py: "zhèi ge (colloquial)", en: "this one",
+      why: "Real-life casual speech favors zhèi before a measure word." },
+    { set: "ZHE_NA", frame: "Reading the news aloud, 那个 is read…", q: "", opts: ["nà ge", "nèi ge"], a: 0,
+      zh: "那个", py: "nà ge (formal)", en: "that one",
+      why: "Careful, formal speech keeps the dictionary reading nà." },
+    { set: "ZHE_NA", frame: "Street Mandarin: 那个人 sounds like…", q: "", opts: ["nà ge rén", "nèi ge rén"], a: 1,
+      zh: "那个人", py: "nèi ge rén (colloquial)", en: "that person",
+      why: "nèi is the everyday spoken form of 那 before a measure word." },
+    { set: "ZHE_NA", frame: "Which reading do textbooks print for 这?", q: "", opts: ["zhè", "zhèi"], a: 0,
+      zh: "这", py: "zhè (standard)", en: "this",
+      why: "zhè is the standard reading; zhèi is the colloquial variant you'll hear on the street." },
+
+    // --- adverb before the verb ---
+    { set: "ADV", frame: "“We are all students.”", q: "", opts: ["我们都是学生。", "我们是都学生。"], a: 0,
+      zh: "我们都是学生。", py: "wǒ men dōu shì xué shēng.", en: "We are all students.",
+      why: "都 sits right before the verb 是." },
+    { set: "ADV", frame: "“I am also an engineer.”", q: "", opts: ["我是也工程师。", "我也是工程师。"], a: 1,
+      zh: "我也是工程师。", py: "wǒ yě shì gōng chéng shī.", en: "I am also an engineer.",
+      why: "也 goes before the verb 是, never after it." },
+    { set: "ADV", frame: "“Mom and dad are both teachers.”", q: "", opts: ["爸爸妈妈都是老师。", "爸爸妈妈是都老师。"], a: 0,
+      zh: "爸爸妈妈都是老师。", py: "bà ba mā ma dōu shì lǎo shī.", en: "Mom and dad are both teachers.",
+      why: "都 before 是. Bonus: 爸爸妈妈 together is the everyday word for “parents.”" },
+    { set: "ADV", frame: "“They are all my friends.”", q: "", opts: ["他们是我的都朋友。", "他们都是我的朋友。"], a: 1,
+      zh: "他们都是我的朋友。", py: "tā men dōu shì wǒ de péng you.", en: "They are all my friends.",
+      why: "都 attaches to the verb, not to the noun." },
+
+    // --- 一 tone changes ---
+    { set: "YI_TONE", frame: "一 + 个 gè (4th tone)", q: "一个 — how is 一 said?", opts: ["yī", "yí", "yì"], a: 1,
+      zh: "一个", py: "yí ge", en: "one (of something)",
+      why: "Before a 4th tone, 一 becomes 2nd tone: yí ge." },
+    { set: "YI_TONE", frame: "一 + 张 zhāng (1st tone)", q: "一张 — how is 一 said?", opts: ["yī", "yí", "yì"], a: 2,
+      zh: "一张", py: "yì zhāng", en: "a sheet of",
+      why: "Before a 1st tone, 一 becomes 4th tone: yì zhāng." },
+    { set: "YI_TONE", frame: "一 + 瓶 píng (2nd tone)", q: "一瓶 — how is 一 said?", opts: ["yī", "yí", "yì"], a: 2,
+      zh: "一瓶", py: "yì píng", en: "a bottle of",
+      why: "Before a 2nd tone, 一 becomes 4th tone: yì píng." },
+    { set: "YI_TONE", frame: "一 + 起 qǐ (3rd tone)", q: "一起 — how is 一 said?", opts: ["yī", "yí", "yì"], a: 2,
+      zh: "一起", py: "yì qǐ", en: "together",
+      why: "Before a 3rd tone, 一 becomes 4th tone: yì qǐ." },
+    { set: "YI_TONE", frame: "Counting: 一，二，三", q: "How is 一 said when counting?", opts: ["yī", "yí", "yì"], a: 0,
+      zh: "一，二，三", py: "yī, èr, sān", en: "one, two, three",
+      why: "Counting keeps the citation reading: 1st tone yī." },
+    { set: "YI_TONE", frame: "Ordinal: 第一", q: "第一 — how is 一 said?", opts: ["yī", "yí", "yì"], a: 0,
+      zh: "第一", py: "dì yī", en: "first",
+      why: "Ordinals keep 一 in 1st tone: dì yī." },
+    { set: "YI_TONE", frame: "Date: 一月", q: "一月 — how is 一 said?", opts: ["yī", "yí", "yì"], a: 0,
+      zh: "一月", py: "yī yuè", en: "January",
+      why: "Dates and month names keep 一 in 1st tone: yī yuè." },
+    { set: "YI_TONE", frame: "一 + 杯 bēi (1st tone)", q: "一杯 — how is 一 said?", opts: ["yī", "yí", "yì"], a: 2,
+      zh: "一杯", py: "yì bēi", en: "a cup of",
+      why: "Before a 1st tone, 一 becomes 4th tone: yì bēi." },
+    { set: "YI_TONE", frame: "一 + 年 nián (2nd tone)", q: "一年 — how is 一 said?", opts: ["yī", "yí", "yì"], a: 2,
+      zh: "一年", py: "yì nián", en: "one year",
+      why: "Before a 2nd tone, 一 becomes 4th tone: yì nián." },
+    { set: "YI_TONE", frame: "一 + 点 diǎn (3rd tone)", q: "一点 — how is 一 said?", opts: ["yī", "yí", "yì"], a: 2,
+      zh: "一点", py: "yì diǎn", en: "one o'clock; a little",
+      why: "Before a 3rd tone, 一 becomes 4th tone: yì diǎn." },
+    { set: "YI_TONE", frame: "一 + 样 yàng (4th tone)", q: "一样 — how is 一 said?", opts: ["yī", "yí", "yì"], a: 1,
+      zh: "一样", py: "yí yàng", en: "the same",
+      why: "Before a 4th tone, 一 becomes 2nd tone: yí yàng." },
+  ];
+
+  const setById = Object.fromEntries(SETS.map(s => [s.id, s]));
+
+  // ----- State -----
+  let selectedDrill = "ALL";
+  let order = "shuffle";
+  let audio = "tts";
+  let queue = [];
+  let totalThisRound = 0;
+  let cleared = 0;
+  let firstTry = 0;
+  let seen = null;        // Set of items already attempted this round (for first-try scoring)
+  let answered = false;
+  let current = null;
+
+  // ----- Pronunciation: Web Speech API -----
+  const Speech = (() => {
+    const synth = window.speechSynthesis;
+    let voice = null;
+    function pick() {
+      if (!synth) return;
+      const zh = synth.getVoices().filter(v => v.lang && v.lang.toLowerCase().startsWith("zh"));
+      voice = zh.find(v => /^zh[-_]?(cn|hans)/i.test(v.lang)) || zh[0] || null;
+    }
+    if (synth) { pick(); synth.addEventListener("voiceschanged", pick); }
+    function speak(text, btn, rate) {
+      if (!synth || !text) return;
+      synth.cancel();
+      if (!voice) pick();
+      const u = new SpeechSynthesisUtterance(text);
+      if (voice) u.voice = voice;
+      u.lang = (voice && voice.lang) || "zh-CN";
+      u.rate = rate || 0.9;
+      if (btn) {
+        u.onstart = () => btn.classList.add("playing");
+        const done = () => btn.classList.remove("playing");
+        u.onend = done; u.onerror = done;
+      }
+      synth.speak(u);
+    }
+    return { supported: !!synth, speak };
+  })();
+
+  // ----- Elements -----
+  const screens = {
+    start: document.getElementById("start"),
+    study: document.getElementById("study"),
+    done:  document.getElementById("done"),
+  };
+  const el = {
+    drillSel:   document.getElementById("drillSel"),
+    rangeInfo:  document.getElementById("rangeInfo"),
+    orderToggle:document.getElementById("orderToggle"),
+    audioToggle:document.getElementById("audioToggle"),
+    startBtn:   document.getElementById("startBtn"),
+    progress:   document.getElementById("progress"),
+    setTag:     document.getElementById("setTag"),
+    frame:      document.getElementById("frame"),
+    question:   document.getElementById("question"),
+    choices:    document.getElementById("choices"),
+    explain:    document.getElementById("explain"),
+    verdict:    document.getElementById("verdict"),
+    zh:         document.getElementById("zh"),
+    py:         document.getElementById("py"),
+    en:         document.getElementById("en"),
+    why:        document.getElementById("why"),
+    rule:       document.getElementById("rule"),
+    speakBtn:   document.getElementById("speakBtn"),
+    speakSlowBtn: document.getElementById("speakSlowBtn"),
+    speakRow:   document.getElementById("speakRow"),
+    nextRow:    document.getElementById("nextRow"),
+    nextBtn:    document.getElementById("nextBtn"),
+    quitBtn:    document.getElementById("quitBtn"),
+    doneSummary:document.getElementById("doneSummary"),
+    restartBtn: document.getElementById("restartBtn"),
+  };
+
+  // ----- Start screen -----
+  function selectedItems() {
+    if (selectedDrill === "ALL") return ITEMS.slice();
+    return ITEMS.filter(i => i.set === selectedDrill);
+  }
+  function buildDrillSelect() {
+    const all = document.createElement("option");
+    all.value = "ALL";
+    all.textContent = `All drills (${ITEMS.length} questions)`;
+    el.drillSel.appendChild(all);
+    SETS.forEach(s => {
+      const n = ITEMS.filter(i => i.set === s.id).length;
+      const o = document.createElement("option");
+      o.value = s.id;
+      o.textContent = `${s.title} (${n})`;
+      el.drillSel.appendChild(o);
+    });
+    el.drillSel.value = selectedDrill;
+  }
+  buildDrillSelect();
+
+  function syncRange() {
+    const n = selectedItems().length;
+    const label = selectedDrill === "ALL" ? "All drills" : setById[selectedDrill].title;
+    el.rangeInfo.textContent = `${label} · ${n} question${n === 1 ? "" : "s"}`;
+  }
+  el.drillSel.addEventListener("change", () => {
+    selectedDrill = el.drillSel.value;
+    syncRange();
+  });
+  syncRange();
+
+  el.orderToggle.addEventListener("click", e => {
+    const b = e.target.closest(".opt");
+    if (!b) return;
+    order = b.dataset.order;
+    [...el.orderToggle.children].forEach(c => c.classList.toggle("sel", c === b));
+  });
+  el.audioToggle.addEventListener("click", e => {
+    const b = e.target.closest(".opt");
+    if (!b) return;
+    audio = b.dataset.audio;
+    [...el.audioToggle.children].forEach(c => c.classList.toggle("sel", c === b));
+  });
+
+  function show(name) {
+    Object.values(screens).forEach(s => s.classList.remove("active"));
+    screens[name].classList.add("active");
+  }
+  function shuffle(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+
+  // ----- Session flow -----
+  function startSession() {
+    queue = selectedItems();
+    if (order === "shuffle") shuffle(queue);
+    totalThisRound = queue.length;
+    cleared = 0;
+    firstTry = 0;
+    seen = new Set();
+    show("study");
+    nextCard();
+  }
+
+  function nextCard() {
+    if (queue.length === 0) {
+      el.doneSummary.textContent =
+        `You cleared ${totalThisRound} question${totalThisRound === 1 ? "" : "s"} — ${firstTry} right on the first try.`;
+      show("done");
+      return;
+    }
+    current = queue[0];
+    answered = false;
+
+    el.setTag.textContent = setById[current.set].title;
+    el.frame.textContent = current.frame || "";
+    el.frame.style.display = current.frame ? "" : "none";
+    // Highlight the blank inside the prompt.
+    if (current.q) {
+      el.question.innerHTML = current.q.split("___").map(escapeHtml).join('<span class="blank">___</span>');
+      el.question.style.display = "";
+    } else {
+      el.question.style.display = "none";
+    }
+
+    el.choices.innerHTML = "";
+    current.opts.forEach((opt, i) => {
+      const b = document.createElement("button");
+      b.className = "choice";
+      b.innerHTML = `<span class="key">${i + 1}</span>${escapeHtml(opt)}`;
+      b.addEventListener("click", () => answer(i));
+      el.choices.appendChild(b);
+    });
+
+    el.explain.classList.remove("show");
+    el.nextRow.classList.remove("show");
+    el.speakBtn.classList.remove("playing");
+    el.speakSlowBtn.classList.remove("playing");
+    updateProgress();
+  }
+
+  function escapeHtml(s) {
+    return s.replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  }
+
+  function updateProgress() {
+    el.progress.textContent = `${cleared} / ${totalThisRound}`;
+  }
+
+  function answer(i) {
+    if (answered) return;
+    answered = true;
+    const good = i === current.a;
+    const isFirstAttempt = !seen.has(current);
+    seen.add(current);
+    if (good && isFirstAttempt) firstTry++;
+
+    [...el.choices.children].forEach((b, j) => {
+      b.disabled = true;
+      if (j === current.a) b.classList.add("correct");
+      else if (j === i) b.classList.add("wrong");
+    });
+
+    el.verdict.textContent = good ? "✓ Correct" : "✗ Not quite — it comes back later";
+    el.verdict.className = "verdict " + (good ? "good" : "bad");
+    el.zh.textContent = current.zh || "";
+    el.py.textContent = current.py || "";
+    el.en.textContent = current.en || "";
+    el.why.textContent = current.why || "";
+    el.rule.textContent = setById[current.set].rule;
+    el.speakRow.style.display = (Speech.supported && current.zh) ? "" : "none";
+    el.explain.classList.add("show");
+    el.nextRow.classList.add("show");
+
+    if (good) {
+      queue.shift();
+      cleared++;
+    } else {
+      const c = queue.shift();
+      queue.splice(Math.min(queue.length, 4), 0, c); // return it a few cards later
+    }
+    updateProgress();
+
+    if (audio === "tts" && current.zh) Speech.speak(current.zh, el.speakBtn);
+  }
+
+  // ----- Events -----
+  el.startBtn.addEventListener("click", startSession);
+  el.restartBtn.addEventListener("click", () => show("start"));
+  el.quitBtn.addEventListener("click", () => show("start"));
+  el.nextBtn.addEventListener("click", nextCard);
+  const SLOW_RATE = 0.5;
+  el.speakBtn.addEventListener("click", () => Speech.speak(current && current.zh, el.speakBtn));
+  el.speakSlowBtn.addEventListener("click", () => Speech.speak(current && current.zh, el.speakSlowBtn, SLOW_RATE));
+
+  document.addEventListener("keydown", e => {
+    if (!screens.study.classList.contains("active")) return;
+    if (!answered) {
+      const n = parseInt(e.key, 10);
+      if (n >= 1 && n <= current.opts.length) { e.preventDefault(); answer(n - 1); }
+      return;
+    }
+    if (e.code === "Space" || e.key === "Enter") { e.preventDefault(); nextCard(); return; }
+    if (e.key === "r" || e.key === "R") { e.preventDefault(); Speech.speak(current.zh, el.speakBtn); return; }
+    if (e.key === "s" || e.key === "S") { e.preventDefault(); Speech.speak(current.zh, el.speakSlowBtn, SLOW_RATE); }
+  });
+
+  // ----- Init -----
+  if (!Speech.supported) {
+    document.getElementById("audioSection").style.display = "none";
+    audio = "off";
+  }
+</script>
+</body>
+</html>
