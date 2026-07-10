@@ -14,6 +14,11 @@ grows as more batches are added here. Sentence pinyin is generated with
 pypinyin so tone marks stay accurate and consistent (reusing the tone-sandhi
 and polyphone handling from gen_sentences.py).
 
+LESSONS adds a "mini lesson" to the grammar workhorses (的, 可, 了, 得, ...)
+whose single gloss + example can't cover their real range: each lesson lists
+the character's distinct everyday uses with a pattern, gloss and a tiny
+example sentence of its own.
+
 Run:  python3 tools/gen_colloquial_data.py
 Out:  pages/colloquial_data.js
 """
@@ -76,15 +81,25 @@ def _corrected(zh: str):
             continue
         if ch == "地" and idx >= 2 and pairs[idx - 1][0] == pairs[idx - 2][0]:
             s = "de"                     # adverbial particle after a reduplicated adjective (慢慢地)
+        elif ch == "地" and idx + 1 < len(pairs) and pairs[idx + 1][0] in "笑说走看哭":
+            s = "de"                     # adverbial particle before a verb (开心地笑)
         elif ch == "长":
             nxt_ch = pairs[idx + 1][0] if idx + 1 < len(pairs) else ""
-            s = "zhǎng" if nxt_ch in ("高", "大") else "cháng"   # 长高/长大 = grow
-        elif ch == "都" and s == "dū":
-            s = "dōu"
+            s = "zhǎng" if nxt_ch in ("高", "大", "得") else "cháng"   # 长高/长大/长得 = grow
+        elif ch == "都" and s == "dū" and not (idx and pairs[idx - 1][0] == "首"):
+            s = "dōu"                    # 首都 (capital) keeps dū
         elif ch == "子" and s in ("zǐ", "zī"):
             s = "zi"
-        elif ch == "好" and s == "hào":
-            s = "hǎo"
+        elif ch in "妈爸哥姐弟妹奶爷" and idx and pairs[idx - 1][0] == ch:
+            s = {"妈": "ma", "爸": "ba", "哥": "ge", "姐": "jie",
+                 "弟": "di", "妹": "mei", "奶": "nai", "爷": "ye"}[ch]
+            # reduplicated kinship terms: second syllable is neutral (妈妈 mā ma)
+        elif ch == "好" and s == "hào" and not (idx and pairs[idx - 1][0] == "爱"):
+            s = "hǎo"                    # 爱好 (hobby) keeps hào
+        elif ch == "只" and idx and pairs[idx - 1][0] in "一两三几每半":
+            s = "zhī"                    # measure word after a number (两只猫)
+        elif ch == "着" and idx and pairs[idx - 1][0] == "不":
+            s = "zháo"                   # potential complement (睡不着)
         elif ch == "得":
             nxt_ch = pairs[idx + 1][0] if idx + 1 < len(pairs) else ""
             if pairs[idx - 1:idx] and pairs[idx - 1][0] == "我" and nxt_ch == "走":
@@ -758,6 +773,386 @@ MNEMONICS = {
 }
 
 
+# ===================== LESSONS: mini usage lessons =====================
+# The hardest characters in the top-500 are the little grammar workhorses:
+# one gloss + one sentence can't cover 的 or 可. Each lesson is a list of
+# distinct uses -- an optional pattern head ("h", with pinyin generated
+# unless "py" is given), a one-line gloss ("g"), and usually a tiny example
+# ("ex" + "en"). Uses without an example render as a plain note line.
+
+LESSONS = {
+    "的": {
+        "intro": "The single most common character in Chinese — a little glue word with three main jobs.",
+        "uses": [
+            {"h": "我的", "g": "possession: X 的 Y = “X's Y”",
+             "ex": "这是妈妈的钥匙。", "en": "These are mom's keys."},
+            {"h": "红色的", "g": "glues any description to a noun: description + 的 + noun",
+             "ex": "我喜欢红色的车。", "en": "I like red cars."},
+            {"h": "吃的", "g": "drop the noun and 的 means “the … one / … stuff”",
+             "ex": "有什么好吃的？", "en": "Anything tasty around?"},
+            {"h": "是……的", "py": "shì … de",
+             "g": "wraps up how/when/where something happened, for emphasis",
+             "ex": "我是坐飞机来的。", "en": "I came by plane (that's how)."},
+            {"g": "Watch the readings: dì in 目的 (mùdì, goal), dí in 的确 (díquè, indeed)."},
+        ],
+    },
+    "一": {
+        "intro": "Not just the number one — 一 powers a bunch of everyday patterns.",
+        "uses": [
+            {"h": "一个", "g": "plain counting: 一 + measure word + noun",
+             "ex": "我买了一个包子。", "en": "I bought a steamed bun."},
+            {"h": "一下", "g": "verb + 一下 softens it: “real quick, a bit”",
+             "ex": "你等一下！", "en": "Wait a sec!"},
+            {"h": "一点儿", "g": "“a little”",
+             "ex": "我会说一点儿中文。", "en": "I speak a little Chinese."},
+            {"h": "一起", "g": "“together”",
+             "ex": "明天一起吃饭吧。", "en": "Let's eat together tomorrow."},
+        ],
+    },
+    "是": {
+        "uses": [
+            {"h": "A 是 B", "py": "A shì B", "g": "identifying things: “A is B”",
+             "ex": "他是我哥哥。", "en": "He's my older brother."},
+            {"h": "是啊", "g": "agreeing: “yeah, right?”",
+             "ex": "是啊，太贵了！", "en": "Yeah, way too expensive!"},
+            {"h": "是……的", "py": "shì … de",
+             "g": "emphasizes when/how/where something happened",
+             "ex": "这是我自己做的。", "en": "I made this myself."},
+        ],
+    },
+    "不": {
+        "uses": [
+            {"g": "straight negation, right before a verb or adjective",
+             "ex": "我今天不去。", "en": "I'm not going today."},
+            {"h": "去不去", "g": "verb + 不 + verb makes a casual yes/no question",
+             "ex": "你去不去？", "en": "Are you going or not?"},
+            {"h": "不用", "g": "“no need” — the polite way to decline",
+             "ex": "不用了，谢谢！", "en": "No need, thanks!"},
+        ],
+    },
+    "了": {
+        "intro": "The famous 了 — two core jobs cover most of what you'll meet.",
+        "uses": [
+            {"g": "right after the verb: the action happened, it's done",
+             "ex": "我买了三本书。", "en": "I bought three books."},
+            {"g": "at the end of the sentence: new situation — something changed",
+             "ex": "下雨了！", "en": "It's raining (now)!"},
+            {"h": "太……了", "py": "tài … le", "g": "“too / so …!” — exclamation frame",
+             "ex": "太好了！", "en": "Awesome!"},
+            {"h": "别……了", "py": "bié … le", "g": "“stop …ing”",
+             "ex": "别哭了。", "en": "Stop crying."},
+        ],
+    },
+    "在": {
+        "uses": [
+            {"g": "full verb: to be at / in",
+             "ex": "他在办公室。", "en": "He's in the office."},
+            {"g": "before a place: “in/at …” + action",
+             "ex": "我在北京工作。", "en": "I work in Beijing."},
+            {"h": "在 + verb", "py": "zài + verb", "g": "happening right now: “-ing”",
+             "ex": "我在做饭。", "en": "I'm cooking."},
+        ],
+    },
+    "个": {
+        "uses": [
+            {"g": "the default measure word: number + 个 + noun",
+             "ex": "我们班有二十个学生。", "en": "There are twenty students in our class."},
+            {"g": "not sure which measure word fits? 个 is usually a safe fallback",
+             "ex": "我有一个问题。", "en": "I have a question."},
+            {"h": "这个 / 那个", "py": "zhè ge / nà ge",
+             "g": "“this one / that one” — also the classic um-uh filler while you think",
+             "ex": "我要这个，不要那个。", "en": "I want this one, not that one."},
+        ],
+    },
+    "上": {
+        "uses": [
+            {"h": "上班 / 上课", "py": "shàng bān / shàng kè",
+             "g": "to go to (work, class) — 上 as “attend”",
+             "ex": "我八点上班。", "en": "I start work at eight."},
+            {"h": "上车 / 上网", "py": "shàng chē / shàng wǎng",
+             "g": "to get on / go online — 上 as “get onto”",
+             "ex": "快上车！", "en": "Get in the car, quick!"},
+            {"h": "上个", "g": "“last” with time words",
+             "ex": "上个星期我很忙。", "en": "I was really busy last week."},
+        ],
+    },
+    "为": {
+        "uses": [
+            {"h": "为你", "g": "“for” someone — for their sake",
+             "ex": "我为你骄傲！", "en": "I'm proud of you!"},
+            {"h": "为什么", "g": "“why” — literally “for what”",
+             "ex": "你为什么不吃？", "en": "Why aren't you eating?"},
+            {"h": "为了", "g": "“in order to” — states the purpose up front",
+             "ex": "为了健康，我每天跑步。", "en": "I run every day for my health."},
+            {"h": "认为", "g": "read wéi (2nd tone) in 认为 “to think” and 成为 “to become”",
+             "ex": "我认为你是对的。", "en": "I think you're right."},
+        ],
+    },
+    "地": {
+        "uses": [
+            {"g": "de: adjective + 地 + verb turns it into an adverb (“-ly”)",
+             "ex": "她开心地笑了。", "en": "She smiled happily."},
+            {"g": "dì: the ground, the earth",
+             "ex": "地上都是水。", "en": "There's water all over the floor."},
+            {"g": "dì also starts place words: 地图 map, 地铁 metro",
+             "ex": "我们坐地铁去吧。", "en": "Let's take the metro."},
+        ],
+    },
+    "以": {
+        "uses": [
+            {"h": "可以", "g": "“can, may” — by far the most common 以",
+             "ex": "这里可以拍照吗？", "en": "Can I take photos here?"},
+            {"h": "以为", "g": "“to think (wrongly)” — for assumptions that turned out false",
+             "ex": "我以为今天是周五。", "en": "I thought today was Friday."},
+            {"h": "以前 / 以后", "py": "yǐ qián / yǐ hòu", "g": "“before / after”",
+             "ex": "以后再说吧。", "en": "Let's talk about it later."},
+            {"h": "所以", "g": "“so, therefore”",
+             "ex": "太晚了，所以我先走了。", "en": "It was too late, so I left."},
+        ],
+    },
+    "要": {
+        "uses": [
+            {"g": "“to want” something",
+             "ex": "我要一份炒饭。", "en": "I'll have a fried rice."},
+            {"g": "about to / going to — near future",
+             "ex": "电影要开始了。", "en": "The movie's about to start."},
+            {"g": "“must, need to” — advice and obligations",
+             "ex": "开车要小心。", "en": "Be careful driving."},
+            {"h": "要是", "g": "“if” — colloquial cousin of 如果",
+             "ex": "要是下雨，我们就不去了。", "en": "If it rains, we won't go."},
+        ],
+    },
+    "就": {
+        "intro": "Tiny but everywhere — 就 flavors sentences more than it translates.",
+        "uses": [
+            {"g": "“right away, as soon as” — sooner than expected",
+             "ex": "我马上就好。", "en": "I'll be ready in a sec."},
+            {"g": "“then” — links a condition to its result",
+             "ex": "你累了就休息吧。", "en": "If you're tired, then rest."},
+            {"g": "“only, just”",
+             "ex": "我就看了一眼。", "en": "I only took one look."},
+            {"g": "“exactly, precisely” — emphasis",
+             "ex": "这就是我想要的！", "en": "This is exactly what I wanted!"},
+        ],
+    },
+    "会": {
+        "uses": [
+            {"g": "a learned skill: “know how to”",
+             "ex": "我会游泳。", "en": "I can swim."},
+            {"g": "“will (probably)” — predictions",
+             "ex": "明天会下雨。", "en": "It'll rain tomorrow."},
+            {"h": "一会儿", "g": "“a little while”",
+             "ex": "等一会儿再走吧。", "en": "Let's leave in a little while."},
+            {"h": "开会", "g": "a meeting — the noun side of 会",
+             "ex": "我在开会，晚点儿说。", "en": "I'm in a meeting — talk later."},
+        ],
+    },
+    "可": {
+        "intro": "Little 可 does three very different jobs — this is one to slow down on.",
+        "uses": [
+            {"h": "可以", "g": "“can, may” — permission and possibility",
+             "ex": "我可以坐这儿吗？", "en": "May I sit here?"},
+            {"h": "可是", "g": "“but, however” — softer than 但是, everywhere in speech",
+             "ex": "我很想去，可是没时间。", "en": "I really want to go, but I don't have time."},
+            {"g": "可 alone, for emphasis: “really, definitely”",
+             "ex": "这可不行！", "en": "That really won't do!"},
+            {"h": "可能", "g": "“maybe, possibly” — 可 as “-able” also gives 可爱 cute, 可怕 scary",
+             "ex": "他可能忘了。", "en": "He probably forgot."},
+        ],
+    },
+    "对": {
+        "uses": [
+            {"g": "“correct, right”",
+             "ex": "对，就是这样！", "en": "Right, exactly!"},
+            {"h": "对我", "g": "“to, towards” someone",
+             "ex": "她对我很好。", "en": "She treats me really well."},
+            {"h": "对不起", "g": "“sorry”",
+             "ex": "对不起，我来晚了。", "en": "Sorry I'm late."},
+            {"h": "对了", "g": "“oh right, by the way” — topic switcher",
+             "ex": "对了，你周末有空吗？", "en": "Oh right — are you free this weekend?"},
+        ],
+    },
+    "能": {
+        "uses": [
+            {"g": "can — the circumstances allow it",
+             "ex": "我今晚不能来。", "en": "I can't come tonight."},
+            {"g": "polite requests",
+             "ex": "你能帮我一下吗？", "en": "Could you help me out?"},
+            {"g": "能 vs 会 vs 可以: 会 = learned skill, 能 = circumstances allow, 可以 = permission."},
+        ],
+    },
+    "得": {
+        "intro": "Three readings, three jobs — the classic triple-duty character.",
+        "uses": [
+            {"h": "得到", "g": "dé — to get, to obtain",
+             "ex": "他得到了大家的信任。", "en": "He earned everyone's trust."},
+            {"h": "跑得快", "g": "de — verb + 得 + how well: manner or degree",
+             "ex": "你跑得真快！", "en": "You run so fast!"},
+            {"h": "得走了", "py": "děi zǒu le", "g": "děi — “must, gotta” (colloquial)",
+             "ex": "我得走了。", "en": "I've gotta go."},
+        ],
+    },
+    "着": {
+        "uses": [
+            {"g": "zhe — an ongoing state: something stays that way",
+             "ex": "别站着，坐吧。", "en": "Don't just stand there — sit."},
+            {"h": "V着V", "py": "V zhe V", "g": "zhe — doing one thing while doing another",
+             "ex": "我们走着去吧。", "en": "Let's walk there."},
+            {"h": "睡不着", "g": "zháo — after a verb: managed to (睡着 = fall asleep)",
+             "ex": "我昨晚睡不着。", "en": "I couldn't fall asleep last night."},
+            {"h": "着急", "g": "zháo also in 着急 “worried, anxious”",
+             "ex": "别着急，慢慢来。", "en": "No rush — take your time."},
+        ],
+    },
+    "下": {
+        "uses": [
+            {"h": "下个", "g": "“next” with time words",
+             "ex": "下个月我去中国。", "en": "Next month I'm going to China."},
+            {"h": "下车", "g": "to get off / go down",
+             "ex": "我们下一站下车。", "en": "We get off at the next stop."},
+            {"h": "一下", "g": "verb + 一下: “real quick”",
+             "ex": "我看一下。", "en": "Let me take a quick look."},
+        ],
+    },
+    "过": {
+        "uses": [
+            {"g": "to cross, to pass",
+             "ex": "过马路要小心。", "en": "Be careful crossing the street."},
+            {"h": "吃过", "g": "verb + 过: “have ever done” — life experience",
+             "ex": "你吃过北京烤鸭吗？", "en": "Have you ever had Peking duck?"},
+            {"g": "with time: after, in (some days)",
+             "ex": "过两天再说。", "en": "Let's revisit in a couple of days."},
+        ],
+    },
+    "行": {
+        "uses": [
+            {"g": "xíng — “OK, that works”",
+             "ex": "行，就这么定了。", "en": "OK, it's settled."},
+            {"h": "自行车", "g": "xíng — to go, travel: the “self-go vehicle”, a bike",
+             "ex": "我骑自行车上班。", "en": "I bike to work."},
+            {"h": "银行", "g": "háng — row; trade; read háng in 银行 “bank”",
+             "ex": "银行几点开门？", "en": "What time does the bank open?"},
+        ],
+    },
+    "所": {
+        "uses": [
+            {"h": "所以", "g": "“so, therefore” — by far the most common use",
+             "ex": "我没带伞，所以淋湿了。", "en": "I didn't bring an umbrella, so I got soaked."},
+            {"h": "厕所", "g": "“toilet” — the other 所 you need daily",
+             "ex": "请问，厕所在哪儿？", "en": "Excuse me, where's the bathroom?"},
+            {"h": "所有", "g": "“all, every”",
+             "ex": "所有人都到了。", "en": "Everyone's here."},
+        ],
+    },
+    "多": {
+        "uses": [
+            {"g": "“many, much”",
+             "ex": "今天人真多！", "en": "It's so crowded today!"},
+            {"h": "多 + adj", "py": "duō + adj", "g": "asks “how …?”",
+             "ex": "你多高？", "en": "How tall are you?"},
+            {"h": "多少", "g": "“how many / how much”",
+             "ex": "你的电话是多少？", "en": "What's your phone number?"},
+            {"h": "多 + verb", "py": "duō + verb", "g": "“(do) more”",
+             "ex": "多喝水，早点儿睡。", "en": "Drink more water and sleep early."},
+        ],
+    },
+    "都": {
+        "uses": [
+            {"g": "“all, both” — comes after the things it covers",
+             "ex": "我们都饿了。", "en": "We're all hungry."},
+            {"h": "连……都", "py": "lián … dōu", "g": "“even …”",
+             "ex": "他连早饭都没吃。", "en": "He didn't even eat breakfast."},
+            {"h": "都……了", "py": "dōu … le", "g": "“already …!” — mild disbelief",
+             "ex": "都十二点了，快睡吧！", "en": "It's already midnight — go to sleep!"},
+            {"h": "首都", "g": "read dū in 首都 “capital city”",
+             "ex": "北京是中国的首都。", "en": "Beijing is China's capital."},
+        ],
+    },
+    "当": {
+        "uses": [
+            {"g": "dāng — to work as, to serve as",
+             "ex": "她想当医生。", "en": "She wants to be a doctor."},
+            {"h": "当然", "g": "“of course”",
+             "ex": "当然没问题！", "en": "Of course, no problem!"},
+            {"h": "上当", "g": "dàng (4th tone) — 上当 “to get fooled / scammed”",
+             "ex": "我上当了！", "en": "I got scammed!"},
+        ],
+    },
+    "还": {
+        "uses": [
+            {"g": "hái — “still”",
+             "ex": "他还没起床。", "en": "He still hasn't gotten up."},
+            {"g": "hái — “also, in addition”",
+             "ex": "你还要别的吗？", "en": "Do you want anything else?"},
+            {"h": "还是", "g": "“or” in questions; also “had better”",
+             "ex": "你喝茶还是咖啡？", "en": "Tea or coffee?"},
+            {"h": "还钱", "g": "huán — to return, to give back",
+             "ex": "我下个月还钱。", "en": "I'll pay the money back next month."},
+        ],
+    },
+    "好": {
+        "uses": [
+            {"g": "“good; fine” — also the all-purpose “OK”",
+             "ex": "好，就这样吧。", "en": "OK, let's leave it at that."},
+            {"h": "好 + adj", "py": "hǎo + adj", "g": "“so …!”",
+             "ex": "今天好热啊！", "en": "It's so hot today!"},
+            {"h": "好 + verb", "py": "hǎo + verb", "g": "easy / nice to …",
+             "ex": "这个很好用。", "en": "This works really well."},
+            {"h": "爱好", "g": "hào (4th tone) — “to be fond of”: 爱好 hobby",
+             "ex": "你有什么爱好？", "en": "What are your hobbies?"},
+        ],
+    },
+    "只": {
+        "uses": [
+            {"g": "zhǐ — “only, just”",
+             "ex": "我只有十块钱。", "en": "I've only got ten kuai."},
+            {"h": "一只", "g": "zhī — measure word for animals (and one of a pair)",
+             "ex": "我家有两只猫。", "en": "I have two cats."},
+        ],
+    },
+    "长": {
+        "uses": [
+            {"g": "cháng — long",
+             "ex": "这条路好长啊！", "en": "This road is so long!"},
+            {"g": "zhǎng — to grow (up)",
+             "ex": "孩子们长大了。", "en": "The kids have grown up."},
+            {"h": "长得", "g": "zhǎng — 长得 describes someone's looks",
+             "ex": "你们俩长得真像！", "en": "You two look so alike!"},
+        ],
+    },
+    "把": {
+        "intro": "The famous 把-sentence: pull the object up front and say what you did to it.",
+        "uses": [
+            {"h": "把 X + verb", "py": "bǎ X + verb", "g": "“take X and …” — focuses on what happens to the object",
+             "ex": "请把手机给我。", "en": "Please hand me the phone."},
+            {"g": "great for mishaps — what got lost, broken, forgotten",
+             "ex": "我把钥匙忘在家里了。", "en": "I left my keys at home."},
+            {"h": "一把", "g": "measure word for things with handles",
+             "ex": "带一把伞吧。", "en": "Take an umbrella."},
+        ],
+    },
+    "又": {
+        "uses": [
+            {"g": "“again” — for things that already happened (future repeats use 再)",
+             "ex": "我又忘带钥匙了。", "en": "I forgot my keys again."},
+            {"h": "又……又", "py": "yòu … yòu", "g": "“both … and …”",
+             "ex": "这家店又便宜又好吃。", "en": "This place is cheap and tasty."},
+        ],
+    },
+    "点": {
+        "uses": [
+            {"g": "o'clock",
+             "ex": "我们六点见。", "en": "See you at six."},
+            {"h": "一点儿 / 有点儿", "py": "yì diǎnr / yǒu diǎnr",
+             "g": "“a bit” — 一点儿 goes after, 有点儿 before (usually complaints)",
+             "ex": "我有点儿累。", "en": "I'm a bit tired."},
+            {"h": "点菜", "g": "to order food — “point at” the menu",
+             "ex": "我们点菜吧！", "en": "Let's order!"},
+        ],
+    },
+}
+
+
 def build():
     out = []
     for rank, chpy in sorted(BASE_BY_RANK.items()):
@@ -782,7 +1177,34 @@ def build():
             row["parts"], row["mnem"] = m
         else:
             print(f"WARNING: no mnemonic for #{rank} {char}")
+        lesson = LESSONS.get(char)
+        if lesson:
+            row["lesson"] = lesson_json(char, lesson)
         out.append(row)
+    return out
+
+
+def lesson_json(char, lesson):
+    uses = []
+    for u in lesson["uses"]:
+        d = {"g": u["g"]}
+        h = u.get("h")
+        if h:
+            d["h"] = h
+            if "py" in u:
+                d["hPy"] = u["py"]
+            elif HANZI.fullmatch(h):
+                d["hPy"] = to_pinyin(h)
+            else:
+                raise ValueError(f"lesson head {h!r} for {char} needs explicit 'py'")
+        if "ex" in u:
+            d["ex"] = u["ex"]
+            d["exPy"] = to_pinyin(u["ex"])
+            d["exEn"] = u["en"]
+        uses.append(d)
+    out = {"uses": uses}
+    if lesson.get("intro"):
+        out["intro"] = lesson["intro"]
     return out
 
 
