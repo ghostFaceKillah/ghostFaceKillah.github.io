@@ -11,7 +11,47 @@ window.COLLOQUIAL_DATA = [
     "exPy": "zhè shì wǒ de shǒu jī.",
     "exEn": "This is my phone.",
     "parts": "白 white + 勺 ladle",
-    "mnem": "A <b>white</b> (白) <b>ladle</b> (勺) — whose is it? Mark the owner with 的: 我的 = mine."
+    "mnem": "A <b>white</b> (白) <b>ladle</b> (勺) — whose is it? Mark the owner with 的: 我的 = mine.",
+    "lesson": {
+      "uses": [
+        {
+          "g": "possession: X 的 Y = “X's Y”",
+          "h": "我的",
+          "hPy": "wǒ de",
+          "ex": "这是妈妈的钥匙。",
+          "exPy": "zhè shì mā ma de yào shi.",
+          "exEn": "These are mom's keys."
+        },
+        {
+          "g": "glues any description to a noun: description + 的 + noun",
+          "h": "红色的",
+          "hPy": "hóng sè de",
+          "ex": "我喜欢红色的车。",
+          "exPy": "wǒ xǐ huān hóng sè de chē.",
+          "exEn": "I like red cars."
+        },
+        {
+          "g": "drop the noun and 的 means “the … one / … stuff”",
+          "h": "吃的",
+          "hPy": "chī de",
+          "ex": "有什么好吃的？",
+          "exPy": "yǒu shén me hǎo chī de?",
+          "exEn": "Anything tasty around?"
+        },
+        {
+          "g": "wraps up how/when/where something happened, for emphasis",
+          "h": "是……的",
+          "hPy": "shì … de",
+          "ex": "我是坐飞机来的。",
+          "exPy": "wǒ shì zuò fēi jī lái de.",
+          "exEn": "I came by plane (that's how)."
+        },
+        {
+          "g": "Watch the readings: dì in 目的 (mùdì, goal), dí in 的确 (díquè, indeed)."
+        }
+      ],
+      "intro": "The single most common character in Chinese — a little glue word with three main jobs."
+    }
   },
   {
     "rank": 2,
@@ -23,7 +63,44 @@ window.COLLOQUIAL_DATA = [
     "exEn": "I want one coffee.",
     "tone": "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一杯 is yì bēi.",
     "parts": "one stroke",
-    "mnem": "<b>One</b> single stroke — the simplest character there is."
+    "mnem": "<b>One</b> single stroke — the simplest character there is.",
+    "lesson": {
+      "uses": [
+        {
+          "g": "plain counting: 一 + measure word + noun",
+          "h": "一个",
+          "hPy": "yí gè",
+          "ex": "我买了一个包子。",
+          "exPy": "wǒ mǎi le yí gè bāo zi.",
+          "exEn": "I bought a steamed bun."
+        },
+        {
+          "g": "verb + 一下 softens it: “real quick, a bit”",
+          "h": "一下",
+          "hPy": "yí xià",
+          "ex": "你等一下！",
+          "exPy": "nǐ děng yí xià!",
+          "exEn": "Wait a sec!"
+        },
+        {
+          "g": "“a little”",
+          "h": "一点儿",
+          "hPy": "yì diǎnr",
+          "ex": "我会说一点儿中文。",
+          "exPy": "wǒ huì shuō yì diǎnr zhōng wén.",
+          "exEn": "I speak a little Chinese."
+        },
+        {
+          "g": "“together”",
+          "h": "一起",
+          "hPy": "yì qǐ",
+          "ex": "明天一起吃饭吧。",
+          "exPy": "míng tiān yì qǐ chī fàn ba.",
+          "exEn": "Let's eat together tomorrow."
+        }
+      ],
+      "intro": "Not just the number one — 一 powers a bunch of everyday patterns."
+    }
   },
   {
     "rank": 3,
@@ -34,7 +111,35 @@ window.COLLOQUIAL_DATA = [
     "exPy": "wǒ shì xué shēng.",
     "exEn": "I am a student.",
     "parts": "日 sun over a straight base",
-    "mnem": "Under the <b>sun</b> (日) everything stands straight and true — “it <b>is</b> so.”"
+    "mnem": "Under the <b>sun</b> (日) everything stands straight and true — “it <b>is</b> so.”",
+    "lesson": {
+      "uses": [
+        {
+          "g": "identifying things: “A is B”",
+          "h": "A 是 B",
+          "hPy": "A shì B",
+          "ex": "他是我哥哥。",
+          "exPy": "tā shì wǒ gē ge.",
+          "exEn": "He's my older brother."
+        },
+        {
+          "g": "agreeing: “yeah, right?”",
+          "h": "是啊",
+          "hPy": "shì a",
+          "ex": "是啊，太贵了！",
+          "exPy": "shì a, tài guì le!",
+          "exEn": "Yeah, way too expensive!"
+        },
+        {
+          "g": "emphasizes when/how/where something happened",
+          "h": "是……的",
+          "hPy": "shì … de",
+          "ex": "这是我自己做的。",
+          "exPy": "zhè shì wǒ zì jǐ zuò de.",
+          "exEn": "I made this myself."
+        }
+      ]
+    }
   },
   {
     "rank": 4,
@@ -46,7 +151,33 @@ window.COLLOQUIAL_DATA = [
     "exEn": "I don't know.",
     "tone": "Tone change: 不 becomes bú before a 4th tone, otherwise bù — here 不知 is bù zhī.",
     "parts": "pictograph: a root blocked by the ground",
-    "mnem": "A seed's root hits solid rock and can't sprout — <b>no</b>, <b>not</b> happening."
+    "mnem": "A seed's root hits solid rock and can't sprout — <b>no</b>, <b>not</b> happening.",
+    "lesson": {
+      "uses": [
+        {
+          "g": "straight negation, right before a verb or adjective",
+          "ex": "我今天不去。",
+          "exPy": "wǒ jīn tiān bú qù.",
+          "exEn": "I'm not going today."
+        },
+        {
+          "g": "verb + 不 + verb makes a casual yes/no question",
+          "h": "去不去",
+          "hPy": "qù bú qù",
+          "ex": "你去不去？",
+          "exPy": "nǐ qù bú qù?",
+          "exEn": "Are you going or not?"
+        },
+        {
+          "g": "“no need” — the polite way to decline",
+          "h": "不用",
+          "hPy": "bú yòng",
+          "ex": "不用了，谢谢！",
+          "exPy": "bú yòng le, xiè xiè!",
+          "exEn": "No need, thanks!"
+        }
+      ]
+    }
   },
   {
     "rank": 5,
@@ -57,7 +188,40 @@ window.COLLOQUIAL_DATA = [
     "exPy": "wǒ chī le.",
     "exEn": "I've eaten.",
     "parts": "子 child without arms",
-    "mnem": "A <b>child</b> (子) swaddled with its arms wrapped in — nothing left to do: done, finished, 了."
+    "mnem": "A <b>child</b> (子) swaddled with its arms wrapped in — nothing left to do: done, finished, 了.",
+    "lesson": {
+      "uses": [
+        {
+          "g": "right after the verb: the action happened, it's done",
+          "ex": "我买了三本书。",
+          "exPy": "wǒ mǎi le sān běn shū.",
+          "exEn": "I bought three books."
+        },
+        {
+          "g": "at the end of the sentence: new situation — something changed",
+          "ex": "下雨了！",
+          "exPy": "xià yǔ le!",
+          "exEn": "It's raining (now)!"
+        },
+        {
+          "g": "“too / so …!” — exclamation frame",
+          "h": "太……了",
+          "hPy": "tài … le",
+          "ex": "太好了！",
+          "exPy": "tài hǎo le!",
+          "exEn": "Awesome!"
+        },
+        {
+          "g": "“stop …ing”",
+          "h": "别……了",
+          "hPy": "bié … le",
+          "ex": "别哭了。",
+          "exPy": "bié kū le.",
+          "exEn": "Stop crying."
+        }
+      ],
+      "intro": "The famous 了 — two core jobs cover most of what you'll meet."
+    }
   },
   {
     "rank": 6,
@@ -68,7 +232,31 @@ window.COLLOQUIAL_DATA = [
     "exPy": "wǒ zài jiā.",
     "exEn": "I'm at home.",
     "parts": "才 sprout + 土 earth",
-    "mnem": "A sprout (才) rooted in the <b>earth</b> (土) — it exists somewhere: <b>at</b>, <b>in</b>."
+    "mnem": "A sprout (才) rooted in the <b>earth</b> (土) — it exists somewhere: <b>at</b>, <b>in</b>.",
+    "lesson": {
+      "uses": [
+        {
+          "g": "full verb: to be at / in",
+          "ex": "他在办公室。",
+          "exPy": "tā zài bàn gōng shì.",
+          "exEn": "He's in the office."
+        },
+        {
+          "g": "before a place: “in/at …” + action",
+          "ex": "我在北京工作。",
+          "exPy": "wǒ zài běi jīng gōng zuò.",
+          "exEn": "I work in Beijing."
+        },
+        {
+          "g": "happening right now: “-ing”",
+          "h": "在 + verb",
+          "hPy": "zài + verb",
+          "ex": "我在做饭。",
+          "exPy": "wǒ zài zuò fàn.",
+          "exEn": "I'm cooking."
+        }
+      ]
+    }
   },
   {
     "rank": 7,
@@ -135,7 +323,31 @@ window.COLLOQUIAL_DATA = [
     "exPy": "gěi wǒ yí gè.",
     "exEn": "Give me one.",
     "parts": "人 person + 丨 stick",
-    "mnem": "A person holding one bamboo <b>stick</b> (丨) — one generic <b>item</b>: the all-purpose measure word."
+    "mnem": "A person holding one bamboo <b>stick</b> (丨) — one generic <b>item</b>: the all-purpose measure word.",
+    "lesson": {
+      "uses": [
+        {
+          "g": "the default measure word: number + 个 + noun",
+          "ex": "我们班有二十个学生。",
+          "exPy": "wǒ men bān yǒu èr shí gè xué shēng.",
+          "exEn": "There are twenty students in our class."
+        },
+        {
+          "g": "not sure which measure word fits? 个 is usually a safe fallback",
+          "ex": "我有一个问题。",
+          "exPy": "wǒ yǒu yí gè wèn tí.",
+          "exEn": "I have a question."
+        },
+        {
+          "g": "“this one / that one” — also the classic um-uh filler while you think",
+          "h": "这个 / 那个",
+          "hPy": "zhè ge / nà ge",
+          "ex": "我要这个，不要那个。",
+          "exPy": "wǒ yào zhè ge, bú yào nà ge.",
+          "exEn": "I want this one, not that one."
+        }
+      ]
+    }
   },
   {
     "rank": 13,
@@ -179,7 +391,35 @@ window.COLLOQUIAL_DATA = [
     "exPy": "zhuō zi shàng yǒu yì běn shū.",
     "exEn": "There's a book on the table.",
     "parts": "a mark above the base line",
-    "mnem": "A flag planted <b>above</b> the ground line — <b>up</b>, on top."
+    "mnem": "A flag planted <b>above</b> the ground line — <b>up</b>, on top.",
+    "lesson": {
+      "uses": [
+        {
+          "g": "to go to (work, class) — 上 as “attend”",
+          "h": "上班 / 上课",
+          "hPy": "shàng bān / shàng kè",
+          "ex": "我八点上班。",
+          "exPy": "wǒ bā diǎn shàng bān.",
+          "exEn": "I start work at eight."
+        },
+        {
+          "g": "to get on / go online — 上 as “get onto”",
+          "h": "上车 / 上网",
+          "hPy": "shàng chē / shàng wǎng",
+          "ex": "快上车！",
+          "exPy": "kuài shàng chē!",
+          "exEn": "Get in the car, quick!"
+        },
+        {
+          "g": "“last” with time words",
+          "h": "上个",
+          "hPy": "shàng gè",
+          "ex": "上个星期我很忙。",
+          "exPy": "shàng gè xīng qī wǒ hěn máng.",
+          "exEn": "I was really busy last week."
+        }
+      ]
+    }
   },
   {
     "rank": 17,
@@ -201,7 +441,43 @@ window.COLLOQUIAL_DATA = [
     "exPy": "wǒ wèi nǐ gāo xìng.",
     "exEn": "I'm happy for you.",
     "parts": "from 爲: a hand leading an elephant",
-    "mnem": "Originally a hand leading an elephant to work — effort <b>for</b> a purpose: 为你 for you."
+    "mnem": "Originally a hand leading an elephant to work — effort <b>for</b> a purpose: 为你 for you.",
+    "lesson": {
+      "uses": [
+        {
+          "g": "“for” someone — for their sake",
+          "h": "为你",
+          "hPy": "wèi nǐ",
+          "ex": "我为你骄傲！",
+          "exPy": "wǒ wèi nǐ jiāo ào!",
+          "exEn": "I'm proud of you!"
+        },
+        {
+          "g": "“why” — literally “for what”",
+          "h": "为什么",
+          "hPy": "wèi shén me",
+          "ex": "你为什么不吃？",
+          "exPy": "nǐ wèi shén me bù chī?",
+          "exEn": "Why aren't you eating?"
+        },
+        {
+          "g": "“in order to” — states the purpose up front",
+          "h": "为了",
+          "hPy": "wèi le",
+          "ex": "为了健康，我每天跑步。",
+          "exPy": "wèi le jiàn kāng, wǒ měi tiān pǎo bù.",
+          "exEn": "I run every day for my health."
+        },
+        {
+          "g": "read wéi (2nd tone) in 认为 “to think” and 成为 “to become”",
+          "h": "认为",
+          "hPy": "rèn wéi",
+          "ex": "我认为你是对的。",
+          "exPy": "wǒ rèn wéi nǐ shì duì de.",
+          "exEn": "I think you're right."
+        }
+      ]
+    }
   },
   {
     "rank": 19,
@@ -234,7 +510,29 @@ window.COLLOQUIAL_DATA = [
     "exPy": "tā màn màn de zǒu.",
     "exEn": "He walked slowly.",
     "parts": "土 earth + 也",
-    "mnem": "<b>Earth</b> (土) is the base of everything — the ground; as a particle it grounds adverbs: 慢慢地 slowly."
+    "mnem": "<b>Earth</b> (土) is the base of everything — the ground; as a particle it grounds adverbs: 慢慢地 slowly.",
+    "lesson": {
+      "uses": [
+        {
+          "g": "de: adjective + 地 + verb turns it into an adverb (“-ly”)",
+          "ex": "她开心地笑了。",
+          "exPy": "tā kāi xīn de xiào le.",
+          "exEn": "She smiled happily."
+        },
+        {
+          "g": "dì: the ground, the earth",
+          "ex": "地上都是水。",
+          "exPy": "dì shàng dōu shì shuǐ.",
+          "exEn": "There's water all over the floor."
+        },
+        {
+          "g": "dì also starts place words: 地图 map, 地铁 metro",
+          "ex": "我们坐地铁去吧。",
+          "exPy": "wǒ men zuò dì tiě qù ba.",
+          "exEn": "Let's take the metro."
+        }
+      ]
+    }
   },
   {
     "rank": 22,
@@ -256,7 +554,43 @@ window.COLLOQUIAL_DATA = [
     "exPy": "wǒ yǐ wéi nǐ zǒu le.",
     "exEn": "I thought you'd left.",
     "parts": "a person picking up a tool",
-    "mnem": "Pick up the tool and work <b>by means of</b> it; 以为 = take it (wrongly) to be so."
+    "mnem": "Pick up the tool and work <b>by means of</b> it; 以为 = take it (wrongly) to be so.",
+    "lesson": {
+      "uses": [
+        {
+          "g": "“can, may” — by far the most common 以",
+          "h": "可以",
+          "hPy": "kě yǐ",
+          "ex": "这里可以拍照吗？",
+          "exPy": "zhè lǐ kě yǐ pāi zhào ma?",
+          "exEn": "Can I take photos here?"
+        },
+        {
+          "g": "“to think (wrongly)” — for assumptions that turned out false",
+          "h": "以为",
+          "hPy": "yǐ wéi",
+          "ex": "我以为今天是周五。",
+          "exPy": "wǒ yǐ wéi jīn tiān shì zhōu wǔ.",
+          "exEn": "I thought today was Friday."
+        },
+        {
+          "g": "“before / after”",
+          "h": "以前 / 以后",
+          "hPy": "yǐ qián / yǐ hòu",
+          "ex": "以后再说吧。",
+          "exPy": "yǐ hòu zài shuō ba.",
+          "exEn": "Let's talk about it later."
+        },
+        {
+          "g": "“so, therefore”",
+          "h": "所以",
+          "hPy": "suǒ yǐ",
+          "ex": "太晚了，所以我先走了。",
+          "exPy": "tài wǎn le, suǒ yǐ wǒ xiān zǒu le.",
+          "exEn": "It was too late, so I left."
+        }
+      ]
+    }
   },
   {
     "rank": 24,
@@ -289,7 +623,37 @@ window.COLLOQUIAL_DATA = [
     "exPy": "wǒ yào yì bēi shuǐ.",
     "exEn": "I want a glass of water.",
     "parts": "西 west + 女 woman",
-    "mnem": "The <b>woman</b> (女) from the <b>west</b> (西) knows exactly what she <b>wants</b>."
+    "mnem": "The <b>woman</b> (女) from the <b>west</b> (西) knows exactly what she <b>wants</b>.",
+    "lesson": {
+      "uses": [
+        {
+          "g": "“to want” something",
+          "ex": "我要一份炒饭。",
+          "exPy": "wǒ yào yí fèn chǎo fàn.",
+          "exEn": "I'll have a fried rice."
+        },
+        {
+          "g": "about to / going to — near future",
+          "ex": "电影要开始了。",
+          "exPy": "diàn yǐng yào kāi shǐ le.",
+          "exEn": "The movie's about to start."
+        },
+        {
+          "g": "“must, need to” — advice and obligations",
+          "ex": "开车要小心。",
+          "exPy": "kāi chē yào xiǎo xīn.",
+          "exEn": "Be careful driving."
+        },
+        {
+          "g": "“if” — colloquial cousin of 如果",
+          "h": "要是",
+          "hPy": "yào shì",
+          "ex": "要是下雨，我们就不去了。",
+          "exPy": "yào shì xià yǔ, wǒ men jiù bú qù le.",
+          "exEn": "If it rains, we won't go."
+        }
+      ]
+    }
   },
   {
     "rank": 27,
@@ -300,7 +664,36 @@ window.COLLOQUIAL_DATA = [
     "exPy": "wǒ mǎ shàng jiù dào.",
     "exEn": "I'll be there right away.",
     "parts": "京 capital + 尤 outstanding",
-    "mnem": "Head straight for the <b>capital</b> (京), no detours — <b>right away</b>, <b>just</b> so: 马上就到."
+    "mnem": "Head straight for the <b>capital</b> (京), no detours — <b>right away</b>, <b>just</b> so: 马上就到.",
+    "lesson": {
+      "uses": [
+        {
+          "g": "“right away, as soon as” — sooner than expected",
+          "ex": "我马上就好。",
+          "exPy": "wǒ mǎ shàng jiù hǎo.",
+          "exEn": "I'll be ready in a sec."
+        },
+        {
+          "g": "“then” — links a condition to its result",
+          "ex": "你累了就休息吧。",
+          "exPy": "nǐ lèi le jiù xiū xī ba.",
+          "exEn": "If you're tired, then rest."
+        },
+        {
+          "g": "“only, just”",
+          "ex": "我就看了一眼。",
+          "exPy": "wǒ jiù kàn le yì yǎn.",
+          "exEn": "I only took one look."
+        },
+        {
+          "g": "“exactly, precisely” — emphasis",
+          "ex": "这就是我想要的！",
+          "exPy": "zhè jiù shì wǒ xiǎng yào de!",
+          "exEn": "This is exactly what I wanted!"
+        }
+      ],
+      "intro": "Tiny but everywhere — 就 flavors sentences more than it translates."
+    }
   },
   {
     "rank": 28,
@@ -322,7 +715,39 @@ window.COLLOQUIAL_DATA = [
     "exPy": "nǐ huì shuō zhōng wén ma?",
     "exEn": "Can you speak Chinese?",
     "parts": "人 person + 云 cloud",
-    "mnem": "<b>People</b> (人) gathering like <b>clouds</b> (云) — a meeting; skills you've gathered are what you <b>can</b> do."
+    "mnem": "<b>People</b> (人) gathering like <b>clouds</b> (云) — a meeting; skills you've gathered are what you <b>can</b> do.",
+    "lesson": {
+      "uses": [
+        {
+          "g": "a learned skill: “know how to”",
+          "ex": "我会游泳。",
+          "exPy": "wǒ huì yóu yǒng.",
+          "exEn": "I can swim."
+        },
+        {
+          "g": "“will (probably)” — predictions",
+          "ex": "明天会下雨。",
+          "exPy": "míng tiān huì xià yǔ.",
+          "exEn": "It'll rain tomorrow."
+        },
+        {
+          "g": "“a little while”",
+          "h": "一会儿",
+          "hPy": "yí huìr",
+          "ex": "等一会儿再走吧。",
+          "exPy": "děng yí huìr zài zǒu ba.",
+          "exEn": "Let's leave in a little while."
+        },
+        {
+          "g": "a meeting — the noun side of 会",
+          "h": "开会",
+          "hPy": "kāi huì",
+          "ex": "我在开会，晚点儿说。",
+          "exPy": "wǒ zài kāi huì, wǎn diǎnr shuō.",
+          "exEn": "I'm in a meeting — talk later."
+        }
+      ]
+    }
   },
   {
     "rank": 30,
@@ -334,7 +759,42 @@ window.COLLOQUIAL_DATA = [
     "exEn": "May I come in?",
     "tone": "Tone change: a 3rd tone before another 3rd tone is pronounced 2nd tone — 可以 is written kě yǐ but said ké yǐ.",
     "parts": "丁 nail + 口 mouth",
-    "mnem": "The <b>mouth</b> (口) nails it down (丁): “<b>Can</b> do — approved!”"
+    "mnem": "The <b>mouth</b> (口) nails it down (丁): “<b>Can</b> do — approved!”",
+    "lesson": {
+      "uses": [
+        {
+          "g": "“can, may” — permission and possibility",
+          "h": "可以",
+          "hPy": "kě yǐ",
+          "ex": "我可以坐这儿吗？",
+          "exPy": "wǒ kě yǐ zuò zhèr ma?",
+          "exEn": "May I sit here?"
+        },
+        {
+          "g": "“but, however” — softer than 但是, everywhere in speech",
+          "h": "可是",
+          "hPy": "kě shì",
+          "ex": "我很想去，可是没时间。",
+          "exPy": "wǒ hěn xiǎng qù, kě shì méi shí jiān.",
+          "exEn": "I really want to go, but I don't have time."
+        },
+        {
+          "g": "可 alone, for emphasis: “really, definitely”",
+          "ex": "这可不行！",
+          "exPy": "zhè kě bù xíng!",
+          "exEn": "That really won't do!"
+        },
+        {
+          "g": "“maybe, possibly” — 可 as “-able” also gives 可爱 cute, 可怕 scary",
+          "h": "可能",
+          "hPy": "kě néng",
+          "ex": "他可能忘了。",
+          "exPy": "tā kě néng wàng le.",
+          "exEn": "He probably forgot."
+        }
+      ],
+      "intro": "Little 可 does three very different jobs — this is one to slow down on."
+    }
   },
   {
     "rank": 31,
@@ -368,7 +828,41 @@ window.COLLOQUIAL_DATA = [
     "exPy": "nǐ shuō de duì.",
     "exEn": "You're right.",
     "parts": "又 hand + 寸 inch",
-    "mnem": "A <b>hand</b> (又) measuring to the exact <b>inch</b> (寸) — precisely <b>correct</b>: 对!"
+    "mnem": "A <b>hand</b> (又) measuring to the exact <b>inch</b> (寸) — precisely <b>correct</b>: 对!",
+    "lesson": {
+      "uses": [
+        {
+          "g": "“correct, right”",
+          "ex": "对，就是这样！",
+          "exPy": "duì, jiù shì zhè yàng!",
+          "exEn": "Right, exactly!"
+        },
+        {
+          "g": "“to, towards” someone",
+          "h": "对我",
+          "hPy": "duì wǒ",
+          "ex": "她对我很好。",
+          "exPy": "tā duì wǒ hěn hǎo.",
+          "exEn": "She treats me really well."
+        },
+        {
+          "g": "“sorry”",
+          "h": "对不起",
+          "hPy": "duì bu qǐ",
+          "ex": "对不起，我来晚了。",
+          "exPy": "duì bu qǐ, wǒ lái wǎn le.",
+          "exEn": "Sorry I'm late."
+        },
+        {
+          "g": "“oh right, by the way” — topic switcher",
+          "h": "对了",
+          "hPy": "duì le",
+          "ex": "对了，你周末有空吗？",
+          "exPy": "duì le, nǐ zhōu mò yǒu kòng ma?",
+          "exEn": "Oh right — are you free this weekend?"
+        }
+      ]
+    }
   },
   {
     "rank": 34,
@@ -390,7 +884,26 @@ window.COLLOQUIAL_DATA = [
     "exPy": "wǒ néng bāng nǐ ma?",
     "exEn": "Can I help you?",
     "parts": "pictograph: a bear (月 body + 匕匕 claws)",
-    "mnem": "Originally a <b>bear</b> — strong and capable: <b>can</b>, able to."
+    "mnem": "Originally a <b>bear</b> — strong and capable: <b>can</b>, able to.",
+    "lesson": {
+      "uses": [
+        {
+          "g": "can — the circumstances allow it",
+          "ex": "我今晚不能来。",
+          "exPy": "wǒ jīn wǎn bù néng lái.",
+          "exEn": "I can't come tonight."
+        },
+        {
+          "g": "polite requests",
+          "ex": "你能帮我一下吗？",
+          "exPy": "nǐ néng bāng wǒ yí xià ma?",
+          "exEn": "Could you help me out?"
+        },
+        {
+          "g": "能 vs 会 vs 可以: 会 = learned skill, 能 = circumstances allow, 可以 = permission."
+        }
+      ]
+    }
   },
   {
     "rank": 36,
@@ -434,7 +947,36 @@ window.COLLOQUIAL_DATA = [
     "exPy": "wǒ dé dào le hǎo xiāo xī.",
     "exEn": "I got good news.",
     "parts": "彳 step + 旦 dawn + 寸 inch",
-    "mnem": "<b>Step</b> (彳) out at <b>dawn</b> (旦) and come home with treasure in <b>hand</b> (寸) — to <b>get</b>: 得到."
+    "mnem": "<b>Step</b> (彳) out at <b>dawn</b> (旦) and come home with treasure in <b>hand</b> (寸) — to <b>get</b>: 得到.",
+    "lesson": {
+      "uses": [
+        {
+          "g": "dé — to get, to obtain",
+          "h": "得到",
+          "hPy": "dé dào",
+          "ex": "他得到了大家的信任。",
+          "exPy": "tā dé dào le dà jiā de xìn rèn.",
+          "exEn": "He earned everyone's trust."
+        },
+        {
+          "g": "de — verb + 得 + how well: manner or degree",
+          "h": "跑得快",
+          "hPy": "pǎo de kuài",
+          "ex": "你跑得真快！",
+          "exPy": "nǐ pǎo de zhēn kuài!",
+          "exEn": "You run so fast!"
+        },
+        {
+          "g": "děi — “must, gotta” (colloquial)",
+          "h": "得走了",
+          "hPy": "děi zǒu le",
+          "ex": "我得走了。",
+          "exPy": "wǒ děi zǒu le.",
+          "exEn": "I've gotta go."
+        }
+      ],
+      "intro": "Three readings, three jobs — the classic triple-duty character."
+    }
   },
   {
     "rank": 40,
@@ -456,7 +998,41 @@ window.COLLOQUIAL_DATA = [
     "exPy": "wǒ zài děng zhe nǐ.",
     "exEn": "I'm waiting for you.",
     "parts": "羊 sheep + 目 eye",
-    "mnem": "Your <b>eye</b> (目) fixed on the <b>sheep</b> (羊), continuously — the “-ing” particle: 等着 waiting."
+    "mnem": "Your <b>eye</b> (目) fixed on the <b>sheep</b> (羊), continuously — the “-ing” particle: 等着 waiting.",
+    "lesson": {
+      "uses": [
+        {
+          "g": "zhe — an ongoing state: something stays that way",
+          "ex": "别站着，坐吧。",
+          "exPy": "bié zhàn zhe, zuò ba.",
+          "exEn": "Don't just stand there — sit."
+        },
+        {
+          "g": "zhe — doing one thing while doing another",
+          "h": "V着V",
+          "hPy": "V zhe V",
+          "ex": "我们走着去吧。",
+          "exPy": "wǒ men zǒu zhe qù ba.",
+          "exEn": "Let's walk there."
+        },
+        {
+          "g": "zháo — after a verb: managed to (睡着 = fall asleep)",
+          "h": "睡不着",
+          "hPy": "shuì bù zháo",
+          "ex": "我昨晚睡不着。",
+          "exPy": "wǒ zuó wǎn shuì bù zháo.",
+          "exEn": "I couldn't fall asleep last night."
+        },
+        {
+          "g": "zháo also in 着急 “worried, anxious”",
+          "h": "着急",
+          "hPy": "zháo jí",
+          "ex": "别着急，慢慢来。",
+          "exPy": "bié zháo jí, màn màn lái.",
+          "exEn": "No rush — take your time."
+        }
+      ]
+    }
   },
   {
     "rank": 42,
@@ -467,7 +1043,35 @@ window.COLLOQUIAL_DATA = [
     "exPy": "xià yǔ le.",
     "exEn": "It's raining.",
     "parts": "a mark below the base line",
-    "mnem": "A root growing <b>below</b> the ground line — <b>down</b>, under: 下雨 rain comes down."
+    "mnem": "A root growing <b>below</b> the ground line — <b>down</b>, under: 下雨 rain comes down.",
+    "lesson": {
+      "uses": [
+        {
+          "g": "“next” with time words",
+          "h": "下个",
+          "hPy": "xià gè",
+          "ex": "下个月我去中国。",
+          "exPy": "xià gè yuè wǒ qù zhōng guó.",
+          "exEn": "Next month I'm going to China."
+        },
+        {
+          "g": "to get off / go down",
+          "h": "下车",
+          "hPy": "xià chē",
+          "ex": "我们下一站下车。",
+          "exPy": "wǒ men xià yí zhàn xià chē.",
+          "exEn": "We get off at the next stop."
+        },
+        {
+          "g": "verb + 一下: “real quick”",
+          "h": "一下",
+          "hPy": "yí xià",
+          "ex": "我看一下。",
+          "exPy": "wǒ kàn yí xià.",
+          "exEn": "Let me take a quick look."
+        }
+      ]
+    }
   },
   {
     "rank": 43,
@@ -511,7 +1115,31 @@ window.COLLOQUIAL_DATA = [
     "exPy": "wǒ qù guò běi jīng.",
     "exEn": "I've been to Beijing.",
     "parts": "辶 walk + 寸 inch",
-    "mnem": "<b>Walking</b> (辶) past, inch (寸) by inch — to <b>cross</b>; once crossed it's experience: 去过 have been."
+    "mnem": "<b>Walking</b> (辶) past, inch (寸) by inch — to <b>cross</b>; once crossed it's experience: 去过 have been.",
+    "lesson": {
+      "uses": [
+        {
+          "g": "to cross, to pass",
+          "ex": "过马路要小心。",
+          "exPy": "guò mǎ lù yào xiǎo xīn.",
+          "exEn": "Be careful crossing the street."
+        },
+        {
+          "g": "verb + 过: “have ever done” — life experience",
+          "h": "吃过",
+          "hPy": "chī guò",
+          "ex": "你吃过北京烤鸭吗？",
+          "exPy": "nǐ chī guò běi jīng kǎo yā ma?",
+          "exEn": "Have you ever had Peking duck?"
+        },
+        {
+          "g": "with time: after, in (some days)",
+          "ex": "过两天再说。",
+          "exPy": "guò liǎng tiān zài shuō.",
+          "exEn": "Let's revisit in a couple of days."
+        }
+      ]
+    }
   },
   {
     "rank": 47,
@@ -588,7 +1216,33 @@ window.COLLOQUIAL_DATA = [
     "exPy": "xíng, jiù zhè me bàn.",
     "exEn": "OK, let's do it that way.",
     "parts": "pictograph: a crossroads",
-    "mnem": "A <b>crossroads</b> where everything moves — to go; “行!” = it works, OK, let's go."
+    "mnem": "A <b>crossroads</b> where everything moves — to go; “行!” = it works, OK, let's go.",
+    "lesson": {
+      "uses": [
+        {
+          "g": "xíng — “OK, that works”",
+          "ex": "行，就这么定了。",
+          "exPy": "xíng, jiù zhè me dìng le.",
+          "exEn": "OK, it's settled."
+        },
+        {
+          "g": "xíng — to go, travel: the “self-go vehicle”, a bike",
+          "h": "自行车",
+          "hPy": "zì xíng chē",
+          "ex": "我骑自行车上班。",
+          "exPy": "wǒ qí zì xíng chē shàng bān.",
+          "exEn": "I bike to work."
+        },
+        {
+          "g": "háng — row; trade; read háng in 银行 “bank”",
+          "h": "银行",
+          "hPy": "yín háng",
+          "ex": "银行几点开门？",
+          "exPy": "yín háng jǐ diǎn kāi mén?",
+          "exEn": "What time does the bank open?"
+        }
+      ]
+    }
   },
   {
     "rank": 54,
@@ -600,7 +1254,35 @@ window.COLLOQUIAL_DATA = [
     "exEn": "So I didn't go.",
     "tone": "Tone change: a 3rd tone before another 3rd tone is pronounced 2nd tone — 所以 is written suǒ yǐ but said suó yǐ.",
     "parts": "户 door + 斤 axe",
-    "mnem": "The <b>door</b> (户) where the <b>axe</b> (斤) hangs — the <b>place</b>; 所以: from that place follows… <b>so</b>."
+    "mnem": "The <b>door</b> (户) where the <b>axe</b> (斤) hangs — the <b>place</b>; 所以: from that place follows… <b>so</b>.",
+    "lesson": {
+      "uses": [
+        {
+          "g": "“so, therefore” — by far the most common use",
+          "h": "所以",
+          "hPy": "suǒ yǐ",
+          "ex": "我没带伞，所以淋湿了。",
+          "exPy": "wǒ méi dài sǎn, suǒ yǐ lín shī le.",
+          "exEn": "I didn't bring an umbrella, so I got soaked."
+        },
+        {
+          "g": "“toilet” — the other 所 you need daily",
+          "h": "厕所",
+          "hPy": "cè suǒ",
+          "ex": "请问，厕所在哪儿？",
+          "exPy": "qǐng wèn, cè suǒ zài nǎr?",
+          "exEn": "Excuse me, where's the bathroom?"
+        },
+        {
+          "g": "“all, every”",
+          "h": "所有",
+          "hPy": "suǒ yǒu",
+          "ex": "所有人都到了。",
+          "exPy": "suǒ yǒu rén dōu dào le.",
+          "exEn": "Everyone's here."
+        }
+      ]
+    }
   },
   {
     "rank": 55,
@@ -677,7 +1359,41 @@ window.COLLOQUIAL_DATA = [
     "exPy": "nǐ duō dà le?",
     "exEn": "How old are you?",
     "parts": "夕 evening + 夕 evening",
-    "mnem": "<b>Evening</b> (夕) after evening piling up — <b>many</b>, much."
+    "mnem": "<b>Evening</b> (夕) after evening piling up — <b>many</b>, much.",
+    "lesson": {
+      "uses": [
+        {
+          "g": "“many, much”",
+          "ex": "今天人真多！",
+          "exPy": "jīn tiān rén zhēn duō!",
+          "exEn": "It's so crowded today!"
+        },
+        {
+          "g": "asks “how …?”",
+          "h": "多 + adj",
+          "hPy": "duō + adj",
+          "ex": "你多高？",
+          "exPy": "nǐ duō gāo?",
+          "exEn": "How tall are you?"
+        },
+        {
+          "g": "“how many / how much”",
+          "h": "多少",
+          "hPy": "duō shǎo",
+          "ex": "你的电话是多少？",
+          "exPy": "nǐ de diàn huà shì duō shǎo?",
+          "exEn": "What's your phone number?"
+        },
+        {
+          "g": "“(do) more”",
+          "h": "多 + verb",
+          "hPy": "duō + verb",
+          "ex": "多喝水，早点儿睡。",
+          "exPy": "duō hē shuǐ, zǎo diǎnr shuì.",
+          "exEn": "Drink more water and sleep early."
+        }
+      ]
+    }
   },
   {
     "rank": 62,
@@ -754,7 +1470,41 @@ window.COLLOQUIAL_DATA = [
     "exPy": "wǒ men dōu dào le.",
     "exEn": "We've all arrived.",
     "parts": "者 + 阝 city",
-    "mnem": "The capital <b>city</b> (阝) where everyone gathers — <b>all</b>: 我们都."
+    "mnem": "The capital <b>city</b> (阝) where everyone gathers — <b>all</b>: 我们都.",
+    "lesson": {
+      "uses": [
+        {
+          "g": "“all, both” — comes after the things it covers",
+          "ex": "我们都饿了。",
+          "exPy": "wǒ men dōu è le.",
+          "exEn": "We're all hungry."
+        },
+        {
+          "g": "“even …”",
+          "h": "连……都",
+          "hPy": "lián … dōu",
+          "ex": "他连早饭都没吃。",
+          "exPy": "tā lián zǎo fàn dōu méi chī.",
+          "exEn": "He didn't even eat breakfast."
+        },
+        {
+          "g": "“already …!” — mild disbelief",
+          "h": "都……了",
+          "hPy": "dōu … le",
+          "ex": "都十二点了，快睡吧！",
+          "exPy": "dōu shí èr diǎn le, kuài shuì ba!",
+          "exEn": "It's already midnight — go to sleep!"
+        },
+        {
+          "g": "read dū in 首都 “capital city”",
+          "h": "首都",
+          "hPy": "shǒu dū",
+          "ex": "北京是中国的首都。",
+          "exPy": "běi jīng shì zhōng guó de shǒu dū.",
+          "exEn": "Beijing is China's capital."
+        }
+      ]
+    }
   },
   {
     "rank": 69,
@@ -787,7 +1537,33 @@ window.COLLOQUIAL_DATA = [
     "exPy": "nà dāng rán!",
     "exEn": "Of course!",
     "parts": "彐 broom-hand over a base",
-    "mnem": "Pick up the broom and <b>serve as</b> the one in charge — 当医生 work as a doctor; 当然 of course, as one should."
+    "mnem": "Pick up the broom and <b>serve as</b> the one in charge — 当医生 work as a doctor; 当然 of course, as one should.",
+    "lesson": {
+      "uses": [
+        {
+          "g": "dāng — to work as, to serve as",
+          "ex": "她想当医生。",
+          "exPy": "tā xiǎng dāng yī shēng.",
+          "exEn": "She wants to be a doctor."
+        },
+        {
+          "g": "“of course”",
+          "h": "当然",
+          "hPy": "dāng rán",
+          "ex": "当然没问题！",
+          "exPy": "dāng rán méi wèn tí!",
+          "exEn": "Of course, no problem!"
+        },
+        {
+          "g": "dàng (4th tone) — 上当 “to get fooled / scammed”",
+          "h": "上当",
+          "hPy": "shàng dàng",
+          "ex": "我上当了！",
+          "exPy": "wǒ shàng dàng le!",
+          "exEn": "I got scammed!"
+        }
+      ]
+    }
   },
   {
     "rank": 72,
@@ -886,7 +1662,39 @@ window.COLLOQUIAL_DATA = [
     "exPy": "nǐ hái hǎo ma?",
     "exEn": "Are you okay?",
     "parts": "辶 walk + 不 no",
-    "mnem": "<b>Walking</b> (辶) back, “<b>not</b> (不) done yet” — <b>still</b>, also: 还好 still OK."
+    "mnem": "<b>Walking</b> (辶) back, “<b>not</b> (不) done yet” — <b>still</b>, also: 还好 still OK.",
+    "lesson": {
+      "uses": [
+        {
+          "g": "hái — “still”",
+          "ex": "他还没起床。",
+          "exPy": "tā hái méi qǐ chuáng.",
+          "exEn": "He still hasn't gotten up."
+        },
+        {
+          "g": "hái — “also, in addition”",
+          "ex": "你还要别的吗？",
+          "exPy": "nǐ hái yào bié de ma?",
+          "exEn": "Do you want anything else?"
+        },
+        {
+          "g": "“or” in questions; also “had better”",
+          "h": "还是",
+          "hPy": "hái shì",
+          "ex": "你喝茶还是咖啡？",
+          "exPy": "nǐ hē chá hái shì kā fēi?",
+          "exEn": "Tea or coffee?"
+        },
+        {
+          "g": "huán — to return, to give back",
+          "h": "还钱",
+          "hPy": "huán qián",
+          "ex": "我下个月还钱。",
+          "exPy": "wǒ xià gè yuè huán qián.",
+          "exEn": "I'll pay the money back next month."
+        }
+      ]
+    }
   },
   {
     "rank": 81,
@@ -908,7 +1716,41 @@ window.COLLOQUIAL_DATA = [
     "exPy": "hǎo de, méi wèn tí!",
     "exEn": "OK, no problem!",
     "parts": "女 woman + 子 child",
-    "mnem": "A <b>woman</b> (女) holding her <b>child</b> (子) — mother and child together: everything is <b>good</b>."
+    "mnem": "A <b>woman</b> (女) holding her <b>child</b> (子) — mother and child together: everything is <b>good</b>.",
+    "lesson": {
+      "uses": [
+        {
+          "g": "“good; fine” — also the all-purpose “OK”",
+          "ex": "好，就这样吧。",
+          "exPy": "hǎo, jiù zhè yàng ba.",
+          "exEn": "OK, let's leave it at that."
+        },
+        {
+          "g": "“so …!”",
+          "h": "好 + adj",
+          "hPy": "hǎo + adj",
+          "ex": "今天好热啊！",
+          "exPy": "jīn tiān hǎo rè a!",
+          "exEn": "It's so hot today!"
+        },
+        {
+          "g": "easy / nice to …",
+          "h": "好 + verb",
+          "hPy": "hǎo + verb",
+          "ex": "这个很好用。",
+          "exPy": "zhè ge hěn hǎo yòng.",
+          "exEn": "This works really well."
+        },
+        {
+          "g": "hào (4th tone) — “to be fond of”: 爱好 hobby",
+          "h": "爱好",
+          "hPy": "ài hào",
+          "ex": "你有什么爱好？",
+          "exPy": "nǐ yǒu shén me ài hào?",
+          "exEn": "What are your hobbies?"
+        }
+      ]
+    }
   },
   {
     "rank": 83,
@@ -1073,7 +1915,25 @@ window.COLLOQUIAL_DATA = [
     "exPy": "wǒ zhǐ shì wèn wèn.",
     "exEn": "I'm just asking.",
     "parts": "口 mouth + 八 a puff of breath",
-    "mnem": "One mouth (口), one puff (八) — <b>only</b> that, <b>just</b>: 只是."
+    "mnem": "One mouth (口), one puff (八) — <b>only</b> that, <b>just</b>: 只是.",
+    "lesson": {
+      "uses": [
+        {
+          "g": "zhǐ — “only, just”",
+          "ex": "我只有十块钱。",
+          "exPy": "wǒ zhǐ yǒu shí kuài qián.",
+          "exEn": "I've only got ten kuai."
+        },
+        {
+          "g": "zhī — measure word for animals (and one of a pair)",
+          "h": "一只",
+          "hPy": "yì zhī",
+          "ex": "我家有两只猫。",
+          "exPy": "wǒ jiā yǒu liǎng zhī māo.",
+          "exEn": "I have two cats."
+        }
+      ]
+    }
   },
   {
     "rank": 98,
@@ -1208,7 +2068,31 @@ window.COLLOQUIAL_DATA = [
     "exPy": "nǐ zhǎng gāo le!",
     "exEn": "You've grown taller!",
     "parts": "pictograph: long flowing hair",
-    "mnem": "<b>Long</b> hair streaming — cháng = long; hair keeps <b>growing</b> — zhǎng = grow."
+    "mnem": "<b>Long</b> hair streaming — cháng = long; hair keeps <b>growing</b> — zhǎng = grow.",
+    "lesson": {
+      "uses": [
+        {
+          "g": "cháng — long",
+          "ex": "这条路好长啊！",
+          "exPy": "zhè tiáo lù hǎo cháng a!",
+          "exEn": "This road is so long!"
+        },
+        {
+          "g": "zhǎng — to grow (up)",
+          "ex": "孩子们长大了。",
+          "exPy": "hái zi men zhǎng dà le.",
+          "exEn": "The kids have grown up."
+        },
+        {
+          "g": "zhǎng — 长得 describes someone's looks",
+          "h": "长得",
+          "hPy": "zhǎng de",
+          "ex": "你们俩长得真像！",
+          "exPy": "nǐ men liǎ zhǎng de zhēn xiàng!",
+          "exEn": "You two look so alike!"
+        }
+      ]
+    }
   },
   {
     "rank": 110,
@@ -1219,7 +2103,34 @@ window.COLLOQUIAL_DATA = [
     "exPy": "bǎ mén guān shàng.",
     "exEn": "Close the door.",
     "parts": "扌 hand + 巴 (≈ <b>bā</b>, sound)",
-    "mnem": "A <b>hand</b> (扌) gripping the handle — 把 grabs the object and moves it up front: 把门关上."
+    "mnem": "A <b>hand</b> (扌) gripping the handle — 把 grabs the object and moves it up front: 把门关上.",
+    "lesson": {
+      "uses": [
+        {
+          "g": "“take X and …” — focuses on what happens to the object",
+          "h": "把 X + verb",
+          "hPy": "bǎ X + verb",
+          "ex": "请把手机给我。",
+          "exPy": "qǐng bǎ shǒu jī gěi wǒ.",
+          "exEn": "Please hand me the phone."
+        },
+        {
+          "g": "great for mishaps — what got lost, broken, forgotten",
+          "ex": "我把钥匙忘在家里了。",
+          "exPy": "wǒ bǎ yào shi wàng zài jiā lǐ le.",
+          "exEn": "I left my keys at home."
+        },
+        {
+          "g": "measure word for things with handles",
+          "h": "一把",
+          "hPy": "yì bǎ",
+          "ex": "带一把伞吧。",
+          "exPy": "dài yì bǎ sǎn ba.",
+          "exEn": "Take an umbrella."
+        }
+      ],
+      "intro": "The famous 把-sentence: pull the object up front and say what you did to it."
+    }
   },
   {
     "rank": 111,
@@ -1396,7 +2307,25 @@ window.COLLOQUIAL_DATA = [
     "exPy": "nǐ yòu chí dào le!",
     "exEn": "You're late again!",
     "parts": "pictograph: a right hand",
-    "mnem": "The same right <b>hand</b> reaching out yet <b>again</b> — 又迟到了! late again!"
+    "mnem": "The same right <b>hand</b> reaching out yet <b>again</b> — 又迟到了! late again!",
+    "lesson": {
+      "uses": [
+        {
+          "g": "“again” — for things that already happened (future repeats use 再)",
+          "ex": "我又忘带钥匙了。",
+          "exPy": "wǒ yòu wàng dài yào shi le.",
+          "exEn": "I forgot my keys again."
+        },
+        {
+          "g": "“both … and …”",
+          "h": "又……又",
+          "hPy": "yòu … yòu",
+          "ex": "这家店又便宜又好吃。",
+          "exPy": "zhè jiā diàn yòu pián yi yòu hǎo chī.",
+          "exEn": "This place is cheap and tasty."
+        }
+      ]
+    }
   },
   {
     "rank": 127,
@@ -1418,7 +2347,33 @@ window.COLLOQUIAL_DATA = [
     "exPy": "jǐ diǎn le?",
     "exEn": "What time is it?",
     "parts": "占 (≈ <b>zhàn</b>, sound) + 灬 fire",
-    "mnem": "Tiny <b>flames</b> (灬) — <b>dots</b>; the clock's dots give 几点 what o'clock; a dot of something = 一点儿 a bit."
+    "mnem": "Tiny <b>flames</b> (灬) — <b>dots</b>; the clock's dots give 几点 what o'clock; a dot of something = 一点儿 a bit.",
+    "lesson": {
+      "uses": [
+        {
+          "g": "o'clock",
+          "ex": "我们六点见。",
+          "exPy": "wǒ men liù diǎn jiàn.",
+          "exEn": "See you at six."
+        },
+        {
+          "g": "“a bit” — 一点儿 goes after, 有点儿 before (usually complaints)",
+          "h": "一点儿 / 有点儿",
+          "hPy": "yì diǎnr / yǒu diǎnr",
+          "ex": "我有点儿累。",
+          "exPy": "wǒ yǒu diǎnr lèi.",
+          "exEn": "I'm a bit tired."
+        },
+        {
+          "g": "to order food — “point at” the menu",
+          "h": "点菜",
+          "hPy": "diǎn cài",
+          "ex": "我们点菜吧！",
+          "exPy": "wǒ men diǎn cài ba!",
+          "exEn": "Let's order!"
+        }
+      ]
+    }
   },
   {
     "rank": 129,

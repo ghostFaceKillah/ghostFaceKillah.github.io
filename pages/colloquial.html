@@ -174,6 +174,20 @@
   .toneNote { font-size: .85rem; color: var(--amber); margin: 14px 0 0; line-height: 1.45; }
   .toneNote:empty { display: none; }
 
+  .lesson { border-top: 1px solid var(--line); margin-top: 16px; padding-top: 16px; text-align: left; }
+  .lesson:empty { display: none; border: none; margin: 0; padding: 0; }
+  .lesson > small { display: block; font-size: .75rem; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 8px; text-align: center; }
+  .lessonIntro { font-size: .9rem; color: var(--muted); margin: 0 0 12px; line-height: 1.45; }
+  .use { margin: 0 0 14px; }
+  .use:last-child { margin-bottom: 0; }
+  .useHead { font-size: .9rem; margin: 0; line-height: 1.5; }
+  .useHead b { font-size: 1.05rem; font-weight: 600; }
+  .useHead .py { color: var(--accent); }
+  .useEx { font-size: 1.1rem; margin: 3px 0 0; cursor: pointer; }
+  .useEx:hover { color: var(--accent); }
+  .useExPy { font-size: .85rem; color: var(--accent); margin: 0; }
+  .useExEn { font-size: .85rem; color: var(--muted); margin: 0; }
+
   .speak-row { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
   .speak {
     border: 1px solid var(--line);
@@ -220,7 +234,7 @@
   <!-- START -->
   <section id="start" class="screen active">
     <h1>Colloquial Character Trainer</h1>
-    <p class="sub">The 500 most common Chinese characters, drilled in sets of 20 — with an example sentence, pinyin and pronunciation for each.</p>
+    <p class="sub">The 500 most common Chinese characters, drilled in sets of 20 — with an example sentence, pinyin and pronunciation for each, plus mini lessons on the tricky grammar characters.</p>
 
     <p class="label">Which set?</p>
     <select class="sel-input" id="setSel"></select>
@@ -265,6 +279,7 @@
           <p class="exEn" id="exEn"></p>
         </div>
         <p class="toneNote" id="toneNote"></p>
+        <div class="lesson" id="lesson"></div>
         <div class="speak-row" id="speakRow">
           <button class="speak" id="speakBtn" type="button" title="Replay character (R)">🔊 Char</button>
           <button class="speak" id="speakSlowBtn" type="button" title="Read character slowly (S)">🐢 Slow</button>
@@ -405,6 +420,7 @@
     exPy:       document.getElementById("exPy"),
     exEn:       document.getElementById("exEn"),
     toneNote:   document.getElementById("toneNote"),
+    lesson:     document.getElementById("lesson"),
     hint:       document.getElementById("hint"),
     revealRow:  document.getElementById("revealRow"),
     revealBtn:  document.getElementById("revealBtn"),
@@ -507,6 +523,7 @@
     el.exPy.textContent = current.exPy;
     el.exEn.textContent = current.exEn;
     el.toneNote.textContent = current.tone || "";
+    renderLesson(current.lesson);
     el.speakBtn.classList.remove("playing");
     el.speakSlowBtn.classList.remove("playing");
     el.speakSentBtn.classList.remove("playing");
@@ -520,6 +537,63 @@
 
   function updateProgress() {
     el.progress.textContent = `${cleared} / ${totalThisRound}`;
+  }
+
+  // Mini lesson: distinct everyday uses of a grammar-heavy character, each
+  // with its own pattern + tiny example (tap an example to hear it).
+  function renderLesson(lesson) {
+    el.lesson.innerHTML = "";
+    if (!lesson) return;
+    const title = document.createElement("small");
+    title.textContent = "Mini lesson";
+    el.lesson.appendChild(title);
+    if (lesson.intro) {
+      const p = document.createElement("p");
+      p.className = "lessonIntro";
+      p.textContent = lesson.intro;
+      el.lesson.appendChild(p);
+    }
+    for (const u of lesson.uses) {
+      const use = document.createElement("div");
+      use.className = "use";
+      const head = document.createElement("p");
+      head.className = "useHead";
+      if (u.h) {
+        const b = document.createElement("b");
+        b.textContent = u.h;
+        head.appendChild(b);
+        if (u.hPy) {
+          const py = document.createElement("span");
+          py.className = "py";
+          py.textContent = " " + u.hPy;
+          head.appendChild(py);
+        }
+        head.appendChild(document.createTextNode(" — " + u.g));
+      } else {
+        head.textContent = u.g;
+      }
+      use.appendChild(head);
+      if (u.ex) {
+        const ex = document.createElement("p");
+        ex.className = "useEx";
+        ex.textContent = u.ex;
+        ex.title = "Tap to hear";
+        ex.addEventListener("click", e => {
+          e.stopPropagation();
+          Speech.speak(u.ex, null);
+        });
+        use.appendChild(ex);
+        const exPy = document.createElement("p");
+        exPy.className = "useExPy";
+        exPy.textContent = u.exPy;
+        use.appendChild(exPy);
+        const exEn = document.createElement("p");
+        exEn.className = "useExEn";
+        exEn.textContent = u.exEn;
+        use.appendChild(exEn);
+      }
+      el.lesson.appendChild(use);
+    }
   }
 
   function reveal() {
