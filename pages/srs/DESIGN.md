@@ -53,13 +53,15 @@ Decided 2026-07-11. This doc is the source of truth for sessions continuing the 
   28-day due forecast for enabled decks. Styling (owner iterated twice on
   2026-07-11: single-hue ramps felt monochrome → kana rainbow → final ask:
   chart colors must be EXACTLY the four grade-button hues, and heatmap days
-  should be a cute emoji, not dots): all chart vars alias the button colors
-  (`--gs/--gg/--gb` = green/sky/red for 🌱/🌿/🌸; `--w1..--w4` =
-  red/amber/green/sky in Again→Easy order; `--ret` = green, "Good" =
-  remembered). Aliases resolve at use-time, so dark mode follows the buttons'
-  dark values with no per-theme chart overrides. Heatmap: a reviewed day is a
-  💗 whose font-size carries the review count (s1–s4); the month-hue cycle
-  (`--m1..--m5`) is gone with it. Encodings stay honest: magnitude never rides
+  should be cute emoji, not dots — a different one per day): all chart vars
+  alias the button colors (`--gs/--gg/--gb` = red/amber/green for 🌱/🌿/🌸 —
+  traffic-light, maturing toward "Good"; `--w1..--w4` = red/amber/green/sky
+  in Again→Easy order; `--ret` = green, "Good" = remembered). Aliases resolve
+  at use-time, so dark mode follows the buttons' dark values with no
+  per-theme chart overrides. Heatmap: a reviewed day is a cute emoji — an
+  8-strong set (coprime with the 7 weekday rows) cycled by calendar date, so
+  each day keeps its emoji forever — whose font-size carries the review count
+  (s1–s4); the month-hue cycle (`--m1..--m5`) is gone. Magnitude never rides
   on color, stages carry emoji + labeled counts, weeks carry axis labels, and
   every mark has a tooltip + aria-label.
 - **Review log & retention** (decided 2026-07-11): every grade appends

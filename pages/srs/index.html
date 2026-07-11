@@ -32,7 +32,7 @@
        Aliases resolve at use-time, so dark mode follows the buttons for free.
        Heatmap: a reviewed day is a 💗 whose SIZE carries the count (s1–s4). */
     --track: #edf1ee;                                            /* empty cells */
-    --gs: var(--green); --gg: var(--sky); --gb: var(--red);      /* 🌱 🌿 🌸 */
+    --gs: var(--red); --gg: var(--amber); --gb: var(--green);    /* 🌱 🌿 🌸 */
     --w1: var(--red); --w2: var(--amber); --w3: var(--green); --w4: var(--sky);
     --ret: var(--green);                                         /* retention 🧠 */
     color-scheme: light;
@@ -623,7 +623,7 @@
         <div class="heat-grid" id="heatGrid"></div>
       </div>
       <div class="heat-legend">fewer
-        <i class="day s1">💗</i><i class="day s2">💗</i><i class="day s3">💗</i><i class="day s4">💗</i>
+        <i class="day s1">🌸</i><i class="day s2">🍀</i><i class="day s3">🌟</i><i class="day s4">💗</i>
       more</div>
     </div>
 
@@ -1083,8 +1083,10 @@
   // Three classic SRS charts, all computed from state the app already keeps:
   // a review heatmap + streak (from `days`), a card-maturity "garden" and a
   // due forecast (from `cardStates`). Chart hues are the four grade-button
-  // colors; heatmap days are 💗 sized by review count.
+  // colors; heatmap days are cute emoji sized by review count.
   const fmtDay = d => d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+  // 8 emoji (coprime with the 7 weekday rows), cycled by calendar date
+  const DAY_EMOJI = ["💗", "🌸", "🌟", "🍀", "🌈", "🍓", "🐥", "✨"];
 
   function renderStats() {
     const now = Date.now();
@@ -1138,7 +1140,8 @@
           if (n > 0) {
             const size = Math.max(1, Math.ceil(4 * n / max));
             cell.className = `day s${size}`;
-            cell.textContent = "💗";
+            // date-keyed pick, so every day keeps its emoji forever
+            cell.textContent = DAY_EMOJI[Math.round(day.getTime() / FSRS.DAY_MS) % DAY_EMOJI.length];
           }
           const r = ret[todayKey(day.getTime())];
           const tipText = `${fmtDay(day)} — ${n} review${n === 1 ? "" : "s"}` +
