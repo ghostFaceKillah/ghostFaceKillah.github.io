@@ -150,7 +150,7 @@
   .focus-row .btn { width: auto; margin-top: 0; padding: 11px 22px; font-size: 1rem; }
 
   .theme-toggle {
-    position: fixed; top: 16px; right: 16px;
+    position: absolute; top: 16px; right: 16px;
     width: 42px; height: 42px; border-radius: 50%;
     border: 2px solid var(--line); background: var(--card); color: var(--ink);
     font-size: 1.15rem; line-height: 1; cursor: pointer;
@@ -271,6 +271,19 @@
   }
   .srs-mnem::before, .srs-note::before { content: "💡 "; }
   .srs-rule::before { content: "📏 "; }
+  .srs-tone { font-size: .9rem; margin-top: 10px; color: var(--amber); line-height: 1.5; }
+  .srs-tone::before { content: "🎵 "; }
+  .srs-lesson {
+    font-size: .92rem; margin: 12px auto 0; max-width: 420px; line-height: 1.5;
+    background: var(--sky-soft); border-radius: 16px; padding: 10px 14px; text-align: left;
+  }
+  .srs-lesson small {
+    display: block; text-transform: uppercase; letter-spacing: .08em;
+    font-weight: 700; font-size: .72rem; color: var(--muted);
+  }
+  .srs-lesson p { margin: 8px 0 0; }
+  .srs-lesson .use-ex { margin-top: 2px; color: var(--muted); }
+  .srs-lesson .py { color: var(--accent); font-weight: 700; }
   .back .srs-zh { font-size: 1.6rem; }
 
   .speak-row { display: flex; justify-content: center; gap: 10px; margin-top: 14px; }
@@ -344,6 +357,11 @@
   .modal-box p { margin: 6px 0; line-height: 1.5; }
   .modal-box .btn { margin-top: 14px; }
 
+  /* On narrow screens the theme toggle would sit on top of the content —
+     start the page below it instead. */
+  @media (max-width: 760px) {
+    body { padding-top: 74px; }
+  }
   @media (max-width: 480px) {
     .stats { grid-template-columns: repeat(2, 1fr); }
     .srs-big { font-size: 3.6rem; }
