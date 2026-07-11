@@ -28,6 +28,12 @@
     --green: #4fbf8f;
     --amber: #f5a54c;
     --red: #ef8368;
+    /* stats ramp — one green hue, validated light→dark (see DESIGN.md) */
+    --q0: #e9f2ec;
+    --q1: #76c296;
+    --q2: #4cb079;
+    --q3: #2b985e;
+    --q4: #127844;
     color-scheme: light;
   }
   @media (prefers-color-scheme: dark) {
@@ -48,6 +54,11 @@
       --green: #5fd6a2;
       --amber: #ffb765;
       --red: #ff9a7d;
+      --q0: #3a4a40;
+      --q1: #4d8465;
+      --q2: #5aa87e;
+      --q3: #68cc98;
+      --q4: #79eab1;
       color-scheme: dark;
     }
   }
@@ -68,6 +79,11 @@
     --green: #5fd6a2;
     --amber: #ffb765;
     --red: #ff9a7d;
+    --q0: #3a4a40;
+    --q1: #4d8465;
+    --q2: #5aa87e;
+    --q3: #68cc98;
+    --q4: #79eab1;
     color-scheme: dark;
   }
 
@@ -322,6 +338,67 @@
   .done { text-align: center; }
   .done .big { font-size: 2.6rem; margin: 30px 0 8px; font-weight: 900; }
 
+  /* ----- Stats screen ----- */
+  .panel {
+    background: var(--card); border: 2px solid var(--line); border-radius: 22px;
+    padding: 16px;
+  }
+  .heatwrap { overflow-x: auto; padding-bottom: 2px; }
+  .heat-months {
+    display: grid; grid-auto-flow: column; grid-auto-columns: 13px; gap: 3px;
+    height: 15px; margin: 0 auto 4px; width: max-content;
+    font-size: .68rem; color: var(--muted); font-weight: 700;
+  }
+  .heat-months span { white-space: nowrap; }
+  .heat-grid {
+    display: grid; grid-auto-flow: column;
+    grid-template-rows: repeat(7, 13px); grid-auto-columns: 13px; gap: 3px;
+    width: max-content; margin: 0 auto;
+  }
+  .heat-grid i { border-radius: 4px; background: var(--q0); }
+  .q1 { background: var(--q1) !important; }
+  .q2 { background: var(--q2) !important; }
+  .q3 { background: var(--q3) !important; }
+  .q4 { background: var(--q4) !important; }
+  .heat-legend {
+    display: flex; align-items: center; justify-content: flex-end; gap: 4px;
+    margin-top: 10px; font-size: .72rem; color: var(--muted); font-weight: 700;
+  }
+  .heat-legend i { width: 11px; height: 11px; border-radius: 3px; background: var(--q0); }
+
+  .garden-bar { display: flex; gap: 2px; height: 24px; border-radius: 999px; overflow: hidden; }
+  .garden-bar i { min-width: 8px; }
+  .garden-legend { margin: 12px 0 0; font-size: .88rem; }
+  .garden-legend p { margin: 7px 0 0; display: flex; align-items: center; gap: 8px; }
+  .garden-legend .dot { width: 10px; height: 10px; border-radius: 50%; flex: none; }
+  .garden-legend span { color: var(--muted); font-size: .8rem; }
+  .garden-legend b { margin-left: auto; padding-left: 8px; }
+  .garden-empty { color: var(--muted); text-align: center; margin: 6px 0; }
+  .seeds { color: var(--muted); font-size: .85rem; margin: 12px 0 0; }
+
+  .forecast { display: flex; align-items: flex-end; gap: 3px; height: 110px; }
+  .fbar {
+    flex: 1; min-width: 0; height: 100%;
+    display: flex; flex-direction: column; justify-content: flex-end; align-items: center;
+  }
+  .fbar b { font-size: .7rem; margin-bottom: 2px; }
+  .fbar i { display: block; width: 100%; max-width: 24px; border-radius: 4px 4px 0 0; background: var(--q3); }
+  .fbar i.zero { background: var(--q0); }
+  .forecast-axis {
+    display: flex; margin-top: 0; padding-top: 5px; border-top: 1px solid var(--line);
+    font-size: .72rem; color: var(--muted); font-weight: 700;
+  }
+  .forecast-axis span { width: 25%; }
+
+  .tip {
+    position: fixed; z-index: 60;
+    background: var(--ink); color: var(--bg);
+    padding: 6px 10px; border-radius: 10px;
+    font-size: .8rem; font-weight: 700; white-space: nowrap;
+    pointer-events: none; opacity: 0; transition: opacity .1s;
+  }
+  .tip.show { opacity: 1; }
+
   /* ----- Account widget ----- */
   .account { text-align: center; margin-top: 26px; display: none; }
   .account.show { display: block; }
@@ -408,6 +485,9 @@
       <button class="btn ghost" id="learnBtn">🌱 Learn new<small id="learnCount"></small></button>
       <button class="btn ghost" id="aheadBtn">⏩ Review ahead<small id="aheadCount"></small></button>
     </div>
+    <div class="btn-row">
+      <button class="btn ghost" id="statsBtn">📈 My progress &amp; garden</button>
+    </div>
 
     <div class="label">Focus review — cram one set, e.g. before a lesson</div>
     <div class="focus-row">
@@ -467,6 +547,47 @@
       <button class="grade g-hard" data-grade="2">Hard<small id="ivl2"></small></button>
       <button class="grade g-good" data-grade="3">Good<small id="ivl3"></small></button>
       <button class="grade g-easy" data-grade="4">Easy<small id="ivl4"></small></button>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <section id="statsScreen" class="screen">
+    <div class="topbar">
+      <a id="statsBack">← back to decks</a>
+      <span>进步 progress</span>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><b id="stStreak">0</b><span>day streak 🔥</span></div>
+      <div class="stat"><b id="stTotal">0</b><span>reviews total</span></div>
+      <div class="stat"><b id="stDays">0</b><span>days practiced</span></div>
+      <div class="stat"><b id="stBloom">0</b><span>blooming 🌸</span></div>
+    </div>
+
+    <div class="label">Every day you showed up</div>
+    <div class="panel">
+      <div class="heatwrap" id="heatWrap">
+        <div class="heat-months" id="heatMonths"></div>
+        <div class="heat-grid" id="heatGrid"></div>
+      </div>
+      <div class="heat-legend">less
+        <i></i><i class="q1"></i><i class="q2"></i><i class="q3"></i><i class="q4"></i>
+      more</div>
+    </div>
+
+    <div class="label">The garden — how deeply your cards have rooted</div>
+    <div class="panel" id="gardenPanel">
+      <div class="garden-bar" id="gardenBar"></div>
+      <div class="garden-legend" id="gardenLegend"></div>
+      <p class="seeds" id="seedNote"></p>
+    </div>
+
+    <div class="label">Coming due — the next 4 weeks</div>
+    <div class="panel">
+      <div class="forecast" id="forecast"></div>
+      <div class="forecast-axis">
+        <span>today</span><span>+1 week</span><span>+2 weeks</span><span>+3 weeks</span>
+      </div>
     </div>
   </section>
 
@@ -663,7 +784,7 @@
 
   // ----- Home screen ------------------------------------------------------------
   const $ = id => document.getElementById(id);
-  const screens = { home: $("home"), review: $("review"), done: $("doneScreen") };
+  const screens = { home: $("home"), review: $("review"), done: $("doneScreen"), stats: $("statsScreen") };
   function show(name) {
     Object.values(screens).forEach(s => s.classList.remove("active"));
     screens[name].classList.add("active");
@@ -810,6 +931,153 @@
       refreshStats();
     }
   });
+
+  // ----- Stats screen -----------------------------------------------------------
+  // Three classic SRS charts, all computed from state the app already keeps:
+  // a review heatmap + streak (from `days`), a card-maturity "garden" and a
+  // due forecast (from `cardStates`). Colors come from --q1..--q4, one green
+  // hue in validated light→dark steps.
+  const fmtDay = d => d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+
+  function renderStats() {
+    const now = Date.now();
+
+    // --- tiles: streak, totals -------------------------------------------
+    let total = 0, active = 0;
+    for (const k in days) {
+      const r = days[k].reviews || 0;
+      if (r > 0) { active++; total += r; }
+    }
+    let streak = 0;
+    const t = new Date(now);
+    // an unreviewed today doesn't break the streak (the day isn't over yet)
+    if (!((days[todayKey(t.getTime())] || {}).reviews > 0)) t.setDate(t.getDate() - 1);
+    while (((days[todayKey(t.getTime())] || {}).reviews || 0) > 0) {
+      streak++;
+      t.setDate(t.getDate() - 1);
+    }
+    $("stStreak").textContent = streak;
+    $("stTotal").textContent = total;
+    $("stDays").textContent = active;
+
+    // --- heatmap: last 26 weeks, Monday-first columns ----------------------
+    const WEEKS = 26;
+    const today = new Date(now); today.setHours(0, 0, 0, 0);
+    const start = new Date(today);
+    start.setDate(today.getDate() - ((today.getDay() + 6) % 7) - (WEEKS - 1) * 7);
+    let max = 1;
+    for (const k in days) max = Math.max(max, days[k].reviews || 0);
+
+    const months = $("heatMonths"), grid = $("heatGrid");
+    months.innerHTML = ""; grid.innerHTML = "";
+    let prevMonth = -1;
+    for (let w = 0; w < WEEKS; w++) {
+      const monday = new Date(start); monday.setDate(start.getDate() + w * 7);
+      const m = document.createElement("span");
+      if (monday.getMonth() !== prevMonth) {
+        m.textContent = monday.toLocaleDateString("en-US", { month: "short" });
+        prevMonth = monday.getMonth();
+      }
+      months.appendChild(m);
+      for (let r = 0; r < 7; r++) {
+        const day = new Date(monday); day.setDate(monday.getDate() + r);
+        const cell = document.createElement("i");
+        if (day > today) {
+          cell.style.visibility = "hidden";
+        } else {
+          const n = (days[todayKey(day.getTime())] || {}).reviews || 0;
+          if (n > 0) cell.className = "q" + Math.max(1, Math.ceil(4 * n / max));
+          const tipText = `${fmtDay(day)} — ${n} review${n === 1 ? "" : "s"}`;
+          cell.dataset.tip = tipText;
+          cell.setAttribute("aria-label", tipText);
+        }
+        grid.appendChild(cell);
+      }
+    }
+    const wrap = $("heatWrap");
+    wrap.scrollLeft = wrap.scrollWidth; // land on the most recent weeks
+
+    // --- garden: maturity of every card ever reviewed ----------------------
+    // Stage = the interval the card is currently carrying (Anki idiom:
+    // "mature" at 21 days; a 7-day midpoint keeps the middle stage honest).
+    const STAGES = [
+      { emoji: "🌱", name: "sprouts", desc: "coming back within a week", cls: "q2" },
+      { emoji: "🌿", name: "growing", desc: "carrying 1–3 week intervals", cls: "q3" },
+      { emoji: "🌸", name: "blooming", desc: "remembered for 3+ weeks", cls: "q4" },
+    ];
+    const counts = [0, 0, 0];
+    for (const id in cardStates) {
+      const s = cardStates[id];
+      const iv = (s.due - s.lastReview) / FSRS.DAY_MS;
+      counts[iv >= 21 ? 2 : iv >= 7 ? 1 : 0]++;
+    }
+    $("stBloom").textContent = counts[2];
+    const seenTotal = counts[0] + counts[1] + counts[2];
+    const bar = $("gardenBar"), legend = $("gardenLegend");
+    bar.innerHTML = ""; legend.innerHTML = "";
+    if (!seenTotal) {
+      bar.style.display = "none";
+      legend.innerHTML = `<p class="garden-empty">nothing planted yet — review a card and the garden begins 🌰</p>`;
+    } else {
+      bar.style.display = "";
+      STAGES.forEach((st, i) => {
+        if (counts[i]) {
+          const seg = document.createElement("i");
+          seg.className = st.cls;
+          seg.style.flexGrow = counts[i];
+          seg.dataset.tip = `${st.emoji} ${counts[i]} ${st.name}`;
+          bar.appendChild(seg);
+        }
+        const p = document.createElement("p");
+        p.innerHTML =
+          `<span class="dot ${st.cls}"></span>${st.emoji} ${st.name} <span>· ${st.desc}</span><b>${counts[i]}</b>`;
+        legend.appendChild(p);
+      });
+    }
+    const seeds = enabledCards().filter(c => !cardStates[c.id]).length;
+    $("seedNote").textContent = seeds
+      ? `🌰 ${seeds} seed${seeds === 1 ? "" : "s"} still waiting in your enabled decks`
+      : "";
+
+    // --- forecast: enabled cards coming due over the next 28 days ----------
+    const buckets = new Array(28).fill(0);
+    for (const c of enabledCards()) {
+      const s = cardStates[c.id];
+      if (!s) continue;
+      const d = Math.max(0, Math.floor((s.due - today.getTime()) / FSRS.DAY_MS));
+      if (d < 28) buckets[d]++; // overdue rolls into "today"
+    }
+    const fmax = Math.max(1, ...buckets);
+    const labelAt = buckets.indexOf(fmax); // direct-label the peak only
+    const fc = $("forecast");
+    fc.innerHTML = "";
+    buckets.forEach((n, d) => {
+      const day = new Date(today); day.setDate(today.getDate() + d);
+      const holder = document.createElement("div");
+      holder.className = "fbar";
+      holder.dataset.tip = `${fmtDay(day)} — ${n} card${n === 1 ? "" : "s"} due`;
+      const b = n === fmax && d === labelAt && n > 0 ? `<b>${n}</b>` : "";
+      const h = n ? Math.max(4, Math.round(92 * n / fmax)) : 2;
+      holder.innerHTML = `${b}<i class="${n ? "" : "zero"}" style="height:${h}px"></i>`;
+      fc.appendChild(holder);
+    });
+  }
+
+  // Shared tooltip for heatmap cells, garden segments and forecast bars.
+  const tip = document.createElement("div");
+  tip.className = "tip";
+  document.body.appendChild(tip);
+  document.addEventListener("pointerover", e => {
+    const el = e.target.closest("[data-tip]");
+    if (!el) { tip.classList.remove("show"); return; }
+    tip.textContent = el.dataset.tip;
+    const r = el.getBoundingClientRect();
+    tip.classList.add("show");
+    const w = tip.offsetWidth;
+    tip.style.left = Math.min(Math.max(6, r.left + r.width / 2 - w / 2), innerWidth - w - 6) + "px";
+    tip.style.top = Math.max(6, r.top - tip.offsetHeight - 8) + "px";
+  });
+  document.addEventListener("scroll", () => tip.classList.remove("show"), true);
 
   // ----- Pronunciation (Web Speech API) ----------------------------------------
   const Speech = (() => {
@@ -1001,6 +1269,8 @@
     startSession("focus", focusCards($("focusSelect").value)));
   $("quitBtn").addEventListener("click", () => { show("home"); refreshStats(); });
   $("homeBtn").addEventListener("click", () => { show("home"); refreshStats(); });
+  $("statsBtn").addEventListener("click", () => { renderStats(); show("stats"); });
+  $("statsBack").addEventListener("click", () => { show("home"); refreshStats(); });
   $("card").addEventListener("click", reveal);
   $("revealBtn").addEventListener("click", reveal);
   $("grades").addEventListener("click", e => {

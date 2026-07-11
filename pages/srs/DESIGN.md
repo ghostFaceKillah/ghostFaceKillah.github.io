@@ -36,6 +36,15 @@ Decided 2026-07-11. This doc is the source of truth for sessions continuing the 
     NOT opt it into the daily rotation — the deck chips stay the only intake switch.
   - **ahead** — extra rounds after the daily queue is clear: not-yet-due cards
     sorted by retrievability (weakest first), 20 at a time, repeatable.
+- **Stats screen** (decided 2026-07-11): the three idiomatic SRS charts, computed
+  entirely from existing state (`days` + card states, nothing new persisted):
+  review heatmap + streak (26 Monday-first weeks, GitHub-style), a card-maturity
+  "garden" (🌱 <7d, 🌿 7–21d, 🌸 ≥21d — Anki's 21-day "mature" idiom), and a
+  28-day due forecast for enabled decks. Charts use one green hue in validated
+  light→dark steps (`--q1..--q4`; ordinal-ramp checks pass in both modes — light
+  `#76c296 #4cb079 #2b985e #127844` on white, dark `#4d8465 #5aa87e #68cc98
+  #79eab1` on `#2f3c34`). Retention-rate charts would need a per-review
+  pass/fail log, which we deliberately don't store yet.
 - **Guest mode:** the app fully works signed-out on localStorage. On first sign-in,
   offer a one-time "import this progress into your account?" — never merge silently.
 - **Multi-user:** open to any Google account. All state private per user.
