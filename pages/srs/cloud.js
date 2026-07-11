@@ -9,6 +9,8 @@
 // Data model (guarded by /firestore.rules — each user owns users/{uid}/**):
 //   users/{uid}/cards/{docId}     — one doc per card: the FSRS state
 //   users/{uid}/settings/app      — { groups, newPerDay }
+//   users/{uid}/log/{YYYY-MM}     — { entries: ["ts,grade,prevIvl,cardId", …] }
+//                                   one doc per month of review-log entries
 //
 // Card IDs contain "/" (e.g. "words/L1D1/你"), which Firestore forbids in
 // document IDs, so doc IDs store them with "/" swapped for "|". The mapping
@@ -58,6 +60,7 @@ async function boot() {
 
   const cardDoc = id => doc(db, "users", user.uid, "cards", encodeId(id));
   const settingsDoc = () => doc(db, "users", user.uid, "settings", "app");
+  const logDoc = month => doc(db, "users", user.uid, "log", month);
 
   window.SRS_CLOUD = {
     get user() { return user; },
@@ -83,26 +86,42 @@ async function boot() {
       setDoc(settingsDoc(), settings).catch(e => console.warn("srs sync: settings push failed", e));
     },
 
-    // One-shot hydration after sign-in → { cards: {cardId: state}, settings|null }.
+    // The whole month chunk each time — a rewrite, not an append, so offline
+    // queueing coalesces naturally and the doc never needs a merge.
+    pushLog(month, entries) {
+      if (!user) return;
+      setDoc(logDoc(month), { entries }).catch(e => console.warn("srs sync: log push failed", e));
+    },
+
+    // One-shot hydration after sign-in →
+    // { cards: {cardId: state}, settings|null, log: {YYYY-MM: entries} }.
     async fetchAll() {
       if (!user) return null;
-      const [cardsSnap, settingsSnap] = await Promise.all([
+      const [cardsSnap, settingsSnap, logSnap] = await Promise.all([
         getDocs(collection(db, "users", user.uid, "cards")),
         getDoc(settingsDoc()),
+        getDocs(collection(db, "users", user.uid, "log")),
       ]);
       const cards = {};
       cardsSnap.forEach(d => { cards[decodeId(d.id)] = d.data(); });
-      return { cards, settings: settingsSnap.exists() ? settingsSnap.data() : null };
+      const log = {};
+      logSnap.forEach(d => { log[d.id] = d.data().entries || []; });
+      return { cards, settings: settingsSnap.exists() ? settingsSnap.data() : null, log };
     },
 
     // Explicit guest-progress import: batched writes (Firestore caps at 500/batch).
-    async importAll(cards, settings) {
+    async importAll(cards, settings, log) {
       if (!user) return;
       const ids = Object.keys(cards);
       for (let i = 0; i < ids.length; i += 450) {
         const batch = writeBatch(db);
         for (const id of ids.slice(i, i + 450)) batch.set(cardDoc(id), cards[id]);
-        if (i === 0 && settings) batch.set(settingsDoc(), settings);
+        if (i === 0) {
+          if (settings) batch.set(settingsDoc(), settings);
+          for (const [month, entries] of Object.entries(log || {})) {
+            batch.set(logDoc(month), { entries });
+          }
+        }
         await batch.commit();
       }
     },
