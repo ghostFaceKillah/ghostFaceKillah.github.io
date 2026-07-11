@@ -201,6 +201,7 @@ window.SRS_REGISTRY = (function () {
         const kata = d.script === "kata";
         return line("py", d.r) +
           line("ex", `${esc(kata ? d.wk : d.wh)} — ${esc(d.wr)} — ${esc(d.en)} ${esc(d.e)}`, true) +
+          line("mnem", kata ? d.mk : d.mh) +
           line("note", d.note) +
           (kata ? line("note", d.noteK) : "");
       },

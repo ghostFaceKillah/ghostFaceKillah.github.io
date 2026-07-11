@@ -235,6 +235,12 @@
   }
   .note::before { content: "💡 "; }
   .note:empty { display: none; }
+  .mnem {
+    font-size: .92rem; margin: 14px auto 0; max-width: 400px; line-height: 1.5;
+    background: var(--pink-soft); border-radius: 16px; padding: 10px 14px; text-align: left;
+  }
+  .mnem::before { content: "🎨 "; }
+  .mnem:empty { display: none; }
 
   .speak-row { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
   .speak {
@@ -362,6 +368,7 @@
         <div class="picBlob" id="picBlob">🐜</div>
         <p class="exWord" id="exWord"></p>
         <p class="exMeaning" id="exMeaning"></p>
+        <p class="mnem" id="mnemEl"></p>
         <p class="note" id="noteEl"></p>
         <div class="speak-row">
           <button class="speak" id="speakWordBtn" type="button" title="Say the word (R)">🔊 Say the word</button>
@@ -568,6 +575,7 @@
     picBlob:    document.getElementById("picBlob"),
     exWord:     document.getElementById("exWord"),
     exMeaning:  document.getElementById("exMeaning"),
+    mnem:       document.getElementById("mnemEl"),
     note:       document.getElementById("noteEl"),
     speakWordBtn: document.getElementById("speakWordBtn"),
     speakKanaBtn: document.getElementById("speakKanaBtn"),
@@ -688,6 +696,7 @@
     const word = isKata ? x.wk : x.wh;
     el.exWord.innerHTML = highlightWord(word, isKata ? x.k : x.h);
     el.exMeaning.textContent = `${x.wr} — ${x.en}`;
+    el.mnem.textContent = (isKata ? x.mk : x.mh) || "";
     el.note.textContent = [x.note, isKata ? x.noteK : null].filter(Boolean).join(" ");
     revealed = false;
     el.answer.classList.remove("show");
