@@ -132,6 +132,22 @@
   .btn:active { transform: translateY(2px); box-shadow: 0 2px 0 rgba(0,0,0,.12); }
   .btn:disabled { opacity: .45; cursor: default; }
   .btn.ghost { background: var(--card); color: var(--ink); border: 2px solid var(--line); box-shadow: none; }
+  .btn-row { display: flex; gap: 10px; }
+  .btn-row .btn { margin-top: 12px; padding: 13px 8px; font-size: 1rem; }
+  .btn-row .btn small { display: block; font-weight: 700; font-size: .78rem; color: var(--muted); margin-top: 2px; }
+
+  /* ----- Focus review picker ----- */
+  .focus-row { display: flex; gap: 10px; }
+  .focus-row select {
+    flex: 1; min-width: 0;
+    border: 2px solid var(--line);
+    background: var(--card); color: var(--ink);
+    border-radius: 999px; padding: 11px 16px;
+    font-family: inherit; font-size: .95rem; font-weight: 700;
+    cursor: pointer;
+  }
+  .focus-row select:hover { border-color: var(--accent); }
+  .focus-row .btn { width: auto; margin-top: 0; padding: 11px 22px; font-size: 1rem; }
 
   .theme-toggle {
     position: fixed; top: 16px; right: 16px;
@@ -369,6 +385,17 @@
 
     <button class="btn" id="startBtn">Start review</button>
 
+    <div class="btn-row">
+      <button class="btn ghost" id="learnBtn">🌱 Learn new<small id="learnCount"></small></button>
+      <button class="btn ghost" id="aheadBtn">⏩ Review ahead<small id="aheadCount"></small></button>
+    </div>
+
+    <div class="label">Focus review — cram one set, e.g. before a lesson</div>
+    <div class="focus-row">
+      <select id="focusSelect"><option value="">choose a set…</option></select>
+      <button class="btn ghost" id="focusBtn" disabled>🎯 Go</button>
+    </div>
+
     <div class="label">New cards per day</div>
     <div class="toggle" id="capToggle">
       <button class="opt" data-cap="5">5</button>
@@ -427,7 +454,7 @@
   <!-- DONE -->
   <section id="doneScreen" class="screen">
     <div class="done">
-      <p class="big">All clear! 🎉</p>
+      <p class="big" id="doneBig">All clear! 🎉</p>
       <p class="sub" id="doneSummary"></p>
       <button class="btn ghost" id="homeBtn">Back to decks</button>
     </div>
@@ -564,10 +591,13 @@
   const isEnabled = card => !!settings.groups[groupKey(card.deckId, card.groupId)];
   const enabledCards = () => REGISTRY.cards.filter(isEnabled);
 
+  function endOfTodayMs(now) {
+    const d = new Date(now); d.setHours(23, 59, 59, 999);
+    return d.getTime();
+  }
   function dueCards(now) {
     // due = reviewed before and scheduled for any time today (or overdue)
-    const endOfToday = new Date(now); endOfToday.setHours(23, 59, 59, 999);
-    const cutoff = endOfToday.getTime();
+    const cutoff = endOfTodayMs(now);
     return enabledCards().filter(c => {
       const s = cardStates[c.id];
       return s && s.due <= cutoff;
@@ -578,6 +608,33 @@
   }
   function newQuotaLeft(now) {
     return Math.max(0, settings.newPerDay - todayCounts(now).introduced);
+  }
+
+  // Cards for "review ahead": seen, not due today, weakest memories first.
+  // Grading them early is safe — FSRS uses the true elapsed time, so a card
+  // reviewed ahead of schedule earns only a small stability bump.
+  const AHEAD_BATCH = 20;
+  function aheadCards(now) {
+    const cutoff = endOfTodayMs(now);
+    return enabledCards()
+      .map(c => ({ c, s: cardStates[c.id] }))
+      .filter(x => x.s && x.s.due > cutoff)
+      .sort((a, b) =>
+        FSRS.retrievability((now - a.s.lastReview) / FSRS.DAY_MS, a.s.stability) -
+        FSRS.retrievability((now - b.s.lastReview) / FSRS.DAY_MS, b.s.stability))
+      .map(x => x.c);
+  }
+
+  // Cards for a focus session: everything in one group (a chapter, a kana
+  // row…), enabled for daily review or not. Seen cards shuffled up front,
+  // unseen ones after in their natural order.
+  function focusCards(key) {
+    const slash = key.indexOf("/");
+    const deck = REGISTRY.deckById[key.slice(0, slash)];
+    const group = deck && deck.groups.find(g => g.id === key.slice(slash + 1));
+    if (!group) return [];
+    const seen = shuffle(group.cards.filter(c => cardStates[c.id]));
+    return seen.concat(group.cards.filter(c => !cardStates[c.id]));
   }
 
   // ----- Home screen ------------------------------------------------------------
@@ -602,7 +659,37 @@
       due + fresh > 0 ? "Start review" :
       enabledCards().length === 0 ? "Pick some decks below ↓" :
       "All done for today 🎉";
+
+    const unseen = newCardsAvailable().length;
+    $("learnBtn").disabled = unseen === 0;
+    $("learnCount").textContent = unseen
+      ? `${Math.min(settings.newPerDay, unseen)} of ${unseen} waiting`
+      : "decks all met";
+    const ahead = aheadCards(now).length;
+    $("aheadBtn").disabled = ahead === 0;
+    $("aheadCount").textContent = ahead
+      ? `${Math.min(AHEAD_BATCH, ahead)} weakest`
+      : "nothing to pull in";
   }
+
+  // The focus picker lists every group on the site (enabled for daily
+  // review or not) — cramming a chapter shouldn't require opting it in.
+  function buildFocusSelect() {
+    const sel = $("focusSelect");
+    for (const deck of REGISTRY.decks) {
+      const og = document.createElement("optgroup");
+      og.label = `${deck.emoji} ${deck.name}`;
+      for (const g of deck.groups) {
+        const opt = document.createElement("option");
+        opt.value = groupKey(deck.id, g.id);
+        opt.textContent = `${g.name} · ${g.cards.length}`;
+        og.appendChild(opt);
+      }
+      sel.appendChild(og);
+    }
+    sel.addEventListener("change", () => { $("focusBtn").disabled = !sel.value; });
+  }
+  buildFocusSelect();
 
   function syncCapButtons() {
     document.querySelectorAll("#capToggle .opt").forEach(b => {
@@ -744,7 +831,18 @@
   }
 
   // ----- Review session -----------------------------------------------------------
+  // Three ways in, one engine. Every mode grades through the same
+  // FSRS.review with the real elapsed time — the math handles early and
+  // late reviews on its own, so no mode needs special scheduling rules.
+  //   daily — due cards + new cards up to the daily cap (the default habit)
+  //   learn — only unseen cards, one newPerDay-sized batch per session;
+  //           deliberately allowed past the daily cap, but each card still
+  //           counts as introduced so the daily queue won't double-add
+  //   focus — every card of one chosen group, due or not (tutor-prep cram)
+  //   ahead — extra rounds after the daily queue is clear: the weakest
+  //           not-yet-due cards, AHEAD_BATCH at a time
   let queue = [];          // card objects
+  let sessionMode = "daily";
   let sessionTotal = 0;
   let sessionDone = 0;
   let sessionNew = 0;
@@ -759,14 +857,20 @@
     return arr;
   }
 
-  function buildQueue() {
-    const now = Date.now();
-    const due = shuffle(dueCards(now));
-    const fresh = newCardsAvailable().slice(0, newQuotaLeft(now));
-    queue = due.concat(fresh);
+  function startSession(mode, cards) {
+    if (!cards.length) { refreshStats(); return; }
+    sessionMode = mode;
+    queue = cards;
     sessionTotal = queue.length;
     sessionDone = 0;
     sessionNew = 0;
+    show("review");
+    showCard();
+  }
+
+  function dailyQueue() {
+    const now = Date.now();
+    return shuffle(dueCards(now)).concat(newCardsAvailable().slice(0, newQuotaLeft(now)));
   }
 
   function fmtDelay(ms) {
@@ -844,6 +948,13 @@
 
   function finishSession() {
     const c = todayCounts(Date.now());
+    const opener = {
+      daily: "All clear! 🎉",
+      learn: sessionNew ? `${sessionNew} new card${sessionNew === 1 ? "" : "s"} met 🌱` : "All clear! 🎉",
+      focus: "Set crammed! 🎯",
+      ahead: "Extra round done! ⏩",
+    };
+    $("doneBig").textContent = opener[sessionMode] || "All clear! 🎉";
     $("doneSummary").textContent =
       `${c.reviews} review${c.reviews === 1 ? "" : "s"} today` +
       (c.introduced ? ` — ${c.introduced} new card${c.introduced === 1 ? "" : "s"} met 🌱` : "");
@@ -852,12 +963,13 @@
   }
 
   // ----- Wiring ---------------------------------------------------------------------
-  $("startBtn").addEventListener("click", () => {
-    buildQueue();
-    if (!queue.length) { refreshStats(); return; }
-    show("review");
-    showCard();
-  });
+  $("startBtn").addEventListener("click", () => startSession("daily", dailyQueue()));
+  $("learnBtn").addEventListener("click", () =>
+    startSession("learn", newCardsAvailable().slice(0, settings.newPerDay)));
+  $("aheadBtn").addEventListener("click", () =>
+    startSession("ahead", aheadCards(Date.now()).slice(0, AHEAD_BATCH)));
+  $("focusBtn").addEventListener("click", () =>
+    startSession("focus", focusCards($("focusSelect").value)));
   $("quitBtn").addEventListener("click", () => { show("home"); refreshStats(); });
   $("homeBtn").addEventListener("click", () => { show("home"); refreshStats(); });
   $("card").addEventListener("click", reveal);
