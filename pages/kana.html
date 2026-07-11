@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kana Trainer かな</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #fdf3f8;
+    --dots: #f6dcea;
+    --card: #ffffff;
+    --ink: #5b4a56;
+    --muted: #a58fa0;
+    --line: #f3d9e7;
+    --pink: #ff9ec3;
+    --pink-soft: #ffe3ef;
+    --peach: #ffb88a;
+    --peach-soft: #ffeede;
+    --mint: #7fd8b4;
+    --mint-soft: #e0f7ec;
+    --sky: #8ecbf5;
+    --sky-soft: #e3f2fd;
+    --lav: #c3aef0;
+    --lav-soft: #f0e9fd;
+    --lemon: #ffd66b;
+    --lemon-soft: #fff6dc;
+    --accent: #f06ca6;
+    --green: #4fbf8f;
+    --amber: #f5a54c;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #2a2230;
+      --dots: #362b3e;
+      --card: #3a2f42;
+      --ink: #f5e9f1;
+      --muted: #b9a3b6;
+      --line: #4d3f57;
+      --pink-soft: #513a4c;
+      --peach-soft: #52413a;
+      --mint-soft: #34473f;
+      --sky-soft: #33424f;
+      --lav-soft: #423a55;
+      --lemon-soft: #4e4636;
+      --accent: #ff8ebd;
+      --green: #5fd6a2;
+      --amber: #ffb765;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #2a2230;
+    --dots: #362b3e;
+    --card: #3a2f42;
+    --ink: #f5e9f1;
+    --muted: #b9a3b6;
+    --line: #4d3f57;
+    --pink-soft: #513a4c;
+    --peach-soft: #52413a;
+    --mint-soft: #34473f;
+    --sky-soft: #33424f;
+    --lav-soft: #423a55;
+    --lemon-soft: #4e4636;
+    --accent: #ff8ebd;
+    --green: #5fd6a2;
+    --amber: #ffb765;
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { min-height: 100%; margin: 0; }
+  body {
+    background: var(--bg);
+    background-image: radial-gradient(var(--dots) 12%, transparent 13%),
+                      radial-gradient(var(--dots) 12%, transparent 13%);
+    background-size: 46px 46px;
+    background-position: 0 0, 23px 23px;
+    color: var(--ink);
+    font-family: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", "Yu Gothic", -apple-system, "Segoe UI", sans-serif;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 32px 20px 48px;
+  }
+  .wrap { width: 100%; max-width: 600px; }
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  /* ----- Bubble title (like the kana charts) ----- */
+  .bubbles { display: flex; justify-content: center; gap: 6px; flex-wrap: wrap; margin: 6px 0 6px; }
+  .bubble {
+    width: 52px; height: 52px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-size: 1.6rem; font-weight: 900;
+    box-shadow: 0 3px 0 rgba(0,0,0,.10);
+  }
+  .b1 { background: #f76e9c; } .b2 { background: #ffa04d; }
+  .b3 { background: #ffcb3d; } .b4 { background: #66c98d; }
+  .b5 { background: #59b7e8; } .b6 { background: #9b86e8; }
+  .b7 { background: #f7818f; }
+  .sub { color: var(--muted); text-align: center; margin: 0 0 8px; font-size: .95rem; }
+  .mascots { text-align: center; font-size: 1.5rem; letter-spacing: .35em; margin: 0 0 24px; }
+
+  .label {
+    font-size: .8rem; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--muted); margin: 22px 0 10px; font-weight: 700;
+  }
+
+  /* ----- Cutesy pill buttons ----- */
+  .opt {
+    border: 2px solid var(--line);
+    background: var(--card);
+    border-radius: 999px;
+    padding: 12px 10px;
+    font-size: 1rem;
+    font-family: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    transition: border-color .12s, background .12s, transform .08s;
+    color: var(--ink);
+  }
+  .opt:hover { border-color: var(--accent); }
+  .opt:active { transform: scale(.97); }
+  .opt.sel { border-color: var(--accent); background: var(--pink-soft); color: var(--accent); }
+  .toggle { display: flex; gap: 10px; }
+  .toggle .opt { flex: 1; }
+
+  /* ----- Row chips ----- */
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip {
+    border: 2px solid var(--line);
+    background: var(--card);
+    color: var(--muted);
+    border-radius: 999px;
+    padding: 8px 13px;
+    font-size: .95rem;
+    font-family: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform .08s, border-color .12s, background .12s, color .12s;
+  }
+  .chip:active { transform: scale(.95); }
+  .chip.sel { color: var(--ink); border-color: transparent; }
+  .chip.sel.c0 { background: var(--pink-soft);  border-color: var(--pink); }
+  .chip.sel.c1 { background: var(--peach-soft); border-color: var(--peach); }
+  .chip.sel.c2 { background: var(--lemon-soft); border-color: var(--lemon); }
+  .chip.sel.c3 { background: var(--mint-soft);  border-color: var(--mint); }
+  .chip.sel.c4 { background: var(--sky-soft);   border-color: var(--sky); }
+  .chip.sel.c5 { background: var(--lav-soft);   border-color: var(--lav); }
+  .quick { display: flex; gap: 14px; margin-top: 10px; }
+  .quick a { color: var(--accent); font-size: .85rem; font-weight: 700; cursor: pointer; text-decoration: none; }
+  .quick a:hover { text-decoration: underline; }
+  .countInfo { color: var(--muted); font-size: .9rem; text-align: center; margin: 20px 0 14px; min-height: 1.2em; }
+
+  .btn {
+    display: block; width: 100%;
+    border: none; border-radius: 999px;
+    padding: 16px; font-size: 1.1rem; font-weight: 900;
+    font-family: inherit; cursor: pointer;
+    background: var(--accent); color: #fff;
+    box-shadow: 0 4px 0 rgba(0,0,0,.12);
+    transition: transform .08s, opacity .12s;
+  }
+  .btn:hover { opacity: .92; }
+  .btn:active { transform: translateY(2px); box-shadow: 0 2px 0 rgba(0,0,0,.12); }
+  .btn:disabled { opacity: .45; cursor: default; }
+  .btn.ghost { background: var(--card); color: var(--ink); border: 2px solid var(--line); box-shadow: none; }
+
+  .theme-toggle {
+    position: fixed; top: 16px; right: 16px;
+    width: 42px; height: 42px; border-radius: 50%;
+    border: 2px solid var(--line); background: var(--card); color: var(--ink);
+    font-size: 1.15rem; line-height: 1; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    z-index: 10; transition: border-color .12s;
+  }
+  .theme-toggle:hover { border-color: var(--accent); }
+
+  /* ----- Study screen ----- */
+  .topbar { display: flex; justify-content: space-between; align-items: center; color: var(--muted); font-size: .9rem; margin-bottom: 10px; font-weight: 700; }
+  .topbar a { color: var(--muted); text-decoration: none; cursor: pointer; }
+  .topbar a:hover { color: var(--ink); }
+  .bar { height: 10px; border-radius: 999px; background: var(--line); overflow: hidden; margin-bottom: 20px; }
+  .bar i { display: block; height: 100%; width: 0%; border-radius: 999px;
+           background: linear-gradient(90deg, #ff9ec3, #ffcb6b, #7fd8b4, #8ecbf5, #c3aef0);
+           transition: width .25s; }
+
+  .card {
+    background: var(--card);
+    border: 3px solid var(--line);
+    border-radius: 30px;
+    padding: 34px 22px 30px;
+    text-align: center;
+    cursor: pointer;
+    user-select: none;
+    min-height: 340px;
+    display: flex; flex-direction: column; justify-content: center;
+    box-shadow: 0 6px 0 rgba(0,0,0,.06);
+    position: relative;
+  }
+  .scriptTag {
+    position: absolute; top: 14px; left: 18px;
+    font-size: .75rem; font-weight: 700; color: var(--muted);
+    border: 2px solid var(--line); border-radius: 999px; padding: 3px 11px;
+  }
+  .kana { font-size: 6.5rem; line-height: 1.15; margin: 0; font-weight: 700; }
+
+  .answer { display: none; margin-top: 6px; }
+  .answer.show { display: block; animation: pop .22s ease-out; }
+  @keyframes pop { 0% { transform: scale(.94); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+  .romaji { font-size: 2.1rem; margin: 0 0 14px; color: var(--accent); font-weight: 900; }
+
+  .picBlob {
+    width: 118px; height: 118px; margin: 0 auto 10px;
+    border-radius: 46% 54% 52% 48% / 50% 46% 54% 50%;
+    background: linear-gradient(135deg, var(--pink-soft), var(--lemon-soft));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 4rem;
+    animation: wiggle 2.4s ease-in-out infinite;
+  }
+  @keyframes wiggle {
+    0%, 100% { transform: rotate(-3deg); }
+    50% { transform: rotate(3deg); }
+  }
+  .exWord { font-size: 1.7rem; margin: 4px 0 0; font-weight: 700; }
+  .exWord b { color: var(--accent); font-weight: 900; }
+  .exMeaning { font-size: 1rem; color: var(--muted); margin: 2px 0 0; }
+  .note {
+    font-size: .92rem; margin: 14px auto 0; max-width: 400px; line-height: 1.5;
+    background: var(--lemon-soft); border-radius: 16px; padding: 10px 14px; text-align: left;
+  }
+  .note::before { content: "💡 "; }
+  .note:empty { display: none; }
+
+  .speak-row { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+  .speak {
+    border: 2px solid var(--line);
+    background: var(--card); color: var(--accent);
+    border-radius: 999px; padding: 9px 18px;
+    font-size: .95rem; font-weight: 700; font-family: inherit;
+    cursor: pointer; display: inline-flex; align-items: center; gap: 7px;
+    transition: border-color .12s, background .12s;
+  }
+  .speak:hover { border-color: var(--accent); background: var(--pink-soft); }
+  .speak.playing { border-color: var(--amber); color: var(--amber); }
+
+  .hint { color: var(--muted); margin-top: 22px; font-size: .9rem; }
+  .reveal-row { margin-top: 16px; }
+  .actions { display: none; gap: 12px; margin-top: 16px; }
+  .actions.show { display: flex; }
+  .actions .btn { flex: 1; }
+  .btn.again { background: var(--amber); }
+  .btn.got { background: var(--green); }
+
+  /* ----- Done screen ----- */
+  .done { text-align: center; }
+  .done .big { font-size: 2.6rem; margin: 30px 0 8px; font-weight: 900; }
+
+  /* ----- Tips screen ----- */
+  .tipCard {
+    background: var(--card);
+    border: 3px solid var(--line);
+    border-radius: 24px;
+    padding: 20px 20px 18px;
+    margin-bottom: 18px;
+    box-shadow: 0 4px 0 rgba(0,0,0,.05);
+  }
+  .tipCard h2 { margin: 0 0 8px; font-size: 1.2rem; }
+  .tipCard p { margin: 0 0 10px; font-size: .97rem; line-height: 1.6; }
+  .tipCard p:last-child { margin-bottom: 0; }
+  .exRow { display: flex; flex-wrap: wrap; gap: 8px; margin: 4px 0 10px; }
+  .exRow:last-child { margin-bottom: 0; }
+  .ex {
+    border: 2px solid var(--line);
+    background: var(--card);
+    border-radius: 16px; padding: 8px 13px;
+    font-size: .95rem; font-family: inherit; color: var(--ink);
+    cursor: pointer; text-align: left; line-height: 1.4;
+    transition: border-color .12s, background .12s;
+  }
+  .ex:hover { border-color: var(--accent); background: var(--pink-soft); }
+  .ex b { font-size: 1.15rem; font-weight: 900; }
+  .ex small { color: var(--muted); display: block; }
+  .ex.playing { border-color: var(--amber); }
+  .lookalikes { width: 100%; border-collapse: collapse; font-size: .95rem; }
+  .lookalikes td { border-top: 2px dashed var(--line); padding: 8px 6px; vertical-align: middle; }
+  .lookalikes tr:first-child td { border-top: none; }
+  .lookalikes .pair { font-size: 1.6rem; font-weight: 700; white-space: nowrap; }
+  .lookalikes .how { color: var(--muted); line-height: 1.45; }
+  .backRow { margin-top: 4px; }
+</style>
+<script>
+  // Apply saved theme before paint to avoid a flash.
+  (function () {
+    var t = localStorage.getItem("theme");
+    if (t) document.documentElement.setAttribute("data-theme", t);
+  })();
+</script>
+</head>
+<body>
+<button id="themeToggle" class="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle dark mode">🌙</button>
+<div class="wrap">
+
+  <!-- START -->
+  <section id="start" class="screen active">
+    <div class="bubbles" aria-hidden="true">
+      <span class="bubble b1">か</span><span class="bubble b2">な</span><span class="bubble b3">ト</span><span class="bubble b4">レ</span><span class="bubble b5">ー</span><span class="bubble b6">ナ</span><span class="bubble b7">ー</span>
+    </div>
+    <p class="sub">Kana Trainer — see a kana, remember its sound, meet a cute friend.</p>
+    <p class="mascots" aria-hidden="true">🐢🍓🦁⛄🐼</p>
+
+    <p class="label">Script</p>
+    <div class="toggle" id="scriptToggle">
+      <button class="opt sel" data-script="hira">あ Hiragana</button>
+      <button class="opt" data-script="kata">ア Katakana</button>
+      <button class="opt" data-script="both">Both</button>
+    </div>
+
+    <p class="label">Rows</p>
+    <div class="chips" id="rowChips"></div>
+    <div class="quick">
+      <a id="pickBasic">basic 46</a>
+      <a id="pickAll">everything</a>
+      <a id="pickNone">none</a>
+    </div>
+
+    <p class="label">Order</p>
+    <div class="toggle" id="orderToggle">
+      <button class="opt sel" data-order="shuffle">Shuffle</button>
+      <button class="opt" data-order="ordered">In order</button>
+    </div>
+
+    <p class="label">Audio</p>
+    <div class="toggle" id="audioToggle">
+      <button class="opt sel" data-audio="on">🔊 Auto-play</button>
+      <button class="opt" data-audio="off">Off</button>
+    </div>
+
+    <p class="countInfo" id="countInfo"></p>
+    <button class="btn" id="startBtn">Start ✨</button>
+    <div style="height:12px"></div>
+    <button class="btn ghost" id="tipsBtn">📖 Tips — little っ, ゛゜, きゃ &amp; friends</button>
+  </section>
+
+  <!-- STUDY -->
+  <section id="study" class="screen">
+    <div class="topbar">
+      <a id="quitBtn">&larr; Quit</a>
+      <span id="progress">0 / 0</span>
+    </div>
+    <div class="bar"><i id="barFill"></i></div>
+
+    <div class="card" id="card">
+      <span class="scriptTag" id="scriptTag">ひらがな</span>
+      <p class="kana" id="kanaEl">あ</p>
+      <div class="answer" id="answer">
+        <p class="romaji" id="romajiEl"></p>
+        <div class="picBlob" id="picBlob">🐜</div>
+        <p class="exWord" id="exWord"></p>
+        <p class="exMeaning" id="exMeaning"></p>
+        <p class="note" id="noteEl"></p>
+        <div class="speak-row">
+          <button class="speak" id="speakWordBtn" type="button" title="Say the word (R)">🔊 Say the word</button>
+          <button class="speak" id="speakKanaBtn" type="button" title="Just the kana (K)">🗣️ Just the kana</button>
+          <button class="speak" id="speakSlowBtn" type="button" title="Slowly (S)">🐢 Slowly</button>
+        </div>
+      </div>
+      <p class="hint" id="hint">Tap the card or press Space to reveal</p>
+    </div>
+
+    <div class="reveal-row" id="revealRow">
+      <button class="btn" id="revealBtn">Reveal</button>
+    </div>
+
+    <div class="actions" id="actions">
+      <button class="btn again" id="againBtn">Again 🔁 <small>(1)</small></button>
+      <button class="btn got" id="gotBtn">Got it! 🌸 <small>(2)</small></button>
+    </div>
+  </section>
+
+  <!-- DONE -->
+  <section id="done" class="screen">
+    <div class="done">
+      <p class="big">🎉 ぜんぶ できた！</p>
+      <p class="sub" id="doneSummary"></p>
+      <p class="mascots" aria-hidden="true">🌸🐣🍡🐙🌈</p>
+      <button class="btn" id="restartBtn">Study again</button>
+    </div>
+  </section>
+
+  <!-- TIPS -->
+  <section id="tips" class="screen">
+    <div class="topbar backRow">
+      <a id="tipsBackBtn">&larr; Back</a>
+      <span>Tap any example to hear it 🔊</span>
+    </div>
+
+    <div class="tipCard">
+      <h2>っ / ッ — the little tsu</h2>
+      <p>A <b>small</b> つ is not pronounced "tsu"! It marks a tiny pause that <b>doubles the next consonant</b>. Full-size つ says "tsu"; the small one just holds your breath for a beat.</p>
+      <div class="exRow">
+        <button class="ex" data-say="きて"><b>きて</b> kite <small>come!</small></button>
+        <button class="ex" data-say="きって"><b>き<span style="color:var(--accent)">っ</span>て</b> ki<span style="color:var(--accent)">t</span>te <small>postage stamp</small></button>
+      </div>
+      <div class="exRow">
+        <button class="ex" data-say="がっこう"><b>が<span style="color:var(--accent)">っ</span>こう</b> ga<span style="color:var(--accent)">k</span>kō <small>school 🏫</small></button>
+        <button class="ex" data-say="ヨット"><b>ヨ<span style="color:var(--accent)">ッ</span>ト</b> yo<span style="color:var(--accent)">t</span>to <small>yacht ⛵</small></button>
+      </div>
+    </div>
+
+    <div class="tipCard">
+      <h2>゛ and ゜ — dakuten &amp; handakuten</h2>
+      <p>Two little dots ゛ make a sound <b>voiced</b>: k→g, s→z, t→d, h→b. The tiny circle ゜ only goes on the h-row and makes <b>p</b>. Same kana shape, new sound!</p>
+      <div class="exRow">
+        <button class="ex" data-say="か、が"><b>か → が</b> <small>ka → ga</small></button>
+        <button class="ex" data-say="さ、ざ"><b>さ → ざ</b> <small>sa → za</small></button>
+        <button class="ex" data-say="た、だ"><b>た → だ</b> <small>ta → da</small></button>
+        <button class="ex" data-say="は、ば、ぱ"><b>は → ば → ぱ</b> <small>ha → ba → pa</small></button>
+      </div>
+      <p>ぢ and づ are rare — they sound exactly like じ and ず. You'll almost always see じ and ず instead.</p>
+    </div>
+
+    <div class="tipCard">
+      <h2>ゃ ゅ ょ — the small ya, yu, yo</h2>
+      <p>A small ゃ/ゅ/ょ <b>glues onto the kana before it</b> to blend into one syllable: き + small ゃ = <b>kya</b> (one beat). A full-size や would be two beats: ki-ya.</p>
+      <div class="exRow">
+        <button class="ex" data-say="ちょうちょ"><b>ち<span style="color:var(--accent)">ょ</span>うちょ</b> chōcho <small>butterfly 🦋</small></button>
+        <button class="ex" data-say="やきゅう"><b>やき<span style="color:var(--accent)">ゅ</span>う</b> yakyū <small>baseball ⚾</small></button>
+      </div>
+      <p>The classic trap — one is a hospital, the other a beauty salon:</p>
+      <div class="exRow">
+        <button class="ex" data-say="びょういん"><b>び<span style="color:var(--accent)">ょ</span>ういん</b> byōin <small>hospital 🏥</small></button>
+        <button class="ex" data-say="びよういん"><b>びよういん</b> biyōin <small>beauty salon 💇</small></button>
+      </div>
+    </div>
+
+    <div class="tipCard">
+      <h2>Long vowels — stretch it out</h2>
+      <p>In hiragana a vowel is stretched by adding another vowel kana (お-row usually adds う). In katakana it's the long dash <b>ー</b>. The length can change the word completely!</p>
+      <div class="exRow">
+        <button class="ex" data-say="おばさん"><b>おばさん</b> obasan <small>aunt</small></button>
+        <button class="ex" data-say="おばあさん"><b>おば<span style="color:var(--accent)">あ</span>さん</b> obāsan <small>grandma 👵</small></button>
+      </div>
+      <div class="exRow">
+        <button class="ex" data-say="ほうき"><b>ほ<span style="color:var(--accent)">う</span>き</b> hōki <small>broom 🧹</small></button>
+        <button class="ex" data-say="ケーキ"><b>ケ<span style="color:var(--accent)">ー</span>キ</b> kēki <small>cake 🍰</small></button>
+      </div>
+    </div>
+
+    <div class="tipCard">
+      <h2>は・へ・を — sneaky particles</h2>
+      <p>Three kana change sound when they work as grammar particles:
+         <b>は</b> is read <b>wa</b> as the topic marker, <b>へ</b> is read <b>e</b> as "towards", and <b>を</b> (read <b>o</b>) is used <i>only</i> as the object marker — you'll never meet it inside a normal word.</p>
+      <div class="exRow">
+        <button class="ex" data-say="こんにちは"><b>こんにち<span style="color:var(--accent)">は</span></b> konnichi<span style="color:var(--accent)">wa</span> <small>hello!</small></button>
+        <button class="ex" data-say="がっこうへいく"><b>がっこう<span style="color:var(--accent)">へ</span>いく</b> gakkō <span style="color:var(--accent)">e</span> iku <small>go to school</small></button>
+        <button class="ex" data-say="ほんをよむ"><b>ほん<span style="color:var(--accent)">を</span>よむ</b> hon <span style="color:var(--accent)">o</span> yomu <small>read a book</small></button>
+      </div>
+    </div>
+
+    <div class="tipCard">
+      <h2>Lookalike alert! 👀</h2>
+      <table class="lookalikes">
+        <tr><td class="pair">シ / ツ</td><td class="how"><b>shi</b>: strokes lie down, drawn bottom-up ↗ (like a smile). <b>tsu</b>: strokes stand up, drawn top-down ↘.</td></tr>
+        <tr><td class="pair">ソ / ン</td><td class="how"><b>so</b> stands upright ↘, <b>n</b> lies flat ↗ — same trick as シ/ツ.</td></tr>
+        <tr><td class="pair">る / ろ</td><td class="how"><b>ru</b> has a little loop at the end — <b>ro</b> doesn't. "Ru has a curl."</td></tr>
+        <tr><td class="pair">ね / れ / わ</td><td class="how"><b>ne</b>ko's tail curls into a loop 🐱, <b>re</b> flicks out, <b>wa</b> curves back in.</td></tr>
+        <tr><td class="pair">め / ぬ</td><td class="how"><b>me</b> is plain; <b>nu</b> has a loop — think noodles 🍜 caught on the end.</td></tr>
+      </table>
+    </div>
+
+    <button class="btn ghost" id="tipsBackBtn2">&larr; Back to start</button>
+  </section>
+
+</div>
+
+<script>
+  // ----- Dark mode toggle -----
+  (function () {
+    const root = document.documentElement;
+    const toggle = document.getElementById("themeToggle");
+    const mql = window.matchMedia("(prefers-color-scheme: dark)");
+    function current() {
+      return root.getAttribute("data-theme") || (mql.matches ? "dark" : "light");
+    }
+    function syncIcon() {
+      toggle.textContent = current() === "dark" ? "☀️" : "🌙";
+    }
+    toggle.addEventListener("click", () => {
+      const next = current() === "dark" ? "light" : "dark";
+      root.setAttribute("data-theme", next);
+      localStorage.setItem("theme", next);
+      syncIcon();
+    });
+    mql.addEventListener("change", () => { if (!root.getAttribute("data-theme")) syncIcon(); });
+    syncIcon();
+  })();
+
+  // ----- Rows -----
+  const ROWS = [
+    { id: "a",  hira: "あいうえお", kata: "アイウエオ", basic: true },
+    { id: "k",  hira: "かきくけこ", kata: "カキクケコ", basic: true },
+    { id: "s",  hira: "さしすせそ", kata: "サシスセソ", basic: true },
+    { id: "t",  hira: "たちつてと", kata: "タチツテト", basic: true },
+    { id: "n",  hira: "なにぬねの", kata: "ナニヌネノ", basic: true },
+    { id: "h",  hira: "はひふへほ", kata: "ハヒフヘホ", basic: true },
+    { id: "m",  hira: "まみむめも", kata: "マミムメモ", basic: true },
+    { id: "y",  hira: "やゆよ",     kata: "ヤユヨ",     basic: true },
+    { id: "r",  hira: "らりるれろ", kata: "ラリルレロ", basic: true },
+    { id: "w",  hira: "わをん",     kata: "ワヲン",     basic: true },
+    { id: "g",  hira: "がぎぐげご", kata: "ガギグゲゴ", basic: false },
+    { id: "z",  hira: "ざじずぜぞ", kata: "ザジズゼゾ", basic: false },
+    { id: "d",  hira: "だぢづでど", kata: "ダヂヅデド", basic: false },
+    { id: "b",  hira: "ばびぶべぼ", kata: "バビブベボ", basic: false },
+    { id: "p",  hira: "ぱぴぷぺぽ", kata: "パピプペポ", basic: false },
+  ];
+
+  // ----- Kana data -----
+  // r = romaji, h/k = hiragana/katakana, row = row id,
+  // wh/wk = example word in each script, wr = word romaji, en = meaning,
+  // e = cute picture, note = little tip shown on reveal, noteK = katakana-only extra.
+  const KANA = [
+    // あ row
+    { r: "a",   h: "あ", k: "ア", row: "a", wh: "あり",           wk: "アリ",           wr: "ari",            en: "ant",              e: "🐜" },
+    { r: "i",   h: "い", k: "イ", row: "a", wh: "いちご",         wk: "イチゴ",         wr: "ichigo",         en: "strawberry",       e: "🍓" },
+    { r: "u",   h: "う", k: "ウ", row: "a", wh: "うし",           wk: "ウシ",           wr: "ushi",           en: "cow",              e: "🐮" },
+    { r: "e",   h: "え", k: "エ", row: "a", wh: "えんぴつ",       wk: "エンピツ",       wr: "enpitsu",        en: "pencil",           e: "✏️" },
+    { r: "o",   h: "お", k: "オ", row: "a", wh: "おばけ",         wk: "オバケ",         wr: "obake",          en: "ghost",            e: "👻" },
+    // か row
+    { r: "ka",  h: "か", k: "カ", row: "k", wh: "かめ",           wk: "カメ",           wr: "kame",           en: "turtle",           e: "🐢" },
+    { r: "ki",  h: "き", k: "キ", row: "k", wh: "きのこ",         wk: "キノコ",         wr: "kinoko",         en: "mushroom",         e: "🍄" },
+    { r: "ku",  h: "く", k: "ク", row: "k", wh: "くま",           wk: "クマ",           wr: "kuma",           en: "bear",             e: "🐻" },
+    { r: "ke",  h: "け", k: "ケ", row: "k", wh: "けーき",         wk: "ケーキ",         wr: "kēki",           en: "cake",             e: "🍰",
+      note: "The ー stretches the vowel: “keh-ki”. Cake is a loanword, so it's usually written in katakana: ケーキ." },
+    { r: "ko",  h: "こ", k: "コ", row: "k", wh: "こあら",         wk: "コアラ",         wr: "koara",          en: "koala",            e: "🐨" },
+    // さ row
+    { r: "sa",  h: "さ", k: "サ", row: "s", wh: "さかな",         wk: "サカナ",         wr: "sakana",         en: "fish",             e: "🐟" },
+    { r: "shi", h: "し", k: "シ", row: "s", wh: "しかく",         wk: "シカク",         wr: "shikaku",        en: "square",           e: "🟦",
+      note: "It's “shi”, not “si”!", noteK: "Watch out: シ (shi) vs ツ (tsu) — shi's strokes lie down and are drawn bottom-up, like a smile." },
+    { r: "su",  h: "す", k: "ス", row: "s", wh: "すいか",         wk: "スイカ",         wr: "suika",          en: "watermelon",       e: "🍉" },
+    { r: "se",  h: "せ", k: "セ", row: "s", wh: "せみ",           wk: "セミ",           wr: "semi",           en: "cicada",           e: "🦗" },
+    { r: "so",  h: "そ", k: "ソ", row: "s", wh: "そふとくりーむ", wk: "ソフトクリーム", wr: "sofuto kurīmu",  en: "soft-serve",       e: "🍦",
+      noteK: "Watch out: ソ (so) vs ン (n) — so stands upright and is drawn top-down." },
+    // た row
+    { r: "ta",  h: "た", k: "タ", row: "t", wh: "たいよう",       wk: "タイヨウ",       wr: "taiyō",          en: "sun",              e: "🌞" },
+    { r: "chi", h: "ち", k: "チ", row: "t", wh: "ちょうちょ",     wk: "チョウチョ",     wr: "chōcho",         en: "butterfly",        e: "🦋",
+      note: "It's “chi”, not “ti”! And spot the small ょ — it blends: chi + yo → “cho”." },
+    { r: "tsu", h: "つ", k: "ツ", row: "t", wh: "つき",           wk: "ツキ",           wr: "tsuki",          en: "moon",             e: "🌙",
+      note: "It's “tsu”, not “tu”! Its tiny twin っ is silent and doubles the next consonant — see Tips.",
+      noteK: "Watch out: ツ (tsu) vs シ (shi) — tsu's strokes stand up and are drawn top-down." },
+    { r: "te",  h: "て", k: "テ", row: "t", wh: "てがみ",         wk: "テガミ",         wr: "tegami",         en: "letter",           e: "💌" },
+    { r: "to",  h: "と", k: "ト", row: "t", wh: "とり",           wk: "トリ",           wr: "tori",           en: "bird",             e: "🐥" },
+    // な row
+    { r: "na",  h: "な", k: "ナ", row: "n", wh: "ながぐつ",       wk: "ナガグツ",       wr: "nagagutsu",      en: "rain boots",       e: "👢" },
+    { r: "ni",  h: "に", k: "ニ", row: "n", wh: "にじ",           wk: "ニジ",           wr: "niji",           en: "rainbow",          e: "🌈" },
+    { r: "nu",  h: "ぬ", k: "ヌ", row: "n", wh: "ぬりえ",         wk: "ヌリエ",         wr: "nurie",          en: "coloring book",    e: "🖍️",
+      note: "ぬ has a little loop at the end — め doesn't. Think noodles caught on the tail!" },
+    { r: "ne",  h: "ね", k: "ネ", row: "n", wh: "ねこ",           wk: "ネコ",           wr: "neko",           en: "cat",              e: "🐱",
+      note: "ね(ko) has a curled tail — like a cat! れ flicks out, わ curves back in." },
+    { r: "no",  h: "の", k: "ノ", row: "n", wh: "のはら",         wk: "ノハラ",         wr: "nohara",         en: "flower field",     e: "🌼" },
+    // は row
+    { r: "ha",  h: "は", k: "ハ", row: "h", wh: "はぶらし",       wk: "ハブラシ",       wr: "haburashi",      en: "toothbrush",       e: "🪥",
+      note: "As the topic particle it's read “wa” — こんにちは = konnichiwa!" },
+    { r: "hi",  h: "ひ", k: "ヒ", row: "h", wh: "ひつじ",         wk: "ヒツジ",         wr: "hitsuji",        en: "sheep",            e: "🐑" },
+    { r: "fu",  h: "ふ", k: "フ", row: "h", wh: "ふくろう",       wk: "フクロウ",       wr: "fukurō",         en: "owl",              e: "🦉",
+      note: "“fu” sits halfway between f and h — blow softly, like fogging a mirror." },
+    { r: "he",  h: "へ", k: "ヘ", row: "h", wh: "へび",           wk: "ヘビ",           wr: "hebi",           en: "snake",            e: "🐍",
+      note: "As the direction particle it's read “e”. Bonus: へ and ヘ look almost identical in both scripts — one freebie!" },
+    { r: "ho",  h: "ほ", k: "ホ", row: "h", wh: "ほうき",         wk: "ホウキ",         wr: "hōki",           en: "broom",            e: "🧹",
+      note: "ほうき: the う stretches the “o” — hōki." },
+    // ま row
+    { r: "ma",  h: "ま", k: "マ", row: "m", wh: "まど",           wk: "マド",           wr: "mado",           en: "window",           e: "🪟" },
+    { r: "mi",  h: "み", k: "ミ", row: "m", wh: "みず",           wk: "ミズ",           wr: "mizu",           en: "water",            e: "💧" },
+    { r: "mu",  h: "む", k: "ム", row: "m", wh: "むしめがね",     wk: "ムシメガネ",     wr: "mushimegane",    en: "magnifying glass", e: "🔍" },
+    { r: "me",  h: "め", k: "メ", row: "m", wh: "めがね",         wk: "メガネ",         wr: "megane",         en: "glasses",          e: "👓" },
+    { r: "mo",  h: "も", k: "モ", row: "m", wh: "もも",           wk: "モモ",           wr: "momo",           en: "peach",            e: "🍑" },
+    // や row
+    { r: "ya",  h: "や", k: "ヤ", row: "y", wh: "やきゅう",       wk: "ヤキュウ",       wr: "yakyū",          en: "baseball",         e: "⚾",
+      note: "Spot the small ゅ: ki + yu → “kyu”, then う stretches it — yakyū." },
+    { r: "yu",  h: "ゆ", k: "ユ", row: "y", wh: "ゆきだるま",     wk: "ユキダルマ",     wr: "yukidaruma",     en: "snowman",          e: "⛄" },
+    { r: "yo",  h: "よ", k: "ヨ", row: "y", wh: "よっと",         wk: "ヨット",         wr: "yotto",          en: "yacht",            e: "⛵",
+      note: "Spot the small っ — it doubles the t: yo-t-to. See Tips!" },
+    // ら row
+    { r: "ra",  h: "ら", k: "ラ", row: "r", wh: "らいおん",       wk: "ライオン",       wr: "raion",          en: "lion",             e: "🦁" },
+    { r: "ri",  h: "り", k: "リ", row: "r", wh: "りす",           wk: "リス",           wr: "risu",           en: "squirrel",         e: "🐿️" },
+    { r: "ru",  h: "る", k: "ル", row: "r", wh: "るびー",         wk: "ルビー",         wr: "rubī",           en: "ruby",             e: "💎",
+      note: "る has a little loop at the end, ろ doesn't — “ru has a curl”." },
+    { r: "re",  h: "れ", k: "レ", row: "r", wh: "れもん",         wk: "レモン",         wr: "remon",          en: "lemon",            e: "🍋" },
+    { r: "ro",  h: "ろ", k: "ロ", row: "r", wh: "ろうそく",       wk: "ロウソク",       wr: "rōsoku",         en: "candle",           e: "🕯️" },
+    // わ row + ん
+    { r: "wa",  h: "わ", k: "ワ", row: "w", wh: "わに",           wk: "ワニ",           wr: "wani",           en: "crocodile",        e: "🐊" },
+    { r: "o (wo)", h: "を", k: "ヲ", row: "w", wh: "てをふる",    wk: "テヲフル",       wr: "te o furu",      en: "to wave a hand",   e: "👋",
+      note: "を appears almost only as the object particle, pronounced plain “o”: ほんをよむ — I read a book." },
+    { r: "n",   h: "ん", k: "ン", row: "w", wh: "ほん",           wk: "ホン",           wr: "hon",            en: "book",             e: "📖",
+      note: "The only kana with no vowel — a syllable all by itself: ho-n.",
+      noteK: "Watch out: ン (n) vs ソ (so) — n lies flat and is drawn bottom-up." },
+    // が row
+    { r: "ga",  h: "が", k: "ガ", row: "g", wh: "がっこう",       wk: "ガッコウ",       wr: "gakkō",          en: "school",           e: "🏫",
+      note: "か + ゛ = ga. And spot the small っ doubling the k: ga-k-kō!" },
+    { r: "gi",  h: "ぎ", k: "ギ", row: "g", wh: "ぎんこう",       wk: "ギンコウ",       wr: "ginkō",          en: "bank",             e: "🏦" },
+    { r: "gu",  h: "ぐ", k: "グ", row: "g", wh: "ぐみ",           wk: "グミ",           wr: "gumi",           en: "gummy candy",      e: "🍬" },
+    { r: "ge",  h: "げ", k: "ゲ", row: "g", wh: "げた",           wk: "ゲタ",           wr: "geta",           en: "wooden sandals",   e: "🩴" },
+    { r: "go",  h: "ご", k: "ゴ", row: "g", wh: "ごはん",         wk: "ゴハン",         wr: "gohan",          en: "rice, a meal",     e: "🍚" },
+    // ざ row
+    { r: "za",  h: "ざ", k: "ザ", row: "z", wh: "ざっし",         wk: "ザッシ",         wr: "zasshi",         en: "magazine",         e: "📰",
+      note: "Small っ again: za-s-shi." },
+    { r: "ji",  h: "じ", k: "ジ", row: "z", wh: "じてんしゃ",     wk: "ジテンシャ",     wr: "jitensha",       en: "bicycle",          e: "🚲",
+      note: "し + ゛ = ji. Spot the small ゃ: shi + ya → “sha”." },
+    { r: "zu",  h: "ず", k: "ズ", row: "z", wh: "ずぼん",         wk: "ズボン",         wr: "zubon",          en: "trousers",         e: "👖" },
+    { r: "ze",  h: "ぜ", k: "ゼ", row: "z", wh: "ぜろ",           wk: "ゼロ",           wr: "zero",           en: "zero",             e: "0️⃣" },
+    { r: "zo",  h: "ぞ", k: "ゾ", row: "z", wh: "ぞう",           wk: "ゾウ",           wr: "zō",             en: "elephant",         e: "🐘" },
+    // だ row
+    { r: "da",  h: "だ", k: "ダ", row: "d", wh: "だんご",         wk: "ダンゴ",         wr: "dango",          en: "sweet dumplings",  e: "🍡" },
+    { r: "ji (dji)", h: "ぢ", k: "ヂ", row: "d", wh: "はなぢ",    wk: "ハナヂ",         wr: "hanaji",         en: "nosebleed",        e: "🤧",
+      note: "Rare! Sounds exactly like じ. It only shows up in a few words like はなぢ (hana + chi)." },
+    { r: "zu (dzu)", h: "づ", k: "ヅ", row: "d", wh: "みかづき",  wk: "ミカヅキ",       wr: "mikazuki",       en: "crescent moon",    e: "🌛",
+      note: "Rare! Sounds exactly like ず. You'll mostly meet it in compounds like みかづき (mika + tsuki)." },
+    { r: "de",  h: "で", k: "デ", row: "d", wh: "でんわ",         wk: "デンワ",         wr: "denwa",          en: "telephone",        e: "☎️" },
+    { r: "do",  h: "ど", k: "ド", row: "d", wh: "どーなつ",       wk: "ドーナツ",       wr: "dōnatsu",        en: "donut",            e: "🍩" },
+    // ば row
+    { r: "ba",  h: "ば", k: "バ", row: "b", wh: "ばなな",         wk: "バナナ",         wr: "banana",         en: "banana",           e: "🍌" },
+    { r: "bi",  h: "び", k: "ビ", row: "b", wh: "びっくり",       wk: "ビックリ",       wr: "bikkuri",        en: "surprise!",        e: "😲",
+      note: "Small っ doubles the k: bi-k-kuri!" },
+    { r: "bu",  h: "ぶ", k: "ブ", row: "b", wh: "ぶた",           wk: "ブタ",           wr: "buta",           en: "pig",              e: "🐷" },
+    { r: "be",  h: "べ", k: "ベ", row: "b", wh: "べんとう",       wk: "ベントウ",       wr: "bentō",          en: "lunch box",        e: "🍱" },
+    { r: "bo",  h: "ぼ", k: "ボ", row: "b", wh: "ぼうし",         wk: "ボウシ",         wr: "bōshi",          en: "hat",              e: "👒" },
+    // ぱ row
+    { r: "pa",  h: "ぱ", k: "パ", row: "p", wh: "ぱんだ",         wk: "パンダ",         wr: "panda",          en: "panda",            e: "🐼",
+      note: "は + ゜ = pa. The little circle means “p”!" },
+    { r: "pi",  h: "ぴ", k: "ピ", row: "p", wh: "ぴあの",         wk: "ピアノ",         wr: "piano",          en: "piano",            e: "🎹" },
+    { r: "pu",  h: "ぷ", k: "プ", row: "p", wh: "ぷりん",         wk: "プリン",         wr: "purin",          en: "pudding",          e: "🍮" },
+    { r: "pe",  h: "ぺ", k: "ペ", row: "p", wh: "ぺんぎん",       wk: "ペンギン",       wr: "pengin",         en: "penguin",          e: "🐧" },
+    { r: "po",  h: "ぽ", k: "ポ", row: "p", wh: "ぽすと",         wk: "ポスト",         wr: "posuto",         en: "postbox",          e: "📮" },
+  ];
+
+  // ----- Pronunciation: Web Speech API (Japanese) -----
+  const Speech = (() => {
+    const synth = window.speechSynthesis;
+    let voice = null;
+    function pick() {
+      if (!synth) return;
+      const ja = synth.getVoices().filter(v => v.lang && v.lang.toLowerCase().startsWith("ja"));
+      voice = ja[0] || null;
+    }
+    if (synth) { pick(); synth.addEventListener("voiceschanged", pick); }
+    function speak(text, btn, rate) {
+      if (!synth || !text) return;
+      synth.cancel();
+      if (!voice) pick();
+      const u = new SpeechSynthesisUtterance(text);
+      if (voice) u.voice = voice;
+      u.lang = (voice && voice.lang) || "ja-JP";
+      u.rate = rate || 0.9;
+      if (btn) {
+        u.onstart = () => btn.classList.add("playing");
+        const done = () => btn.classList.remove("playing");
+        u.onend = done; u.onerror = done;
+      }
+      synth.speak(u);
+    }
+    return { supported: !!synth, speak };
+  })();
+
+  // ----- State -----
+  let script = "hira";           // "hira" | "kata" | "both"
+  let order = "shuffle";
+  let audio = "on";
+  const selectedRows = new Set(ROWS.filter(r => r.basic).map(r => r.id));
+  let queue = [];                // cards: { kana, script }
+  let totalThisRound = 0;
+  let cleared = 0;
+  let revealed = false;
+
+  // ----- Elements -----
+  const screens = {
+    start: document.getElementById("start"),
+    study: document.getElementById("study"),
+    done:  document.getElementById("done"),
+    tips:  document.getElementById("tips"),
+  };
+  const el = {
+    scriptToggle: document.getElementById("scriptToggle"),
+    rowChips:   document.getElementById("rowChips"),
+    orderToggle:document.getElementById("orderToggle"),
+    audioToggle:document.getElementById("audioToggle"),
+    countInfo:  document.getElementById("countInfo"),
+    startBtn:   document.getElementById("startBtn"),
+    tipsBtn:    document.getElementById("tipsBtn"),
+    progress:   document.getElementById("progress"),
+    barFill:    document.getElementById("barFill"),
+    card:       document.getElementById("card"),
+    scriptTag:  document.getElementById("scriptTag"),
+    kana:       document.getElementById("kanaEl"),
+    answer:     document.getElementById("answer"),
+    romaji:     document.getElementById("romajiEl"),
+    picBlob:    document.getElementById("picBlob"),
+    exWord:     document.getElementById("exWord"),
+    exMeaning:  document.getElementById("exMeaning"),
+    note:       document.getElementById("noteEl"),
+    speakWordBtn: document.getElementById("speakWordBtn"),
+    speakKanaBtn: document.getElementById("speakKanaBtn"),
+    speakSlowBtn: document.getElementById("speakSlowBtn"),
+    hint:       document.getElementById("hint"),
+    revealRow:  document.getElementById("revealRow"),
+    revealBtn:  document.getElementById("revealBtn"),
+    actions:    document.getElementById("actions"),
+    againBtn:   document.getElementById("againBtn"),
+    gotBtn:     document.getElementById("gotBtn"),
+    quitBtn:    document.getElementById("quitBtn"),
+    doneSummary:document.getElementById("doneSummary"),
+    restartBtn: document.getElementById("restartBtn"),
+  };
+
+  function show(name) {
+    Object.values(screens).forEach(s => s.classList.remove("active"));
+    screens[name].classList.add("active");
+  }
+
+  // ----- Start screen: row chips -----
+  function buildChips() {
+    el.rowChips.innerHTML = "";
+    ROWS.forEach((row, i) => {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "chip c" + (i % 6);
+      b.dataset.row = row.id;
+      b.textContent = script === "kata" ? row.kata : row.hira;
+      if (selectedRows.has(row.id)) b.classList.add("sel");
+      b.addEventListener("click", () => {
+        if (selectedRows.has(row.id)) selectedRows.delete(row.id);
+        else selectedRows.add(row.id);
+        b.classList.toggle("sel");
+        syncCount();
+      });
+      el.rowChips.appendChild(b);
+    });
+  }
+  function setRows(pred) {
+    selectedRows.clear();
+    ROWS.filter(pred).forEach(r => selectedRows.add(r.id));
+    buildChips();
+    syncCount();
+  }
+  document.getElementById("pickBasic").addEventListener("click", () => setRows(r => r.basic));
+  document.getElementById("pickAll").addEventListener("click", () => setRows(() => true));
+  document.getElementById("pickNone").addEventListener("click", () => setRows(() => false));
+
+  function selectedKana() {
+    return KANA.filter(x => selectedRows.has(x.row));
+  }
+  function cardCount() {
+    return selectedKana().length * (script === "both" ? 2 : 1);
+  }
+  function syncCount() {
+    const n = cardCount();
+    el.countInfo.textContent = n ? `${n} card${n === 1 ? "" : "s"} ready ♪` : "pick at least one row!";
+    el.startBtn.disabled = !n;
+  }
+
+  // Toggle helpers
+  function wireToggle(container, attr, cb) {
+    container.querySelectorAll(".opt").forEach(b => {
+      b.addEventListener("click", () => {
+        container.querySelectorAll(".opt").forEach(o => o.classList.remove("sel"));
+        b.classList.add("sel");
+        cb(b.dataset[attr]);
+      });
+    });
+  }
+  wireToggle(el.scriptToggle, "script", v => { script = v; buildChips(); syncCount(); });
+  wireToggle(el.orderToggle, "order", v => { order = v; });
+  wireToggle(el.audioToggle, "audio", v => { audio = v; });
+
+  buildChips();
+  syncCount();
+
+  // ----- Study flow -----
+  function shuffle(a) {
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  function buildQueue() {
+    const kana = selectedKana();
+    let cards = [];
+    if (script === "both") {
+      kana.forEach(x => { cards.push({ kana: x, script: "hira" }); cards.push({ kana: x, script: "kata" }); });
+    } else {
+      kana.forEach(x => cards.push({ kana: x, script }));
+    }
+    if (order === "shuffle") shuffle(cards);
+    return cards;
+  }
+
+  function current() { return queue[0]; }
+
+  function highlightWord(word, ch) {
+    const i = word.indexOf(ch);
+    const esc = s => s.replace(/[&<>]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]));
+    if (i === -1) return esc(word);
+    return esc(word.slice(0, i)) + "<b>" + esc(ch) + "</b>" + esc(word.slice(i + ch.length));
+  }
+
+  function renderCard() {
+    const c = current();
+    if (!c) { finish(); return; }
+    const x = c.kana;
+    const isKata = c.script === "kata";
+    el.scriptTag.textContent = isKata ? "カタカナ" : "ひらがな";
+    el.kana.textContent = isKata ? x.k : x.h;
+    el.romaji.textContent = x.r;
+    el.picBlob.textContent = x.e;
+    const word = isKata ? x.wk : x.wh;
+    el.exWord.innerHTML = highlightWord(word, isKata ? x.k : x.h);
+    el.exMeaning.textContent = `${x.wr} — ${x.en}`;
+    el.note.textContent = [x.note, isKata ? x.noteK : null].filter(Boolean).join(" ");
+    revealed = false;
+    el.answer.classList.remove("show");
+    el.hint.style.display = "";
+    el.actions.classList.remove("show");
+    el.revealRow.style.display = "";
+    el.progress.textContent = `${cleared} / ${totalThisRound}`;
+    el.barFill.style.width = (totalThisRound ? (cleared / totalThisRound) * 100 : 0) + "%";
+  }
+
+  function currentWord() {
+    const c = current();
+    return c ? (c.script === "kata" ? c.kana.wk : c.kana.wh) : "";
+  }
+  function currentKanaChar() {
+    const c = current();
+    return c ? (c.script === "kata" ? c.kana.k : c.kana.h) : "";
+  }
+
+  function reveal() {
+    if (revealed || !current()) return;
+    revealed = true;
+    el.answer.classList.add("show");
+    el.hint.style.display = "none";
+    el.revealRow.style.display = "none";
+    el.actions.classList.add("show");
+    if (audio === "on") Speech.speak(currentKanaChar() + "。" + currentWord(), el.speakWordBtn);
+  }
+
+  function next(gotIt) {
+    const c = queue.shift();
+    if (gotIt) cleared++;
+    else queue.push(c); // see it again at the end
+    if (!queue.length) { finish(); return; }
+    renderCard();
+  }
+
+  function finish() {
+    el.doneSummary.textContent = `You cleared ${totalThisRound} card${totalThisRound === 1 ? "" : "s"}. すごい!`;
+    show("done");
+  }
+
+  function start() {
+    queue = buildQueue();
+    totalThisRound = queue.length;
+    cleared = 0;
+    if (!totalThisRound) return;
+    show("study");
+    renderCard();
+  }
+
+  el.startBtn.addEventListener("click", start);
+  el.restartBtn.addEventListener("click", () => show("start"));
+  el.quitBtn.addEventListener("click", () => show("start"));
+  el.revealBtn.addEventListener("click", reveal);
+  el.card.addEventListener("click", () => { if (!revealed) reveal(); });
+  el.againBtn.addEventListener("click", () => next(false));
+  el.gotBtn.addEventListener("click", () => next(true));
+
+  el.speakWordBtn.addEventListener("click", e => { e.stopPropagation(); Speech.speak(currentWord(), el.speakWordBtn); });
+  el.speakKanaBtn.addEventListener("click", e => { e.stopPropagation(); Speech.speak(currentKanaChar(), el.speakKanaBtn); });
+  el.speakSlowBtn.addEventListener("click", e => { e.stopPropagation(); Speech.speak(currentWord(), el.speakSlowBtn, 0.55); });
+
+  // ----- Tips screen -----
+  el.tipsBtn.addEventListener("click", () => show("tips"));
+  document.getElementById("tipsBackBtn").addEventListener("click", () => show("start"));
+  document.getElementById("tipsBackBtn2").addEventListener("click", () => show("start"));
+  screens.tips.addEventListener("click", e => {
+    const b = e.target.closest(".ex");
+    if (b && b.dataset.say) Speech.speak(b.dataset.say, b, 0.85);
+  });
+
+  // ----- Keyboard shortcuts -----
+  document.addEventListener("keydown", e => {
+    if (!screens.study.classList.contains("active")) return;
+    if (e.key === " " || e.key === "Enter") { e.preventDefault(); if (!revealed) reveal(); }
+    else if (revealed && e.key === "1") next(false);
+    else if (revealed && e.key === "2") next(true);
+    else if (revealed && (e.key === "r" || e.key === "R")) Speech.speak(currentWord(), el.speakWordBtn);
+    else if (revealed && (e.key === "k" || e.key === "K")) Speech.speak(currentKanaChar(), el.speakKanaBtn);
+    else if (revealed && (e.key === "s" || e.key === "S")) Speech.speak(currentWord(), el.speakSlowBtn, 0.55);
+  });
+
+  if (!Speech.supported) {
+    el.speakWordBtn.style.display = "none";
+    el.speakKanaBtn.style.display = "none";
+    el.speakSlowBtn.style.display = "none";
+  }
+</script>
+</body>
+</html>
