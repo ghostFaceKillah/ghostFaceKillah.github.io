@@ -91,6 +91,31 @@ const T0 = Date.UTC(2026, 0, 1, 12, 0, 0);
     early.stability < onTime.stability);
 }
 
+// ----- same-day reviews (FSRS-6 short-term memory) ------------------------------
+{
+  // A card learned this morning, reviewed again the same day: grades must
+  // differentiate even though retrievability is still ~1 (the FSRS-4.5
+  // scheduler collapsed all passing grades to the same interval here).
+  const learned = FSRS.review(null, GOOD, T0);
+  const prev = FSRS.previewIntervals(learned, T0 + 10 * 60 * 60 * 1000);
+  check("same-day: Easy schedules further out than Good",
+    prev[EASY] > prev[GOOD],
+    `Good ${days(prev[GOOD]).toFixed(1)}d vs Easy ${days(prev[EASY]).toFixed(1)}d`);
+
+  // A brand-new card failed at T0 comes back after the 10-minute step.
+  const failed = FSRS.review(null, AGAIN, T0);
+  const back = failed.due; // ~10 min later
+  const good = FSRS.review(failed, GOOD, back);
+  check("same-day: a pass never shrinks stability", good.stability >= failed.stability);
+  const hard = FSRS.review(failed, HARD, back);
+  check("same-day: Hard keeps stability below Good's", hard.stability < good.stability);
+
+  // Same-day Again drops stability (short-term formula, not a no-op).
+  const relapse = FSRS.review(learned, AGAIN, T0 + 10 * 60 * 1000);
+  check("same-day: Again shrinks stability", relapse.stability < learned.stability,
+    `${learned.stability.toFixed(2)} → ${relapse.stability.toFixed(2)}`);
+}
+
 // ----- retrievability & interval round-trip ------------------------------------
 {
   const r = FSRS.retrievability(FSRS.intervalDays(10), 10);
