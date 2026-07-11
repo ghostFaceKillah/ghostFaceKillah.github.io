@@ -8,9 +8,16 @@ Decided 2026-07-11. This doc is the source of truth for sessions continuing the 
 - **Standalone app** at `pages/srs/` — existing trainer pages stay untouched in look
   and behavior; no review buttons or header changes on them. The SRS app is the
   daily-review experience; trainers remain the browse/study experience.
-- **Scheduler:** FSRS (grades Again / Hard / Good / Easy). Pure function
+- **Scheduler:** FSRS-6 (grades Again / Hard / Good / Easy; upgraded from
+  FSRS-4.5 on 2026-07-11 — the 4.5 same-day-review blind spot made all passing
+  grades collapse to "1d" on cards relearned within a session). Pure function
   `(cardState, grade, now) → newState`, no I/O, testable in isolation.
-  Card state: `{stability, difficulty, due, lastReview, reps, lapses}`.
+  Reviews < 1 day after the previous one go through FSRS-6's short-term
+  memory formulas, so grades differentiate stability within a session; the
+  1-day interval floor still shows "1d" on all passing grades while a card's
+  stability is under ~1.5 days — same as Anki, working as intended.
+  Card state: `{stability, difficulty, due, lastReview, reps, lapses}` —
+  unchanged from 4.5, so stored states carry over with no migration.
 - **Card IDs:** stable, derived from existing data. Examples:
   `words/L1D1/你`, `sent/hsk1/42`, `coll/1`, `kana/あ`. ~2,500 cards total.
 - **Card intake:** opt-in by deck/lesson (IC1 lessons individually, colloquial chars

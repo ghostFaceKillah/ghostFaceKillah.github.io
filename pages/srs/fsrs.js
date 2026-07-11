@@ -1,8 +1,10 @@
-// FSRS-4.5 scheduler — pure functions, no I/O (see DESIGN.md).
+// FSRS-6 scheduler — pure functions, no I/O (see DESIGN.md).
 //
 // Card state shape (all times are epoch milliseconds):
 //   { stability, difficulty, due, lastReview, reps, lapses }
 // A card that has never been reviewed has no state (null/undefined).
+// State written by the earlier FSRS-4.5 scheduler is read as-is: stability
+// and difficulty live on the same scales, so no migration is needed.
 //
 // Grades: 1 = Again, 2 = Hard, 3 = Good, 4 = Easy.
 //
@@ -12,15 +14,17 @@
 window.FSRS = (function () {
   "use strict";
 
-  // Default FSRS-4.5 weights.
+  // Default FSRS-6 weights (open-spaced-repetition defaults, 21 params).
   const W = [
-    0.4872, 1.4003, 3.7145, 13.8206, 5.1618, 1.2298, 0.8975, 0.031,
-    1.6474, 0.1367, 1.0461, 2.1072, 0.0793, 0.3246, 1.587, 0.2272, 2.8755,
+    0.212, 1.2931, 2.3065, 8.2956, 6.4133, 0.8334, 3.0194, 0.001,
+    1.8722, 0.1666, 0.796, 1.4835, 0.0614, 0.2629, 1.6483, 0.6014,
+    1.8729, 0.5425, 0.0912, 0.0658, 0.1542,
   ];
-  const DECAY = -0.5;
-  const FACTOR = 19 / 81; // 0.9 ** (1 / DECAY) - 1
+  const DECAY = -W[20]; // FSRS-6: the forgetting-curve shape is itself a weight
+  const FACTOR = Math.pow(0.9, 1 / DECAY) - 1;
   const REQUEST_RETENTION = 0.9;
   const MAX_INTERVAL_DAYS = 36500;
+  const MIN_STABILITY = 0.001;
   const AGAIN_DELAY_MS = 10 * 60 * 1000; // relearning step: back in ~10 min
   const DAY_MS = 24 * 60 * 60 * 1000;
 
@@ -40,17 +44,24 @@ window.FSRS = (function () {
   }
 
   function initStability(grade) {
-    return Math.max(W[grade - 1], 0.1);
+    return Math.max(W[grade - 1], MIN_STABILITY);
+  }
+
+  // D0 may fall outside [1,10] (D0(Easy) is negative with default weights);
+  // the raw value is what mean reversion pulls toward, per the reference impl.
+  function rawInitDifficulty(grade) {
+    return W[4] - Math.exp(W[5] * (grade - 1)) + 1;
   }
 
   function initDifficulty(grade) {
-    return clamp(W[4] - (grade - 3) * W[5], 1, 10);
+    return clamp(rawInitDifficulty(grade), 1, 10);
   }
 
   function nextDifficulty(d, grade) {
-    const next = d - W[6] * (grade - 3);
+    const delta = -W[6] * (grade - 3);
+    const damped = d + delta * (10 - d) / 9; // linear damping near D=10
     // mean reversion toward D0(Easy)
-    return clamp(W[7] * initDifficulty(EASY) + (1 - W[7]) * next, 1, 10);
+    return clamp(W[7] * rawInitDifficulty(EASY) + (1 - W[7]) * damped, 1, 10);
   }
 
   function nextRecallStability(d, s, r, grade) {
@@ -66,11 +77,20 @@ window.FSRS = (function () {
   }
 
   function nextForgetStability(d, s, r) {
-    const sf = W[11] *
+    const longTerm = W[11] *
       Math.pow(d, -W[12]) *
       (Math.pow(s + 1, W[13]) - 1) *
       Math.exp(W[14] * (1 - r));
-    return Math.min(sf, s); // a lapse never increases stability
+    // a lapse can keep at most the short-term fraction of the old stability
+    return Math.min(longTerm, s / Math.exp(W[17] * W[18]));
+  }
+
+  // Same-day review (< 1 day since the last one): the short-term memory
+  // model — grades move stability even when retrievability is still ~1.
+  function shortTermStability(s, grade) {
+    let inc = Math.exp(W[17] * (grade - 3 + W[18])) * Math.pow(s, -W[19]);
+    if (grade === GOOD || grade === EASY) inc = Math.max(inc, 1); // a pass never shrinks a card
+    return s * inc;
   }
 
   // The scheduler: (cardState|null, grade, nowMs) → newState.
@@ -86,17 +106,19 @@ window.FSRS = (function () {
       lapses = grade === AGAIN ? 1 : 0;
     } else {
       const elapsedDays = Math.max(0, (now - state.lastReview) / DAY_MS);
-      const r = retrievability(elapsedDays, state.stability);
       difficulty = nextDifficulty(state.difficulty, grade);
-      if (grade === AGAIN) {
-        stability = nextForgetStability(state.difficulty, state.stability, r);
-        lapses = state.lapses + 1;
+      if (elapsedDays < 1) {
+        stability = shortTermStability(state.stability, grade);
       } else {
-        stability = nextRecallStability(state.difficulty, state.stability, r, grade);
-        lapses = state.lapses;
+        const r = retrievability(elapsedDays, state.stability);
+        stability = grade === AGAIN
+          ? nextForgetStability(state.difficulty, state.stability, r)
+          : nextRecallStability(state.difficulty, state.stability, r, grade);
       }
+      lapses = grade === AGAIN ? state.lapses + 1 : state.lapses;
       reps = state.reps + 1;
     }
+    stability = Math.max(stability, MIN_STABILITY);
 
     const due = grade === AGAIN
       ? now + AGAIN_DELAY_MS
@@ -130,6 +152,6 @@ window.FSRS = (function () {
     retrievability,
     intervalDays,
     // exposed for tests
-    _internals: { W, initStability, initDifficulty, nextDifficulty, nextRecallStability, nextForgetStability },
+    _internals: { W, initStability, initDifficulty, nextDifficulty, nextRecallStability, nextForgetStability, shortTermStability },
   };
 })();
