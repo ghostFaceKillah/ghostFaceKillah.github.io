@@ -360,15 +360,11 @@
     grid-template-rows: repeat(7, 15px); grid-auto-columns: 15px; gap: 2px;
     width: max-content; margin: 0 auto;
   }
-  /* a reviewed day is a 💗: its size = how many reviews that day */
-  .heat-grid i {
-    border-radius: 50%; background: var(--track);
-    place-self: center; width: 5px; height: 5px;
+  /* a practiced day grows a plant (size = reviews); a bare day is ground */
+  .heat-grid i, .heat-legend i.day {
+    place-self: center; font-style: normal; line-height: 1;
   }
-  .heat-grid i.day, .heat-legend i.day {
-    background: none; border-radius: 0; width: auto; height: auto;
-    font-style: normal; line-height: 1;
-  }
+  .heat-grid i.bare { font-size: 9px; opacity: .55; }
   .s1 { font-size: 7px; }
   .s2 { font-size: 9.5px; }
   .s3 { font-size: 12px; }
@@ -624,8 +620,8 @@
         <div class="heat-grid" id="heatGrid"></div>
       </div>
       <div class="heat-legend">fewer
-        <i class="day s1">🌸</i><i class="day s2">🍀</i><i class="day s3">🌟</i><i class="day s4">💗</i>
-      more</div>
+        <i class="day s1">🌱</i><i class="day s2">🌿</i><i class="day s3">🌷</i><i class="day s4">🌻</i>
+      more · 🪨 rest day</div>
     </div>
 
     <div class="label">🧠 Retention — how much sticks</div>
@@ -1086,21 +1082,19 @@
   // due forecast (from `cardStates`). Chart hues are the four grade-button
   // colors; heatmap days are cute emoji sized by review count.
   const fmtDay = d => d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
-  // A big mostly-cute emoji jar, cycled by calendar date. Split on spaces —
-  // many emoji are multi-codepoint. Keep the count OFF multiples of 7, or
-  // each weekday row of the heatmap shows the same slice over and over.
-  const DAY_EMOJI = (
-    "💗 💖 💘 💝 💞 💓 💕 ❤️ 🧡 💛 💚 💙 💜 💟 " +
-    "✨ ⭐ 🌟 💫 🎉 🎊 🎈 🎀 🎁 🏆 🥇 👑 💎 🔮 " +
-    "🌸 🌺 🌼 🌻 🌷 🌹 💐 🌱 🌿 ☘️ 🍀 🍁 🍄 🌵 🌴 " +
-    "🌈 ☀️ 🌞 🌙 ⛅ ❄️ ⛄ 🌊 💧 ☔ " +
-    "🍓 🍒 🍑 🍊 🍋 🍉 🍇 🍎 🍏 🥝 🍍 🥭 🥥 " +
-    "🍰 🧁 🍩 🍪 🍬 🍭 🍡 🍦 🍨 🍯 🥞 🧋 🍵 🍙 🥟 " +
-    "🐶 🐱 🐭 🐹 🐰 🦊 🐻 🐼 🐨 🐯 🦁 🐮 🐷 🐸 🐵 " +
-    "🐔 🐧 🐦 🐤 🐥 🐣 🦆 🦉 🦄 🐴 🐝 🦋 🐌 🐞 🐢 " +
-    "🐙 🦀 🐠 🐟 🐬 🐳 🐋 🐿️ 🦔 🐘 🐑 " +
-    "😊 😄 🥰 🤗 😺 🧸 🎠 🎵 🎶 🎨 🚀 ⛵ 🌍 📚"
+  // The heatmap is a garden: a practiced day grows a plant (or a garden
+  // visitor), a skipped day stays bare ground. Split on spaces — many emoji
+  // are multi-codepoint.
+  const GARDEN = (
+    "🌱 🌿 ☘️ 🍀 🍃 🌸 🌺 🌼 🌻 🌷 🌹 💐 🌾 🌵 🌴 🌳 🌲 🍄 🍁 " +
+    "🍓 🍒 🍎 🍑 🍊 🍋 🍇 🍉 🥝 🫐 🍅 🥕 🌽 🎃 🥒 🍆 🥔 🍠 " +
+    "🐝 🦋 🐞 🐌 🐛 🐸 🐿️ 🦔 🐇 🐦"
   ).split(" ");
+  const GROUND = "🪨 🪵 🍂 🌰".split(" ");
+  // Deterministic scatter — hash the calendar day so the garden looks wild
+  // but never reshuffles between visits.
+  const scatter = (arr, dayN, salt) =>
+    arr[(Math.imul(dayN ^ salt, 2654435761) >>> 0) % arr.length];
 
   function renderStats() {
     const now = Date.now();
@@ -1123,8 +1117,8 @@
     $("stTotal").textContent = total;
     $("stDays").textContent = active;
 
-    // --- heatmap: last 26 weeks, Monday-first columns ----------------------
-    const WEEKS = 26;
+    // --- heatmap: last 18 weeks (~4 months), Monday-first columns ----------
+    const WEEKS = 18;
     const today = new Date(now); today.setHours(0, 0, 0, 0);
     const start = new Date(today);
     start.setDate(today.getDate() - ((today.getDay() + 6) % 7) - (WEEKS - 1) * 7);
@@ -1151,11 +1145,14 @@
           cell.style.visibility = "hidden";
         } else {
           const n = (days[todayKey(day.getTime())] || {}).reviews || 0;
+          const dayN = Math.round(day.getTime() / FSRS.DAY_MS);
           if (n > 0) {
             const size = Math.max(1, Math.ceil(4 * n / max));
             cell.className = `day s${size}`;
-            // date-keyed pick, so every day keeps its emoji forever
-            cell.textContent = DAY_EMOJI[Math.round(day.getTime() / FSRS.DAY_MS) % DAY_EMOJI.length];
+            cell.textContent = scatter(GARDEN, dayN, 0);
+          } else {
+            cell.className = "bare";
+            cell.textContent = scatter(GROUND, dayN, 7);
           }
           const r = ret[todayKey(day.getTime())];
           const tipText = `${fmtDay(day)} — ${n} review${n === 1 ? "" : "s"}` +

@@ -48,7 +48,7 @@ Decided 2026-07-11. This doc is the source of truth for sessions continuing the 
     sorted by retrievability (weakest first), 20 at a time, repeatable.
 - **Stats screen** (decided 2026-07-11): the three idiomatic SRS charts, computed
   entirely from existing state (`days` + card states, nothing new persisted):
-  review heatmap + streak (26 Monday-first weeks, GitHub-style), a card-maturity
+  review heatmap + streak (18 Monday-first weeks ≈ 4 months, GitHub-style), a card-maturity
   "garden" (🌱 <7d, 🌿 7–21d, 🌸 ≥21d — Anki's 21-day "mature" idiom), and a
   28-day due forecast for enabled decks. Styling (owner iterated twice on
   2026-07-11: single-hue ramps felt monochrome → kana rainbow → final ask:
@@ -58,11 +58,13 @@ Decided 2026-07-11. This doc is the source of truth for sessions continuing the 
   traffic-light, maturing toward "Good"; `--w1..--w4` = red/amber/green/sky
   in Again→Easy order; `--ret` = green, "Good" = remembered). Aliases resolve
   at use-time, so dark mode follows the buttons' dark values with no
-  per-theme chart overrides. Heatmap: a reviewed day is a cute emoji — a
-  136-strong mostly-cute jar (owner asked for 100+, 2026-07-11; keep the count
-  OFF multiples of 7 or weekday rows stripe) cycled by calendar date, so
-  each day keeps its emoji forever — whose font-size carries the review count
-  (s1–s4); the month-hue cycle (`--m1..--m5`) is gone. Magnitude never rides
+  per-theme chart overrides. Heatmap: it IS a garden (owner iterated from
+  hearts → 136-emoji jar → garden, 2026-07-11): a practiced day grows a plant
+  / garden visitor (48-emoji set) whose font-size carries the review count
+  (s1–s4); a skipped day shows bare ground (🪨🪵🍂🌰, small + faded), window
+  trimmed to 18 weeks ≈ 4 months. Picks are a deterministic hash of the
+  calendar day (`scatter()` — wild-looking but stable across visits; different
+  salt for ground); the month-hue cycle (`--m1..--m5`) is gone. Magnitude never rides
   on color, stages carry emoji + labeled counts, weeks carry axis labels, and
   every mark has a tooltip + aria-label.
 - **Review log & retention** (decided 2026-07-11): every grade appends
