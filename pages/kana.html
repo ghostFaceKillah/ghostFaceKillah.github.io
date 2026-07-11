@@ -478,6 +478,7 @@
 
 </div>
 
+<script src="kana_data.js"></script>
 <script>
   // ----- Dark mode toggle -----
   (function () {
@@ -500,142 +501,9 @@
     syncIcon();
   })();
 
-  // ----- Rows -----
-  const ROWS = [
-    { id: "a",  hira: "あいうえお", kata: "アイウエオ", basic: true },
-    { id: "k",  hira: "かきくけこ", kata: "カキクケコ", basic: true },
-    { id: "s",  hira: "さしすせそ", kata: "サシスセソ", basic: true },
-    { id: "t",  hira: "たちつてと", kata: "タチツテト", basic: true },
-    { id: "n",  hira: "なにぬねの", kata: "ナニヌネノ", basic: true },
-    { id: "h",  hira: "はひふへほ", kata: "ハヒフヘホ", basic: true },
-    { id: "m",  hira: "まみむめも", kata: "マミムメモ", basic: true },
-    { id: "y",  hira: "やゆよ",     kata: "ヤユヨ",     basic: true },
-    { id: "r",  hira: "らりるれろ", kata: "ラリルレロ", basic: true },
-    { id: "w",  hira: "わをん",     kata: "ワヲン",     basic: true },
-    { id: "g",  hira: "がぎぐげご", kata: "ガギグゲゴ", basic: false },
-    { id: "z",  hira: "ざじずぜぞ", kata: "ザジズゼゾ", basic: false },
-    { id: "d",  hira: "だぢづでど", kata: "ダヂヅデド", basic: false },
-    { id: "b",  hira: "ばびぶべぼ", kata: "バビブベボ", basic: false },
-    { id: "p",  hira: "ぱぴぷぺぽ", kata: "パピプペポ", basic: false },
-  ];
-
-  // ----- Kana data -----
-  // r = romaji, h/k = hiragana/katakana, row = row id,
-  // wh/wk = example word in each script, wr = word romaji, en = meaning,
-  // e = cute picture, note = little tip shown on reveal, noteK = katakana-only extra.
-  const KANA = [
-    // あ row
-    { r: "a",   h: "あ", k: "ア", row: "a", wh: "あり",           wk: "アリ",           wr: "ari",            en: "ant",              e: "🐜" },
-    { r: "i",   h: "い", k: "イ", row: "a", wh: "いちご",         wk: "イチゴ",         wr: "ichigo",         en: "strawberry",       e: "🍓" },
-    { r: "u",   h: "う", k: "ウ", row: "a", wh: "うし",           wk: "ウシ",           wr: "ushi",           en: "cow",              e: "🐮" },
-    { r: "e",   h: "え", k: "エ", row: "a", wh: "えんぴつ",       wk: "エンピツ",       wr: "enpitsu",        en: "pencil",           e: "✏️" },
-    { r: "o",   h: "お", k: "オ", row: "a", wh: "おばけ",         wk: "オバケ",         wr: "obake",          en: "ghost",            e: "👻" },
-    // か row
-    { r: "ka",  h: "か", k: "カ", row: "k", wh: "かめ",           wk: "カメ",           wr: "kame",           en: "turtle",           e: "🐢" },
-    { r: "ki",  h: "き", k: "キ", row: "k", wh: "きのこ",         wk: "キノコ",         wr: "kinoko",         en: "mushroom",         e: "🍄" },
-    { r: "ku",  h: "く", k: "ク", row: "k", wh: "くま",           wk: "クマ",           wr: "kuma",           en: "bear",             e: "🐻" },
-    { r: "ke",  h: "け", k: "ケ", row: "k", wh: "けーき",         wk: "ケーキ",         wr: "kēki",           en: "cake",             e: "🍰",
-      note: "The ー stretches the vowel: “keh-ki”. Cake is a loanword, so it's usually written in katakana: ケーキ." },
-    { r: "ko",  h: "こ", k: "コ", row: "k", wh: "こあら",         wk: "コアラ",         wr: "koara",          en: "koala",            e: "🐨" },
-    // さ row
-    { r: "sa",  h: "さ", k: "サ", row: "s", wh: "さかな",         wk: "サカナ",         wr: "sakana",         en: "fish",             e: "🐟" },
-    { r: "shi", h: "し", k: "シ", row: "s", wh: "しかく",         wk: "シカク",         wr: "shikaku",        en: "square",           e: "🟦",
-      note: "It's “shi”, not “si”!", noteK: "Watch out: シ (shi) vs ツ (tsu) — shi's strokes lie down and are drawn bottom-up, like a smile." },
-    { r: "su",  h: "す", k: "ス", row: "s", wh: "すいか",         wk: "スイカ",         wr: "suika",          en: "watermelon",       e: "🍉" },
-    { r: "se",  h: "せ", k: "セ", row: "s", wh: "せみ",           wk: "セミ",           wr: "semi",           en: "cicada",           e: "🦗" },
-    { r: "so",  h: "そ", k: "ソ", row: "s", wh: "そふとくりーむ", wk: "ソフトクリーム", wr: "sofuto kurīmu",  en: "soft-serve",       e: "🍦",
-      noteK: "Watch out: ソ (so) vs ン (n) — so stands upright and is drawn top-down." },
-    // た row
-    { r: "ta",  h: "た", k: "タ", row: "t", wh: "たいよう",       wk: "タイヨウ",       wr: "taiyō",          en: "sun",              e: "🌞" },
-    { r: "chi", h: "ち", k: "チ", row: "t", wh: "ちょうちょ",     wk: "チョウチョ",     wr: "chōcho",         en: "butterfly",        e: "🦋",
-      note: "It's “chi”, not “ti”! And spot the small ょ — it blends: chi + yo → “cho”." },
-    { r: "tsu", h: "つ", k: "ツ", row: "t", wh: "つき",           wk: "ツキ",           wr: "tsuki",          en: "moon",             e: "🌙",
-      note: "It's “tsu”, not “tu”! Its tiny twin っ is silent and doubles the next consonant — see Tips.",
-      noteK: "Watch out: ツ (tsu) vs シ (shi) — tsu's strokes stand up and are drawn top-down." },
-    { r: "te",  h: "て", k: "テ", row: "t", wh: "てがみ",         wk: "テガミ",         wr: "tegami",         en: "letter",           e: "💌" },
-    { r: "to",  h: "と", k: "ト", row: "t", wh: "とり",           wk: "トリ",           wr: "tori",           en: "bird",             e: "🐥" },
-    // な row
-    { r: "na",  h: "な", k: "ナ", row: "n", wh: "ながぐつ",       wk: "ナガグツ",       wr: "nagagutsu",      en: "rain boots",       e: "👢" },
-    { r: "ni",  h: "に", k: "ニ", row: "n", wh: "にじ",           wk: "ニジ",           wr: "niji",           en: "rainbow",          e: "🌈" },
-    { r: "nu",  h: "ぬ", k: "ヌ", row: "n", wh: "ぬりえ",         wk: "ヌリエ",         wr: "nurie",          en: "coloring book",    e: "🖍️",
-      note: "ぬ has a little loop at the end — め doesn't. Think noodles caught on the tail!" },
-    { r: "ne",  h: "ね", k: "ネ", row: "n", wh: "ねこ",           wk: "ネコ",           wr: "neko",           en: "cat",              e: "🐱",
-      note: "ね(ko) has a curled tail — like a cat! れ flicks out, わ curves back in." },
-    { r: "no",  h: "の", k: "ノ", row: "n", wh: "のはら",         wk: "ノハラ",         wr: "nohara",         en: "flower field",     e: "🌼" },
-    // は row
-    { r: "ha",  h: "は", k: "ハ", row: "h", wh: "はぶらし",       wk: "ハブラシ",       wr: "haburashi",      en: "toothbrush",       e: "🪥",
-      note: "As the topic particle it's read “wa” — こんにちは = konnichiwa!" },
-    { r: "hi",  h: "ひ", k: "ヒ", row: "h", wh: "ひつじ",         wk: "ヒツジ",         wr: "hitsuji",        en: "sheep",            e: "🐑" },
-    { r: "fu",  h: "ふ", k: "フ", row: "h", wh: "ふくろう",       wk: "フクロウ",       wr: "fukurō",         en: "owl",              e: "🦉",
-      note: "“fu” sits halfway between f and h — blow softly, like fogging a mirror." },
-    { r: "he",  h: "へ", k: "ヘ", row: "h", wh: "へび",           wk: "ヘビ",           wr: "hebi",           en: "snake",            e: "🐍",
-      note: "As the direction particle it's read “e”. Bonus: へ and ヘ look almost identical in both scripts — one freebie!" },
-    { r: "ho",  h: "ほ", k: "ホ", row: "h", wh: "ほうき",         wk: "ホウキ",         wr: "hōki",           en: "broom",            e: "🧹",
-      note: "ほうき: the う stretches the “o” — hōki." },
-    // ま row
-    { r: "ma",  h: "ま", k: "マ", row: "m", wh: "まど",           wk: "マド",           wr: "mado",           en: "window",           e: "🪟" },
-    { r: "mi",  h: "み", k: "ミ", row: "m", wh: "みず",           wk: "ミズ",           wr: "mizu",           en: "water",            e: "💧" },
-    { r: "mu",  h: "む", k: "ム", row: "m", wh: "むしめがね",     wk: "ムシメガネ",     wr: "mushimegane",    en: "magnifying glass", e: "🔍" },
-    { r: "me",  h: "め", k: "メ", row: "m", wh: "めがね",         wk: "メガネ",         wr: "megane",         en: "glasses",          e: "👓" },
-    { r: "mo",  h: "も", k: "モ", row: "m", wh: "もも",           wk: "モモ",           wr: "momo",           en: "peach",            e: "🍑" },
-    // や row
-    { r: "ya",  h: "や", k: "ヤ", row: "y", wh: "やきゅう",       wk: "ヤキュウ",       wr: "yakyū",          en: "baseball",         e: "⚾",
-      note: "Spot the small ゅ: ki + yu → “kyu”, then う stretches it — yakyū." },
-    { r: "yu",  h: "ゆ", k: "ユ", row: "y", wh: "ゆきだるま",     wk: "ユキダルマ",     wr: "yukidaruma",     en: "snowman",          e: "⛄" },
-    { r: "yo",  h: "よ", k: "ヨ", row: "y", wh: "よっと",         wk: "ヨット",         wr: "yotto",          en: "yacht",            e: "⛵",
-      note: "Spot the small っ — it doubles the t: yo-t-to. See Tips!" },
-    // ら row
-    { r: "ra",  h: "ら", k: "ラ", row: "r", wh: "らいおん",       wk: "ライオン",       wr: "raion",          en: "lion",             e: "🦁" },
-    { r: "ri",  h: "り", k: "リ", row: "r", wh: "りす",           wk: "リス",           wr: "risu",           en: "squirrel",         e: "🐿️" },
-    { r: "ru",  h: "る", k: "ル", row: "r", wh: "るびー",         wk: "ルビー",         wr: "rubī",           en: "ruby",             e: "💎",
-      note: "る has a little loop at the end, ろ doesn't — “ru has a curl”." },
-    { r: "re",  h: "れ", k: "レ", row: "r", wh: "れもん",         wk: "レモン",         wr: "remon",          en: "lemon",            e: "🍋" },
-    { r: "ro",  h: "ろ", k: "ロ", row: "r", wh: "ろうそく",       wk: "ロウソク",       wr: "rōsoku",         en: "candle",           e: "🕯️" },
-    // わ row + ん
-    { r: "wa",  h: "わ", k: "ワ", row: "w", wh: "わに",           wk: "ワニ",           wr: "wani",           en: "crocodile",        e: "🐊" },
-    { r: "o (wo)", h: "を", k: "ヲ", row: "w", wh: "てをふる",    wk: "テヲフル",       wr: "te o furu",      en: "to wave a hand",   e: "👋",
-      note: "を appears almost only as the object particle, pronounced plain “o”: ほんをよむ — I read a book." },
-    { r: "n",   h: "ん", k: "ン", row: "w", wh: "ほん",           wk: "ホン",           wr: "hon",            en: "book",             e: "📖",
-      note: "The only kana with no vowel — a syllable all by itself: ho-n.",
-      noteK: "Watch out: ン (n) vs ソ (so) — n lies flat and is drawn bottom-up." },
-    // が row
-    { r: "ga",  h: "が", k: "ガ", row: "g", wh: "がっこう",       wk: "ガッコウ",       wr: "gakkō",          en: "school",           e: "🏫",
-      note: "か + ゛ = ga. And spot the small っ doubling the k: ga-k-kō!" },
-    { r: "gi",  h: "ぎ", k: "ギ", row: "g", wh: "ぎんこう",       wk: "ギンコウ",       wr: "ginkō",          en: "bank",             e: "🏦" },
-    { r: "gu",  h: "ぐ", k: "グ", row: "g", wh: "ぐみ",           wk: "グミ",           wr: "gumi",           en: "gummy candy",      e: "🍬" },
-    { r: "ge",  h: "げ", k: "ゲ", row: "g", wh: "げた",           wk: "ゲタ",           wr: "geta",           en: "wooden sandals",   e: "🩴" },
-    { r: "go",  h: "ご", k: "ゴ", row: "g", wh: "ごはん",         wk: "ゴハン",         wr: "gohan",          en: "rice, a meal",     e: "🍚" },
-    // ざ row
-    { r: "za",  h: "ざ", k: "ザ", row: "z", wh: "ざっし",         wk: "ザッシ",         wr: "zasshi",         en: "magazine",         e: "📰",
-      note: "Small っ again: za-s-shi." },
-    { r: "ji",  h: "じ", k: "ジ", row: "z", wh: "じてんしゃ",     wk: "ジテンシャ",     wr: "jitensha",       en: "bicycle",          e: "🚲",
-      note: "し + ゛ = ji. Spot the small ゃ: shi + ya → “sha”." },
-    { r: "zu",  h: "ず", k: "ズ", row: "z", wh: "ずぼん",         wk: "ズボン",         wr: "zubon",          en: "trousers",         e: "👖" },
-    { r: "ze",  h: "ぜ", k: "ゼ", row: "z", wh: "ぜろ",           wk: "ゼロ",           wr: "zero",           en: "zero",             e: "0️⃣" },
-    { r: "zo",  h: "ぞ", k: "ゾ", row: "z", wh: "ぞう",           wk: "ゾウ",           wr: "zō",             en: "elephant",         e: "🐘" },
-    // だ row
-    { r: "da",  h: "だ", k: "ダ", row: "d", wh: "だんご",         wk: "ダンゴ",         wr: "dango",          en: "sweet dumplings",  e: "🍡" },
-    { r: "ji (dji)", h: "ぢ", k: "ヂ", row: "d", wh: "はなぢ",    wk: "ハナヂ",         wr: "hanaji",         en: "nosebleed",        e: "🤧",
-      note: "Rare! Sounds exactly like じ. It only shows up in a few words like はなぢ (hana + chi)." },
-    { r: "zu (dzu)", h: "づ", k: "ヅ", row: "d", wh: "みかづき",  wk: "ミカヅキ",       wr: "mikazuki",       en: "crescent moon",    e: "🌛",
-      note: "Rare! Sounds exactly like ず. You'll mostly meet it in compounds like みかづき (mika + tsuki)." },
-    { r: "de",  h: "で", k: "デ", row: "d", wh: "でんわ",         wk: "デンワ",         wr: "denwa",          en: "telephone",        e: "☎️" },
-    { r: "do",  h: "ど", k: "ド", row: "d", wh: "どーなつ",       wk: "ドーナツ",       wr: "dōnatsu",        en: "donut",            e: "🍩" },
-    // ば row
-    { r: "ba",  h: "ば", k: "バ", row: "b", wh: "ばなな",         wk: "バナナ",         wr: "banana",         en: "banana",           e: "🍌" },
-    { r: "bi",  h: "び", k: "ビ", row: "b", wh: "びっくり",       wk: "ビックリ",       wr: "bikkuri",        en: "surprise!",        e: "😲",
-      note: "Small っ doubles the k: bi-k-kuri!" },
-    { r: "bu",  h: "ぶ", k: "ブ", row: "b", wh: "ぶた",           wk: "ブタ",           wr: "buta",           en: "pig",              e: "🐷" },
-    { r: "be",  h: "べ", k: "ベ", row: "b", wh: "べんとう",       wk: "ベントウ",       wr: "bentō",          en: "lunch box",        e: "🍱" },
-    { r: "bo",  h: "ぼ", k: "ボ", row: "b", wh: "ぼうし",         wk: "ボウシ",         wr: "bōshi",          en: "hat",              e: "👒" },
-    // ぱ row
-    { r: "pa",  h: "ぱ", k: "パ", row: "p", wh: "ぱんだ",         wk: "パンダ",         wr: "panda",          en: "panda",            e: "🐼",
-      note: "は + ゜ = pa. The little circle means “p”!" },
-    { r: "pi",  h: "ぴ", k: "ピ", row: "p", wh: "ぴあの",         wk: "ピアノ",         wr: "piano",          en: "piano",            e: "🎹" },
-    { r: "pu",  h: "ぷ", k: "プ", row: "p", wh: "ぷりん",         wk: "プリン",         wr: "purin",          en: "pudding",          e: "🍮" },
-    { r: "pe",  h: "ぺ", k: "ペ", row: "p", wh: "ぺんぎん",       wk: "ペンギン",       wr: "pengin",         en: "penguin",          e: "🐧" },
-    { r: "po",  h: "ぽ", k: "ポ", row: "p", wh: "ぽすと",         wk: "ポスト",         wr: "posuto",         en: "postbox",          e: "📮" },
-  ];
+  // ----- Kana data (rows + cards) — loaded from kana_data.js -----
+  const ROWS = window.KANA_DATA.rows;
+  const KANA = window.KANA_DATA.kana;
 
   // ----- Pronunciation: Web Speech API (Japanese) -----
   const Speech = (() => {
