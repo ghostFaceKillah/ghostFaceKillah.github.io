@@ -16,6 +16,16 @@ Decided 2026-07-11. This doc is the source of truth for sessions continuing the 
 - **Card intake:** opt-in by deck/lesson (IC1 lessons individually, colloquial chars
   in bands of 20, IC1 sentence chapters, HSK recall sets of 50, kana rows, radicals,
   numbers, usage). New cards introduced at a per-user daily cap (default ~15).
+- **Selection groups** (decided 2026-07-11): three generic slots (①②③), each
+  remembering its own set of enabled deck groups; switching slots swaps the whole
+  selection (leave-slot keeps its picks, target slot's picks are recalled).
+  Settings shape: `{ slot: 0..2, slots: [g0, g1, g2], groups, newPerDay }` where
+  `groups` is a live in-memory REFERENCE to `slots[slot]` — every existing
+  reader/writer of `settings.groups` transparently operates on the active slot.
+  References don't survive JSON, so `normalizeSettings()` re-ties them on every
+  load/adopt; legacy settings (plain `groups`) migrate to slot 0, and
+  `migrateGroupKeys` runs per slot. Queues, stats, and the forecast all follow
+  the active slot; the focus picker stays selection-independent by design.
 - **Sentence directions** (decided 2026-07-11): Integrated Chinese sentences stay
   recognition cards (Chinese front → English back, deck `sent`). HSK sentences are
   production cards in their own deck `recall` (English front → Chinese back), split
