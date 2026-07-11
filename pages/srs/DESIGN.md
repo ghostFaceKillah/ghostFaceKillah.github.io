@@ -36,6 +36,25 @@ Decided 2026-07-11. This doc is the source of truth for sessions continuing the 
     NOT opt it into the daily rotation — the deck chips stay the only intake switch.
   - **ahead** — extra rounds after the daily queue is clear: not-yet-due cards
     sorted by retrievability (weakest first), 20 at a time, repeatable.
+- **Stats screen** (decided 2026-07-11): the three idiomatic SRS charts, computed
+  entirely from existing state (`days` + card states, nothing new persisted):
+  review heatmap + streak (26 Monday-first weeks, GitHub-style), a card-maturity
+  "garden" (🌱 <7d, 🌿 7–21d, 🌸 ≥21d — Anki's 21-day "mature" idiom), and a
+  28-day due forecast for enabled decks. Rainbow styling (owner iterated:
+  single-hue ramps felt monochrome; wants the kana-trainer bubble rainbow,
+  2026-07-11). Multi-hue but honest: in the heatmap, dot SIZE carries the
+  review count (s1–s4) and hue follows the month (`--m1..--m5`, a 5-hue cycle —
+  a 6th lemon slot collapsed with peach under deuteranopia and was dropped);
+  garden stages each get a hue (🌱 mint `--gs`, 🌿 lavender `--gg`, 🌸 pink
+  `--gb`); forecast bars are colored per week (`--w1..--w4`, matching the axis
+  groups). All sets pass the categorical validator in both modes (light on
+  white: `#ef5f8f #3ba0d9 #e8821c #35a86b #8f77e0`; dark on `#2f3c34`:
+  `#d94f7e #2f8fc4 #cf7414 #2f9660 #8168d4`). Remaining WARNs are the legal
+  floor-band cases — mitigated by secondary encoding everywhere: month hue is
+  redundant with column position + month labels, magnitude never rides on
+  color, stages carry emoji + labeled counts, weeks carry axis labels, and
+  every mark has a tooltip + aria-label. Retention-rate charts would need a
+  per-review pass/fail log, which we deliberately don't store yet.
 - **Guest mode:** the app fully works signed-out on localStorage. On first sign-in,
   offer a one-time "import this progress into your account?" — never merge silently.
 - **Multi-user:** open to any Google account. All state private per user.
