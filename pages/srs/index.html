@@ -28,14 +28,13 @@
     --green: #4fbf8f;
     --amber: #f5a54c;
     --red: #ef8368;
-    /* stats palette — kana-trainer rainbow, validated (see DESIGN.md).
-       Heatmap: dot SIZE carries the count; hue follows the month (m1–m5 cycle).
-       Garden: one hue per stage. Forecast: one hue per week (w1–w4). */
+    /* stats palette — exactly the four grade-button hues (see DESIGN.md).
+       Aliases resolve at use-time, so dark mode follows the buttons for free.
+       Heatmap: a reviewed day is a 💗 whose SIZE carries the count (s1–s4). */
     --track: #edf1ee;                                            /* empty cells */
-    --m1: #ef5f8f; --m2: #3ba0d9; --m3: #e8821c; --m4: #35a86b; --m5: #8f77e0;
-    --gs: #35a86b; --gg: #8f77e0; --gb: #ef5f8f;                 /* 🌱 🌿 🌸 */
-    --w1: #ef5f8f; --w2: #e8821c; --w3: #35a86b; --w4: #3ba0d9;
-    --ret: #8f77e0;                                              /* retention 🧠 */
+    --gs: var(--green); --gg: var(--sky); --gb: var(--red);      /* 🌱 🌿 🌸 */
+    --w1: var(--red); --w2: var(--amber); --w3: var(--green); --w4: var(--sky);
+    --ret: var(--green);                                         /* retention 🧠 */
     color-scheme: light;
   }
   @media (prefers-color-scheme: dark) {
@@ -57,10 +56,6 @@
       --amber: #ffb765;
       --red: #ff9a7d;
       --track: #3a4a40;
-      --m1: #d94f7e; --m2: #2f8fc4; --m3: #cf7414; --m4: #2f9660; --m5: #8168d4;
-      --gs: #2f9660; --gg: #8168d4; --gb: #d94f7e;
-      --w1: #d94f7e; --w2: #cf7414; --w3: #2f9660; --w4: #2f8fc4;
-      --ret: #a98fd0;
       color-scheme: dark;
     }
   }
@@ -82,10 +77,6 @@
     --amber: #ffb765;
     --red: #ff9a7d;
     --track: #3a4a40;
-    --m1: #d94f7e; --m2: #2f8fc4; --m3: #cf7414; --m4: #2f9660; --m5: #8168d4;
-    --gs: #2f9660; --gg: #8168d4; --gb: #d94f7e;
-    --w1: #d94f7e; --w2: #cf7414; --w3: #2f9660; --w4: #2f8fc4;
-    --ret: #a98fd0;
     color-scheme: dark;
   }
 
@@ -369,20 +360,19 @@
     grid-template-rows: repeat(7, 15px); grid-auto-columns: 15px; gap: 2px;
     width: max-content; margin: 0 auto;
   }
-  /* a reviewed day is a dot: size = how many reviews, hue = its month */
+  /* a reviewed day is a 💗: its size = how many reviews that day */
   .heat-grid i {
     border-radius: 50%; background: var(--track);
     place-self: center; width: 5px; height: 5px;
   }
-  .s1 { width: 8px; height: 8px; }
-  .s2 { width: 10px; height: 10px; }
-  .s3 { width: 12.5px; height: 12.5px; }
-  .s4 { width: 15px; height: 15px; }
-  .m1 { background: var(--m1) !important; }
-  .m2 { background: var(--m2) !important; }
-  .m3 { background: var(--m3) !important; }
-  .m4 { background: var(--m4) !important; }
-  .m5 { background: var(--m5) !important; }
+  .heat-grid i.day, .heat-legend i.day {
+    background: none; border-radius: 0; width: auto; height: auto;
+    font-style: normal; line-height: 1;
+  }
+  .s1 { font-size: 7px; }
+  .s2 { font-size: 9.5px; }
+  .s3 { font-size: 12px; }
+  .s4 { font-size: 14px; }
   .gs { background: var(--gs) !important; }
   .gg { background: var(--gg) !important; }
   .gb { background: var(--gb) !important; }
@@ -394,7 +384,7 @@
     display: flex; align-items: center; justify-content: flex-end; gap: 4px;
     margin-top: 10px; font-size: .72rem; color: var(--muted); font-weight: 700;
   }
-  .heat-legend i { border-radius: 50%; background: var(--muted); flex: none; }
+  .heat-legend i { flex: none; }
 
   .garden-bar { display: flex; gap: 2px; height: 24px; border-radius: 999px; overflow: hidden; }
   .garden-bar i { min-width: 8px; }
@@ -633,8 +623,8 @@
         <div class="heat-grid" id="heatGrid"></div>
       </div>
       <div class="heat-legend">fewer
-        <i class="s1"></i><i class="s2"></i><i class="s3"></i><i class="s4"></i>
-      more · a color per month</div>
+        <i class="day s1">💗</i><i class="day s2">💗</i><i class="day s3">💗</i><i class="day s4">💗</i>
+      more</div>
     </div>
 
     <div class="label">🧠 Retention — how much sticks</div>
@@ -1092,8 +1082,8 @@
   // ----- Stats screen -----------------------------------------------------------
   // Three classic SRS charts, all computed from state the app already keeps:
   // a review heatmap + streak (from `days`), a card-maturity "garden" and a
-  // due forecast (from `cardStates`). Colors come from --q1..--q4, one green
-  // hue in validated light→dark steps.
+  // due forecast (from `cardStates`). Chart hues are the four grade-button
+  // colors; heatmap days are 💗 sized by review count.
   const fmtDay = d => d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
 
   function renderStats() {
@@ -1147,7 +1137,8 @@
           const n = (days[todayKey(day.getTime())] || {}).reviews || 0;
           if (n > 0) {
             const size = Math.max(1, Math.ceil(4 * n / max));
-            cell.className = `s${size} m${(day.getMonth() % 5) + 1}`;
+            cell.className = `day s${size}`;
+            cell.textContent = "💗";
           }
           const r = ret[todayKey(day.getTime())];
           const tipText = `${fmtDay(day)} — ${n} review${n === 1 ? "" : "s"}` +
