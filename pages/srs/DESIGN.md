@@ -16,6 +16,19 @@ Decided 2026-07-11. This doc is the source of truth for sessions continuing the 
 - **Card intake:** opt-in by deck/lesson (IC1 lessons individually, colloquial chars
   in bands of 50, sentence decks hsk1/hsk2/ic1, kana rows, radicals, numbers, usage).
   New cards introduced at a per-user daily cap (default ~15).
+- **Four session modes, one engine** (decided 2026-07-11). Every mode grades
+  through the same `FSRS.review` with real elapsed time — early/late reviews are
+  handled by the math itself (early review ⇒ high retrievability ⇒ tiny stability
+  gain), so no mode needs special scheduling rules:
+  - **daily** — due cards + new cards up to the daily cap (the default habit).
+  - **learn** — unseen cards only, one `newPerDay`-sized batch per session.
+    Deliberately allowed past the daily cap (explicit user intent), but each card
+    still counts as introduced, so the daily queue never double-adds new cards.
+  - **focus** — every card of one chosen group (e.g. an IC1 chapter before a tutor
+    lesson), due or not, enabled for daily review or not. Cramming a group does
+    NOT opt it into the daily rotation — the deck chips stay the only intake switch.
+  - **ahead** — extra rounds after the daily queue is clear: not-yet-due cards
+    sorted by retrievability (weakest first), 20 at a time, repeatable.
 - **Guest mode:** the app fully works signed-out on localStorage. On first sign-in,
   offer a one-time "import this progress into your account?" — never merge silently.
 - **Multi-user:** open to any Google account. All state private per user.
