@@ -14,8 +14,15 @@ Decided 2026-07-11. This doc is the source of truth for sessions continuing the 
 - **Card IDs:** stable, derived from existing data. Examples:
   `words/L1D1/你`, `sent/hsk1/42`, `coll/1`, `kana/あ`. ~2,500 cards total.
 - **Card intake:** opt-in by deck/lesson (IC1 lessons individually, colloquial chars
-  in bands of 50, sentence decks hsk1/hsk2/ic1, kana rows, radicals, numbers, usage).
-  New cards introduced at a per-user daily cap (default ~15).
+  in bands of 20, IC1 sentence chapters, HSK recall sets of 50, kana rows, radicals,
+  numbers, usage). New cards introduced at a per-user daily cap (default ~15).
+- **Sentence directions** (decided 2026-07-11): Integrated Chinese sentences stay
+  recognition cards (Chinese front → English back, deck `sent`). HSK sentences are
+  production cards in their own deck `recall` (English front → Chinese back), split
+  into opt-in sets of 50. HSK card IDs are `recall/hsk1/N` — deliberately new, so
+  history from the retired Chinese-first `sent/hsk1/N` cards never schedules the
+  flipped exercise. Old `sent/hsk1`, `sent/hsk2` group opt-ins migrate to all the
+  matching `recall/*` groups (same `migrateGroupKeys` mechanism as earlier splits).
 - **Four session modes, one engine** (decided 2026-07-11). Every mode grades
   through the same `FSRS.review` with real elapsed time — early/late reviews are
   handled by the math itself (early review ⇒ high retrievability ⇒ tiny stability
