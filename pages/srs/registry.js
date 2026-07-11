@@ -44,6 +44,36 @@ window.SRS_REGISTRY = (function () {
   const line = (cls, content, html) =>
     content ? `<div class="srs-${cls}">${html ? content : esc(content)}</div>` : "";
 
+  // Tone-change notes and "mini lesson" usage patterns live on the colloquial
+  // entries. Rendered on colloquial cards and, via this index, on the matching
+  // single-character Integrated Chinese word cards (不, 了, 的, …).
+  const collByChar = {};
+  for (const c of COLL) collByChar[c.c] = c;
+
+  // `stripToneRef` drops the tone note's trailing "— here …" clause, which
+  // points at the colloquial example sentence — not shown on word cards.
+  function miniLessonHtml(entry, stripToneRef) {
+    if (!entry) return "";
+    let tone = entry.tone;
+    if (tone && stripToneRef) tone = tone.replace(/\s*— here .*$/u, ".");
+    let out = line("tone", tone);
+    const l = entry.lesson;
+    if (l) {
+      let body = "<small>Mini lesson</small>";
+      if (l.intro) body += `<p>${esc(l.intro)}</p>`;
+      for (const u of l.uses || []) {
+        body += `<p>${u.h
+          ? `<b>${esc(u.h)}</b>${u.hPy ? ` <span class="py">${esc(u.hPy)}</span>` : ""} — ${esc(u.g)}`
+          : esc(u.g)}</p>`;
+        if (u.ex) {
+          body += `<p class="use-ex">${esc(u.ex)}${u.exPy ? " — " + esc(u.exPy) : ""}${u.exEn ? " — " + esc(u.exEn) : ""}</p>`;
+        }
+      }
+      out += `<div class="srs-lesson">${body}</div>`;
+    }
+    return out;
+  }
+
   const decks = [];
 
   // ----- words: Integrated Chinese vocabulary, opt-in per lesson -----------
@@ -71,7 +101,8 @@ window.SRS_REGISTRY = (function () {
         line("pos", d.pos) +
         line("en", d.def) +
         line("parts", d.parts, true) +
-        line("mnem", d.mnem, true),
+        line("mnem", d.mnem, true) +
+        miniLessonHtml(collByChar[d.w], true),
     });
   }
 
@@ -94,7 +125,10 @@ window.SRS_REGISTRY = (function () {
       id: "sent", name: "Sentences", emoji: "💬", page: "../sentences.html",
       groups,
       renderFront: d => `<div class="srs-zh">${esc(d.zh)}</div>`,
-      renderBack: d => line("py", d.py) + line("en", d.en),
+      renderBack: d =>
+        line("py", d.py) +
+        line("en", d.en) +
+        (d.notes || []).map(n => line("tone", n)).join(""),
     });
   }
 
@@ -118,7 +152,8 @@ window.SRS_REGISTRY = (function () {
         line("en", d.en) +
         line("parts", d.parts, true) +
         line("mnem", d.mnem, true) +
-        line("ex", d.ex ? `${esc(d.ex)} — ${esc(d.exPy)} — ${esc(d.exEn)}` : "", true),
+        line("ex", d.ex ? `${esc(d.ex)} — ${esc(d.exPy)} — ${esc(d.exEn)}` : "", true) +
+        miniLessonHtml(d),
     });
   }
 
