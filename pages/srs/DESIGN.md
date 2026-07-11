@@ -58,8 +58,9 @@ Decided 2026-07-11. This doc is the source of truth for sessions continuing the 
   traffic-light, maturing toward "Good"; `--w1..--w4` = red/amber/green/sky
   in Again→Easy order; `--ret` = green, "Good" = remembered). Aliases resolve
   at use-time, so dark mode follows the buttons' dark values with no
-  per-theme chart overrides. Heatmap: a reviewed day is a cute emoji — an
-  8-strong set (coprime with the 7 weekday rows) cycled by calendar date, so
+  per-theme chart overrides. Heatmap: a reviewed day is a cute emoji — a
+  136-strong mostly-cute jar (owner asked for 100+, 2026-07-11; keep the count
+  OFF multiples of 7 or weekday rows stripe) cycled by calendar date, so
   each day keeps its emoji forever — whose font-size carries the review count
   (s1–s4); the month-hue cycle (`--m1..--m5`) is gone. Magnitude never rides
   on color, stages carry emoji + labeled counts, weeks carry axis labels, and

@@ -1086,8 +1086,21 @@
   // due forecast (from `cardStates`). Chart hues are the four grade-button
   // colors; heatmap days are cute emoji sized by review count.
   const fmtDay = d => d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
-  // 8 emoji (coprime with the 7 weekday rows), cycled by calendar date
-  const DAY_EMOJI = ["💗", "🌸", "🌟", "🍀", "🌈", "🍓", "🐥", "✨"];
+  // A big mostly-cute emoji jar, cycled by calendar date. Split on spaces —
+  // many emoji are multi-codepoint. Keep the count OFF multiples of 7, or
+  // each weekday row of the heatmap shows the same slice over and over.
+  const DAY_EMOJI = (
+    "💗 💖 💘 💝 💞 💓 💕 ❤️ 🧡 💛 💚 💙 💜 💟 " +
+    "✨ ⭐ 🌟 💫 🎉 🎊 🎈 🎀 🎁 🏆 🥇 👑 💎 🔮 " +
+    "🌸 🌺 🌼 🌻 🌷 🌹 💐 🌱 🌿 ☘️ 🍀 🍁 🍄 🌵 🌴 " +
+    "🌈 ☀️ 🌞 🌙 ⛅ ❄️ ⛄ 🌊 💧 ☔ " +
+    "🍓 🍒 🍑 🍊 🍋 🍉 🍇 🍎 🍏 🥝 🍍 🥭 🥥 " +
+    "🍰 🧁 🍩 🍪 🍬 🍭 🍡 🍦 🍨 🍯 🥞 🧋 🍵 🍙 🥟 " +
+    "🐶 🐱 🐭 🐹 🐰 🦊 🐻 🐼 🐨 🐯 🦁 🐮 🐷 🐸 🐵 " +
+    "🐔 🐧 🐦 🐤 🐥 🐣 🦆 🦉 🦄 🐴 🐝 🦋 🐌 🐞 🐢 " +
+    "🐙 🦀 🐠 🐟 🐬 🐳 🐋 🐿️ 🦔 🐘 🐑 " +
+    "😊 😄 🥰 🤗 😺 🧸 🎠 🎵 🎶 🎨 🚀 ⛵ 🌍 📚"
+  ).split(" ");
 
   function renderStats() {
     const now = Date.now();
