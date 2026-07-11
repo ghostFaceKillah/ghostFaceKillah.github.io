@@ -28,11 +28,13 @@
     --green: #4fbf8f;
     --amber: #f5a54c;
     --red: #ef8368;
-    /* stats palette — a pastel hue per chart, each ramp validated (see DESIGN.md) */
+    /* stats palette — kana-trainer rainbow, validated (see DESIGN.md).
+       Heatmap: dot SIZE carries the count; hue follows the month (m1–m5 cycle).
+       Garden: one hue per stage. Forecast: one hue per week (w1–w4). */
     --track: #edf1ee;                                            /* empty cells */
-    --h1: #f096b4; --h2: #e06f97; --h3: #c74a77; --h4: #a02653;  /* heatmap 💗 pink */
-    --g1: #4cb079; --g2: #2b985e; --g3: #127844;                 /* garden 🌱 green */
-    --fc: #3a8fc4;                                               /* forecast ☁️ sky */
+    --m1: #ef5f8f; --m2: #3ba0d9; --m3: #e8821c; --m4: #35a86b; --m5: #8f77e0;
+    --gs: #35a86b; --gg: #8f77e0; --gb: #ef5f8f;                 /* 🌱 🌿 🌸 */
+    --w1: #ef5f8f; --w2: #e8821c; --w3: #35a86b; --w4: #3ba0d9;
     color-scheme: light;
   }
   @media (prefers-color-scheme: dark) {
@@ -54,9 +56,9 @@
       --amber: #ffb765;
       --red: #ff9a7d;
       --track: #3a4a40;
-      --h1: #9a5b73; --h2: #b56f8c; --h3: #d284a6; --h4: #f09ac2;
-      --g1: #5aa87e; --g2: #68cc98; --g3: #79eab1;
-      --fc: #8ecbf5;
+      --m1: #d94f7e; --m2: #2f8fc4; --m3: #cf7414; --m4: #2f9660; --m5: #8168d4;
+      --gs: #2f9660; --gg: #8168d4; --gb: #d94f7e;
+      --w1: #d94f7e; --w2: #cf7414; --w3: #2f9660; --w4: #2f8fc4;
       color-scheme: dark;
     }
   }
@@ -78,9 +80,9 @@
     --amber: #ffb765;
     --red: #ff9a7d;
     --track: #3a4a40;
-    --h1: #9a5b73; --h2: #b56f8c; --h3: #d284a6; --h4: #f09ac2;
-    --g1: #5aa87e; --g2: #68cc98; --g3: #79eab1;
-    --fc: #8ecbf5;
+    --m1: #d94f7e; --m2: #2f8fc4; --m3: #cf7414; --m4: #2f9660; --m5: #8168d4;
+    --gs: #2f9660; --gg: #8168d4; --gb: #d94f7e;
+    --w1: #d94f7e; --w2: #cf7414; --w3: #2f9660; --w4: #2f8fc4;
     color-scheme: dark;
   }
 
@@ -348,29 +350,42 @@
   #statsScreen .stat:nth-child(4) { background: var(--pink-soft); }
   .heatwrap { overflow-x: auto; padding-bottom: 2px; }
   .heat-months {
-    display: grid; grid-auto-flow: column; grid-auto-columns: 13px; gap: 3px;
+    display: grid; grid-auto-flow: column; grid-auto-columns: 15px; gap: 2px;
     height: 15px; margin: 0 auto 4px; width: max-content;
     font-size: .68rem; color: var(--muted); font-weight: 700;
   }
   .heat-months span { white-space: nowrap; }
   .heat-grid {
     display: grid; grid-auto-flow: column;
-    grid-template-rows: repeat(7, 13px); grid-auto-columns: 13px; gap: 3px;
+    grid-template-rows: repeat(7, 15px); grid-auto-columns: 15px; gap: 2px;
     width: max-content; margin: 0 auto;
   }
-  .heat-grid i { border-radius: 50%; background: var(--track); }
-  .h1 { background: var(--h1) !important; }
-  .h2 { background: var(--h2) !important; }
-  .h3 { background: var(--h3) !important; }
-  .h4 { background: var(--h4) !important; }
-  .g1 { background: var(--g1) !important; }
-  .g2 { background: var(--g2) !important; }
-  .g3 { background: var(--g3) !important; }
+  /* a reviewed day is a dot: size = how many reviews, hue = its month */
+  .heat-grid i {
+    border-radius: 50%; background: var(--track);
+    place-self: center; width: 5px; height: 5px;
+  }
+  .s1 { width: 8px; height: 8px; }
+  .s2 { width: 10px; height: 10px; }
+  .s3 { width: 12.5px; height: 12.5px; }
+  .s4 { width: 15px; height: 15px; }
+  .m1 { background: var(--m1) !important; }
+  .m2 { background: var(--m2) !important; }
+  .m3 { background: var(--m3) !important; }
+  .m4 { background: var(--m4) !important; }
+  .m5 { background: var(--m5) !important; }
+  .gs { background: var(--gs) !important; }
+  .gg { background: var(--gg) !important; }
+  .gb { background: var(--gb) !important; }
+  .w1 { background: var(--w1) !important; }
+  .w2 { background: var(--w2) !important; }
+  .w3 { background: var(--w3) !important; }
+  .w4 { background: var(--w4) !important; }
   .heat-legend {
     display: flex; align-items: center; justify-content: flex-end; gap: 4px;
     margin-top: 10px; font-size: .72rem; color: var(--muted); font-weight: 700;
   }
-  .heat-legend i { width: 11px; height: 11px; border-radius: 50%; background: var(--track); }
+  .heat-legend i { border-radius: 50%; background: var(--muted); flex: none; }
 
   .garden-bar { display: flex; gap: 2px; height: 24px; border-radius: 999px; overflow: hidden; }
   .garden-bar i { min-width: 8px; }
@@ -388,8 +403,7 @@
     display: flex; flex-direction: column; justify-content: flex-end; align-items: center;
   }
   .fbar b { font-size: .7rem; margin-bottom: 2px; }
-  .fbar i { display: block; width: 100%; max-width: 24px; border-radius: 4px 4px 0 0; background: var(--fc); }
-  .fbar i.zero { background: var(--track); }
+  .fbar i { display: block; width: 100%; max-width: 24px; border-radius: 4px 4px 0 0; background: var(--track); }
   .forecast-axis {
     display: flex; margin-top: 0; padding-top: 5px; border-top: 1px solid var(--line);
     font-size: .72rem; color: var(--muted); font-weight: 700;
@@ -576,9 +590,9 @@
         <div class="heat-months" id="heatMonths"></div>
         <div class="heat-grid" id="heatGrid"></div>
       </div>
-      <div class="heat-legend">less
-        <i></i><i class="h1"></i><i class="h2"></i><i class="h3"></i><i class="h4"></i>
-      more</div>
+      <div class="heat-legend">fewer
+        <i class="s1"></i><i class="s2"></i><i class="s3"></i><i class="s4"></i>
+      more · a color per month</div>
     </div>
 
     <div class="label">🌷 The garden — how deeply your cards have rooted</div>
@@ -992,7 +1006,10 @@
           cell.style.visibility = "hidden";
         } else {
           const n = (days[todayKey(day.getTime())] || {}).reviews || 0;
-          if (n > 0) cell.className = "h" + Math.max(1, Math.ceil(4 * n / max));
+          if (n > 0) {
+            const size = Math.max(1, Math.ceil(4 * n / max));
+            cell.className = `s${size} m${(day.getMonth() % 5) + 1}`;
+          }
           const tipText = `${fmtDay(day)} — ${n} review${n === 1 ? "" : "s"}`;
           cell.dataset.tip = tipText;
           cell.setAttribute("aria-label", tipText);
@@ -1007,9 +1024,9 @@
     // Stage = the interval the card is currently carrying (Anki idiom:
     // "mature" at 21 days; a 7-day midpoint keeps the middle stage honest).
     const STAGES = [
-      { emoji: "🌱", name: "sprouts", desc: "coming back within a week", cls: "g1" },
-      { emoji: "🌿", name: "growing", desc: "carrying 1–3 week intervals", cls: "g2" },
-      { emoji: "🌸", name: "blooming", desc: "remembered for 3+ weeks", cls: "g3" },
+      { emoji: "🌱", name: "sprouts", desc: "coming back within a week", cls: "gs" },
+      { emoji: "🌿", name: "growing", desc: "carrying 1–3 week intervals", cls: "gg" },
+      { emoji: "🌸", name: "blooming", desc: "remembered for 3+ weeks", cls: "gb" },
     ];
     const counts = [0, 0, 0];
     for (const id in cardStates) {
@@ -1064,7 +1081,7 @@
       holder.dataset.tip = `${fmtDay(day)} — ${n} card${n === 1 ? "" : "s"} due`;
       const b = n === fmax && d === labelAt && n > 0 ? `<b>${n}</b>` : "";
       const h = n ? Math.max(4, Math.round(92 * n / fmax)) : 2;
-      holder.innerHTML = `${b}<i class="${n ? "" : "zero"}" style="height:${h}px"></i>`;
+      holder.innerHTML = `${b}<i class="${n ? "w" + (Math.floor(d / 7) + 1) : "zero"}" style="height:${h}px"></i>`;
       fc.appendChild(holder);
     });
   }
