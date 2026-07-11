@@ -97,6 +97,14 @@ Decided 2026-07-11. This doc is the source of truth for sessions continuing the 
 | radicals | inline `const RADICALS` in `pages/radicals.html` | needs extraction |
 | numbers | inline in `pages/numbers.html` | needs extraction |
 | usage | inline `const ITEMS` in `pages/usage.html` | needs extraction |
+| word mini lessons | `pages/word_lessons_data.js` (`window.WORD_LESSONS`) | hand-written |
+
+Word mini lessons (added 2026-07-11): hand-written usage notes for function
+words the colloquial-200 lookup can't reach — multi-character conjunctions
+(还是/或者, 可是/但是, 要是, 因为/所以) and single characters outside the 200
+(才, 再, 别, 跟, 让). Same `{tone, lesson}` shape as colloquial entries, keyed
+by the word's `w`; the registry throws on keys that match no word, and on word
+cards a WORD_LESSONS entry takes precedence over the colloquial-character one.
 
 Extraction = move each inline array into `pages/<name>_data.js` setting a
 `window.*_DATA` global, and load it from the old page via a script tag

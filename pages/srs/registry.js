@@ -9,6 +9,7 @@
 //   <script src="../radicals_data.js"></script>  (window.RADICALS_DATA)
 //   <script src="../numbers_data.js"></script>   (window.NUMBERS_DATA)
 //   <script src="../usage_data.js"></script>     (window.USAGE_DATA)
+//   <script src="../word_lessons_data.js"></script> (window.WORD_LESSONS)
 //   <script src="registry.js"></script>          (this file)
 //
 // Card IDs are stable and derived from the data itself — never from array
@@ -36,6 +37,7 @@ window.SRS_REGISTRY = (function () {
   const RADICALS = need("RADICALS_DATA");
   const NUM = need("NUMBERS_DATA");
   const USAGE = need("USAGE_DATA");
+  const LESSONS = need("WORD_LESSONS");
 
   const esc = s => String(s == null ? "" : s)
     .replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
@@ -44,9 +46,13 @@ window.SRS_REGISTRY = (function () {
   const line = (cls, content, html) =>
     content ? `<div class="srs-${cls}">${html ? content : esc(content)}</div>` : "";
 
-  // Tone-change notes and "mini lesson" usage patterns live on the colloquial
-  // entries. Rendered on colloquial cards and, via this index, on the matching
-  // single-character Integrated Chinese word cards (不, 了, 的, …).
+  // Tone-change notes and "mini lesson" usage patterns live in two places:
+  // on the colloquial entries (rendered on colloquial cards and, via this
+  // index, on matching single-character Integrated Chinese word cards — 不,
+  // 了, 的, …) and in WORD_LESSONS (word_lessons_data.js), hand-written for
+  // function words the colloquial 200 can't cover — multi-character ones
+  // like 还是/可是 and missing single characters like 才/再. On word cards a
+  // WORD_LESSONS entry wins over the colloquial one.
   const collByChar = {};
   for (const c of COLL) collByChar[c.c] = c;
 
@@ -92,6 +98,10 @@ window.SRS_REGISTRY = (function () {
       const groupId = w.lesson.replace(/D\d+$/, ""); // L1D2 → L1; FOOD → FOOD
       byGroup[groupId].cards.push({ id: `words/${w.lesson}/${w.w}`, data: w });
     }
+    for (const w of Object.keys(LESSONS)) {
+      if (!WORDS.words.some(x => x.w === w))
+        throw new Error("SRS registry: WORD_LESSONS entry for unknown word " + w);
+    }
     decks.push({
       id: "words", name: "Words (Integrated Chinese)", emoji: "📚", page: "../words.html",
       groups,
@@ -102,7 +112,7 @@ window.SRS_REGISTRY = (function () {
         line("en", d.def) +
         line("parts", d.parts, true) +
         line("mnem", d.mnem, true) +
-        miniLessonHtml(collByChar[d.w], true),
+        miniLessonHtml(LESSONS[d.w] || collByChar[d.w], true),
     });
   }
 
