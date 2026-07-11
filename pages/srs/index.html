@@ -35,6 +35,7 @@
     --m1: #ef5f8f; --m2: #3ba0d9; --m3: #e8821c; --m4: #35a86b; --m5: #8f77e0;
     --gs: #35a86b; --gg: #8f77e0; --gb: #ef5f8f;                 /* 🌱 🌿 🌸 */
     --w1: #ef5f8f; --w2: #e8821c; --w3: #35a86b; --w4: #3ba0d9;
+    --ret: #8f77e0;                                              /* retention 🧠 */
     color-scheme: light;
   }
   @media (prefers-color-scheme: dark) {
@@ -59,6 +60,7 @@
       --m1: #d94f7e; --m2: #2f8fc4; --m3: #cf7414; --m4: #2f9660; --m5: #8168d4;
       --gs: #2f9660; --gg: #8168d4; --gb: #d94f7e;
       --w1: #d94f7e; --w2: #cf7414; --w3: #2f9660; --w4: #2f8fc4;
+      --ret: #a98fd0;
       color-scheme: dark;
     }
   }
@@ -83,6 +85,7 @@
     --m1: #d94f7e; --m2: #2f8fc4; --m3: #cf7414; --m4: #2f9660; --m5: #8168d4;
     --gs: #2f9660; --gg: #8168d4; --gb: #d94f7e;
     --w1: #d94f7e; --w2: #cf7414; --w3: #2f9660; --w4: #2f8fc4;
+    --ret: #a98fd0;
     color-scheme: dark;
   }
 
@@ -410,6 +413,32 @@
   }
   .forecast-axis span { width: 25%; }
 
+  /* ----- Retention panel ----- */
+  .ret-head { display: flex; align-items: baseline; gap: 10px; margin-bottom: 10px; }
+  .ret-head b { font-size: 2rem; font-weight: 900; }
+  .ret-head span { color: var(--muted); font-size: .85rem; font-weight: 700; }
+  .ret-chart { position: relative; display: flex; align-items: flex-end; gap: 3px; height: 110px; }
+  .ret-goal {
+    position: absolute; left: 0; right: 0; bottom: 83px;
+    border-top: 1px solid var(--line); pointer-events: none;
+  }
+  .ret-goal em {
+    position: absolute; left: 0; top: -15px;
+    font-style: normal; font-size: .68rem; color: var(--muted); font-weight: 700;
+  }
+  .rbar {
+    flex: 1; min-width: 0; height: 100%; position: relative;
+    display: flex; flex-direction: column; justify-content: flex-end; align-items: center;
+  }
+  .rbar b { font-size: .7rem; margin-bottom: 2px; }
+  .rbar i { display: block; width: 100%; max-width: 24px; border-radius: 4px 4px 0 0; background: var(--ret); }
+  .rbar i.zero { background: var(--track); }
+  .ret-axis {
+    display: flex; justify-content: space-between; margin-top: 0; padding-top: 5px;
+    border-top: 1px solid var(--line);
+    font-size: .72rem; color: var(--muted); font-weight: 700;
+  }
+
   .tip {
     position: fixed; z-index: 60;
     background: var(--ink); color: var(--bg);
@@ -595,6 +624,13 @@
       more · a color per month</div>
     </div>
 
+    <div class="label">🧠 Retention — how much sticks</div>
+    <div class="panel">
+      <div class="ret-head"><b id="retPct">–</b><span id="retSub"></span></div>
+      <div class="ret-chart" id="retChart"><span class="ret-goal"><em>goal 90%</em></span></div>
+      <div class="ret-axis"><span>12 weeks ago</span><span>this week</span></div>
+    </div>
+
     <div class="label">🌷 The garden — how deeply your cards have rooted</div>
     <div class="panel" id="gardenPanel">
       <div class="garden-bar" id="gardenBar"></div>
@@ -749,6 +785,53 @@
     c[field]++;
     days[k] = c;
     saveDays();
+  }
+
+  // ----- Review log -------------------------------------------------------------
+  // Append-only, chunked by month ("log:YYYY-MM" → ["ts,grade,prevIvl,cardId", …]).
+  // prevIvl is the whole-day interval the card carried INTO the review
+  // (-1 = first sight of the card) — that's what makes true retention computable.
+  const monthKey = t => todayKey(t).slice(0, 7);
+  function appendLog(cardId, grade, prevIvlDays, now) {
+    const key = "log:" + monthKey(now);
+    const chunk = store.read(key, []);
+    chunk.push(now + "," + grade + "," + Math.round(prevIvlDays) + "," + cardId);
+    store.write(key, chunk);
+    if (cloud) cloud.pushLog(monthKey(now), chunk);
+  }
+  function readLog(fromTs, toTs) {
+    const out = [];
+    const d = new Date(fromTs);
+    d.setDate(1); d.setHours(0, 0, 0, 0);
+    while (d.getTime() <= toTs) {
+      for (const s of store.read("log:" + monthKey(d.getTime()), [])) {
+        const a = s.indexOf(","), b = s.indexOf(",", a + 1), c = s.indexOf(",", b + 1);
+        const ts = +s.slice(0, a);
+        if (ts >= fromTs && ts <= toTs) {
+          out.push({ ts, grade: +s.slice(a + 1, b), ivl: +s.slice(b + 1, c), id: s.slice(c + 1) });
+        }
+      }
+      d.setMonth(d.getMonth() + 1);
+    }
+    return out;
+  }
+  // True retention per day (the Anki idiom): only the FIRST review of each
+  // already-learned card counts — new cards and same-session relearning
+  // repeats are excluded. → { "YYYY-MM-DD": { pass, total } }
+  function retentionByDay(entries) {
+    const perDay = {};
+    const seen = new Set();
+    for (const e of entries) {                 // chunks are append-ordered
+      if (e.ivl < 0) continue;
+      const day = todayKey(e.ts);
+      const k = day + "|" + e.id;
+      if (seen.has(k)) continue;
+      seen.add(k);
+      const c = perDay[day] || (perDay[day] = { pass: 0, total: 0 });
+      c.total++;
+      if (e.grade > 1) c.pass++;
+    }
+    return perDay;
   }
 
   // ----- Deck / card helpers --------------------------------------------------
@@ -987,6 +1070,8 @@
     start.setDate(today.getDate() - ((today.getDay() + 6) % 7) - (WEEKS - 1) * 7);
     let max = 1;
     for (const k in days) max = Math.max(max, days[k].reviews || 0);
+    // one log read covers the heatmap tooltips and the retention panel
+    const ret = retentionByDay(readLog(start.getTime(), now));
 
     const months = $("heatMonths"), grid = $("heatGrid");
     months.innerHTML = ""; grid.innerHTML = "";
@@ -1010,7 +1095,9 @@
             const size = Math.max(1, Math.ceil(4 * n / max));
             cell.className = `s${size} m${(day.getMonth() % 5) + 1}`;
           }
-          const tipText = `${fmtDay(day)} — ${n} review${n === 1 ? "" : "s"}`;
+          const r = ret[todayKey(day.getTime())];
+          const tipText = `${fmtDay(day)} — ${n} review${n === 1 ? "" : "s"}` +
+            (r && r.total ? ` · ${Math.round(100 * r.pass / r.total)}% remembered` : "");
           cell.dataset.tip = tipText;
           cell.setAttribute("aria-label", tipText);
         }
@@ -1019,6 +1106,42 @@
     }
     const wrap = $("heatWrap");
     wrap.scrollLeft = wrap.scrollWidth; // land on the most recent weeks
+
+    // --- retention: 30-day headline + 12 weekly bars vs the 90% goal -------
+    let p30 = 0, t30 = 0;
+    for (let i = 0; i < 30; i++) {
+      const d = new Date(today); d.setDate(today.getDate() - i);
+      const r = ret[todayKey(d.getTime())];
+      if (r) { p30 += r.pass; t30 += r.total; }
+    }
+    $("retPct").textContent = t30 ? Math.round(100 * p30 / t30) + "%" : "–";
+    $("retSub").textContent = t30
+      ? `of ${t30} reviews remembered · last 30 days`
+      : "shows up as you review — new cards don't count, only real recalls 🧠";
+
+    const thisMonday = new Date(today);
+    thisMonday.setDate(today.getDate() - ((today.getDay() + 6) % 7));
+    const rc = $("retChart");
+    rc.querySelectorAll(".rbar").forEach(el => el.remove());
+    for (let w = 11; w >= 0; w--) {
+      const from = new Date(thisMonday); from.setDate(thisMonday.getDate() - w * 7);
+      let pass = 0, total = 0;
+      for (let i = 0; i < 7; i++) {
+        const d = new Date(from); d.setDate(from.getDate() + i);
+        const r = ret[todayKey(d.getTime())];
+        if (r) { pass += r.pass; total += r.total; }
+      }
+      const pct = total ? Math.round(100 * pass / total) : null;
+      const holder = document.createElement("div");
+      holder.className = "rbar";
+      holder.dataset.tip = pct === null
+        ? `week of ${fmtDay(from)} — no reviews`
+        : `week of ${fmtDay(from)} — ${pct}% of ${total} remembered`;
+      const label = w === 0 && pct !== null ? `<b>${pct}%</b>` : "";
+      const h = pct === null ? 2 : Math.max(4, Math.round(pct * 0.92));
+      holder.innerHTML = `${label}<i class="${pct === null ? "zero" : ""}" style="height:${h}px"></i>`;
+      rc.appendChild(holder);
+    }
 
     // --- garden: maturity of every card ever reviewed ----------------------
     // Stage = the interval the card is currently carrying (Anki idiom:
@@ -1248,10 +1371,13 @@
   function grade(g) {
     if (!current || !revealed) return;
     const now = Date.now();
-    const wasNew = !cardStates[current.id];
-    cardStates[current.id] = FSRS.review(cardStates[current.id] || null, g, now);
+    const prev = cardStates[current.id];
+    const wasNew = !prev;
+    const prevIvl = prev ? (prev.due - prev.lastReview) / FSRS.DAY_MS : -1;
+    cardStates[current.id] = FSRS.review(prev || null, g, now);
     saveCards();
     if (cloud) cloud.pushCard(current.id, cardStates[current.id]);
+    appendLog(current.id, g, prevIvl, now);
     if (wasNew) { bumpToday(now, "introduced"); sessionNew++; }
     bumpToday(now, "reviews");
 
@@ -1341,6 +1467,9 @@
     if (cloudState.settings) {
       settings = Object.assign({ groups: {}, newPerDay: 15 }, cloudState.settings);
     }
+    for (const [month, entries] of Object.entries(cloudState.log || {})) {
+      store.write("log:" + month, entries);
+    }
     // cloud may still hold pre-split group keys — rewrite and push back once
     if (migrateGroupKeys(settings.groups)) cloudPushSettings();
     saveCards();
@@ -1379,14 +1508,20 @@
     const cards = readAnon("cards", {});
     const anonSettings = readAnon("settings", null);
     const anonDays = readAnon("days", {});
+    const anonLog = {};
+    for (let i = 0; i < localStorage.length; i++) {
+      const m = (localStorage.key(i) || "").match(/^srs:anon:log:(\d{4}-\d{2})$/);
+      if (m) anonLog[m[1]] = readAnon("log:" + m[1], []);
+    }
     cardStates = cards;
     if (anonSettings) settings = Object.assign({ groups: {}, newPerDay: 15 }, anonSettings);
     days = anonDays;
     saveCards(); saveSettings(); saveDays();
+    for (const [month, entries] of Object.entries(anonLog)) store.write("log:" + month, entries);
     store.write("importOffered", true);
     refreshHome();
     try {
-      await cloud.importAll(cards, anonSettings || settings);
+      await cloud.importAll(cards, anonSettings || settings, anonLog);
     } catch (e) {
       console.warn("srs: import upload failed — progress is cached locally and",
         "will not be lost; it re-uploads as cards are reviewed", e);

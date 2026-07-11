@@ -53,8 +53,20 @@ Decided 2026-07-11. This doc is the source of truth for sessions continuing the 
   floor-band cases — mitigated by secondary encoding everywhere: month hue is
   redundant with column position + month labels, magnitude never rides on
   color, stages carry emoji + labeled counts, weeks carry axis labels, and
-  every mark has a tooltip + aria-label. Retention-rate charts would need a
-  per-review pass/fail log, which we deliberately don't store yet.
+  every mark has a tooltip + aria-label.
+- **Review log & retention** (decided 2026-07-11): every grade appends
+  `"ts,grade,prevIvl,cardId"` to a month-chunked log (`log:YYYY-MM` in
+  localStorage; `users/{uid}/log/{YYYY-MM}` docs in Firestore — covered by the
+  existing per-UID wildcard rules, no rules redeploy needed; each push rewrites
+  the month doc so offline writes coalesce). `prevIvl` is the whole-day
+  interval carried into the review, `-1` for a first sight. Retention is
+  Anki-style *true retention*: per day, only the first review of each
+  already-learned card counts (new cards and same-session relearning repeats
+  excluded); remembered = graded above Again. The stats screen shows a 30-day
+  headline + 12 weekly bars against a 90% goal line (`--ret` lavender,
+  ≥3:1 both modes), and heatmap tooltips gain "· N% remembered". The log
+  starts empty — history from before this feature has no retention data.
+  Guest import carries log chunks; sign-in hydrates them from Firestore.
 - **Guest mode:** the app fully works signed-out on localStorage. On first sign-in,
   offer a one-time "import this progress into your account?" — never merge silently.
 - **Multi-user:** open to any Google account. All state private per user.
