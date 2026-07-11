@@ -292,6 +292,42 @@
   .done { text-align: center; }
   .done .big { font-size: 2.6rem; margin: 30px 0 8px; font-weight: 900; }
 
+  /* ----- Account widget ----- */
+  .account { text-align: center; margin-top: 26px; display: none; }
+  .account.show { display: block; }
+  .account .who { color: var(--muted); font-size: .88rem; }
+  .account .who b { color: var(--ink); }
+  .account a { color: var(--accent); cursor: pointer; font-weight: 700; }
+  .account a:hover { text-decoration: underline; }
+  .signin {
+    border: 2px solid var(--line);
+    background: var(--card); color: var(--ink);
+    border-radius: 999px; padding: 10px 20px;
+    font-size: .95rem; font-weight: 700; font-family: inherit;
+    cursor: pointer;
+    transition: border-color .12s, background .12s;
+  }
+  .signin:hover { border-color: var(--accent); background: var(--mint-soft); }
+
+  /* ----- Import modal ----- */
+  .modal {
+    position: fixed; inset: 0; z-index: 50;
+    background: rgba(0,0,0,.45);
+    display: none; align-items: center; justify-content: center;
+    padding: 20px;
+  }
+  .modal.show { display: flex; }
+  .modal-box {
+    background: var(--card); color: var(--ink);
+    border: 3px solid var(--line); border-radius: 26px;
+    max-width: 420px; width: 100%;
+    padding: 26px 24px 22px; text-align: center;
+    box-shadow: 0 8px 0 rgba(0,0,0,.15);
+  }
+  .modal-box .emoji { font-size: 2.6rem; margin: 0 0 6px; }
+  .modal-box p { margin: 6px 0; line-height: 1.5; }
+  .modal-box .btn { margin-top: 14px; }
+
   @media (max-width: 480px) {
     .stats { grid-template-columns: repeat(2, 1fr); }
     .srs-big { font-size: 3.6rem; }
@@ -306,6 +342,8 @@
 <script src="../usage_data.js"></script>
 <script src="registry.js"></script>
 <script src="fsrs.js"></script>
+<script src="firebase-config.js"></script>
+<script type="module" src="cloud.js"></script>
 </head>
 <body>
 
@@ -342,7 +380,14 @@
     <div class="label">Decks — pick what you want to review</div>
     <div id="deckList"></div>
 
-    <p class="foot">
+    <div class="account" id="account">
+      <button class="signin" id="signInBtn">☁️ Sign in with Google to sync</button>
+      <div class="who" id="accountInfo" style="display:none">
+        ☁️ syncing as <b id="accountName"></b> · <a id="signOutBtn">sign out</a>
+      </div>
+    </div>
+
+    <p class="foot" id="footNote">
       Progress is saved in this browser (nothing leaves your device).<br>
       Browse &amp; study on the trainer pages; review here every day. 🌱
     </p>
@@ -390,6 +435,17 @@
 
 </div>
 
+<!-- one-time guest-progress import (shown on first sign-in, never merges silently) -->
+<div class="modal" id="importModal">
+  <div class="modal-box">
+    <p class="emoji">🎒</p>
+    <p>You reviewed <b id="importCount">0</b> card(s) as a guest on this device.</p>
+    <p>Bring that progress into your account?</p>
+    <button class="btn" id="importYes">Yes, import my progress</button>
+    <button class="btn ghost" id="importNo">No, start fresh</button>
+  </div>
+</div>
+
 <script>
   // ----- Dark mode toggle -----
   (function () {
@@ -417,31 +473,48 @@
   const REGISTRY = window.SRS_REGISTRY;
   const FSRS = window.FSRS;
 
-  // ----- Persistence: localStorage, namespaced for the guest user -----------
-  // Phase 3 swaps "anon" for the signed-in uid and syncs to Firestore.
-  const NS = "srs:anon:";
+  // ----- Persistence: localStorage as a write-through cache -----------------
+  // Namespaced per user: srs:anon: for guests, srs:{uid}: when signed in.
+  // When signed in, Firestore is the source of truth (see cloud.js); reviews
+  // always hit localStorage synchronously and never wait for the network.
+  let uid = null;
+  const NS = () => "srs:" + (uid || "anon") + ":";
   const store = {
     read(key, fallback) {
       try {
-        const raw = localStorage.getItem(NS + key);
+        const raw = localStorage.getItem(NS() + key);
         return raw ? JSON.parse(raw) : fallback;
       } catch (e) { return fallback; }
     },
     write(key, value) {
-      localStorage.setItem(NS + key, JSON.stringify(value));
+      localStorage.setItem(NS() + key, JSON.stringify(value));
     },
   };
+  // Read from an explicit namespace (for the guest-import flow).
+  function readAnon(key, fallback) {
+    try {
+      const raw = localStorage.getItem("srs:anon:" + key);
+      return raw ? JSON.parse(raw) : fallback;
+    } catch (e) { return fallback; }
+  }
 
-  let cardStates = store.read("cards", {});           // cardId → FSRS state
-  let settings = Object.assign(
-    { groups: {}, newPerDay: 15 },
-    store.read("settings", {})
-  );
-  let days = store.read("days", {});                  // "YYYY-MM-DD" → {introduced, reviews}
+  let cardStates, settings, days;
+  function loadState() {
+    cardStates = store.read("cards", {});             // cardId → FSRS state
+    settings = Object.assign(
+      { groups: {}, newPerDay: 15 },
+      store.read("settings", {})
+    );
+    days = store.read("days", {});                    // "YYYY-MM-DD" → {introduced, reviews}
+  }
+  loadState();
 
   const saveCards = () => store.write("cards", cardStates);
   const saveSettings = () => store.write("settings", settings);
   const saveDays = () => store.write("days", days);
+  // Push settings to Firestore too — called from user actions only,
+  // so a cloud fetch never echoes straight back up.
+  const cloudPushSettings = () => { if (cloud) cloud.pushSettings(settings); };
 
   function todayKey(now) {
     const d = new Date(now);
@@ -515,6 +588,7 @@
     if (!b) return;
     settings.newPerDay = Number(b.dataset.cap);
     saveSettings();
+    cloudPushSettings();
     syncCapButtons();
     refreshStats();
   });
@@ -571,6 +645,7 @@
       else settings.groups[key] = true;
       chip.classList.toggle("sel");
       saveSettings();
+      cloudPushSettings();
       syncDeckCounts();
       refreshStats();
       return;
@@ -586,6 +661,7 @@
         else delete settings.groups[key];
       }
       saveSettings();
+      cloudPushSettings();
       buildDeckList();
       // keep this deck open after rebuilding
       const idx = REGISTRY.decks.indexOf(deck);
@@ -725,6 +801,7 @@
     const wasNew = !cardStates[current.id];
     cardStates[current.id] = FSRS.review(cardStates[current.id] || null, g, now);
     saveCards();
+    if (cloud) cloud.pushCard(current.id, cardStates[current.id]);
     if (wasNew) { bumpToday(now, "introduced"); sessionNew++; }
     bumpToday(now, "reviews");
 
@@ -779,10 +856,101 @@
     if (revealed && e.key >= "1" && e.key <= "4") grade(Number(e.key));
   });
 
+  // ----- Cloud sync (Firebase — optional, see cloud.js) -------------------------------
+  // The app is fully functional without this: if cloud.js can't load its SDK,
+  // "srs-cloud-ready" never fires and everything below stays dormant.
+  let cloud = null;
+
+  function refreshHome() {
+    buildDeckList();
+    syncCapButtons();
+    refreshStats();
+  }
+
+  function syncAccountWidget(user) {
+    $("signInBtn").style.display = user ? "none" : "";
+    $("accountInfo").style.display = user ? "" : "none";
+    if (user) $("accountName").textContent = user.displayName || user.email || "you";
+    $("footNote").innerHTML = user
+      ? "Progress syncs to your account — pick up on any device. ☁️<br>Browse &amp; study on the trainer pages; review here every day. 🌱"
+      : "Progress is saved in this browser (nothing leaves your device).<br>Browse &amp; study on the trainer pages; review here every day. 🌱";
+  }
+
+  function adoptCloudState(cloudState) {
+    cardStates = cloudState.cards || {};
+    if (cloudState.settings) {
+      settings = Object.assign({ groups: {}, newPerDay: 15 }, cloudState.settings);
+    }
+    saveCards();
+    saveSettings();
+    refreshHome();
+  }
+
+  async function handleUser(user) {
+    uid = user ? user.uid : null;
+    show("home");                 // never leave a stale review session running
+    loadState();                  // instant hydrate from this namespace's cache
+    syncAccountWidget(user);
+    refreshHome();
+    if (!user) return;
+
+    try {
+      const cloudState = await cloud.fetchAll();
+      if (!cloudState || uid !== user.uid) return; // signed out meanwhile
+      const cloudEmpty = Object.keys(cloudState.cards).length === 0 && !cloudState.settings;
+      const anonCards = readAnon("cards", {});
+      const offered = store.read("importOffered", false);
+      if (cloudEmpty && !offered && Object.keys(anonCards).length > 0) {
+        // first sign-in with guest progress on this device: ask, never merge silently
+        $("importCount").textContent = Object.keys(anonCards).length;
+        $("importModal").classList.add("show");
+      } else {
+        adoptCloudState(cloudState);
+      }
+    } catch (e) {
+      console.warn("srs: cloud fetch failed — continuing on the local cache", e);
+    }
+  }
+
+  $("importYes").addEventListener("click", async () => {
+    $("importModal").classList.remove("show");
+    const cards = readAnon("cards", {});
+    const anonSettings = readAnon("settings", null);
+    const anonDays = readAnon("days", {});
+    cardStates = cards;
+    if (anonSettings) settings = Object.assign({ groups: {}, newPerDay: 15 }, anonSettings);
+    days = anonDays;
+    saveCards(); saveSettings(); saveDays();
+    store.write("importOffered", true);
+    refreshHome();
+    try {
+      await cloud.importAll(cards, anonSettings || settings);
+    } catch (e) {
+      console.warn("srs: import upload failed — progress is cached locally and",
+        "will not be lost; it re-uploads as cards are reviewed", e);
+    }
+  });
+
+  $("importNo").addEventListener("click", () => {
+    $("importModal").classList.remove("show");
+    store.write("importOffered", true);
+    refreshHome();
+  });
+
+  $("signInBtn").addEventListener("click", async () => {
+    try { await cloud.signIn(); }
+    catch (e) { console.warn("srs: sign-in cancelled or failed", e); }
+  });
+  $("signOutBtn").addEventListener("click", () => cloud.signOut());
+
+  window.addEventListener("srs-cloud-ready", () => {
+    cloud = window.SRS_CLOUD;
+    $("account").classList.add("show");
+    cloud.onUserChange(handleUser);
+  });
+
   // ----- Boot ------------------------------------------------------------------------
-  buildDeckList();
-  syncCapButtons();
-  refreshStats();
+  refreshHome();
 </script>
 
 </body>
