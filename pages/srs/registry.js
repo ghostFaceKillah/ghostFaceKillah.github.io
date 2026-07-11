@@ -70,7 +70,7 @@ window.SRS_REGISTRY = (function () {
         line("py", d.pinyin) +
         line("pos", d.pos) +
         line("en", d.def) +
-        line("parts", d.parts) +
+        line("parts", d.parts, true) +
         line("mnem", d.mnem, true),
     });
   }
@@ -111,7 +111,7 @@ window.SRS_REGISTRY = (function () {
       renderBack: d =>
         line("py", d.py) +
         line("en", d.en) +
-        line("parts", d.parts) +
+        line("parts", d.parts, true) +
         line("mnem", d.mnem, true) +
         line("ex", d.ex ? `${esc(d.ex)} — ${esc(d.exPy)} — ${esc(d.exEn)}` : "", true),
     });

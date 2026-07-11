@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daily Review 复习</title>
+<style>
+  :root {
+    --bg: #f2f7f3;
+    --dots: #dcefe2;
+    --card: #ffffff;
+    --ink: #47564c;
+    --muted: #8fa697;
+    --line: #d9ebde;
+    --pink: #ff9ec3;
+    --pink-soft: #ffe3ef;
+    --peach: #ffb88a;
+    --peach-soft: #ffeede;
+    --mint: #7fd8b4;
+    --mint-soft: #e0f7ec;
+    --sky: #8ecbf5;
+    --sky-soft: #e3f2fd;
+    --lav: #c3aef0;
+    --lav-soft: #f0e9fd;
+    --lemon: #ffd66b;
+    --lemon-soft: #fff6dc;
+    --accent: #3fae7e;
+    --green: #4fbf8f;
+    --amber: #f5a54c;
+    --red: #ef8368;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #222b25;
+      --dots: #2b362f;
+      --card: #2f3c34;
+      --ink: #e9f3ec;
+      --muted: #9fb3a6;
+      --line: #40514660;
+      --pink-soft: #4d3a44;
+      --peach-soft: #4d4136;
+      --mint-soft: #31473c;
+      --sky-soft: #32424d;
+      --lav-soft: #413a52;
+      --lemon-soft: #4c4534;
+      --accent: #5fd6a2;
+      --green: #5fd6a2;
+      --amber: #ffb765;
+      --red: #ff9a7d;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #222b25;
+    --dots: #2b362f;
+    --card: #2f3c34;
+    --ink: #e9f3ec;
+    --muted: #9fb3a6;
+    --line: #40514660;
+    --pink-soft: #4d3a44;
+    --peach-soft: #4d4136;
+    --mint-soft: #31473c;
+    --sky-soft: #32424d;
+    --lav-soft: #413a52;
+    --lemon-soft: #4c4534;
+    --accent: #5fd6a2;
+    --green: #5fd6a2;
+    --amber: #ffb765;
+    --red: #ff9a7d;
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { min-height: 100%; margin: 0; }
+  body {
+    background: var(--bg);
+    background-image: radial-gradient(var(--dots) 12%, transparent 13%),
+                      radial-gradient(var(--dots) 12%, transparent 13%);
+    background-size: 46px 46px;
+    background-position: 0 0, 23px 23px;
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 32px 20px 48px;
+  }
+  .wrap { width: 100%; max-width: 620px; }
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  .bubbles { display: flex; justify-content: center; gap: 6px; flex-wrap: wrap; margin: 6px 0 6px; }
+  .bubble {
+    width: 52px; height: 52px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-size: 1.5rem; font-weight: 900;
+    box-shadow: 0 3px 0 rgba(0,0,0,.10);
+  }
+  .b1 { background: #66c98d; } .b2 { background: #59b7e8; }
+  .b3 { background: #ffa04d; } .b4 { background: #f76e9c; }
+  .sub { color: var(--muted); text-align: center; margin: 0 0 8px; font-size: .95rem; }
+  .mascots { text-align: center; font-size: 1.5rem; letter-spacing: .35em; margin: 0 0 24px; }
+
+  .label {
+    font-size: .8rem; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--muted); margin: 26px 0 10px; font-weight: 700;
+  }
+
+  /* ----- Stat tiles ----- */
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .stat {
+    background: var(--card); border: 2px solid var(--line); border-radius: 20px;
+    padding: 12px 8px 10px; text-align: center;
+  }
+  .stat b { display: block; font-size: 1.6rem; font-weight: 900; }
+  .stat span { font-size: .78rem; color: var(--muted); font-weight: 700; }
+  .stat.due b { color: var(--amber); }
+  .stat.new b { color: var(--accent); }
+
+  .btn {
+    display: block; width: 100%;
+    border: none; border-radius: 999px;
+    padding: 16px; font-size: 1.1rem; font-weight: 900;
+    font-family: inherit; cursor: pointer;
+    background: var(--accent); color: #fff;
+    box-shadow: 0 4px 0 rgba(0,0,0,.12);
+    transition: transform .08s, opacity .12s;
+    margin-top: 18px;
+  }
+  .btn:hover { opacity: .92; }
+  .btn:active { transform: translateY(2px); box-shadow: 0 2px 0 rgba(0,0,0,.12); }
+  .btn:disabled { opacity: .45; cursor: default; }
+  .btn.ghost { background: var(--card); color: var(--ink); border: 2px solid var(--line); box-shadow: none; }
+
+  .theme-toggle {
+    position: fixed; top: 16px; right: 16px;
+    width: 42px; height: 42px; border-radius: 50%;
+    border: 2px solid var(--line); background: var(--card); color: var(--ink);
+    font-size: 1.15rem; line-height: 1; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    z-index: 10; transition: border-color .12s;
+  }
+  .theme-toggle:hover { border-color: var(--accent); }
+
+  /* ----- Cap pills ----- */
+  .toggle { display: flex; gap: 10px; }
+  .opt {
+    flex: 1;
+    border: 2px solid var(--line);
+    background: var(--card);
+    border-radius: 999px;
+    padding: 11px 8px;
+    font-size: 1rem;
+    font-family: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    transition: border-color .12s, background .12s, transform .08s;
+    color: var(--ink);
+  }
+  .opt:hover { border-color: var(--accent); }
+  .opt:active { transform: scale(.97); }
+  .opt.sel { border-color: var(--accent); background: var(--mint-soft); color: var(--accent); }
+
+  /* ----- Deck list ----- */
+  .deck {
+    background: var(--card); border: 2px solid var(--line); border-radius: 22px;
+    padding: 14px 16px; margin-bottom: 12px;
+  }
+  .deck-head { display: flex; align-items: center; gap: 10px; cursor: pointer; user-select: none; }
+  .deck-head .emoji { font-size: 1.5rem; }
+  .deck-head .name { font-weight: 800; flex: 1; }
+  .deck-head .count { color: var(--muted); font-size: .85rem; font-weight: 700; }
+  .deck-head .caret { color: var(--muted); transition: transform .15s; }
+  .deck.open .caret { transform: rotate(90deg); }
+  .deck-body { display: none; margin-top: 12px; }
+  .deck.open .deck-body { display: block; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip {
+    border: 2px solid var(--line);
+    background: var(--card);
+    color: var(--muted);
+    border-radius: 999px;
+    padding: 7px 12px;
+    font-size: .88rem;
+    font-family: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform .08s, border-color .12s, background .12s, color .12s;
+  }
+  .chip:active { transform: scale(.95); }
+  .chip.sel { color: var(--ink); border-color: var(--accent); background: var(--mint-soft); }
+  .chip small { font-weight: 400; opacity: .8; }
+  .quick { display: flex; gap: 14px; margin-top: 10px; }
+  .quick a { color: var(--accent); font-size: .85rem; font-weight: 700; cursor: pointer; text-decoration: none; }
+  .quick a:hover { text-decoration: underline; }
+
+  .foot { color: var(--muted); font-size: .82rem; text-align: center; margin-top: 26px; line-height: 1.6; }
+  .foot a { color: var(--accent); }
+
+  /* ----- Review screen ----- */
+  .topbar { display: flex; justify-content: space-between; align-items: center; color: var(--muted); font-size: .9rem; margin-bottom: 10px; font-weight: 700; }
+  .topbar a { color: var(--muted); text-decoration: none; cursor: pointer; }
+  .topbar a:hover { color: var(--ink); }
+  .bar { height: 10px; border-radius: 999px; background: var(--line); overflow: hidden; margin-bottom: 20px; }
+  .bar i { display: block; height: 100%; width: 0%; border-radius: 999px;
+           background: linear-gradient(90deg, #7fd8b4, #8ecbf5, #ffcb6b, #ff9ec3);
+           transition: width .25s; }
+
+  .card {
+    background: var(--card);
+    border: 3px solid var(--line);
+    border-radius: 30px;
+    padding: 40px 22px 30px;
+    text-align: center;
+    cursor: pointer;
+    user-select: none;
+    min-height: 330px;
+    display: flex; flex-direction: column; justify-content: center;
+    box-shadow: 0 6px 0 rgba(0,0,0,.06);
+    position: relative;
+  }
+  .deckTag, .newTag {
+    position: absolute; top: 14px;
+    font-size: .75rem; font-weight: 700; color: var(--muted);
+    border: 2px solid var(--line); border-radius: 999px; padding: 3px 11px;
+  }
+  .deckTag { left: 18px; }
+  .newTag { right: 18px; color: var(--accent); border-color: var(--accent); display: none; }
+  .newTag.show { display: block; }
+
+  /* card content, front & back (classes emitted by registry render fns) */
+  .srs-big { font-size: 4.6rem; line-height: 1.15; font-weight: 700; }
+  .srs-zh { font-size: 1.9rem; line-height: 1.4; font-weight: 700; }
+  .srs-kana, .srs-num { font-weight: 700; }
+  .srs-variant { color: var(--muted); font-size: .55em; }
+  .srs-frame { color: var(--muted); font-style: italic; margin-bottom: 10px; }
+  .srs-opts { list-style: none; padding: 0; margin: 14px 0 0; }
+  .srs-opts li {
+    border: 2px solid var(--line); border-radius: 16px;
+    padding: 9px 14px; margin: 8px auto 0; max-width: 380px; font-size: 1.05rem;
+  }
+  .back { display: none; margin-top: 14px; padding-top: 14px; border-top: 2px dashed var(--line); }
+  .back.show { display: block; animation: pop .22s ease-out; }
+  @keyframes pop { 0% { transform: scale(.96); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+  .srs-py { font-size: 1.5rem; color: var(--accent); font-weight: 900; margin: 2px 0; }
+  .srs-pos { color: var(--muted); font-size: .85rem; font-weight: 700; }
+  .srs-en { font-size: 1.15rem; margin: 6px 0; }
+  .srs-alt, .srs-parts { color: var(--muted); font-size: .92rem; margin-top: 6px; }
+  .srs-ex { font-size: 1rem; margin-top: 10px; line-height: 1.5; }
+  .srs-why { font-size: .95rem; margin-top: 10px; color: var(--muted); line-height: 1.5; }
+  .srs-mnem, .srs-note, .srs-rule {
+    font-size: .92rem; margin: 12px auto 0; max-width: 420px; line-height: 1.5;
+    background: var(--lemon-soft); border-radius: 16px; padding: 10px 14px; text-align: left;
+  }
+  .srs-mnem::before, .srs-note::before { content: "💡 "; }
+  .srs-rule::before { content: "📏 "; }
+  .back .srs-zh { font-size: 1.6rem; }
+
+  .speak-row { display: flex; justify-content: center; gap: 10px; margin-top: 14px; }
+  .speak {
+    border: 2px solid var(--line);
+    background: var(--card); color: var(--accent);
+    border-radius: 999px; padding: 8px 17px;
+    font-size: .95rem; font-weight: 700; font-family: inherit;
+    cursor: pointer;
+    transition: border-color .12s, background .12s;
+  }
+  .speak:hover { border-color: var(--accent); background: var(--mint-soft); }
+  .speak.playing { border-color: var(--amber); color: var(--amber); }
+
+  .hint { color: var(--muted); margin-top: 20px; font-size: .9rem; }
+  .reveal-row { margin-top: 16px; }
+  .grades { display: none; gap: 10px; margin-top: 16px; }
+  .grades.show { display: flex; }
+  .grade {
+    flex: 1; border: none; border-radius: 20px;
+    padding: 12px 4px 10px; cursor: pointer; font-family: inherit;
+    color: #fff; font-weight: 900; font-size: 1rem;
+    box-shadow: 0 4px 0 rgba(0,0,0,.12);
+    transition: transform .08s, opacity .12s;
+  }
+  .grade:hover { opacity: .92; }
+  .grade:active { transform: translateY(2px); box-shadow: 0 2px 0 rgba(0,0,0,.12); }
+  .grade small { display: block; font-weight: 700; font-size: .75rem; opacity: .85; margin-top: 2px; }
+  .g-again { background: var(--red); }
+  .g-hard { background: var(--amber); }
+  .g-good { background: var(--green); }
+  .g-easy { background: var(--sky); }
+
+  /* ----- Done screen ----- */
+  .done { text-align: center; }
+  .done .big { font-size: 2.6rem; margin: 30px 0 8px; font-weight: 900; }
+
+  @media (max-width: 480px) {
+    .stats { grid-template-columns: repeat(2, 1fr); }
+    .srs-big { font-size: 3.6rem; }
+  }
+</style>
+<script src="../words_data.js"></script>
+<script src="../sentences_data.js"></script>
+<script src="../colloquial_data.js"></script>
+<script src="../kana_data.js"></script>
+<script src="../radicals_data.js"></script>
+<script src="../numbers_data.js"></script>
+<script src="../usage_data.js"></script>
+<script src="registry.js"></script>
+<script src="fsrs.js"></script>
+</head>
+<body>
+
+<button class="theme-toggle" id="themeToggle" aria-label="toggle dark mode">🌙</button>
+
+<div class="wrap">
+
+  <!-- HOME -->
+  <section id="home" class="screen active">
+    <div class="bubbles">
+      <div class="bubble b1">每</div><div class="bubble b2">日</div>
+      <div class="bubble b3">复</div><div class="bubble b4">习</div>
+    </div>
+    <p class="sub">Daily review — spaced repetition across all the trainers</p>
+    <p class="mascots">🌱🧠🌸</p>
+
+    <div class="stats">
+      <div class="stat due"><b id="statDue">0</b><span>due now</span></div>
+      <div class="stat new"><b id="statNew">0</b><span>new today</span></div>
+      <div class="stat"><b id="statReviews">0</b><span>reviews today</span></div>
+      <div class="stat"><b id="statSeen">0</b><span>cards learning</span></div>
+    </div>
+
+    <button class="btn" id="startBtn">Start review</button>
+
+    <div class="label">New cards per day</div>
+    <div class="toggle" id="capToggle">
+      <button class="opt" data-cap="5">5</button>
+      <button class="opt" data-cap="15">15</button>
+      <button class="opt" data-cap="30">30</button>
+      <button class="opt" data-cap="50">50</button>
+    </div>
+
+    <div class="label">Decks — pick what you want to review</div>
+    <div id="deckList"></div>
+
+    <p class="foot">
+      Progress is saved in this browser (nothing leaves your device).<br>
+      Browse &amp; study on the trainer pages; review here every day. 🌱
+    </p>
+  </section>
+
+  <!-- REVIEW -->
+  <section id="review" class="screen">
+    <div class="topbar">
+      <a id="quitBtn">← that's enough for now</a>
+      <span id="progressText"></span>
+    </div>
+    <div class="bar"><i id="barFill"></i></div>
+
+    <div class="card" id="card">
+      <span class="deckTag" id="deckTag"></span>
+      <span class="newTag" id="newTag">new ✨</span>
+      <div id="front"></div>
+      <div class="back" id="back"></div>
+      <div class="speak-row" id="speakRow" style="display:none">
+        <button class="speak" id="speakBtn">🔊 listen</button>
+      </div>
+      <p class="hint" id="hintText">tap the card or press space to reveal</p>
+    </div>
+
+    <div class="reveal-row" id="revealRow">
+      <button class="btn" id="revealBtn">Show answer</button>
+    </div>
+
+    <div class="grades" id="grades">
+      <button class="grade g-again" data-grade="1">Again<small id="ivl1"></small></button>
+      <button class="grade g-hard" data-grade="2">Hard<small id="ivl2"></small></button>
+      <button class="grade g-good" data-grade="3">Good<small id="ivl3"></small></button>
+      <button class="grade g-easy" data-grade="4">Easy<small id="ivl4"></small></button>
+    </div>
+  </section>
+
+  <!-- DONE -->
+  <section id="doneScreen" class="screen">
+    <div class="done">
+      <p class="big">All clear! 🎉</p>
+      <p class="sub" id="doneSummary"></p>
+      <button class="btn ghost" id="homeBtn">Back to decks</button>
+    </div>
+  </section>
+
+</div>
+
+<script>
+  // ----- Dark mode toggle -----
+  (function () {
+    const root = document.documentElement;
+    const toggle = document.getElementById("themeToggle");
+    const mql = window.matchMedia("(prefers-color-scheme: dark)");
+    const saved = localStorage.getItem("theme");
+    if (saved) root.setAttribute("data-theme", saved);
+    function current() {
+      return root.getAttribute("data-theme") || (mql.matches ? "dark" : "light");
+    }
+    function syncIcon() {
+      toggle.textContent = current() === "dark" ? "☀️" : "🌙";
+    }
+    toggle.addEventListener("click", () => {
+      const next = current() === "dark" ? "light" : "dark";
+      root.setAttribute("data-theme", next);
+      localStorage.setItem("theme", next);
+      syncIcon();
+    });
+    mql.addEventListener("change", () => { if (!root.getAttribute("data-theme")) syncIcon(); });
+    syncIcon();
+  })();
+
+  const REGISTRY = window.SRS_REGISTRY;
+  const FSRS = window.FSRS;
+
+  // ----- Persistence: localStorage, namespaced for the guest user -----------
+  // Phase 3 swaps "anon" for the signed-in uid and syncs to Firestore.
+  const NS = "srs:anon:";
+  const store = {
+    read(key, fallback) {
+      try {
+        const raw = localStorage.getItem(NS + key);
+        return raw ? JSON.parse(raw) : fallback;
+      } catch (e) { return fallback; }
+    },
+    write(key, value) {
+      localStorage.setItem(NS + key, JSON.stringify(value));
+    },
+  };
+
+  let cardStates = store.read("cards", {});           // cardId → FSRS state
+  let settings = Object.assign(
+    { groups: {}, newPerDay: 15 },
+    store.read("settings", {})
+  );
+  let days = store.read("days", {});                  // "YYYY-MM-DD" → {introduced, reviews}
+
+  const saveCards = () => store.write("cards", cardStates);
+  const saveSettings = () => store.write("settings", settings);
+  const saveDays = () => store.write("days", days);
+
+  function todayKey(now) {
+    const d = new Date(now);
+    return d.getFullYear() + "-" +
+      String(d.getMonth() + 1).padStart(2, "0") + "-" +
+      String(d.getDate()).padStart(2, "0");
+  }
+  function todayCounts(now) {
+    return days[todayKey(now)] || { introduced: 0, reviews: 0 };
+  }
+  function bumpToday(now, field) {
+    const k = todayKey(now);
+    const c = days[k] || { introduced: 0, reviews: 0 };
+    c[field]++;
+    days[k] = c;
+    saveDays();
+  }
+
+  // ----- Deck / card helpers --------------------------------------------------
+  const groupKey = (deckId, groupId) => deckId + "/" + groupId;
+  const isEnabled = card => !!settings.groups[groupKey(card.deckId, card.groupId)];
+  const enabledCards = () => REGISTRY.cards.filter(isEnabled);
+
+  function dueCards(now) {
+    // due = reviewed before and scheduled for any time today (or overdue)
+    const endOfToday = new Date(now); endOfToday.setHours(23, 59, 59, 999);
+    const cutoff = endOfToday.getTime();
+    return enabledCards().filter(c => {
+      const s = cardStates[c.id];
+      return s && s.due <= cutoff;
+    });
+  }
+  function newCardsAvailable() {
+    return enabledCards().filter(c => !cardStates[c.id]);
+  }
+  function newQuotaLeft(now) {
+    return Math.max(0, settings.newPerDay - todayCounts(now).introduced);
+  }
+
+  // ----- Home screen ------------------------------------------------------------
+  const $ = id => document.getElementById(id);
+  const screens = { home: $("home"), review: $("review"), done: $("doneScreen") };
+  function show(name) {
+    Object.values(screens).forEach(s => s.classList.remove("active"));
+    screens[name].classList.add("active");
+  }
+
+  function refreshStats() {
+    const now = Date.now();
+    const due = dueCards(now).length;
+    const fresh = Math.min(newQuotaLeft(now), newCardsAvailable().length);
+    $("statDue").textContent = due;
+    $("statNew").textContent = fresh;
+    $("statReviews").textContent = todayCounts(now).reviews;
+    $("statSeen").textContent = Object.keys(cardStates).length;
+    const startBtn = $("startBtn");
+    startBtn.disabled = due + fresh === 0;
+    startBtn.textContent =
+      due + fresh > 0 ? "Start review" :
+      enabledCards().length === 0 ? "Pick some decks below ↓" :
+      "All done for today 🎉";
+  }
+
+  function syncCapButtons() {
+    document.querySelectorAll("#capToggle .opt").forEach(b => {
+      b.classList.toggle("sel", Number(b.dataset.cap) === settings.newPerDay);
+    });
+  }
+  $("capToggle").addEventListener("click", e => {
+    const b = e.target.closest(".opt");
+    if (!b) return;
+    settings.newPerDay = Number(b.dataset.cap);
+    saveSettings();
+    syncCapButtons();
+    refreshStats();
+  });
+
+  function buildDeckList() {
+    const holder = $("deckList");
+    holder.innerHTML = "";
+    for (const deck of REGISTRY.decks) {
+      const el = document.createElement("div");
+      el.className = "deck";
+      const total = deck.groups.reduce((a, g) => a + g.cards.length, 0);
+      const chips = deck.groups.map(g => {
+        const key = groupKey(deck.id, g.id);
+        const sel = settings.groups[key] ? " sel" : "";
+        return `<button class="chip${sel}" data-key="${key}">${g.name} <small>· ${g.cards.length}</small></button>`;
+      }).join("");
+      el.innerHTML =
+        `<div class="deck-head">
+           <span class="emoji">${deck.emoji}</span>
+           <span class="name">${deck.name}</span>
+           <span class="count" data-count="${deck.id}"></span>
+           <span class="caret">▸</span>
+         </div>
+         <div class="deck-body">
+           <div class="chips">${chips}</div>
+           <div class="quick">
+             <a data-all="${deck.id}">select all</a>
+             <a data-none="${deck.id}">none</a>
+           </div>
+         </div>`;
+      holder.appendChild(el);
+    }
+    syncDeckCounts();
+  }
+
+  function syncDeckCounts() {
+    for (const deck of REGISTRY.decks) {
+      const on = deck.groups.reduce((a, g) =>
+        a + (settings.groups[groupKey(deck.id, g.id)] ? g.cards.length : 0), 0);
+      const total = deck.groups.reduce((a, g) => a + g.cards.length, 0);
+      document.querySelector(`[data-count="${deck.id}"]`).textContent =
+        on ? `${on} / ${total} on` : `${total} cards`;
+    }
+  }
+
+  $("deckList").addEventListener("click", e => {
+    const head = e.target.closest(".deck-head");
+    if (head) { head.parentElement.classList.toggle("open"); return; }
+
+    const chip = e.target.closest(".chip");
+    if (chip) {
+      const key = chip.dataset.key;
+      if (settings.groups[key]) delete settings.groups[key];
+      else settings.groups[key] = true;
+      chip.classList.toggle("sel");
+      saveSettings();
+      syncDeckCounts();
+      refreshStats();
+      return;
+    }
+
+    const all = e.target.closest("[data-all]");
+    const none = e.target.closest("[data-none]");
+    if (all || none) {
+      const deck = REGISTRY.deckById[(all || none).dataset[all ? "all" : "none"]];
+      for (const g of deck.groups) {
+        const key = groupKey(deck.id, g.id);
+        if (all) settings.groups[key] = true;
+        else delete settings.groups[key];
+      }
+      saveSettings();
+      buildDeckList();
+      // keep this deck open after rebuilding
+      const idx = REGISTRY.decks.indexOf(deck);
+      $("deckList").children[idx].classList.add("open");
+      refreshStats();
+    }
+  });
+
+  // ----- Pronunciation (Web Speech API) ----------------------------------------
+  const Speech = (() => {
+    const synth = window.speechSynthesis;
+    const voices = { zh: null, ja: null };
+    function pick() {
+      if (!synth) return;
+      const all = synth.getVoices();
+      const zh = all.filter(v => v.lang && v.lang.toLowerCase().startsWith("zh"));
+      voices.zh = zh.find(v => /^zh[-_]?(cn|hans)/i.test(v.lang)) || zh[0] || null;
+      const ja = all.filter(v => v.lang && v.lang.toLowerCase().startsWith("ja"));
+      voices.ja = ja[0] || null;
+    }
+    if (synth) { pick(); synth.addEventListener("voiceschanged", pick); }
+    function speak(text, lang, btn) {
+      if (!synth || !text) return;
+      synth.cancel();
+      if (!voices[lang]) pick();
+      const u = new SpeechSynthesisUtterance(text);
+      const v = voices[lang];
+      if (v) u.voice = v;
+      u.lang = (v && v.lang) || (lang === "ja" ? "ja-JP" : "zh-CN");
+      u.rate = 0.9;
+      if (btn) {
+        u.onstart = () => btn.classList.add("playing");
+        const done = () => btn.classList.remove("playing");
+        u.onend = done; u.onerror = done;
+      }
+      synth.speak(u);
+    }
+    return { supported: !!synth, speak };
+  })();
+
+  // What to read aloud for a card, per deck.
+  function speakable(card) {
+    const d = card.data;
+    switch (card.deckId) {
+      case "words": return { text: d.w, lang: "zh" };
+      case "sent": return { text: d.zh, lang: "zh" };
+      case "coll": return { text: d.c + "。" + (d.ex || ""), lang: "zh" };
+      case "rad": return { text: d.base, lang: "zh" };
+      case "num": return { text: d.hanzi, lang: "zh" };
+      case "usage": return { text: d.zh, lang: "zh" };
+      case "kana": return { text: (card.data.script === "kata" ? d.wk : d.wh), lang: "ja" };
+      default: return null;
+    }
+  }
+
+  // ----- Review session -----------------------------------------------------------
+  let queue = [];          // card objects
+  let sessionTotal = 0;
+  let sessionDone = 0;
+  let sessionNew = 0;
+  let current = null;
+  let revealed = false;
+
+  function shuffle(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+
+  function buildQueue() {
+    const now = Date.now();
+    const due = shuffle(dueCards(now));
+    const fresh = newCardsAvailable().slice(0, newQuotaLeft(now));
+    queue = due.concat(fresh);
+    sessionTotal = queue.length;
+    sessionDone = 0;
+    sessionNew = 0;
+  }
+
+  function fmtDelay(ms) {
+    const m = ms / 60000;
+    if (m < 60) return Math.max(1, Math.round(m)) + "m";
+    const h = m / 60;
+    if (h < 24) return Math.round(h) + "h";
+    const d = h / 24;
+    if (d < 30) return Math.round(d) + "d";
+    const mo = d / 30.4;
+    if (mo < 12) return (mo < 3 ? mo.toFixed(1) : Math.round(mo)) + "mo";
+    return (d / 365.25).toFixed(1) + "y";
+  }
+
+  function showCard() {
+    if (!queue.length) { finishSession(); return; }
+    current = queue[0];
+    revealed = false;
+
+    const deck = REGISTRY.deckById[current.deckId];
+    const { front, back } = REGISTRY.render(current);
+    $("deckTag").textContent = deck.emoji + " " + deck.name;
+    $("newTag").classList.toggle("show", !cardStates[current.id]);
+    $("front").innerHTML = front;
+    $("back").innerHTML = back;
+    $("back").classList.remove("show");
+    $("speakRow").style.display = "none";
+    $("hintText").style.display = "";
+    $("revealRow").style.display = "";
+    $("grades").classList.remove("show");
+
+    const left = queue.length;
+    const freshLeft = queue.filter(c => !cardStates[c.id]).length;
+    $("progressText").textContent =
+      left + " to go" + (freshLeft ? ` · ${freshLeft} new` : "");
+    $("barFill").style.width =
+      (sessionTotal ? Math.round(100 * sessionDone / sessionTotal) : 0) + "%";
+
+    // interval previews on the grade buttons
+    const prev = FSRS.previewIntervals(cardStates[current.id] || null, Date.now());
+    for (const g of [1, 2, 3, 4]) $("ivl" + g).textContent = fmtDelay(prev[g]);
+  }
+
+  function reveal() {
+    if (!current || revealed) return;
+    revealed = true;
+    $("back").classList.add("show");
+    $("hintText").style.display = "none";
+    $("revealRow").style.display = "none";
+    $("grades").classList.add("show");
+    const s = speakable(current);
+    if (s && s.text && Speech.supported) $("speakRow").style.display = "";
+  }
+
+  function grade(g) {
+    if (!current || !revealed) return;
+    const now = Date.now();
+    const wasNew = !cardStates[current.id];
+    cardStates[current.id] = FSRS.review(cardStates[current.id] || null, g, now);
+    saveCards();
+    if (wasNew) { bumpToday(now, "introduced"); sessionNew++; }
+    bumpToday(now, "reviews");
+
+    queue.shift();
+    if (g === FSRS.AGAIN) {
+      // relearning: bring it back a few cards later in this same session
+      const at = Math.min(5, queue.length);
+      queue.splice(at, 0, current);
+    } else {
+      sessionDone++;
+    }
+    showCard();
+  }
+
+  function finishSession() {
+    const c = todayCounts(Date.now());
+    $("doneSummary").textContent =
+      `${c.reviews} review${c.reviews === 1 ? "" : "s"} today` +
+      (c.introduced ? ` — ${c.introduced} new card${c.introduced === 1 ? "" : "s"} met 🌱` : "");
+    show("done");
+    refreshStats();
+  }
+
+  // ----- Wiring ---------------------------------------------------------------------
+  $("startBtn").addEventListener("click", () => {
+    buildQueue();
+    if (!queue.length) { refreshStats(); return; }
+    show("review");
+    showCard();
+  });
+  $("quitBtn").addEventListener("click", () => { show("home"); refreshStats(); });
+  $("homeBtn").addEventListener("click", () => { show("home"); refreshStats(); });
+  $("card").addEventListener("click", reveal);
+  $("revealBtn").addEventListener("click", reveal);
+  $("grades").addEventListener("click", e => {
+    const b = e.target.closest(".grade");
+    if (b) grade(Number(b.dataset.grade));
+  });
+  $("speakBtn").addEventListener("click", e => {
+    e.stopPropagation();
+    const s = speakable(current);
+    if (s) Speech.speak(s.text, s.lang, e.currentTarget);
+  });
+
+  document.addEventListener("keydown", e => {
+    if (!screens.review.classList.contains("active")) return;
+    if (e.key === " " || e.key === "Enter") {
+      e.preventDefault();
+      if (!revealed) reveal();
+      return;
+    }
+    if (revealed && e.key >= "1" && e.key <= "4") grade(Number(e.key));
+  });
+
+  // ----- Boot ------------------------------------------------------------------------
+  buildDeckList();
+  syncCapButtons();
+  refreshStats();
+</script>
+
+</body>
+</html>
