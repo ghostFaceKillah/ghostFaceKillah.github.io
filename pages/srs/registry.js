@@ -75,29 +75,34 @@ window.SRS_REGISTRY = (function () {
     });
   }
 
-  // ----- sent: sentence decks, opt-in per deck ------------------------------
+  // ----- sent: HSK decks whole, Integrated Chinese split per chapter --------
   {
-    const DECKS = [
-      { id: "hsk1", name: "HSK 1 sentences" },
-      { id: "hsk2", name: "HSK 2 sentences" },
-      { id: "ic1", name: "Integrated Chinese 1 sentences" },
+    const groups = [
+      { id: "hsk1", name: "HSK 1 sentences",
+        cards: (SENT.hsk1 || []).map(s => ({ id: `sent/hsk1/${s.n}`, data: s })) },
+      { id: "hsk2", name: "HSK 2 sentences",
+        cards: (SENT.hsk2 || []).map(s => ({ id: `sent/hsk2/${s.n}`, data: s })) },
     ];
+    for (const ch of SENT.ic1_chapters || []) {
+      groups.push({
+        id: `ic1-${ch.n}`, name: `IC1 Lesson ${ch.n} — ${ch.title}`,
+        cards: (SENT.ic1 || []).filter(s => s.n >= ch.from && s.n <= ch.to)
+          .map(s => ({ id: `sent/ic1/${s.n}`, data: s })),
+      });
+    }
     decks.push({
       id: "sent", name: "Sentences", emoji: "💬", page: "../sentences.html",
-      groups: DECKS.map(g => ({
-        id: g.id, name: g.name,
-        cards: (SENT[g.id] || []).map(s => ({ id: `sent/${g.id}/${s.n}`, data: s })),
-      })),
+      groups,
       renderFront: d => `<div class="srs-zh">${esc(d.zh)}</div>`,
       renderBack: d => line("py", d.py) + line("en", d.en),
     });
   }
 
-  // ----- coll: colloquial characters, opt-in in bands of 50 -----------------
+  // ----- coll: colloquial characters, opt-in in sets of 20 ------------------
   {
     const groups = [];
-    for (let lo = 1; lo <= 151; lo += 50) {
-      const hi = lo + 49;
+    for (let lo = 1; lo <= 181; lo += 20) {
+      const hi = lo + 19;
       groups.push({
         id: `${lo}-${hi}`, name: `Characters ${lo}–${hi}`,
         cards: COLL.filter(c => c.rank >= lo && c.rank <= hi)

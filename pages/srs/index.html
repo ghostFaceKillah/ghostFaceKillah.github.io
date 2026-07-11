@@ -498,6 +498,31 @@
     } catch (e) { return fallback; }
   }
 
+  // Earlier releases grouped colloquial characters in bands of 50 and all of
+  // IC1 sentences as one unit. Rewrite those saved keys to the current group
+  // ids (any new group overlapping the old selection turns on).
+  function migrateGroupKeys(groups) {
+    const legacy = {};
+    legacy["sent/ic1"] = REGISTRY.deckById.sent.groups
+      .filter(g => g.id.startsWith("ic1-")).map(g => "sent/" + g.id);
+    for (let lo = 1; lo <= 151; lo += 50) {
+      legacy[`coll/${lo}-${lo + 49}`] = REGISTRY.deckById.coll.groups
+        .filter(g => {
+          const [a, b] = g.id.split("-").map(Number);
+          return a <= lo + 49 && b >= lo;
+        }).map(g => "coll/" + g.id);
+    }
+    let changed = false;
+    for (const [oldKey, newKeys] of Object.entries(legacy)) {
+      if (groups[oldKey]) {
+        delete groups[oldKey];
+        for (const k of newKeys) groups[k] = true;
+        changed = true;
+      }
+    }
+    return changed;
+  }
+
   let cardStates, settings, days;
   function loadState() {
     cardStates = store.read("cards", {});             // cardId → FSRS state
@@ -506,6 +531,7 @@
       store.read("settings", {})
     );
     days = store.read("days", {});                    // "YYYY-MM-DD" → {introduced, reviews}
+    if (migrateGroupKeys(settings.groups)) store.write("settings", settings);
   }
   loadState();
 
@@ -881,6 +907,8 @@
     if (cloudState.settings) {
       settings = Object.assign({ groups: {}, newPerDay: 15 }, cloudState.settings);
     }
+    // cloud may still hold pre-split group keys — rewrite and push back once
+    if (migrateGroupKeys(settings.groups)) cloudPushSettings();
     saveCards();
     saveSettings();
     refreshHome();
