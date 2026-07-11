@@ -40,11 +40,19 @@ Decided 2026-07-11. This doc is the source of truth for sessions continuing the 
   entirely from existing state (`days` + card states, nothing new persisted):
   review heatmap + streak (26 Monday-first weeks, GitHub-style), a card-maturity
   "garden" (🌱 <7d, 🌿 7–21d, 🌸 ≥21d — Anki's 21-day "mature" idiom), and a
-  28-day due forecast for enabled decks. Charts use one green hue in validated
-  light→dark steps (`--q1..--q4`; ordinal-ramp checks pass in both modes — light
-  `#76c296 #4cb079 #2b985e #127844` on white, dark `#4d8465 #5aa87e #68cc98
-  #79eab1` on `#2f3c34`). Retention-rate charts would need a per-review
-  pass/fail log, which we deliberately don't store yet.
+  28-day due forecast for enabled decks. Pastel styling (owner asked for less
+  green, 2026-07-11): each chart keeps one hue but gets its own — heatmap pink
+  (`--h1..--h4`, round cells), garden green (`--g1..--g3` — the one place green
+  stays, it's a garden), forecast sky (`--fc`); stat tiles wear the home-screen
+  pastel washes. Every ramp passes the ordinal checks in both modes (monotone
+  lightness, adjacent ΔL ≥ 0.06, light-end ≥ 2:1 on the card surface): pink
+  light `#f096b4 #e06f97 #c74a77 #a02653` / dark `#9a5b73 #b56f8c #d284a6
+  #f09ac2`; green light `#4cb079 #2b985e #127844` / dark `#5aa87e #68cc98
+  #79eab1`; sky bars `#3a8fc4` light / `#8ecbf5` dark clear 3:1. A validated
+  lavender alternate for the heatmap exists if pink palls: light `#b79ee2
+  #9a77cf #7c53b8 #5b3492`, dark `#7c6699 #9179b3 #a98fd0 #c3a8f0`.
+  Retention-rate charts would need a per-review pass/fail log, which we
+  deliberately don't store yet.
 - **Guest mode:** the app fully works signed-out on localStorage. On first sign-in,
   offer a one-time "import this progress into your account?" — never merge silently.
 - **Multi-user:** open to any Google account. All state private per user.
