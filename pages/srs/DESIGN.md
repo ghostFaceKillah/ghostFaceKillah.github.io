@@ -50,19 +50,19 @@ Decided 2026-07-11. This doc is the source of truth for sessions continuing the 
   entirely from existing state (`days` + card states, nothing new persisted):
   review heatmap + streak (26 Monday-first weeks, GitHub-style), a card-maturity
   "garden" (🌱 <7d, 🌿 7–21d, 🌸 ≥21d — Anki's 21-day "mature" idiom), and a
-  28-day due forecast for enabled decks. Rainbow styling (owner iterated:
-  single-hue ramps felt monochrome; wants the kana-trainer bubble rainbow,
-  2026-07-11). Multi-hue but honest: in the heatmap, dot SIZE carries the
-  review count (s1–s4) and hue follows the month (`--m1..--m5`, a 5-hue cycle —
-  a 6th lemon slot collapsed with peach under deuteranopia and was dropped);
-  garden stages each get a hue (🌱 mint `--gs`, 🌿 lavender `--gg`, 🌸 pink
-  `--gb`); forecast bars are colored per week (`--w1..--w4`, matching the axis
-  groups). All sets pass the categorical validator in both modes (light on
-  white: `#ef5f8f #3ba0d9 #e8821c #35a86b #8f77e0`; dark on `#2f3c34`:
-  `#d94f7e #2f8fc4 #cf7414 #2f9660 #8168d4`). Remaining WARNs are the legal
-  floor-band cases — mitigated by secondary encoding everywhere: month hue is
-  redundant with column position + month labels, magnitude never rides on
-  color, stages carry emoji + labeled counts, weeks carry axis labels, and
+  28-day due forecast for enabled decks. Styling (owner iterated twice on
+  2026-07-11: single-hue ramps felt monochrome → kana rainbow → final ask:
+  chart colors must be EXACTLY the four grade-button hues, and heatmap days
+  should be cute emoji, not dots — a different one per day): all chart vars
+  alias the button colors (`--gs/--gg/--gb` = red/amber/green for 🌱/🌿/🌸 —
+  traffic-light, maturing toward "Good"; `--w1..--w4` = red/amber/green/sky
+  in Again→Easy order; `--ret` = green, "Good" = remembered). Aliases resolve
+  at use-time, so dark mode follows the buttons' dark values with no
+  per-theme chart overrides. Heatmap: a reviewed day is a cute emoji — an
+  8-strong set (coprime with the 7 weekday rows) cycled by calendar date, so
+  each day keeps its emoji forever — whose font-size carries the review count
+  (s1–s4); the month-hue cycle (`--m1..--m5`) is gone. Magnitude never rides
+  on color, stages carry emoji + labeled counts, weeks carry axis labels, and
   every mark has a tooltip + aria-label.
 - **Review log & retention** (decided 2026-07-11): every grade appends
   `"ts,grade,prevIvl,cardId"` to a month-chunked log (`log:YYYY-MM` in
@@ -73,8 +73,8 @@ Decided 2026-07-11. This doc is the source of truth for sessions continuing the 
   Anki-style *true retention*: per day, only the first review of each
   already-learned card counts (new cards and same-session relearning repeats
   excluded); remembered = graded above Again. The stats screen shows a 30-day
-  headline + 12 weekly bars against a 90% goal line (`--ret` lavender,
-  ≥3:1 both modes), and heatmap tooltips gain "· N% remembered". The log
+  headline + 12 weekly bars against a 90% goal line (`--ret`, the green
+  "Good" button hue), and heatmap tooltips gain "· N% remembered". The log
   starts empty — history from before this feature has no retention data.
   Guest import carries log chunks; sign-in hydrates them from Firestore.
 - **Guest mode:** the app fully works signed-out on localStorage. On first sign-in,
