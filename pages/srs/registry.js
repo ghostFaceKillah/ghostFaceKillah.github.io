@@ -192,20 +192,23 @@ window.SRS_REGISTRY = (function () {
     });
   }
 
-  // ----- kana: one card per glyph (hira + kata), opt-in per row -------------
+  // ----- kana: one card per glyph, opt-in per row × script ------------------
+  // Each row is two groups (`a-hira`, `a-kata`) so the scripts can be picked
+  // up independently. Rows used to mix both scripts in one group (`a`) —
+  // migrateGroupKeys in index.html rewrites those saved keys.
   {
     const kanaCard = (k, script) => ({
       id: `kana/${script === "kata" ? k.k : k.h}`,
       data: Object.assign({ script }, k),
     });
+    const kanaGroups = script => KANA.rows.map(row => ({
+      id: `${row.id}-${script}`,
+      name: `${script === "kata" ? "Katakana" : "Hiragana"} ${(script === "kata" ? row.kata : row.hira)[0]} row${row.basic ? "" : " (voiced)"}`,
+      cards: KANA.kana.filter(k => k.row === row.id).map(k => kanaCard(k, script)),
+    }));
     decks.push({
       id: "kana", name: "Kana", emoji: "🌸", page: "../kana.html",
-      groups: KANA.rows.map(row => ({
-        id: row.id,
-        name: `${row.hira[0]} · ${row.kata[0]} row${row.basic ? "" : " (voiced)"}`,
-        cards: KANA.kana.filter(k => k.row === row.id)
-          .flatMap(k => [kanaCard(k, "hira"), kanaCard(k, "kata")]),
-      })),
+      groups: kanaGroups("hira").concat(kanaGroups("kata")),
       renderFront: d => `<div class="srs-kana srs-big">${esc(d.script === "kata" ? d.k : d.h)}</div>`,
       renderBack: d => {
         const kata = d.script === "kata";
