@@ -106,14 +106,10 @@ window.SRS_REGISTRY = (function () {
     });
   }
 
-  // ----- sent: HSK decks whole, Integrated Chinese split per chapter --------
+  // ----- sent: Integrated Chinese sentences, split per chapter ---------------
+  // Recognition direction: shown in Chinese, recall the English meaning.
   {
-    const groups = [
-      { id: "hsk1", name: "HSK 1 sentences",
-        cards: (SENT.hsk1 || []).map(s => ({ id: `sent/hsk1/${s.n}`, data: s })) },
-      { id: "hsk2", name: "HSK 2 sentences",
-        cards: (SENT.hsk2 || []).map(s => ({ id: `sent/hsk2/${s.n}`, data: s })) },
-    ];
+    const groups = [];
     for (const ch of SENT.ic1_chapters || []) {
       groups.push({
         id: `ic1-${ch.n}`, name: `IC1 Lesson ${ch.n} — ${ch.title}`,
@@ -122,12 +118,41 @@ window.SRS_REGISTRY = (function () {
       });
     }
     decks.push({
-      id: "sent", name: "Sentences", emoji: "💬", page: "../sentences.html",
+      id: "sent", name: "Sentences (Integrated Chinese)", emoji: "💬", page: "../sentences.html",
       groups,
       renderFront: d => `<div class="srs-zh">${esc(d.zh)}</div>`,
       renderBack: d =>
         line("py", d.py) +
         line("en", d.en) +
+        (d.notes || []).map(n => line("tone", n)).join(""),
+    });
+  }
+
+  // ----- recall: HSK sentences flipped, opt-in in sets of 50 -----------------
+  // Production direction: shown in English, recall the Chinese sentence.
+  // These used to live in the sent deck as two 500-card groups shown
+  // Chinese-first. Fresh card IDs on purpose: the flipped direction is a
+  // different exercise, so old recognition history must not schedule it.
+  {
+    const groups = [];
+    for (const [key, label] of [["hsk1", "HSK 1"], ["hsk2", "HSK 2"]]) {
+      const all = SENT[key] || [];
+      for (let lo = 1; lo <= all.length; lo += 50) {
+        const hi = Math.min(lo + 49, all.length);
+        groups.push({
+          id: `${key}-${lo}-${hi}`, name: `${label} · ${lo}–${hi}`,
+          cards: all.filter(s => s.n >= lo && s.n <= hi)
+            .map(s => ({ id: `recall/${key}/${s.n}`, data: s })),
+        });
+      }
+    }
+    decks.push({
+      id: "recall", name: "Sentence Recall (HSK)", emoji: "🧠", page: "../sentences.html",
+      groups,
+      renderFront: d => `<div class="srs-en-front">${esc(d.en)}</div>`,
+      renderBack: d =>
+        line("zh", d.zh) +
+        line("py", d.py) +
         (d.notes || []).map(n => line("tone", n)).join(""),
     });
   }

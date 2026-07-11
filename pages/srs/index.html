@@ -248,6 +248,7 @@
   /* card content, front & back (classes emitted by registry render fns) */
   .srs-big { font-size: 4.6rem; line-height: 1.15; font-weight: 700; }
   .srs-zh { font-size: 1.9rem; line-height: 1.4; font-weight: 700; }
+  .srs-en-front { font-size: 1.45rem; line-height: 1.5; font-weight: 700; }
   .srs-kana, .srs-num { font-weight: 700; }
   .srs-variant { color: var(--muted); font-size: .55em; }
   .srs-frame { color: var(--muted); font-style: italic; margin-bottom: 10px; }
@@ -543,13 +544,18 @@
     } catch (e) { return fallback; }
   }
 
-  // Earlier releases grouped colloquial characters in bands of 50 and all of
-  // IC1 sentences as one unit. Rewrite those saved keys to the current group
-  // ids (any new group overlapping the old selection turns on).
+  // Earlier releases grouped colloquial characters in bands of 50, all of
+  // IC1 sentences as one unit, and each HSK level as one 500-card group in
+  // the sent deck. Rewrite those saved keys to the current group ids (any
+  // new group overlapping the old selection turns on).
   function migrateGroupKeys(groups) {
     const legacy = {};
     legacy["sent/ic1"] = REGISTRY.deckById.sent.groups
       .filter(g => g.id.startsWith("ic1-")).map(g => "sent/" + g.id);
+    for (const h of ["hsk1", "hsk2"]) {
+      legacy["sent/" + h] = REGISTRY.deckById.recall.groups
+        .filter(g => g.id.startsWith(h + "-")).map(g => "recall/" + g.id);
+    }
     for (let lo = 1; lo <= 151; lo += 50) {
       legacy[`coll/${lo}-${lo + 49}`] = REGISTRY.deckById.coll.groups
         .filter(g => {
@@ -670,7 +676,11 @@
     $("statDue").textContent = due;
     $("statNew").textContent = fresh;
     $("statReviews").textContent = todayCounts(now).reviews;
-    $("statSeen").textContent = Object.keys(cardStates).length;
+    // count only cards still in the registry — retired ids (e.g. the old
+    // Chinese-first HSK sentence cards) keep their saved state but don't
+    // count as learning
+    $("statSeen").textContent =
+      Object.keys(cardStates).filter(id => REGISTRY.cardById(id)).length;
     const startBtn = $("startBtn");
     startBtn.disabled = due + fresh === 0;
     startBtn.textContent =
@@ -839,6 +849,7 @@
     switch (card.deckId) {
       case "words": return { text: d.w, lang: "zh" };
       case "sent": return { text: d.zh, lang: "zh" };
+      case "recall": return { text: d.zh, lang: "zh" };
       case "coll": return { text: d.c + "。" + (d.ex || ""), lang: "zh" };
       case "rad": return { text: d.base, lang: "zh" };
       case "num": return { text: d.hanzi, lang: "zh" };
