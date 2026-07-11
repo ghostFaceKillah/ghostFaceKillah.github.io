@@ -195,6 +195,12 @@
   .opt:hover { border-color: var(--accent); }
   .opt:active { transform: scale(.97); }
   .opt.sel { border-color: var(--accent); background: var(--mint-soft); color: var(--accent); }
+  #slotToggle .opt { padding: 8px 8px 7px; }
+  #slotToggle small {
+    display: block; font-size: .72rem; font-weight: 700;
+    color: var(--muted); margin-top: 1px;
+  }
+  #slotToggle .opt.sel small { color: var(--accent); }
 
   /* ----- Deck list ----- */
   .deck {
@@ -552,6 +558,13 @@
       <button class="opt" data-cap="50">50</button>
     </div>
 
+    <div class="label">Selection groups — each remembers its own deck picks</div>
+    <div class="toggle" id="slotToggle">
+      <button class="opt" data-slot="0">①<small></small></button>
+      <button class="opt" data-slot="1">②<small></small></button>
+      <button class="opt" data-slot="2">③<small></small></button>
+    </div>
+
     <div class="label">Decks — pick what you want to review</div>
     <div id="deckList"></div>
 
@@ -751,15 +764,31 @@
     return changed;
   }
 
+  // Settings hold THREE selection-group slots; each slot is its own set of
+  // enabled deck groups. `settings.groups` is a live reference to the active
+  // slot's object, so every reader/writer of `groups` transparently works on
+  // the current slot. References don't survive JSON, so normalize re-ties
+  // them after every load/adopt. Legacy settings (plain `groups`) become slot 0.
+  function normalizeSettings(raw) {
+    const s = Object.assign({ groups: {}, newPerDay: 15, slot: 0 }, raw || {});
+    if (!Array.isArray(s.slots) || s.slots.length !== 3) s.slots = [s.groups, {}, {}];
+    s.slots = s.slots.map(g => (g && typeof g === "object") ? g : {});
+    s.slot = Math.min(2, Math.max(0, s.slot | 0));
+    s.groups = s.slots[s.slot];
+    return s;
+  }
+  function migrateAllSlots() {
+    let changed = false;
+    for (const g of settings.slots) changed = migrateGroupKeys(g) || changed;
+    return changed;
+  }
+
   let cardStates, settings, days;
   function loadState() {
     cardStates = store.read("cards", {});             // cardId → FSRS state
-    settings = Object.assign(
-      { groups: {}, newPerDay: 15 },
-      store.read("settings", {})
-    );
+    settings = normalizeSettings(store.read("settings", {}));
     days = store.read("days", {});                    // "YYYY-MM-DD" → {introduced, reviews}
-    if (migrateGroupKeys(settings.groups)) store.write("settings", settings);
+    if (migrateAllSlots()) store.write("settings", settings);
   }
   loadState();
 
@@ -948,6 +977,29 @@
       b.classList.toggle("sel", Number(b.dataset.cap) === settings.newPerDay);
     });
   }
+
+  function syncSlotButtons() {
+    document.querySelectorAll("#slotToggle .opt").forEach(b => {
+      const i = Number(b.dataset.slot);
+      b.classList.toggle("sel", i === settings.slot);
+      const n = Object.keys(settings.slots[i]).length;
+      b.querySelector("small").textContent =
+        n ? `${n} pick${n === 1 ? "" : "s"}` : "empty";
+    });
+  }
+  $("slotToggle").addEventListener("click", e => {
+    const b = e.target.closest(".opt");
+    if (!b) return;
+    const i = Number(b.dataset.slot);
+    if (i === settings.slot) return;
+    // the leaving slot already holds the current picks (groups IS slots[slot]);
+    // just point groups at the recalled slot and redraw
+    settings.slot = i;
+    settings.groups = settings.slots[i];
+    saveSettings();
+    cloudPushSettings();
+    refreshHome();
+  });
   $("capToggle").addEventListener("click", e => {
     const b = e.target.closest(".opt");
     if (!b) return;
@@ -1012,6 +1064,7 @@
       saveSettings();
       cloudPushSettings();
       syncDeckCounts();
+      syncSlotButtons();
       refreshStats();
       return;
     }
@@ -1031,6 +1084,7 @@
       // keep this deck open after rebuilding
       const idx = REGISTRY.decks.indexOf(deck);
       $("deckList").children[idx].classList.add("open");
+      syncSlotButtons();
       refreshStats();
     }
   });
@@ -1450,6 +1504,7 @@
   function refreshHome() {
     buildDeckList();
     syncCapButtons();
+    syncSlotButtons();
     refreshStats();
   }
 
@@ -1465,13 +1520,13 @@
   function adoptCloudState(cloudState) {
     cardStates = cloudState.cards || {};
     if (cloudState.settings) {
-      settings = Object.assign({ groups: {}, newPerDay: 15 }, cloudState.settings);
+      settings = normalizeSettings(cloudState.settings);
     }
     for (const [month, entries] of Object.entries(cloudState.log || {})) {
       store.write("log:" + month, entries);
     }
     // cloud may still hold pre-split group keys — rewrite and push back once
-    if (migrateGroupKeys(settings.groups)) cloudPushSettings();
+    if (migrateAllSlots()) cloudPushSettings();
     saveCards();
     saveSettings();
     refreshHome();
@@ -1514,7 +1569,7 @@
       if (m) anonLog[m[1]] = readAnon("log:" + m[1], []);
     }
     cardStates = cards;
-    if (anonSettings) settings = Object.assign({ groups: {}, newPerDay: 15 }, anonSettings);
+    if (anonSettings) settings = normalizeSettings(anonSettings);
     days = anonDays;
     saveCards(); saveSettings(); saveDays();
     for (const [month, entries] of Object.entries(anonLog)) store.write("log:" + month, entries);
