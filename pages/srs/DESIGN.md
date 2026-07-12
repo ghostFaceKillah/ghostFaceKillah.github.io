@@ -20,10 +20,15 @@ Decided 2026-07-11. This doc is the source of truth for sessions continuing the 
   unchanged from 4.5, so stored states carry over with no migration.
 - **Card IDs:** stable, derived from existing data. Examples:
   `words/L1D1/你`, `sent/hsk1/42`, `coll/1`, `kana/あ`. ~2,500 cards total.
-- **Card intake:** opt-in by deck/lesson (IC1 lessons individually, colloquial chars
-  in bands of 20, IC1 sentence chapters, HSK recall sets of 50, kana rows split
-  per script (hiragana and katakana selectable separately), radicals,
-  numbers, usage). New cards introduced at a per-user daily cap (default ~15).
+- **Card intake:** opt-in by deck/lesson (IC1 lessons individually, topic word
+  packs — Food & Drink, Common Verbs, Numbers words, tutor notes — as their own
+  deck in sets of 10 (split out of the words deck 2026-07-12; card IDs keep the
+  `words/` prefix so history carries over, saved opt-ins migrate via
+  `migrateGroupKeys`), colloquial chars in bands of 20, IC1 sentence chapters,
+  HSK recall sets of 50, kana rows split per script (hiragana and katakana
+  selectable separately), radicals, numbers in magnitude bands (0–10 … 10 000+,
+  was one 56-card group) plus clock times, usage). New cards introduced at a
+  per-user daily cap (default ~15).
 - **Selection groups** (decided 2026-07-11): three generic slots (①②③), each
   remembering its own set of enabled deck groups; switching slots swaps the whole
   selection (leave-slot keeps its picks, target slot's picks are recalled).

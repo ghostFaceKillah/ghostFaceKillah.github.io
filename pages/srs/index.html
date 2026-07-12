@@ -723,11 +723,20 @@
 
   // Earlier releases grouped colloquial characters in bands of 50, all of
   // IC1 sentences as one unit, each HSK level as one 500-card group in the
-  // sent deck, and both kana scripts in one group per row. Rewrite those
-  // saved keys to the current group ids (any new group overlapping the old
-  // selection turns on).
+  // sent deck, both kana scripts in one group per row, topic word packs as
+  // whole groups inside the words deck, and all 56 numbers as one group.
+  // Rewrite those saved keys to the current group ids (any new group
+  // overlapping the old selection turns on).
   function migrateGroupKeys(groups) {
     const legacy = {};
+    // topic packs moved out of the words deck and split into sets of 10
+    for (const t of ["FOOD", "VERBS", "NUMBERS", "TUTOR"]) {
+      legacy["words/" + t] = REGISTRY.deckById.topics.groups
+        .filter(g => g.id === t || g.id.startsWith(t + "-"))
+        .map(g => "topics/" + g.id);
+    }
+    legacy["num/numbers"] = REGISTRY.deckById.num.groups
+      .filter(g => g.id.startsWith("n-")).map(g => "num/" + g.id);
     for (const g of REGISTRY.deckById.kana.groups) {
       const row = g.id.replace(/-(hira|kata)$/, "");
       (legacy["kana/" + row] = legacy["kana/" + row] || []).push("kana/" + g.id);
@@ -1585,6 +1594,7 @@
     }
     cardStates = cards;
     if (anonSettings) settings = normalizeSettings(anonSettings);
+    migrateAllSlots(); // imported guest settings may hold pre-split group keys
     days = anonDays;
     saveCards(); saveSettings(); saveDays();
     for (const [month, entries] of Object.entries(anonLog)) store.write("log:" + month, entries);
