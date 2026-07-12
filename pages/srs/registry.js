@@ -82,6 +82,18 @@ window.SRS_REGISTRY = (function () {
 
   const decks = [];
 
+  // Word cards render identically whether they come from an IC lesson or a
+  // topic pack, so the words and topics decks share these.
+  const wordCard = w => ({ id: `words/${w.lesson}/${w.w}`, data: w });
+  const wordFront = d => `<div class="srs-zh srs-big">${esc(d.w)}</div>`;
+  const wordBack = d =>
+    line("py", d.pinyin) +
+    line("pos", d.pos) +
+    line("en", d.def) +
+    line("parts", d.parts, true) +
+    line("mnem", d.mnem, true) +
+    miniLessonHtml(LESSONS[d.w] || collByChar[d.w], true);
+
   // ----- words: Integrated Chinese vocabulary, opt-in per lesson -----------
   {
     const groups = [];
@@ -90,13 +102,11 @@ window.SRS_REGISTRY = (function () {
       const g = { id: "L" + l.num, name: `Lesson ${l.num} — ${l.theme}`, cards: [] };
       groups.push(g); byGroup[g.id] = g;
     }
-    for (const t of WORDS.topics) {
-      const g = { id: t.id, name: t.theme, cards: [] };
-      groups.push(g); byGroup[g.id] = g;
-    }
+    const topicIds = new Set(WORDS.topics.map(t => t.id));
     for (const w of WORDS.words) {
       const groupId = w.lesson.replace(/D\d+$/, ""); // L1D2 → L1; FOOD → FOOD
-      byGroup[groupId].cards.push({ id: `words/${w.lesson}/${w.w}`, data: w });
+      if (topicIds.has(groupId)) continue; // the topics deck picks these up below
+      byGroup[groupId].cards.push(wordCard(w));
     }
     for (const w of Object.keys(LESSONS)) {
       if (!WORDS.words.some(x => x.w === w))
@@ -105,14 +115,37 @@ window.SRS_REGISTRY = (function () {
     decks.push({
       id: "words", name: "Words (Integrated Chinese)", emoji: "📚", page: "../words.html",
       groups,
-      renderFront: d => `<div class="srs-zh srs-big">${esc(d.w)}</div>`,
-      renderBack: d =>
-        line("py", d.pinyin) +
-        line("pos", d.pos) +
-        line("en", d.def) +
-        line("parts", d.parts, true) +
-        line("mnem", d.mnem, true) +
-        miniLessonHtml(LESSONS[d.w] || collByChar[d.w], true),
+      renderFront: wordFront,
+      renderBack: wordBack,
+    });
+  }
+
+  // ----- topics: themed word packs, opt-in in sets of 10 --------------------
+  // These used to be groups inside the words deck (saved keys words/FOOD, …);
+  // migrateGroupKeys in index.html rewrites those opt-ins. The card IDs keep
+  // their words/ prefix on purpose: same cards, same review history.
+  {
+    const groups = [];
+    for (const t of WORDS.topics) {
+      const words = WORDS.words.filter(w => w.lesson.replace(/D\d+$/, "") === t.id);
+      if (words.length <= 10) {
+        groups.push({ id: t.id, name: t.theme, cards: words.map(wordCard) });
+        continue;
+      }
+      for (let lo = 0; lo < words.length; lo += 10) {
+        const set = words.slice(lo, lo + 10);
+        groups.push({
+          id: `${t.id}-${lo + 1}-${lo + set.length}`,
+          name: `${t.theme} · ${lo + 1}–${lo + set.length}`,
+          cards: set.map(wordCard),
+        });
+      }
+    }
+    decks.push({
+      id: "topics", name: "Words (Topics)", emoji: "🍜", page: "../words.html",
+      groups,
+      renderFront: wordFront,
+      renderBack: wordBack,
     });
   }
 
@@ -252,16 +285,26 @@ window.SRS_REGISTRY = (function () {
       [1, 0], [2, 0], [3, 15], [4, 45], [5, 30], [6, 5],
       [7, 50], [8, 10], [9, 15], [10, 30], [11, 45], [12, 0],
     ];
+    // Magnitude bands (was one 56-card "Numbers" group — saved key
+    // num/numbers, rewritten by migrateGroupKeys) so intake comes in bites.
+    const BANDS = [
+      { id: "n-0-10", name: "Numbers 0–10", max: 10 },
+      { id: "n-11-20", name: "Numbers 11–20", max: 20 },
+      { id: "n-21-99", name: "Numbers 21–99", max: 99 },
+      { id: "n-100-999", name: "Numbers 100–999", max: 999 },
+      { id: "n-1000-9999", name: "Numbers 1000–9999", max: 9999 },
+      { id: "n-10000-up", name: "Numbers 10 000+", max: Infinity },
+    ];
+    const bandOf = n => BANDS.find(b => n <= b.max);
     decks.push({
       id: "num", name: "Numbers & Time", emoji: "🔢", page: "../numbers.html",
-      groups: [
-        {
-          id: "numbers", name: "Numbers",
-          cards: NUMBERS.map(n => ({
-            id: `num/n/${n}`,
-            data: Object.assign({ kind: "number", n }, NUM.numToChinese(n)),
-          })),
-        },
+      groups: BANDS.map(b => ({
+        id: b.id, name: b.name,
+        cards: NUMBERS.filter(n => bandOf(n) === b).map(n => ({
+          id: `num/n/${n}`,
+          data: Object.assign({ kind: "number", n }, NUM.numToChinese(n)),
+        })),
+      })).concat([
         {
           id: "time", name: "Clock times",
           cards: TIMES.map(([h, m]) => ({
@@ -269,7 +312,7 @@ window.SRS_REGISTRY = (function () {
             data: Object.assign({ kind: "time", h, m }, NUM.timeToChinese(h, m)),
           })),
         },
-      ],
+      ]),
       renderFront: d => d.kind === "time"
         ? `<div class="srs-num srs-big">${d.h}:${String(d.m).padStart(2, "0")}</div>`
         : `<div class="srs-num srs-big">${d.n.toLocaleString("en-US")}</div>`,
