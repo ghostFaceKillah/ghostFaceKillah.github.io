@@ -93,6 +93,39 @@ Decided 2026-07-11. This doc is the source of truth for sessions continuing the 
   "Good" button hue), and heatmap tooltips gain "· N% remembered". The log
   starts empty — history from before this feature has no retention data.
   Guest import carries log chunks; sign-in hydrates them from Firestore.
+- **Time analytics & burn-down forecast** (decided 2026-07-12): two more stats
+  panels, both fed by the review log.
+  - Log entries gain an optional 5th field: `"ts,grade,prevIvl,cardId,ms"` —
+    the card's show→grade time, capped at 60 s (`TIME_CAP_MS`, Anki's idiom:
+    past the cap the user wandered off). Entries from before the field have
+    their time estimated as the gap to the previous grade in the same sitting
+    (gaps over the cap = a break, charged as that day's median). Parsing is
+    backward-compatible (`parseLogEntry`: a comma after the id slot with all
+    digits behind it is the ms field; card ids never contain ASCII commas);
+    `days` recounting and chunk merging read only the leading fields, so old
+    and new entries coexist in one month chunk.
+  - **⏱ Time at the desk**: all-time totals (reviewing vs learning) + a 28-day
+    stacked bar chart. A card counts as *learning* for a whole day when its
+    first grade that day was its first sight ever (same-day repeats included);
+    everything else is review time.
+  - **⏳ Time to come**: the owner's main ask — predicted minutes per day to
+    burn down the queue, today headlined (`≈ Xm to clear today — N due + M new
+    · at your pace of ~Ns a card`). An expected-value simulation pushes every
+    enabled card due in the next 28 days through the real `FSRS.review`
+    (it's pure, so it takes simulated timestamps): each review splits into a
+    pass branch (weight = measured true retention, graded Good) and a lapse
+    branch (Again now + Good 10 min later); fractional branches under 2% are
+    dropped. New-card intake keeps flowing at the daily cap while unseen cards
+    remain and cascades the same way — so future days show scheduled reviews,
+    predicted follow-ups (spawned by the sim), and new cards as separate
+    stacked segments. Per-card pace comes from the last 30 days of the log
+    (all time as fallback; 9 s review / 18 s learn defaults for a virgin log)
+    with same-day repeats folded in, so no separate repeat factor is needed.
+  - Colors stay inside the grade-button mandate: reviews `--w3`, learning/new
+    `--w4`, scheduled `--w2`, follow-ups `--w1`. The pastel palette fails the
+    generic lightness/chroma lint by design, so both charts carry the required
+    secondary encoding: legends, per-bar tooltips, direct labels (peak on the
+    past chart, today on the forecast), 2 px gaps between stacked fills.
 - **Cross-device sync hardening** (decided 2026-07-12, after the owner saw
   slot picks vanish and "reviews today" read 0 on a second computer):
   - Root causes, both reproduced in a two-browser-profile harness against the

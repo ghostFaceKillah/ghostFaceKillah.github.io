@@ -405,6 +405,26 @@
   }
   .forecast-axis span { width: 25%; }
 
+  /* ----- Time panels (spent + burn-down forecast) ----- */
+  .tchart { display: flex; align-items: flex-end; gap: 3px; height: 110px; }
+  .tbar {
+    flex: 1; min-width: 0; height: 100%;
+    display: flex; flex-direction: column; justify-content: flex-end; align-items: center;
+  }
+  .tbar b { font-size: .7rem; margin-bottom: 2px; }
+  .tbar i { display: block; width: 100%; max-width: 24px; }
+  .tbar i + i { margin-top: 2px; }              /* surface gap between stacked fills */
+  .tbar i:first-of-type { border-radius: 4px 4px 0 0; }
+  .tbar i.zero { height: 2px; background: var(--track); }
+  .chart-key {
+    display: flex; flex-wrap: wrap; gap: 4px 14px; margin-top: 10px;
+    font-size: .72rem; color: var(--muted); font-weight: 700;
+  }
+  .chart-key i {
+    width: 10px; height: 10px; border-radius: 3px;
+    display: inline-block; margin-right: 5px; vertical-align: -1px;
+  }
+
   /* ----- Retention panel ----- */
   .ret-head { display: flex; align-items: baseline; gap: 10px; margin-bottom: 10px; }
   .ret-head b { font-size: 2rem; font-weight: 900; }
@@ -645,6 +665,31 @@
         <span>today</span><span>+1 week</span><span>+2 weeks</span><span>+3 weeks</span>
       </div>
     </div>
+
+    <div class="label">⏱️ Time at the desk — the last 4 weeks</div>
+    <div class="panel">
+      <div class="ret-head"><b id="timeTotal">–</b><span id="timeSplit"></span></div>
+      <div class="tchart" id="timeChart"></div>
+      <div class="ret-axis"><span>4 weeks ago</span><span>today</span></div>
+      <div class="chart-key">
+        <span><i class="w3"></i>reviews</span>
+        <span><i class="w4"></i>learning new cards</span>
+      </div>
+    </div>
+
+    <div class="label">⏳ Time to come — today's burn-down &amp; the weeks ahead</div>
+    <div class="panel">
+      <div class="ret-head"><b id="burnToday">–</b><span id="burnSub"></span></div>
+      <div class="tchart" id="burnChart"></div>
+      <div class="forecast-axis">
+        <span>today</span><span>+1 week</span><span>+2 weeks</span><span>+3 weeks</span>
+      </div>
+      <div class="chart-key">
+        <span><i class="w2"></i>already scheduled</span>
+        <span><i class="w1"></i>predicted follow-ups</span>
+        <span><i class="w4"></i>new cards</span>
+      </div>
+    </div>
   </section>
 
   <!-- DONE -->
@@ -822,16 +867,35 @@
   }
 
   // ----- Review log -------------------------------------------------------------
-  // Append-only, chunked by month ("log:YYYY-MM" → ["ts,grade,prevIvl,cardId", …]).
+  // Append-only, chunked by month ("log:YYYY-MM" → ["ts,grade,prevIvl,cardId[,ms]", …]).
   // prevIvl is the whole-day interval the card carried INTO the review
   // (-1 = first sight of the card) — that's what makes true retention computable.
+  // ms (added 2026-07-12) is the time the card was on screen, show → grade,
+  // capped at TIME_CAP_MS; entries written before the field exists have none
+  // and get their time estimated from grade-to-grade gaps instead.
+  const TIME_CAP_MS = 60000;
   const monthKey = t => todayKey(t).slice(0, 7);
-  function appendLog(cardId, grade, prevIvlDays, now) {
+  function appendLog(cardId, grade, prevIvlDays, now, durMs) {
     const key = "log:" + monthKey(now);
     const chunk = store.read(key, []);
-    chunk.push(now + "," + grade + "," + Math.round(prevIvlDays) + "," + cardId);
+    chunk.push(now + "," + grade + "," + Math.round(prevIvlDays) + "," + cardId +
+      "," + Math.min(TIME_CAP_MS, Math.max(0, Math.round(durMs))));
     store.write(key, chunk);
     if (cloud && cloudHydrated) cloud.pushLog(monthKey(now), chunk);
+  }
+  // Card ids never contain ASCII commas, so the optional trailing ms field is
+  // recognizable as "one more comma after the id slot, all digits behind it".
+  function parseLogEntry(s) {
+    const a = s.indexOf(","), b = s.indexOf(",", a + 1), c = s.indexOf(",", b + 1);
+    const last = s.lastIndexOf(",");
+    const hasMs = last > c && /^\d+$/.test(s.slice(last + 1));
+    return {
+      ts: +s.slice(0, a),
+      grade: +s.slice(a + 1, b),
+      ivl: +s.slice(b + 1, c),
+      id: s.slice(c + 1, hasMs ? last : s.length),
+      ms: hasMs ? +s.slice(last + 1) : -1,
+    };
   }
   // Union of two month chunks, oldest first. A chunk push overwrites the
   // whole doc, so hydration must merge rather than replace — entries a
@@ -880,13 +944,17 @@
     d.setDate(1); d.setHours(0, 0, 0, 0);
     while (d.getTime() <= toTs) {
       for (const s of store.read("log:" + monthKey(d.getTime()), [])) {
-        const a = s.indexOf(","), b = s.indexOf(",", a + 1), c = s.indexOf(",", b + 1);
-        const ts = +s.slice(0, a);
-        if (ts >= fromTs && ts <= toTs) {
-          out.push({ ts, grade: +s.slice(a + 1, b), ivl: +s.slice(b + 1, c), id: s.slice(c + 1) });
-        }
+        const e = parseLogEntry(s);
+        if (e.ts >= fromTs && e.ts <= toTs) out.push(e);
       }
       d.setMonth(d.getMonth() + 1);
+    }
+    return out;
+  }
+  function readAllLog() {
+    const out = [];
+    for (const month of localLogMonths().sort()) {
+      for (const s of store.read("log:" + month, [])) out.push(parseLogEntry(s));
     }
     return out;
   }
@@ -907,6 +975,144 @@
       if (e.grade > 1) c.pass++;
     }
     return perDay;
+  }
+
+  // ----- Time accounting ---------------------------------------------------------
+  // Anki's idiom: time on a card is capped — past TIME_CAP_MS we assume the
+  // user wandered off. New log entries carry an exact show→grade duration;
+  // entries from before the field are estimated as the gap since the previous
+  // grade in the same sitting (a longer gap = a break, charged as the day's
+  // median instead). A card counts as "learning" for a whole day when its
+  // first grade that day was its first sight ever — its same-day repeats are
+  // part of meeting the card; everything else is review time.
+  const NOMINAL_MS = 15000; // a day with no measurable pace at all
+  function timeByDay() {
+    const byDay = {};
+    for (const e of readAllLog()) {
+      const k = todayKey(e.ts);
+      (byDay[k] = byDay[k] || []).push(e);
+    }
+    const out = {};
+    for (const [day, list] of Object.entries(byDay)) {
+      list.sort((x, y) => x.ts - y.ts);
+      const known = [];
+      const durs = list.map((e, i) => {
+        if (e.ms >= 0) { const d = Math.min(e.ms, TIME_CAP_MS); known.push(d); return d; }
+        const gap = i > 0 ? e.ts - list[i - 1].ts : -1;
+        if (gap > 0 && gap <= TIME_CAP_MS) { known.push(gap); return gap; }
+        return -1;
+      });
+      known.sort((x, y) => x - y);
+      const median = known.length ? known[known.length >> 1] : NOMINAL_MS;
+      const isNew = {};
+      for (const e of list) if (!(e.id in isNew)) isNew[e.id] = e.ivl < 0;
+      const d = { revMs: 0, learnMs: 0, revCards: 0, learnCards: 0 };
+      const counted = new Set();
+      list.forEach((e, i) => {
+        const ms = durs[i] >= 0 ? durs[i] : median;
+        if (isNew[e.id]) d.learnMs += ms; else d.revMs += ms;
+        if (!counted.has(e.id)) {
+          counted.add(e.id);
+          if (isNew[e.id]) d.learnCards++; else d.revCards++;
+        }
+      });
+      out[day] = d;
+    }
+    return out;
+  }
+
+  // Per-card pace with same-day repeats folded in (an Again costs its extra
+  // pass through the queue right here, so the forecast never needs a
+  // separate repeat factor). Last 30 days preferred, all time as fallback,
+  // gentle guesses for a virgin log.
+  function reviewPace(byDay, now) {
+    const win = { revMs: 0, revCards: 0, learnMs: 0, learnCards: 0 };
+    const all = { revMs: 0, revCards: 0, learnMs: 0, learnCards: 0 };
+    const cutoff = todayKey(now - 30 * FSRS.DAY_MS);
+    for (const [day, d] of Object.entries(byDay)) {
+      for (const f in all) all[f] += d[f];
+      if (day >= cutoff) for (const f in win) win[f] += d[f];
+    }
+    const pick = (msF, cardsF, dflt) =>
+      win[cardsF] >= 10 ? win[msF] / win[cardsF] :
+      all[cardsF] > 0 ? all[msF] / all[cardsF] : dflt;
+    return {
+      revMs: pick("revMs", "revCards", 9000),
+      learnMs: pick("learnMs", "learnCards", 18000),
+      measured: all.revCards + all.learnCards > 0,
+    };
+  }
+
+  // How often a review passes (grade above Again) — feeds the lapse branches
+  // of the burn-down forecast. Reviews use the true-retention idiom (first
+  // grade per card per day, so same-session repeats don't flatter the rate);
+  // first sights are measured separately.
+  function passRates(entries) {
+    let rp = 0, rt = 0, np = 0, nt = 0;
+    const ret = retentionByDay(entries);
+    for (const day in ret) { rp += ret[day].pass; rt += ret[day].total; }
+    for (const e of entries) if (e.ivl < 0) { nt++; if (e.grade > 1) np++; }
+    const clamp01 = x => Math.min(0.98, Math.max(0.6, x));
+    return {
+      rev: rt >= 20 ? clamp01(rp / rt) : 0.9,
+      new: nt >= 20 ? clamp01(np / nt) : 0.9,
+    };
+  }
+
+  // Expected-value burn-down forecast. Every enabled card due inside the
+  // window is pushed through the real FSRS scheduler day by day: a review
+  // splits into a pass branch (weight = measured pass rate, graded Good)
+  // and a lapse branch (Again now, Good ten minutes later — that extra
+  // same-session pass costs no separate time, it is already inside the
+  // per-card pace). New-card intake keeps flowing at the daily cap while
+  // unseen cards remain, and its rescheduling cascades the same way.
+  // Fractional branches under 2% of a card are dropped.
+  function simulateBurndown(daysAhead, pRev, pNew) {
+    const now = Date.now();
+    const t = new Date(now); t.setHours(0, 0, 0, 0);
+    const t0 = t.getTime();
+    const dayOf = due => Math.floor((due - t0) / FSRS.DAY_MS);
+    const queues = Array.from({ length: daysAhead }, () => []);
+    const push = (w, s) => {
+      const d = dayOf(s.due);
+      if (w >= 0.02 && d < daysAhead) queues[d].push({ w, s, fu: true });
+    };
+    for (const c of enabledCards()) {
+      const s = cardStates[c.id];
+      if (!s) continue;
+      const d = Math.max(0, dayOf(s.due));
+      if (d < daysAhead) queues[d].push({ w: 1, s, fu: false });
+    }
+    let unseen = newCardsAvailable().length;
+    const out = [];
+    for (let d = 0; d < daysAhead; d++) {
+      // pretend the session happens midday; Again's ~10 min relearning step
+      // plus the 1-day interval floor keeps every reschedule strictly ahead
+      const ts = t0 + d * FSRS.DAY_MS + 12 * 3600 * 1000;
+      let sched = 0, fu = 0;
+      for (const q of queues[d]) {
+        if (q.fu) fu += q.w; else sched += q.w;
+        push(q.w * pRev, FSRS.review(q.s, FSRS.GOOD, ts));
+        push(q.w * (1 - pRev),
+          FSRS.review(FSRS.review(q.s, FSRS.AGAIN, ts), FSRS.GOOD, ts + 10 * 60000));
+      }
+      const intake = Math.min(d === 0 ? newQuotaLeft(now) : settings.newPerDay, unseen);
+      unseen -= intake;
+      if (intake > 0) {
+        push(intake * pNew, FSRS.review(null, FSRS.GOOD, ts));
+        push(intake * (1 - pNew),
+          FSRS.review(FSRS.review(null, FSRS.AGAIN, ts), FSRS.GOOD, ts + 10 * 60000));
+      }
+      out.push({ sched, fu, intake });
+    }
+    return out;
+  }
+
+  function fmtDur(ms) {
+    const m = Math.round(ms / 60000);
+    if (m < 1) return ms > 0 ? "<1m" : "0m";
+    if (m < 60) return m + "m";
+    return Math.floor(m / 60) + "h " + String(m % 60).padStart(2, "0") + "m";
   }
 
   // ----- Deck / card helpers --------------------------------------------------
@@ -1344,6 +1550,77 @@
       holder.innerHTML = `${b}<i class="${n ? "w" + (Math.floor(d / 7) + 1) : "zero"}" style="height:${h}px"></i>`;
       fc.appendChild(holder);
     });
+
+    // A stacked time bar: segments top-to-bottom, 2px gaps, min 2px each so
+    // a sliver of learning is still visible next to a mountain of reviews.
+    const timeBar = (segs, maxMs, label, tipText) => {
+      const holder = document.createElement("div");
+      holder.className = "tbar";
+      holder.dataset.tip = tipText;
+      const parts = segs.filter(s => s.ms > 0).map(s =>
+        `<i class="${s.cls}" style="height:${Math.max(2, Math.round(88 * s.ms / maxMs))}px"></i>`);
+      holder.innerHTML = (label ? `<b>${label}</b>` : "") +
+        (parts.length ? parts.join("") : `<i class="zero"></i>`);
+      return holder;
+    };
+
+    // --- time at the desk: totals + last 28 days, reviews vs learning ------
+    const tbd = timeByDay();
+    let totRev = 0, totLearn = 0;
+    for (const k in tbd) { totRev += tbd[k].revMs; totLearn += tbd[k].learnMs; }
+    $("timeTotal").textContent = totRev + totLearn ? fmtDur(totRev + totLearn) : "–";
+    $("timeSplit").textContent = totRev + totLearn
+      ? `at the desk all time — ${fmtDur(totRev)} reviewing · ${fmtDur(totLearn)} learning new cards`
+      : "fills in as you review 🌱";
+    const spent = [];
+    for (let i = 27; i >= 0; i--) {
+      const d = new Date(today); d.setDate(today.getDate() - i);
+      spent.push({ day: d, t: tbd[todayKey(d.getTime())] || { revMs: 0, learnMs: 0 } });
+    }
+    const tmax = Math.max(1, ...spent.map(x => x.t.revMs + x.t.learnMs));
+    const tc = $("timeChart");
+    tc.innerHTML = "";
+    for (const x of spent) {
+      const tot = x.t.revMs + x.t.learnMs;
+      const tipText = `${fmtDay(x.day)} — ${fmtDur(tot)}` +
+        (tot ? ` (${fmtDur(x.t.revMs)} reviews · ${fmtDur(x.t.learnMs)} learning)` : "");
+      tc.appendChild(timeBar(
+        [{ ms: x.t.learnMs, cls: "w4" }, { ms: x.t.revMs, cls: "w3" }],
+        tmax, tot === tmax && tot > 0 ? fmtDur(tot) : "", tipText));
+    }
+
+    // --- time to come: burn-down forecast, today headlined -----------------
+    const pace = reviewPace(tbd, now);
+    const rates = passRates(readAllLog());
+    const sim = simulateBurndown(28, rates.rev, rates.new);
+    const simMs = s => (s.sched + s.fu) * pace.revMs + s.intake * pace.learnMs;
+    const t0 = sim[0];
+    const cards0 = Math.round(t0.sched) + t0.intake;
+    $("burnToday").textContent = cards0 ? "≈ " + fmtDur(simMs(t0)) : "0m";
+    $("burnSub").textContent = cards0
+      ? `to clear today — ${Math.round(t0.sched)} due` +
+        (t0.intake ? ` + ${t0.intake} new` : "") +
+        (pace.measured
+          ? ` · at your pace of ~${Math.round(pace.revMs / 1000)}s a card`
+          : " · a rough guess until your pace fills in")
+      : "nothing on today's plate 🎉";
+    const bmax = Math.max(1, ...sim.map(simMs));
+    const bc = $("burnChart");
+    bc.innerHTML = "";
+    sim.forEach((s, d) => {
+      const day = new Date(today); day.setDate(today.getDate() + d);
+      const parts = [];
+      if (Math.round(s.sched)) parts.push(`${Math.round(s.sched)} due`);
+      if (Math.round(s.fu)) parts.push(`~${Math.round(s.fu)} follow-ups`);
+      if (s.intake) parts.push(`${s.intake} new`);
+      const tipText = `${fmtDay(day)} — ≈ ${fmtDur(simMs(s))}` +
+        (parts.length ? ` · ${parts.join(" + ")}` : "");
+      bc.appendChild(timeBar(
+        [{ ms: s.intake * pace.learnMs, cls: "w4" },
+         { ms: s.fu * pace.revMs, cls: "w1" },
+         { ms: s.sched * pace.revMs, cls: "w2" }],
+        bmax, d === 0 && simMs(s) > 0 ? fmtDur(simMs(s)) : "", tipText));
+    });
   }
 
   // Shared tooltip for heatmap cells, garden segments and forecast bars.
@@ -1428,6 +1705,7 @@
   let sessionNew = 0;
   let current = null;
   let revealed = false;
+  let cardShownAt = 0;     // show → grade is the card's logged duration
 
   function shuffle(arr) {
     for (let i = arr.length - 1; i > 0; i--) {
@@ -1471,6 +1749,7 @@
     if (!queue.length) { finishSession(); return; }
     current = queue[0];
     revealed = false;
+    cardShownAt = Date.now();
 
     const deck = REGISTRY.deckById[current.deckId];
     const { front, back } = REGISTRY.render(current);
@@ -1516,7 +1795,7 @@
     cardStates[current.id] = FSRS.review(prev || null, g, now);
     saveCards();
     if (cloud) cloud.pushCard(current.id, cardStates[current.id]);
-    appendLog(current.id, g, prevIvl, now);
+    appendLog(current.id, g, prevIvl, now, now - cardShownAt);
     if (wasNew) { bumpToday(now, "introduced"); sessionNew++; }
     bumpToday(now, "reviews");
 
