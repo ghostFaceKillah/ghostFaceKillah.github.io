@@ -93,6 +93,40 @@ Decided 2026-07-11. This doc is the source of truth for sessions continuing the 
   "Good" button hue), and heatmap tooltips gain "· N% remembered". The log
   starts empty — history from before this feature has no retention data.
   Guest import carries log chunks; sign-in hydrates them from Firestore.
+- **Cross-device sync hardening** (decided 2026-07-12, after the owner saw
+  slot picks vanish and "reviews today" read 0 on a second computer):
+  - Root causes, both reproduced in a two-browser-profile harness against the
+    Firebase emulators: (1) `days` (streak / heatmap / "reviews today" / the
+    new-card intake counter) was device-local — never synced; (2) settings and
+    month-log docs are whole-doc pushes, so one click on a stale tab (the
+    other computer's tab, open since yesterday) overwrote newer cloud state —
+    classic last-write-wins clobber.
+  - `days` stays un-synced as a doc; it is **derived**: on every hydration,
+    recount from the review log and take max(local, derived) per day+field
+    (local may hold pre-log history; for any logged day the true count is
+    never below the log's). New-card quota then holds across devices too.
+  - Log hydration **merges** chunks (union of entries, time-ordered) instead
+    of replacing, and pushes the union back when the cloud copy is missing
+    entries — a clobbered month self-heals on the victim's next hydration.
+  - Whole-doc pushes are **gated** on `cloudHydrated` (set by the first
+    successful hydration per sign-in; guest mode unaffected). A tab that
+    hasn't seen the cloud yet cannot overwrite it. Per-card pushes stay
+    ungated — they're fine-grained and a fresh review is always the winner.
+  - **Rebase before acting**: every settings mutation (chips, select all/none,
+    slot switch, daily cap) and every session start first runs
+    `maybeRefreshCloud()` — single-flight, 60 s-throttled fetchAll+adopt,
+    errors keep local state so offline still works — then applies the user's
+    change on top. Chip/cap/session paths go through `refreshKeepingSlot()`:
+    the adopt may bring another device's active slot, but the action must
+    land in the slot the user was looking at.
+  - Tabs also re-hydrate on `visibilitychange`/window `focus` (skipped
+    mid-review and while the import modal is open), so a tab you return to
+    is fresh before you can click anything. `buildDeckList()` preserves
+    which decks are expanded across these rebuilds.
+  - Known accepted trade-off: settings changed while truly offline are kept
+    locally but not queued for push (the gate); they can be overwritten by
+    the next successful hydration. Reviews (cards + log + days) survive
+    offline fine via Firestore's queued per-card writes and the log merge.
 - **Guest mode:** the app fully works signed-out on localStorage. On first sign-in,
   offer a one-time "import this progress into your account?" — never merge silently.
 - **Multi-user:** open to any Google account. All state private per user.

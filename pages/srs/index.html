@@ -701,6 +701,10 @@
   // When signed in, Firestore is the source of truth (see cloud.js); reviews
   // always hit localStorage synchronously and never wait for the network.
   let uid = null;
+  // Cloud pushes rewrite whole docs (settings, month log chunks), so a tab
+  // must never push before it has hydrated from the cloud — a stale tab
+  // would silently erase picks/reviews made on another device.
+  let cloudHydrated = false;
   const NS = () => "srs:" + (uid || "anon") + ":";
   const store = {
     read(key, fallback) {
@@ -798,7 +802,7 @@
   const saveDays = () => store.write("days", days);
   // Push settings to Firestore too — called from user actions only,
   // so a cloud fetch never echoes straight back up.
-  const cloudPushSettings = () => { if (cloud) cloud.pushSettings(settings); };
+  const cloudPushSettings = () => { if (cloud && cloudHydrated) cloud.pushSettings(settings); };
 
   function todayKey(now) {
     const d = new Date(now);
@@ -827,7 +831,48 @@
     const chunk = store.read(key, []);
     chunk.push(now + "," + grade + "," + Math.round(prevIvlDays) + "," + cardId);
     store.write(key, chunk);
-    if (cloud) cloud.pushLog(monthKey(now), chunk);
+    if (cloud && cloudHydrated) cloud.pushLog(monthKey(now), chunk);
+  }
+  // Union of two month chunks, oldest first. A chunk push overwrites the
+  // whole doc, so hydration must merge rather than replace — entries a
+  // behind device is missing must not erase the other device's reviews.
+  function mergeLogChunks(a, b) {
+    const seen = new Set();
+    const out = [];
+    for (const s of [...a, ...b]) if (!seen.has(s)) { seen.add(s); out.push(s); }
+    return out.sort((x, y) => +x.slice(0, x.indexOf(",")) - +y.slice(0, y.indexOf(",")));
+  }
+  function localLogMonths() {
+    const out = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i) || "";
+      if (k.startsWith(NS() + "log:")) out.push(k.slice((NS() + "log:").length));
+    }
+    return out;
+  }
+  // `days` (streak, heatmap, "reviews today", the new-card quota) never
+  // syncs as its own doc — recount it from the merged review log and take
+  // the max of derived vs local per day (local may hold pre-log history,
+  // and for any logged day the true count is never below the log's).
+  function rebuildDaysFromLog() {
+    const derived = {};
+    for (const month of localLogMonths()) {
+      for (const s of store.read("log:" + month, [])) {
+        const a = s.indexOf(","), b = s.indexOf(",", a + 1), c = s.indexOf(",", b + 1);
+        const day = todayKey(+s.slice(0, a));
+        const d = derived[day] || (derived[day] = { introduced: 0, reviews: 0 });
+        d.reviews++;
+        if (+s.slice(b + 1, c) < 0) d.introduced++;
+      }
+    }
+    for (const [day, d] of Object.entries(derived)) {
+      const cur = days[day] || {};
+      days[day] = {
+        introduced: Math.max(cur.introduced || 0, d.introduced),
+        reviews: Math.max(cur.reviews || 0, d.reviews),
+      };
+    }
+    saveDays();
   }
   function readLog(fromTs, toTs) {
     const out = [];
@@ -990,11 +1035,12 @@
         n ? `${n} pick${n === 1 ? "" : "s"}` : "empty";
     });
   }
-  $("slotToggle").addEventListener("click", e => {
+  $("slotToggle").addEventListener("click", async e => {
     const b = e.target.closest(".opt");
     if (!b) return;
     const i = Number(b.dataset.slot);
     if (i === settings.slot) return;
+    await maybeRefreshCloud(); // settings docs are whole-doc pushes — rebase first
     // the leaving slot already holds the current picks (groups IS slots[slot]);
     // just point groups at the recalled slot and redraw
     settings.slot = i;
@@ -1003,10 +1049,12 @@
     cloudPushSettings();
     refreshHome();
   });
-  $("capToggle").addEventListener("click", e => {
+  $("capToggle").addEventListener("click", async e => {
     const b = e.target.closest(".opt");
     if (!b) return;
-    settings.newPerDay = Number(b.dataset.cap);
+    const cap = Number(b.dataset.cap);
+    await refreshKeepingSlot();
+    settings.newPerDay = cap;
     saveSettings();
     cloudPushSettings();
     syncCapButtons();
@@ -1015,6 +1063,8 @@
 
   function buildDeckList() {
     const holder = $("deckList");
+    // rebuilds happen mid-interaction now (cloud refreshes) — keep decks open
+    const open = [...holder.children].map(el => el.classList.contains("open"));
     holder.innerHTML = "";
     for (const deck of REGISTRY.decks) {
       const el = document.createElement("div");
@@ -1041,6 +1091,9 @@
          </div>`;
       holder.appendChild(el);
     }
+    open.forEach((isOpen, i) => {
+      if (isOpen && holder.children[i]) holder.children[i].classList.add("open");
+    });
     syncDeckCounts();
   }
 
@@ -1054,18 +1107,26 @@
     }
   }
 
-  $("deckList").addEventListener("click", e => {
+  $("deckList").addEventListener("click", async e => {
     const head = e.target.closest(".deck-head");
     if (head) { head.parentElement.classList.toggle("open"); return; }
 
     const chip = e.target.closest(".chip");
     if (chip) {
+      // capture the intent from what the user saw, THEN rebase on the cloud —
+      // a stale tab pushing its whole old settings doc would erase picks
+      // made on another device
       const key = chip.dataset.key;
-      if (settings.groups[key]) delete settings.groups[key];
-      else settings.groups[key] = true;
-      chip.classList.toggle("sel");
+      const on = !settings.groups[key];
+      chip.classList.toggle("sel", on); // instant feedback; redrawn below
+      await refreshKeepingSlot();
+      if (on) settings.groups[key] = true;
+      else delete settings.groups[key];
       saveSettings();
       cloudPushSettings();
+      // the refresh may have rebuilt the list — resync this chip's element
+      const el = document.querySelector(`.chip[data-key="${key}"]`);
+      if (el) el.classList.toggle("sel", on);
       syncDeckCounts();
       syncSlotButtons();
       refreshStats();
@@ -1076,6 +1137,7 @@
     const none = e.target.closest("[data-none]");
     if (all || none) {
       const deck = REGISTRY.deckById[(all || none).dataset[all ? "all" : "none"]];
+      await refreshKeepingSlot();
       for (const g of deck.groups) {
         const key = groupKey(deck.id, g.id);
         if (all) settings.groups[key] = true;
@@ -1487,13 +1549,25 @@
   }
 
   // ----- Wiring ---------------------------------------------------------------------
-  $("startBtn").addEventListener("click", () => startSession("daily", dailyQueue()));
-  $("learnBtn").addEventListener("click", () =>
-    startSession("learn", newCardsAvailable().slice(0, settings.newPerDay)));
-  $("aheadBtn").addEventListener("click", () =>
-    startSession("ahead", aheadCards(Date.now()).slice(0, AHEAD_BATCH)));
-  $("focusBtn").addEventListener("click", () =>
-    startSession("focus", focusCards($("focusSelect").value)));
+  // Sessions rebase on the cloud first: the queue is built from fresh card
+  // states, and the log pushes the session makes won't overwrite another
+  // device's same-month entries.
+  $("startBtn").addEventListener("click", async () => {
+    await refreshKeepingSlot();
+    startSession("daily", dailyQueue());
+  });
+  $("learnBtn").addEventListener("click", async () => {
+    await refreshKeepingSlot();
+    startSession("learn", newCardsAvailable().slice(0, settings.newPerDay));
+  });
+  $("aheadBtn").addEventListener("click", async () => {
+    await refreshKeepingSlot();
+    startSession("ahead", aheadCards(Date.now()).slice(0, AHEAD_BATCH));
+  });
+  $("focusBtn").addEventListener("click", async () => {
+    await refreshKeepingSlot();
+    startSession("focus", focusCards($("focusSelect").value));
+  });
   $("quitBtn").addEventListener("click", () => { show("home"); refreshStats(); });
   $("homeBtn").addEventListener("click", () => { show("home"); refreshStats(); });
   $("statsBtn").addEventListener("click", () => { renderStats(); show("stats"); });
@@ -1546,40 +1620,110 @@
     if (cloudState.settings) {
       settings = normalizeSettings(cloudState.settings);
     }
-    for (const [month, entries] of Object.entries(cloudState.log || {})) {
-      store.write("log:" + month, entries);
+    // Merge (not replace) log chunks: a chunk push overwrites the whole month
+    // doc, so entries only one side has must survive in the union — and when
+    // the union holds entries the cloud copy lacks, push it back to heal it.
+    const cloudLog = cloudState.log || {};
+    for (const [month, entries] of Object.entries(cloudLog)) {
+      const merged = mergeLogChunks(entries, store.read("log:" + month, []));
+      store.write("log:" + month, merged);
+      if (merged.length > entries.length && cloud) cloud.pushLog(month, merged);
     }
+    for (const month of localLogMonths()) {
+      if (!cloudLog[month] && cloud) cloud.pushLog(month, store.read("log:" + month, []));
+    }
+    cloudHydrated = true;        // cloud is the base now — pushes are safe
+    lastHydrate = Date.now();
     // cloud may still hold pre-split group keys — rewrite and push back once
     if (migrateAllSlots()) cloudPushSettings();
+    rebuildDaysFromLog();        // "reviews today", streak, heatmap, new-card quota
     saveCards();
     saveSettings();
     refreshHome();
   }
 
+  // Rebase this tab on the cloud when its picture may be stale (another
+  // computer, or this tab sitting open since yesterday). Single-flight so
+  // concurrent callers share one fetch; throttled so a click spree doesn't
+  // hammer Firestore. Errors keep local state — the app must work offline.
+  const STALE_MS = 60000;
+  let lastHydrate = 0;
+  let refreshInFlight = null;
+  function maybeRefreshCloud() {
+    if (!cloud || !cloud.user || Date.now() - lastHydrate < STALE_MS) {
+      return Promise.resolve();
+    }
+    if (!refreshInFlight) {
+      const u = cloud.user.uid;
+      refreshInFlight = cloud.fetchAll()
+        .then(cs => {
+          if (cs && uid === u && cloud.user && cloud.user.uid === u) adoptCloudState(cs);
+        })
+        .catch(e => console.warn("srs: cloud refresh failed — using local state", e))
+        .finally(() => { refreshInFlight = null; });
+    }
+    return refreshInFlight;
+  }
+
+  // Rebase on the cloud but keep the slot the user is looking at — their
+  // action applies where they aimed it, not where another device left off.
+  async function refreshKeepingSlot() {
+    const at = settings.slot;
+    await maybeRefreshCloud();
+    if (settings.slot !== at) {
+      settings.slot = at;
+      settings.groups = settings.slots[at];
+      saveSettings();
+      refreshHome();
+    }
+  }
+
+  // Coming back to a tab that was hidden or unfocused (switched computers,
+  // new morning) re-hydrates it before the user can touch anything.
+  async function refreshOnReturn() {
+    if (document.visibilityState !== "visible") return;
+    if (!cloud || !cloud.user) return;
+    if (screens.review.classList.contains("active")) return;  // never yank a session
+    if ($("importModal").classList.contains("show")) return;  // pending question
+    await maybeRefreshCloud();
+    if (screens.stats.classList.contains("active")) renderStats();
+  }
+  document.addEventListener("visibilitychange", refreshOnReturn);
+  window.addEventListener("focus", refreshOnReturn);
+
   async function handleUser(user) {
     uid = user ? user.uid : null;
+    cloudHydrated = false;        // block whole-doc pushes until we've fetched
+    lastHydrate = 0;
     show("home");                 // never leave a stale review session running
     loadState();                  // instant hydrate from this namespace's cache
     syncAccountWidget(user);
     refreshHome();
     if (!user) return;
 
-    try {
-      const cloudState = await cloud.fetchAll();
-      if (!cloudState || uid !== user.uid) return; // signed out meanwhile
-      const cloudEmpty = Object.keys(cloudState.cards).length === 0 && !cloudState.settings;
-      const anonCards = readAnon("cards", {});
-      const offered = store.read("importOffered", false);
-      if (cloudEmpty && !offered && Object.keys(anonCards).length > 0) {
-        // first sign-in with guest progress on this device: ask, never merge silently
-        $("importCount").textContent = Object.keys(anonCards).length;
-        $("importModal").classList.add("show");
-      } else {
-        adoptCloudState(cloudState);
+    // share the single-flight slot: a click that lands mid-hydration awaits
+    // this fetch instead of racing it with a second one
+    refreshInFlight = (async () => {
+      try {
+        const cloudState = await cloud.fetchAll();
+        if (!cloudState || uid !== user.uid) return; // signed out meanwhile
+        const cloudEmpty = Object.keys(cloudState.cards).length === 0 && !cloudState.settings;
+        const anonCards = readAnon("cards", {});
+        const offered = store.read("importOffered", false);
+        if (cloudEmpty && !offered && Object.keys(anonCards).length > 0) {
+          // first sign-in with guest progress on this device: ask, never merge silently
+          $("importCount").textContent = Object.keys(anonCards).length;
+          $("importModal").classList.add("show");
+        } else {
+          adoptCloudState(cloudState);
+        }
+      } catch (e) {
+        console.warn("srs: cloud fetch failed — continuing on the local cache", e);
+      } finally {
+        refreshInFlight = null;
       }
-    } catch (e) {
-      console.warn("srs: cloud fetch failed — continuing on the local cache", e);
-    }
+    })();
+    await refreshInFlight;
   }
 
   $("importYes").addEventListener("click", async () => {
@@ -1599,6 +1743,8 @@
     saveCards(); saveSettings(); saveDays();
     for (const [month, entries] of Object.entries(anonLog)) store.write("log:" + month, entries);
     store.write("importOffered", true);
+    cloudHydrated = true;         // the import IS the hydration (cloud was empty)
+    lastHydrate = Date.now();
     refreshHome();
     try {
       await cloud.importAll(cards, anonSettings || settings, anonLog);
@@ -1611,6 +1757,8 @@
   $("importNo").addEventListener("click", () => {
     $("importModal").classList.remove("show");
     store.write("importOffered", true);
+    cloudHydrated = true;         // starting fresh — the empty cloud is the base
+    lastHydrate = Date.now();
     refreshHome();
   });
 
