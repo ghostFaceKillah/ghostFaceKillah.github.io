@@ -1367,18 +1367,31 @@
   // colors; heatmap days are cute emoji sized by review count.
   const fmtDay = d => d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
   // The heatmap is a garden: a practiced day grows a plant (or a garden
-  // visitor), a skipped day stays bare ground. Split on spaces — many emoji
-  // are multi-codepoint.
-  const GARDEN = (
-    "🌱 🌿 ☘️ 🍀 🍃 🌸 🌺 🌼 🌻 🌷 🌹 💐 🌾 🌵 🌴 🌳 🌲 🍄 🍁 " +
+  // visitor), a skipped day stays bare ground. Weighted like a real garden —
+  // mostly trees and grass, with flowers, produce and critters as rare
+  // finds. "🌳*8" repeats the emoji 8× in the pick pool. Split on spaces —
+  // many emoji are multi-codepoint.
+  const weighted = spec => spec.split(" ").flatMap(tok => {
+    const [e, w] = tok.split("*");
+    return Array(+w || 1).fill(e);
+  });
+  const GARDEN = weighted(
+    "🌳*9 🌿*9 🌱*6 🌲*5 🌾*4 🍃*4 ☘️*3 🍁*2 🍀 " +
+    "🌸 🌺 🌼 🌻 🌷 🌹 💐 🌵 🌴 🍄 " +
     "🍓 🍒 🍎 🍑 🍊 🍋 🍇 🍉 🥝 🫐 🍅 🥕 🌽 🎃 🥒 🍆 🥔 🍠 " +
     "🐝 🦋 🐞 🐌 🐛 🐸 🐿️ 🦔 🐇 🐦"
-  ).split(" ");
-  const GROUND = "🪨 🪵 🍂 🌰".split(" ");
+  );
+  const GROUND = weighted("🪨*7 🪵*5 🍂*3 🌰");
   // Deterministic scatter — hash the calendar day so the garden looks wild
-  // but never reshuffles between visits.
-  const scatter = (arr, dayN, salt) =>
-    arr[(Math.imul(dayN ^ salt, 2654435761) >>> 0) % arr.length];
+  // but never reshuffles between visits. The xor-shift rounds matter: a
+  // bare multiply keeps the hash's low bits periodic, and `% arr.length`
+  // reads exactly those bits, which made the ground repeat on a 4-day cycle.
+  const scatter = (arr, dayN, salt) => {
+    let h = Math.imul(dayN ^ salt, 2654435761);
+    h = Math.imul(h ^ (h >>> 16), 2246822507);
+    h = Math.imul(h ^ (h >>> 13), 3266489909);
+    return arr[((h ^ (h >>> 16)) >>> 0) % arr.length];
+  };
 
   function renderStats() {
     const now = Date.now();
