@@ -885,9 +885,11 @@
   const AHEAD_BATCH = 20;
   function aheadCards(now) {
     const cutoff = endOfTodayMs(now);
-    return enabledCards()
+    // shuffle before the (stable) sort so cards tied on retrievability —
+    // e.g. a lesson learned together — come out in a fresh order each time
+    return shuffle(enabledCards()
       .map(c => ({ c, s: cardStates[c.id] }))
-      .filter(x => x.s && x.s.due > cutoff)
+      .filter(x => x.s && x.s.due > cutoff))
       .sort((a, b) =>
         FSRS.retrievability((now - a.s.lastReview) / FSRS.DAY_MS, a.s.stability) -
         FSRS.retrievability((now - b.s.lastReview) / FSRS.DAY_MS, b.s.stability))
@@ -1377,7 +1379,9 @@
 
   function dailyQueue() {
     const now = Date.now();
-    return shuffle(dueCards(now)).concat(newCardsAvailable().slice(0, newQuotaLeft(now)));
+    // slice picks today's intake in curriculum order; the shuffle only
+    // randomizes the order those picks are shown in
+    return shuffle(dueCards(now)).concat(shuffle(newCardsAvailable().slice(0, newQuotaLeft(now))));
   }
 
   function fmtDelay(ms) {
@@ -1447,8 +1451,9 @@
 
     queue.shift();
     if (g === FSRS.AGAIN) {
-      // relearning: bring it back a few cards later in this same session
-      const at = Math.min(5, queue.length);
+      // relearning: bring it back a few cards later in this same session,
+      // at a jittered spot so several misses don't march back in lockstep
+      const at = Math.min(3 + Math.floor(Math.random() * 5), queue.length);
       queue.splice(at, 0, current);
     } else {
       sessionDone++;
