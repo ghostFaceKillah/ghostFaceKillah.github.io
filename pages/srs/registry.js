@@ -201,6 +201,33 @@ window.SRS_REGISTRY = (function () {
     });
   }
 
+  // ----- spokenrec: the spoken set in recognition direction -------------------
+  // The same 200 spoken sentences as the recall/spoken/* groups, but flipped:
+  // shown in Chinese, recall the English meaning. Own deck and own card IDs
+  // (sent/spoken/N — the sent/ prefix marks the recognition direction) so the
+  // two directions are opted into and scheduled independently.
+  {
+    const all = SENT.spoken || [];
+    const groups = [];
+    for (let lo = 1; lo <= all.length; lo += 25) {
+      const hi = Math.min(lo + 24, all.length);
+      groups.push({
+        id: `${lo}-${hi}`, name: `Spoken · ${lo}–${hi}`,
+        cards: all.filter(s => s.n >= lo && s.n <= hi)
+          .map(s => ({ id: `sent/spoken/${s.n}`, data: s })),
+      });
+    }
+    decks.push({
+      id: "spokenrec", name: "Spoken Sentences (Reading)", emoji: "🗨️", page: "../sentences.html",
+      groups,
+      renderFront: d => `<div class="srs-zh">${esc(d.zh)}</div>`,
+      renderBack: d =>
+        line("py", d.py) +
+        line("en", d.en) +
+        (d.notes || []).map(n => line("tone", n)).join(""),
+    });
+  }
+
   // ----- coll: colloquial characters, opt-in in sets of 20 ------------------
   {
     const groups = [];

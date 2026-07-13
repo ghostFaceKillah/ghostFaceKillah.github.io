@@ -19,7 +19,7 @@ Decided 2026-07-11. This doc is the source of truth for sessions continuing the 
   Card state: `{stability, difficulty, due, lastReview, reps, lapses}` —
   unchanged from 4.5, so stored states carry over with no migration.
 - **Card IDs:** stable, derived from existing data. Examples:
-  `words/L1D1/你`, `sent/hsk1/42`, `coll/1`, `kana/あ`. ~2,800 cards total.
+  `words/L1D1/你`, `sent/hsk1/42`, `coll/1`, `kana/あ`. ~3,000 cards total.
 - **Card intake:** opt-in by deck/lesson (IC1 lessons individually, topic word
   packs — Food & Drink, Common Verbs, Numbers words, tutor notes — as their own
   deck in sets of 10 (split out of the words deck 2026-07-12; card IDs keep the
@@ -54,6 +54,9 @@ Decided 2026-07-11. This doc is the source of truth for sessions continuing the 
   daily-life vocabulary (微信, 外卖, 师傅, 老板). Entries carry optional usage
   notes (e.g. 你吃了吗 is a greeting, 下次一定 is a polite no) rendered like tone
   notes. Same generator (`tools/gen_sentences.py`), same pinyin pipeline.
+  The set also exists in recognition direction as its own deck `spokenrec`
+  (Chinese front → English back, card IDs `sent/spoken/N`, same bites of 25) —
+  separate IDs so the two directions are opted into and scheduled independently.
 - **Four session modes, one engine** (decided 2026-07-11). Every mode grades
   through the same `FSRS.review` with real elapsed time — early/late reviews are
   handled by the math itself (early review ⇒ high retrievability ⇒ tiny stability
