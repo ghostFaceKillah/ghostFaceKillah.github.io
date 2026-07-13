@@ -1815,18 +1815,286 @@ IC1 = [
 ]
 
 
+# ===================== Spoken — everyday colloquial sentences =====================
+# What people actually say, as opposed to textbook prose: short, high-frequency
+# utterances for real situations (reacting, texting, ordering, taxis, WeChat).
+# Kept beginner-friendly — mostly HSK 1/2 vocabulary plus unavoidable daily-life
+# words (微信, 外卖, 师傅, 老板…). Entries are (chinese, english) or
+# (chinese, english, usage_note) — the note is shown on the card back.
+
+SPOKEN = []
+
+# --- Instant replies & reactions ---
+SPOKEN += [
+    ("好的。", "Okay."),
+    ("行。", "Sure, that works."),
+    ("没问题。", "No problem."),
+    ("好啊！", "Sure!"),
+    ("可以。", "That's fine."),
+    ("不行。", "That won't work."),
+    ("真的吗？", "Really?"),
+    ("真的假的？", "For real?",
+     "Literally \"true or fake?\" — a very common way to react to surprising news."),
+    ("不会吧！", "No way!"),
+    ("太好了！", "That's great!"),
+    ("太棒了！", "Awesome!"),
+    ("当然可以。", "Of course you can."),
+    ("都行。", "Either way works for me."),
+    ("随便，你定吧。", "Whatever — you decide."),
+    ("算了。", "Forget it."),
+    ("没事儿。", "It's fine, no worries."),
+    ("别担心。", "Don't worry."),
+    ("放心吧。", "Don't worry, I've got it."),
+    ("加油！", "You've got this!",
+     "Literally \"add oil\" — all-purpose encouragement: sports, exams, hard days."),
+    ("慢慢来，不着急。", "Take your time, no rush."),
+]
+
+# --- Greetings & small talk ---
+SPOKEN += [
+    ("好久不见！", "Long time no see!"),
+    ("最近怎么样？", "How've you been lately?"),
+    ("还行吧。", "Not bad, I guess."),
+    ("挺好的。", "Pretty good."),
+    ("老样子。", "Same as always."),
+    ("吃了吗？", "Have you eaten?",
+     "A classic friendly greeting — it asks how you're doing, not whether you want food."),
+    ("忙什么呢？", "What are you busy with?"),
+    ("我先走了。", "I'm off."),
+    ("慢走！", "Take care!",
+     "Said to someone leaving — literally \"walk slowly\". Shopkeepers say it to customers."),
+    ("回头见。", "See you later."),
+    ("路上小心。", "Be safe getting there."),
+    ("早点儿休息。", "Get some rest — don't stay up late."),
+    ("周末愉快！", "Have a good weekend!"),
+    ("替我问他好。", "Tell him I said hi."),
+    ("你今天过得怎么样？", "How was your day?"),
+    ("好久没见你了。", "I haven't seen you in ages."),
+    ("下班了吗？", "Are you off work yet?"),
+]
+
+# --- Understanding each other ---
+SPOKEN += [
+    ("你说什么？", "What did you say?"),
+    ("再说一遍，好吗？", "Say that again, okay?"),
+    ("你说慢点儿。", "Slow down a bit."),
+    ("我没听懂。", "I didn't catch that."),
+    ("我听不懂。", "I don't understand."),
+    ("你懂我的意思吗？", "You know what I mean?"),
+    ("懂了懂了。", "Got it, got it."),
+    ("什么意思？", "What does that mean?"),
+    ("这个用中文怎么说？", "How do you say this in Chinese?"),
+    ("这个字怎么念？", "How do you read this character?"),
+    ("我的中文不太好。", "My Chinese isn't great."),
+    ("你说得太快了。", "You're talking too fast."),
+    ("能写下来吗？", "Can you write it down?"),
+    ("我没听清楚。", "I didn't hear that clearly."),
+    ("你是说明天吗？", "You mean tomorrow?"),
+]
+
+# --- Eating out ---
+SPOKEN += [
+    ("老板，来一碗面。", "One bowl of noodles, please.",
+     "老板 (\"boss\") is how you address shopkeepers and small-restaurant owners."),
+    ("你们这儿有什么好吃的？", "What's good here?"),
+    ("再来一杯。", "Another glass, please."),
+    ("我不吃辣。", "I don't eat spicy food."),
+    ("微辣就行。", "Mild spicy is fine."),
+    ("不要香菜。", "No cilantro."),
+    ("在这儿吃还是带走？", "For here or to go?"),
+    ("带走，谢谢。", "To go, thanks."),
+    ("帮我打包一下。", "Could you box this up for me?"),
+    ("服务员，买单！", "Check, please!"),
+    ("一共多少钱啊？", "How much all together?"),
+    ("这次我请客。", "This one's on me."),
+    ("下次你请。", "Next time you're paying."),
+    ("好吃吗？", "Is it good?"),
+    ("太好吃了！", "So good!"),
+    ("我吃饱了。", "I'm stuffed."),
+    ("先来点儿喝的吧。", "Let's start with drinks."),
+    ("你随便点，别客气。", "Order whatever you like, don't be shy."),
+    ("这家店人真多。", "This place is packed."),
+    ("还有位子吗？", "Any seats left?"),
+]
+
+# --- Shopping & paying ---
+SPOKEN += [
+    ("老板，这个多少钱？", "How much is this one?"),
+    ("太贵了，便宜点儿吧。", "Too expensive — knock the price down a bit."),
+    ("能不能再便宜一点儿？", "Can you go any lower?"),
+    ("我随便看看。", "I'm just browsing."),
+    ("就要这个吧。", "I'll take this one."),
+    ("有别的颜色吗？", "Do you have other colors?"),
+    ("我能试试吗？", "Can I try it?"),
+    ("有小一点儿的吗？", "Got a smaller one?"),
+    ("可以刷卡吗？", "Can I pay by card?"),
+    ("用微信可以吗？", "Is WeChat okay?"),
+    ("扫这个码就行。", "Just scan this code."),
+    ("我用支付宝。", "I'll use Alipay."),
+    ("不用了，谢谢。", "No thanks, I'm good."),
+    ("我再想想。", "Let me think about it."),
+    ("这个卖完了。", "This one's sold out."),
+]
+
+# --- Getting around ---
+SPOKEN += [
+    ("请问，卫生间在哪儿？", "Excuse me, where's the bathroom?"),
+    ("附近有地铁站吗？", "Is there a subway station nearby?"),
+    ("离这儿远不远？", "Is it far from here?"),
+    ("走路能到吗？", "Can I walk there?"),
+    ("大概要多长时间？", "About how long will it take?"),
+    ("师傅，去机场，谢谢。", "To the airport please, thanks.",
+     "师傅 (\"master\") is how you address drivers, repairmen, and other workers."),
+    ("师傅，停这儿就行。", "You can just stop here."),
+    ("前面右拐。", "Turn right up ahead."),
+    ("一直走就到了。", "Keep going straight and you're there."),
+    ("我迷路了。", "I'm lost."),
+    ("我到了，你在哪儿呢？", "I'm here — where are you?"),
+    ("我们在哪儿下车？", "Where do we get off?"),
+    ("下一站就到了。", "It's the next stop."),
+    ("今天堵车堵得厉害。", "Traffic is terrible today."),
+    ("师傅，慢点儿开。", "Not so fast, please (to a driver)."),
+]
+
+# --- Phones & making plans ---
+SPOKEN += [
+    ("喂，你在哪儿呢？", "Hey, where are you?"),
+    ("我马上到。", "I'll be right there."),
+    ("我快到了。", "I'm almost there."),
+    ("再等我十分钟。", "Give me ten more minutes."),
+    ("你到了叫我。", "Let me know when you get here."),
+    ("我在路上呢。", "I'm on my way."),
+    ("你先吃，别等我。", "Start without me — don't wait."),
+    ("今天晚上有空吗？", "Are you free tonight?"),
+    ("出来玩儿吧！", "Come out and hang!"),
+    ("明天再说吧。", "Let's figure it out tomorrow."),
+    ("改天吧。", "Some other day, maybe."),
+    ("下次一定。", "Next time for sure.",
+     "Often a polite way of saying no — the promised \"next time\" may never come."),
+    ("时间你定。", "You pick the time."),
+    ("老地方见。", "See you at the usual place."),
+    ("别迟到啊！", "Don't be late!"),
+    ("我可能会晚一点儿。", "I might be a little late."),
+    ("到家了给我发个消息。", "Text me when you're home."),
+    ("我手机快没电了。", "My phone's about to die."),
+]
+
+# --- Feelings & states ---
+SPOKEN += [
+    ("累死了！", "I'm dead tired!",
+     "死了 after an adjective means \"extremely\" — 累死了, 饿死了, 热死了 are everywhere in speech."),
+    ("饿死了！", "I'm starving!"),
+    ("热死了！", "It's boiling!"),
+    ("冷死了！", "It's freezing!"),
+    ("我困死了。", "I'm so sleepy."),
+    ("我有点儿累，想回家了。", "I'm a bit tired — I want to head home."),
+    ("我先睡了，晚安。", "I'm off to bed — night."),
+    ("好无聊啊。", "I'm so bored."),
+    ("烦死了！", "So annoying!"),
+    ("吓我一跳！", "You scared me!"),
+    ("太可惜了。", "What a shame."),
+    ("好可爱啊！", "So cute!"),
+    ("我好紧张啊。", "I'm so nervous."),
+    ("别紧张，没事的。", "Relax, it'll be fine."),
+    ("我今天心情不太好。", "I'm not in a great mood today."),
+    ("今天玩儿得真开心。", "Today was really fun."),
+    ("我想家了。", "I miss home."),
+    ("你怎么了？不开心吗？", "What's wrong? You seem down."),
+]
+
+# --- Courtesy & help ---
+SPOKEN += [
+    ("麻烦你了。", "Sorry for the trouble — thanks."),
+    ("辛苦了！", "Thanks for your hard work!",
+     "Acknowledges someone's effort — said to coworkers, delivery drivers, anyone who just worked."),
+    ("不好意思，打扰一下。", "Sorry to bother you."),
+    ("借过一下。", "Excuse me, coming through."),
+    ("帮我个忙，好吗？", "Do me a favor, will you?"),
+    ("帮我拿一下这个。", "Hold this for me a sec."),
+    ("谢谢啦！", "Thanks!"),
+    ("不用谢。", "Don't mention it."),
+    ("客气什么呀。", "No need to be so polite."),
+    ("你先请。", "After you."),
+    ("没事，我来吧。", "It's fine — I'll do it."),
+    ("你人真好。", "You're so nice."),
+    ("哪里哪里。", "Oh, I'm flattered.",
+     "Humble reply to a compliment — literally \"where, where?\""),
+    ("是我不好，对不起啊。", "My bad — sorry."),
+]
+
+# --- Around the house ---
+SPOKEN += [
+    ("我出门了！", "I'm heading out!"),
+    ("我到家了。", "I'm home."),
+    ("我先回去了。", "I'm heading back."),
+    ("该起床了！", "Time to get up!"),
+    ("该睡觉了。", "Time for bed."),
+    ("我去洗个澡。", "I'm gonna take a shower."),
+    ("饭好了，快来吃！", "Food's ready — come eat!"),
+    ("今天我做饭。", "I'm cooking today."),
+    ("帮我开一下门。", "Get the door for me."),
+    ("把灯关了吧。", "Turn the light off."),
+    ("空调开一下，太热了。", "Turn on the AC — it's too hot."),
+    ("我出去买点儿东西。", "I'm going out to grab a few things."),
+    ("家里没吃的了。", "There's no food in the house."),
+    ("点个外卖吧。", "Let's just order delivery."),
+    ("你在干什么呢？", "What are you up to?"),
+    ("没干什么，在家躺着呢。", "Nothing much — just lying around at home."),
+]
+
+# --- Opinions & reactions ---
+SPOKEN += [
+    ("我觉得还行。", "I think it's okay."),
+    ("一般般吧。", "It's just so-so."),
+    ("还不错！", "Pretty good!"),
+    ("这个特别好吃。", "This one's really good."),
+    ("没想到啊！", "I did not see that coming!"),
+    ("我也这么觉得。", "That's what I think too."),
+    ("你说得对。", "You're right."),
+    ("好主意！", "Good idea!"),
+    ("听你的。", "Your call."),
+    ("应该没问题。", "Should be fine."),
+    ("我不太清楚。", "I'm not too sure."),
+    ("谁知道呢。", "Who knows."),
+    ("反正我不去。", "Either way, I'm not going."),
+    ("说真的，我有点儿担心。", "Honestly, I'm a little worried."),
+    ("那就这么定了。", "Then it's settled."),
+    ("看情况吧。", "Depends — we'll see."),
+]
+
+# --- Phones, photos, WeChat ---
+SPOKEN += [
+    ("加个微信吧。", "Let's add each other on WeChat."),
+    ("你扫我吧。", "You scan mine (my QR code)."),
+    ("发我微信。", "Send it to me on WeChat."),
+    ("我把位置发给你。", "I'll send you the location."),
+    ("麻烦帮我们拍张照。", "Could you take a photo of us?"),
+    ("再拍一张！", "Take one more!"),
+    ("这张拍得真好。", "This one came out great."),
+    ("我手机没电了。", "My phone died."),
+    ("你有充电器吗？", "Do you have a charger?"),
+    ("这儿信号不太好。", "The signal's not great here."),
+    ("密码是多少？", "What's the password?"),
+    ("我看到你发的了。", "I saw what you sent."),
+    ("别玩儿手机了！", "Get off your phone!"),
+    ("我在刷手机呢。", "I'm just scrolling on my phone."),
+    ("拍好了吗？", "Did you get the shot?"),
+    ("到了给我打电话。", "Call me when you're there."),
+]
+
+
 # ===================== Build output =====================
 
-def _item(n, zh, en):
+def _item(n, zh, en, note=None):
     row = {"n": n, "zh": zh, "py": to_pinyin(zh), "en": en}
-    notes = polyphone_notes(zh)
+    notes = ([note] if note else []) + polyphone_notes(zh)
     if notes:
         row["notes"] = notes
     return row
 
 
 def build(pairs):
-    return [_item(i, zh, en) for i, (zh, en) in enumerate(pairs, start=1)]
+    return [_item(i, *entry) for i, entry in enumerate(pairs, start=1)]
 
 
 def build_ic1():
@@ -1847,6 +2115,7 @@ def main():
     data = {
         "hsk1": build(HSK1),
         "hsk2": build(HSK2),
+        "spoken": build(SPOKEN),
         "ic1": ic1_items,
         "ic1_chapters": ic1_lessons,
     }
@@ -1858,6 +2127,7 @@ def main():
         f.write(js)
     print("Wrote", OUT)
     print("HSK1:", len(data["hsk1"]), "HSK2:", len(data["hsk2"]),
+          "Spoken:", len(data["spoken"]),
           "IC1:", len(ic1_items), "sentences in", len(ic1_lessons), "lessons")
 
 

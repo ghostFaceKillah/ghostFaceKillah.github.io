@@ -214,6 +214,7 @@
     <div class="toggle" id="levelToggle">
       <button class="opt sel" data-level="hsk1">HSK 1</button>
       <button class="opt" data-level="hsk2">HSK 2</button>
+      <button class="opt" data-level="spoken">Spoken</button>
       <button class="opt" data-level="ic1">IC 1&ndash;20</button>
     </div>
 
@@ -311,7 +312,7 @@
     syncIcon();
   })();
 
-  const DATA = window.SENTENCE_DATA || { hsk1: [], hsk2: [], ic1: [], ic1_chapters: [] };
+  const DATA = window.SENTENCE_DATA || { hsk1: [], hsk2: [], spoken: [], ic1: [], ic1_chapters: [] };
 
   // ----- State -----
   let level = "hsk1";
@@ -469,7 +470,7 @@
       el.toSel.value = rangeTo;
     }
     const count = rangeTo - rangeFrom + 1;
-    const name = level === "hsk1" ? "HSK 1" : "HSK 2";
+    const name = level === "hsk1" ? "HSK 1" : level === "hsk2" ? "HSK 2" : "Spoken";
     el.rangeInfo.textContent = `${name} · sentences ${rangeFrom}–${rangeTo} · ${count} card${count === 1 ? "" : "s"}`;
   }
 
