@@ -6631,6 +6631,1353 @@ window.SENTENCE_DATA = {
       "en": "Thank you for coming today, take care."
     }
   ],
+  "spoken": [
+    {
+      "n": 1,
+      "zh": "好的。",
+      "py": "hǎo de.",
+      "en": "Okay."
+    },
+    {
+      "n": 2,
+      "zh": "行。",
+      "py": "xíng.",
+      "en": "Sure, that works."
+    },
+    {
+      "n": 3,
+      "zh": "没问题。",
+      "py": "méi wèn tí.",
+      "en": "No problem."
+    },
+    {
+      "n": 4,
+      "zh": "好啊！",
+      "py": "hǎo a!",
+      "en": "Sure!"
+    },
+    {
+      "n": 5,
+      "zh": "可以。",
+      "py": "kě yǐ.",
+      "en": "That's fine."
+    },
+    {
+      "n": 6,
+      "zh": "不行。",
+      "py": "bù xíng.",
+      "en": "That won't work."
+    },
+    {
+      "n": 7,
+      "zh": "真的吗？",
+      "py": "zhēn de ma?",
+      "en": "Really?"
+    },
+    {
+      "n": 8,
+      "zh": "真的假的？",
+      "py": "zhēn de jiǎ de?",
+      "en": "For real?",
+      "notes": [
+        "Literally \"true or fake?\" — a very common way to react to surprising news."
+      ]
+    },
+    {
+      "n": 9,
+      "zh": "不会吧！",
+      "py": "bú huì ba!",
+      "en": "No way!",
+      "notes": [
+        "Tone change: 不 becomes bú before a 4th tone, otherwise bù — here 不会 is bú huì."
+      ]
+    },
+    {
+      "n": 10,
+      "zh": "太好了！",
+      "py": "tài hǎo le!",
+      "en": "That's great!"
+    },
+    {
+      "n": 11,
+      "zh": "太棒了！",
+      "py": "tài bàng le!",
+      "en": "Awesome!"
+    },
+    {
+      "n": 12,
+      "zh": "当然可以。",
+      "py": "dāng rán kě yǐ.",
+      "en": "Of course you can."
+    },
+    {
+      "n": 13,
+      "zh": "都行。",
+      "py": "dōu xíng.",
+      "en": "Either way works for me."
+    },
+    {
+      "n": 14,
+      "zh": "随便，你定吧。",
+      "py": "suí biàn, nǐ dìng ba.",
+      "en": "Whatever — you decide.",
+      "notes": [
+        "Polyphone: 便 is biàn in 方便 (convenient), but pián in 便宜 (cheap)."
+      ]
+    },
+    {
+      "n": 15,
+      "zh": "算了。",
+      "py": "suàn le.",
+      "en": "Forget it."
+    },
+    {
+      "n": 16,
+      "zh": "没事儿。",
+      "py": "méi shìr.",
+      "en": "It's fine, no worries."
+    },
+    {
+      "n": 17,
+      "zh": "别担心。",
+      "py": "bié dān xīn.",
+      "en": "Don't worry."
+    },
+    {
+      "n": 18,
+      "zh": "放心吧。",
+      "py": "fàng xīn ba.",
+      "en": "Don't worry, I've got it."
+    },
+    {
+      "n": 19,
+      "zh": "加油！",
+      "py": "jiā yóu!",
+      "en": "You've got this!",
+      "notes": [
+        "Literally \"add oil\" — all-purpose encouragement: sports, exams, hard days."
+      ]
+    },
+    {
+      "n": 20,
+      "zh": "慢慢来，不着急。",
+      "py": "màn màn lái, bù zháo jí.",
+      "en": "Take your time, no rush."
+    },
+    {
+      "n": 21,
+      "zh": "好久不见！",
+      "py": "hǎo jiǔ bú jiàn!",
+      "en": "Long time no see!",
+      "notes": [
+        "Tone change: 不 becomes bú before a 4th tone, otherwise bù — here 不见 is bú jiàn."
+      ]
+    },
+    {
+      "n": 22,
+      "zh": "最近怎么样？",
+      "py": "zuì jìn zěn me yàng?",
+      "en": "How've you been lately?"
+    },
+    {
+      "n": 23,
+      "zh": "还行吧。",
+      "py": "hái xíng ba.",
+      "en": "Not bad, I guess."
+    },
+    {
+      "n": 24,
+      "zh": "挺好的。",
+      "py": "tǐng hǎo de.",
+      "en": "Pretty good."
+    },
+    {
+      "n": 25,
+      "zh": "老样子。",
+      "py": "lǎo yàng zi.",
+      "en": "Same as always."
+    },
+    {
+      "n": 26,
+      "zh": "吃了吗？",
+      "py": "chī le ma?",
+      "en": "Have you eaten?",
+      "notes": [
+        "A classic friendly greeting — it asks how you're doing, not whether you want food."
+      ]
+    },
+    {
+      "n": 27,
+      "zh": "忙什么呢？",
+      "py": "máng shén me ne?",
+      "en": "What are you busy with?"
+    },
+    {
+      "n": 28,
+      "zh": "我先走了。",
+      "py": "wǒ xiān zǒu le.",
+      "en": "I'm off."
+    },
+    {
+      "n": 29,
+      "zh": "慢走！",
+      "py": "màn zǒu!",
+      "en": "Take care!",
+      "notes": [
+        "Said to someone leaving — literally \"walk slowly\". Shopkeepers say it to customers."
+      ]
+    },
+    {
+      "n": 30,
+      "zh": "回头见。",
+      "py": "huí tóu jiàn.",
+      "en": "See you later."
+    },
+    {
+      "n": 31,
+      "zh": "路上小心。",
+      "py": "lù shàng xiǎo xīn.",
+      "en": "Be safe getting there."
+    },
+    {
+      "n": 32,
+      "zh": "早点儿休息。",
+      "py": "zǎo diǎnr xiū xī.",
+      "en": "Get some rest — don't stay up late."
+    },
+    {
+      "n": 33,
+      "zh": "周末愉快！",
+      "py": "zhōu mò yú kuài!",
+      "en": "Have a good weekend!"
+    },
+    {
+      "n": 34,
+      "zh": "替我问他好。",
+      "py": "tì wǒ wèn tā hǎo.",
+      "en": "Tell him I said hi."
+    },
+    {
+      "n": 35,
+      "zh": "你今天过得怎么样？",
+      "py": "nǐ jīn tiān guò de zěn me yàng?",
+      "en": "How was your day?"
+    },
+    {
+      "n": 36,
+      "zh": "好久没见你了。",
+      "py": "hǎo jiǔ méi jiàn nǐ le.",
+      "en": "I haven't seen you in ages."
+    },
+    {
+      "n": 37,
+      "zh": "下班了吗？",
+      "py": "xià bān le ma?",
+      "en": "Are you off work yet?"
+    },
+    {
+      "n": 38,
+      "zh": "你说什么？",
+      "py": "nǐ shuō shén me?",
+      "en": "What did you say?"
+    },
+    {
+      "n": 39,
+      "zh": "再说一遍，好吗？",
+      "py": "zài shuō yí biàn, hǎo ma?",
+      "en": "Say that again, okay?",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一遍 is yí biàn."
+      ]
+    },
+    {
+      "n": 40,
+      "zh": "你说慢点儿。",
+      "py": "nǐ shuō màn diǎnr.",
+      "en": "Slow down a bit."
+    },
+    {
+      "n": 41,
+      "zh": "我没听懂。",
+      "py": "wǒ méi tīng dǒng.",
+      "en": "I didn't catch that."
+    },
+    {
+      "n": 42,
+      "zh": "我听不懂。",
+      "py": "wǒ tīng bù dǒng.",
+      "en": "I don't understand."
+    },
+    {
+      "n": 43,
+      "zh": "你懂我的意思吗？",
+      "py": "nǐ dǒng wǒ de yì si ma?",
+      "en": "You know what I mean?"
+    },
+    {
+      "n": 44,
+      "zh": "懂了懂了。",
+      "py": "dǒng le dǒng le.",
+      "en": "Got it, got it."
+    },
+    {
+      "n": 45,
+      "zh": "什么意思？",
+      "py": "shén me yì si?",
+      "en": "What does that mean?"
+    },
+    {
+      "n": 46,
+      "zh": "这个用中文怎么说？",
+      "py": "zhè ge yòng zhōng wén zěn me shuō?",
+      "en": "How do you say this in Chinese?"
+    },
+    {
+      "n": 47,
+      "zh": "这个字怎么念？",
+      "py": "zhè ge zì zěn me niàn?",
+      "en": "How do you read this character?"
+    },
+    {
+      "n": 48,
+      "zh": "我的中文不太好。",
+      "py": "wǒ de zhōng wén bú tài hǎo.",
+      "en": "My Chinese isn't great.",
+      "notes": [
+        "Tone change: 不 becomes bú before a 4th tone, otherwise bù — here 不太 is bú tài."
+      ]
+    },
+    {
+      "n": 49,
+      "zh": "你说得太快了。",
+      "py": "nǐ shuō de tài kuài le.",
+      "en": "You're talking too fast."
+    },
+    {
+      "n": 50,
+      "zh": "能写下来吗？",
+      "py": "néng xiě xià lái ma?",
+      "en": "Can you write it down?"
+    },
+    {
+      "n": 51,
+      "zh": "我没听清楚。",
+      "py": "wǒ méi tīng qīng chǔ.",
+      "en": "I didn't hear that clearly."
+    },
+    {
+      "n": 52,
+      "zh": "你是说明天吗？",
+      "py": "nǐ shì shuō míng tiān ma?",
+      "en": "You mean tomorrow?"
+    },
+    {
+      "n": 53,
+      "zh": "老板，来一碗面。",
+      "py": "lǎo bǎn, lái yì wǎn miàn.",
+      "en": "One bowl of noodles, please.",
+      "notes": [
+        "老板 (\"boss\") is how you address shopkeepers and small-restaurant owners.",
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一碗 is yì wǎn."
+      ]
+    },
+    {
+      "n": 54,
+      "zh": "你们这儿有什么好吃的？",
+      "py": "nǐ men zhèr yǒu shén me hǎo chī de?",
+      "en": "What's good here?"
+    },
+    {
+      "n": 55,
+      "zh": "再来一杯。",
+      "py": "zài lái yì bēi.",
+      "en": "Another glass, please.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一杯 is yì bēi."
+      ]
+    },
+    {
+      "n": 56,
+      "zh": "我不吃辣。",
+      "py": "wǒ bù chī là.",
+      "en": "I don't eat spicy food."
+    },
+    {
+      "n": 57,
+      "zh": "微辣就行。",
+      "py": "wēi là jiù xíng.",
+      "en": "Mild spicy is fine."
+    },
+    {
+      "n": 58,
+      "zh": "不要香菜。",
+      "py": "bú yào xiāng cài.",
+      "en": "No cilantro.",
+      "notes": [
+        "Tone change: 不 becomes bú before a 4th tone, otherwise bù — here 不要 is bú yào."
+      ]
+    },
+    {
+      "n": 59,
+      "zh": "在这儿吃还是带走？",
+      "py": "zài zhèr chī hái shì dài zǒu?",
+      "en": "For here or to go?"
+    },
+    {
+      "n": 60,
+      "zh": "带走，谢谢。",
+      "py": "dài zǒu, xiè xiè.",
+      "en": "To go, thanks."
+    },
+    {
+      "n": 61,
+      "zh": "帮我打包一下。",
+      "py": "bāng wǒ dǎ bāo yí xià.",
+      "en": "Could you box this up for me?",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一下 is yí xià."
+      ]
+    },
+    {
+      "n": 62,
+      "zh": "服务员，买单！",
+      "py": "fú wù yuán, mǎi dān!",
+      "en": "Check, please!"
+    },
+    {
+      "n": 63,
+      "zh": "一共多少钱啊？",
+      "py": "yí gòng duō shǎo qián a?",
+      "en": "How much all together?",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一共 is yí gòng."
+      ]
+    },
+    {
+      "n": 64,
+      "zh": "这次我请客。",
+      "py": "zhè cì wǒ qǐng kè.",
+      "en": "This one's on me."
+    },
+    {
+      "n": 65,
+      "zh": "下次你请。",
+      "py": "xià cì nǐ qǐng.",
+      "en": "Next time you're paying."
+    },
+    {
+      "n": 66,
+      "zh": "好吃吗？",
+      "py": "hǎo chī ma?",
+      "en": "Is it good?"
+    },
+    {
+      "n": 67,
+      "zh": "太好吃了！",
+      "py": "tài hǎo chī le!",
+      "en": "So good!"
+    },
+    {
+      "n": 68,
+      "zh": "我吃饱了。",
+      "py": "wǒ chī bǎo le.",
+      "en": "I'm stuffed."
+    },
+    {
+      "n": 69,
+      "zh": "先来点儿喝的吧。",
+      "py": "xiān lái diǎnr hē de ba.",
+      "en": "Let's start with drinks."
+    },
+    {
+      "n": 70,
+      "zh": "你随便点，别客气。",
+      "py": "nǐ suí biàn diǎn, bié kè qì.",
+      "en": "Order whatever you like, don't be shy.",
+      "notes": [
+        "Polyphone: 便 is biàn in 方便 (convenient), but pián in 便宜 (cheap)."
+      ]
+    },
+    {
+      "n": 71,
+      "zh": "这家店人真多。",
+      "py": "zhè jiā diàn rén zhēn duō.",
+      "en": "This place is packed."
+    },
+    {
+      "n": 72,
+      "zh": "还有位子吗？",
+      "py": "hái yǒu wèi zi ma?",
+      "en": "Any seats left?"
+    },
+    {
+      "n": 73,
+      "zh": "老板，这个多少钱？",
+      "py": "lǎo bǎn, zhè ge duō shǎo qián?",
+      "en": "How much is this one?"
+    },
+    {
+      "n": 74,
+      "zh": "太贵了，便宜点儿吧。",
+      "py": "tài guì le, pián yi diǎnr ba.",
+      "en": "Too expensive — knock the price down a bit.",
+      "notes": [
+        "Polyphone: 便 is pián in 便宜 (cheap), but biàn in 方便 (convenient)."
+      ]
+    },
+    {
+      "n": 75,
+      "zh": "能不能再便宜一点儿？",
+      "py": "néng bù néng zài pián yi yì diǎnr?",
+      "en": "Can you go any lower?",
+      "notes": [
+        "Polyphone: 便 is pián in 便宜 (cheap), but biàn in 方便 (convenient).",
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一点 is yì diǎn."
+      ]
+    },
+    {
+      "n": 76,
+      "zh": "我随便看看。",
+      "py": "wǒ suí biàn kàn kàn.",
+      "en": "I'm just browsing.",
+      "notes": [
+        "Polyphone: 便 is biàn in 方便 (convenient), but pián in 便宜 (cheap)."
+      ]
+    },
+    {
+      "n": 77,
+      "zh": "就要这个吧。",
+      "py": "jiù yào zhè ge ba.",
+      "en": "I'll take this one."
+    },
+    {
+      "n": 78,
+      "zh": "有别的颜色吗？",
+      "py": "yǒu bié de yán sè ma?",
+      "en": "Do you have other colors?"
+    },
+    {
+      "n": 79,
+      "zh": "我能试试吗？",
+      "py": "wǒ néng shì shì ma?",
+      "en": "Can I try it?"
+    },
+    {
+      "n": 80,
+      "zh": "有小一点儿的吗？",
+      "py": "yǒu xiǎo yì diǎnr de ma?",
+      "en": "Got a smaller one?",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一点 is yì diǎn."
+      ]
+    },
+    {
+      "n": 81,
+      "zh": "可以刷卡吗？",
+      "py": "kě yǐ shuā kǎ ma?",
+      "en": "Can I pay by card?"
+    },
+    {
+      "n": 82,
+      "zh": "用微信可以吗？",
+      "py": "yòng wēi xìn kě yǐ ma?",
+      "en": "Is WeChat okay?"
+    },
+    {
+      "n": 83,
+      "zh": "扫这个码就行。",
+      "py": "sǎo zhè ge mǎ jiù xíng.",
+      "en": "Just scan this code."
+    },
+    {
+      "n": 84,
+      "zh": "我用支付宝。",
+      "py": "wǒ yòng zhī fù bǎo.",
+      "en": "I'll use Alipay."
+    },
+    {
+      "n": 85,
+      "zh": "不用了，谢谢。",
+      "py": "bú yòng le, xiè xiè.",
+      "en": "No thanks, I'm good.",
+      "notes": [
+        "Tone change: 不 becomes bú before a 4th tone, otherwise bù — here 不用 is bú yòng."
+      ]
+    },
+    {
+      "n": 86,
+      "zh": "我再想想。",
+      "py": "wǒ zài xiǎng xiǎng.",
+      "en": "Let me think about it."
+    },
+    {
+      "n": 87,
+      "zh": "这个卖完了。",
+      "py": "zhè ge mài wán le.",
+      "en": "This one's sold out."
+    },
+    {
+      "n": 88,
+      "zh": "请问，卫生间在哪儿？",
+      "py": "qǐng wèn, wèi shēng jiān zài nǎr?",
+      "en": "Excuse me, where's the bathroom?"
+    },
+    {
+      "n": 89,
+      "zh": "附近有地铁站吗？",
+      "py": "fù jìn yǒu dì tiě zhàn ma?",
+      "en": "Is there a subway station nearby?"
+    },
+    {
+      "n": 90,
+      "zh": "离这儿远不远？",
+      "py": "lí zhèr yuǎn bù yuǎn?",
+      "en": "Is it far from here?"
+    },
+    {
+      "n": 91,
+      "zh": "走路能到吗？",
+      "py": "zǒu lù néng dào ma?",
+      "en": "Can I walk there?"
+    },
+    {
+      "n": 92,
+      "zh": "大概要多长时间？",
+      "py": "dà gài yào duō cháng shí jiān?",
+      "en": "About how long will it take?"
+    },
+    {
+      "n": 93,
+      "zh": "师傅，去机场，谢谢。",
+      "py": "shī fù, qù jī chǎng, xiè xiè.",
+      "en": "To the airport please, thanks.",
+      "notes": [
+        "师傅 (\"master\") is how you address drivers, repairmen, and other workers."
+      ]
+    },
+    {
+      "n": 94,
+      "zh": "师傅，停这儿就行。",
+      "py": "shī fù, tíng zhèr jiù xíng.",
+      "en": "You can just stop here."
+    },
+    {
+      "n": 95,
+      "zh": "前面右拐。",
+      "py": "qián miàn yòu guǎi.",
+      "en": "Turn right up ahead."
+    },
+    {
+      "n": 96,
+      "zh": "一直走就到了。",
+      "py": "yì zhí zǒu jiù dào le.",
+      "en": "Keep going straight and you're there.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一直 is yì zhí."
+      ]
+    },
+    {
+      "n": 97,
+      "zh": "我迷路了。",
+      "py": "wǒ mí lù le.",
+      "en": "I'm lost."
+    },
+    {
+      "n": 98,
+      "zh": "我到了，你在哪儿呢？",
+      "py": "wǒ dào le, nǐ zài nǎr ne?",
+      "en": "I'm here — where are you?"
+    },
+    {
+      "n": 99,
+      "zh": "我们在哪儿下车？",
+      "py": "wǒ men zài nǎr xià chē?",
+      "en": "Where do we get off?"
+    },
+    {
+      "n": 100,
+      "zh": "下一站就到了。",
+      "py": "xià yí zhàn jiù dào le.",
+      "en": "It's the next stop.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一站 is yí zhàn."
+      ]
+    },
+    {
+      "n": 101,
+      "zh": "今天堵车堵得厉害。",
+      "py": "jīn tiān dǔ chē dǔ de lì hài.",
+      "en": "Traffic is terrible today."
+    },
+    {
+      "n": 102,
+      "zh": "师傅，慢点儿开。",
+      "py": "shī fù, màn diǎnr kāi.",
+      "en": "Not so fast, please (to a driver)."
+    },
+    {
+      "n": 103,
+      "zh": "喂，你在哪儿呢？",
+      "py": "wèi, nǐ zài nǎr ne?",
+      "en": "Hey, where are you?"
+    },
+    {
+      "n": 104,
+      "zh": "我马上到。",
+      "py": "wǒ mǎ shàng dào.",
+      "en": "I'll be right there."
+    },
+    {
+      "n": 105,
+      "zh": "我快到了。",
+      "py": "wǒ kuài dào le.",
+      "en": "I'm almost there."
+    },
+    {
+      "n": 106,
+      "zh": "再等我十分钟。",
+      "py": "zài děng wǒ shí fēn zhōng.",
+      "en": "Give me ten more minutes."
+    },
+    {
+      "n": 107,
+      "zh": "你到了叫我。",
+      "py": "nǐ dào le jiào wǒ.",
+      "en": "Let me know when you get here."
+    },
+    {
+      "n": 108,
+      "zh": "我在路上呢。",
+      "py": "wǒ zài lù shàng ne.",
+      "en": "I'm on my way."
+    },
+    {
+      "n": 109,
+      "zh": "你先吃，别等我。",
+      "py": "nǐ xiān chī, bié děng wǒ.",
+      "en": "Start without me — don't wait."
+    },
+    {
+      "n": 110,
+      "zh": "今天晚上有空吗？",
+      "py": "jīn tiān wǎn shàng yǒu kòng ma?",
+      "en": "Are you free tonight?",
+      "notes": [
+        "Polyphone: 空 is kòng when it means \"free time\" (有空儿), but kōng for \"empty / air\" (航空)."
+      ]
+    },
+    {
+      "n": 111,
+      "zh": "出来玩儿吧！",
+      "py": "chū lái wánr ba!",
+      "en": "Come out and hang!"
+    },
+    {
+      "n": 112,
+      "zh": "明天再说吧。",
+      "py": "míng tiān zài shuō ba.",
+      "en": "Let's figure it out tomorrow."
+    },
+    {
+      "n": 113,
+      "zh": "改天吧。",
+      "py": "gǎi tiān ba.",
+      "en": "Some other day, maybe."
+    },
+    {
+      "n": 114,
+      "zh": "下次一定。",
+      "py": "xià cì yí dìng.",
+      "en": "Next time for sure.",
+      "notes": [
+        "Often a polite way of saying no — the promised \"next time\" may never come.",
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一定 is yí dìng."
+      ]
+    },
+    {
+      "n": 115,
+      "zh": "时间你定。",
+      "py": "shí jiān nǐ dìng.",
+      "en": "You pick the time."
+    },
+    {
+      "n": 116,
+      "zh": "老地方见。",
+      "py": "lǎo dì fāng jiàn.",
+      "en": "See you at the usual place."
+    },
+    {
+      "n": 117,
+      "zh": "别迟到啊！",
+      "py": "bié chí dào a!",
+      "en": "Don't be late!"
+    },
+    {
+      "n": 118,
+      "zh": "我可能会晚一点儿。",
+      "py": "wǒ kě néng huì wǎn yì diǎnr.",
+      "en": "I might be a little late.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一点 is yì diǎn."
+      ]
+    },
+    {
+      "n": 119,
+      "zh": "到家了给我发个消息。",
+      "py": "dào jiā le gěi wǒ fā gè xiāo xī.",
+      "en": "Text me when you're home."
+    },
+    {
+      "n": 120,
+      "zh": "我手机快没电了。",
+      "py": "wǒ shǒu jī kuài méi diàn le.",
+      "en": "My phone's about to die."
+    },
+    {
+      "n": 121,
+      "zh": "累死了！",
+      "py": "lèi sǐ le!",
+      "en": "I'm dead tired!",
+      "notes": [
+        "死了 after an adjective means \"extremely\" — 累死了, 饿死了, 热死了 are everywhere in speech."
+      ]
+    },
+    {
+      "n": 122,
+      "zh": "饿死了！",
+      "py": "è sǐ le!",
+      "en": "I'm starving!"
+    },
+    {
+      "n": 123,
+      "zh": "热死了！",
+      "py": "rè sǐ le!",
+      "en": "It's boiling!"
+    },
+    {
+      "n": 124,
+      "zh": "冷死了！",
+      "py": "lěng sǐ le!",
+      "en": "It's freezing!"
+    },
+    {
+      "n": 125,
+      "zh": "我困死了。",
+      "py": "wǒ kùn sǐ le.",
+      "en": "I'm so sleepy."
+    },
+    {
+      "n": 126,
+      "zh": "我有点儿累，想回家了。",
+      "py": "wǒ yǒu diǎnr lèi, xiǎng huí jiā le.",
+      "en": "I'm a bit tired — I want to head home."
+    },
+    {
+      "n": 127,
+      "zh": "我先睡了，晚安。",
+      "py": "wǒ xiān shuì le, wǎn ān.",
+      "en": "I'm off to bed — night."
+    },
+    {
+      "n": 128,
+      "zh": "好无聊啊。",
+      "py": "hǎo wú liáo a.",
+      "en": "I'm so bored."
+    },
+    {
+      "n": 129,
+      "zh": "烦死了！",
+      "py": "fán sǐ le!",
+      "en": "So annoying!"
+    },
+    {
+      "n": 130,
+      "zh": "吓我一跳！",
+      "py": "xià wǒ yí tiào!",
+      "en": "You scared me!",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一跳 is yí tiào."
+      ]
+    },
+    {
+      "n": 131,
+      "zh": "太可惜了。",
+      "py": "tài kě xī le.",
+      "en": "What a shame."
+    },
+    {
+      "n": 132,
+      "zh": "好可爱啊！",
+      "py": "hǎo kě ài a!",
+      "en": "So cute!"
+    },
+    {
+      "n": 133,
+      "zh": "我好紧张啊。",
+      "py": "wǒ hǎo jǐn zhāng a.",
+      "en": "I'm so nervous."
+    },
+    {
+      "n": 134,
+      "zh": "别紧张，没事的。",
+      "py": "bié jǐn zhāng, méi shì de.",
+      "en": "Relax, it'll be fine."
+    },
+    {
+      "n": 135,
+      "zh": "我今天心情不太好。",
+      "py": "wǒ jīn tiān xīn qíng bú tài hǎo.",
+      "en": "I'm not in a great mood today.",
+      "notes": [
+        "Tone change: 不 becomes bú before a 4th tone, otherwise bù — here 不太 is bú tài."
+      ]
+    },
+    {
+      "n": 136,
+      "zh": "今天玩儿得真开心。",
+      "py": "jīn tiān wánr de zhēn kāi xīn.",
+      "en": "Today was really fun."
+    },
+    {
+      "n": 137,
+      "zh": "我想家了。",
+      "py": "wǒ xiǎng jiā le.",
+      "en": "I miss home."
+    },
+    {
+      "n": 138,
+      "zh": "你怎么了？不开心吗？",
+      "py": "nǐ zěn me le? bù kāi xīn ma?",
+      "en": "What's wrong? You seem down."
+    },
+    {
+      "n": 139,
+      "zh": "麻烦你了。",
+      "py": "má fán nǐ le.",
+      "en": "Sorry for the trouble — thanks."
+    },
+    {
+      "n": 140,
+      "zh": "辛苦了！",
+      "py": "xīn kǔ le!",
+      "en": "Thanks for your hard work!",
+      "notes": [
+        "Acknowledges someone's effort — said to coworkers, delivery drivers, anyone who just worked."
+      ]
+    },
+    {
+      "n": 141,
+      "zh": "不好意思，打扰一下。",
+      "py": "bù hǎo yì sī, dǎ rǎo yí xià.",
+      "en": "Sorry to bother you.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一下 is yí xià."
+      ]
+    },
+    {
+      "n": 142,
+      "zh": "借过一下。",
+      "py": "jiè guò yí xià.",
+      "en": "Excuse me, coming through.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一下 is yí xià."
+      ]
+    },
+    {
+      "n": 143,
+      "zh": "帮我个忙，好吗？",
+      "py": "bāng wǒ gè máng, hǎo ma?",
+      "en": "Do me a favor, will you?"
+    },
+    {
+      "n": 144,
+      "zh": "帮我拿一下这个。",
+      "py": "bāng wǒ ná yí xià zhè ge.",
+      "en": "Hold this for me a sec.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一下 is yí xià."
+      ]
+    },
+    {
+      "n": 145,
+      "zh": "谢谢啦！",
+      "py": "xiè xiè la!",
+      "en": "Thanks!"
+    },
+    {
+      "n": 146,
+      "zh": "不用谢。",
+      "py": "bú yòng xiè.",
+      "en": "Don't mention it.",
+      "notes": [
+        "Tone change: 不 becomes bú before a 4th tone, otherwise bù — here 不用 is bú yòng."
+      ]
+    },
+    {
+      "n": 147,
+      "zh": "客气什么呀。",
+      "py": "kè qì shén me ya.",
+      "en": "No need to be so polite."
+    },
+    {
+      "n": 148,
+      "zh": "你先请。",
+      "py": "nǐ xiān qǐng.",
+      "en": "After you."
+    },
+    {
+      "n": 149,
+      "zh": "没事，我来吧。",
+      "py": "méi shì, wǒ lái ba.",
+      "en": "It's fine — I'll do it."
+    },
+    {
+      "n": 150,
+      "zh": "你人真好。",
+      "py": "nǐ rén zhēn hǎo.",
+      "en": "You're so nice."
+    },
+    {
+      "n": 151,
+      "zh": "哪里哪里。",
+      "py": "nǎ lǐ nǎ lǐ.",
+      "en": "Oh, I'm flattered.",
+      "notes": [
+        "Humble reply to a compliment — literally \"where, where?\""
+      ]
+    },
+    {
+      "n": 152,
+      "zh": "是我不好，对不起啊。",
+      "py": "shì wǒ bù hǎo, duì bu qǐ a.",
+      "en": "My bad — sorry.",
+      "notes": [
+        "Tone change: in 对不起 the 不 is toneless — duì bu qǐ."
+      ]
+    },
+    {
+      "n": 153,
+      "zh": "我出门了！",
+      "py": "wǒ chū mén le!",
+      "en": "I'm heading out!"
+    },
+    {
+      "n": 154,
+      "zh": "我到家了。",
+      "py": "wǒ dào jiā le.",
+      "en": "I'm home."
+    },
+    {
+      "n": 155,
+      "zh": "我先回去了。",
+      "py": "wǒ xiān huí qù le.",
+      "en": "I'm heading back."
+    },
+    {
+      "n": 156,
+      "zh": "该起床了！",
+      "py": "gāi qǐ chuáng le!",
+      "en": "Time to get up!"
+    },
+    {
+      "n": 157,
+      "zh": "该睡觉了。",
+      "py": "gāi shuì jiào le.",
+      "en": "Time for bed.",
+      "notes": [
+        "Polyphone: 觉 is jiào in 睡觉 (to sleep), but jué in 觉得 (to feel / think)."
+      ]
+    },
+    {
+      "n": 158,
+      "zh": "我去洗个澡。",
+      "py": "wǒ qù xǐ gè zǎo.",
+      "en": "I'm gonna take a shower."
+    },
+    {
+      "n": 159,
+      "zh": "饭好了，快来吃！",
+      "py": "fàn hǎo le, kuài lái chī!",
+      "en": "Food's ready — come eat!"
+    },
+    {
+      "n": 160,
+      "zh": "今天我做饭。",
+      "py": "jīn tiān wǒ zuò fàn.",
+      "en": "I'm cooking today."
+    },
+    {
+      "n": 161,
+      "zh": "帮我开一下门。",
+      "py": "bāng wǒ kāi yí xià mén.",
+      "en": "Get the door for me.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一下 is yí xià."
+      ]
+    },
+    {
+      "n": 162,
+      "zh": "把灯关了吧。",
+      "py": "bǎ dēng guān le ba.",
+      "en": "Turn the light off."
+    },
+    {
+      "n": 163,
+      "zh": "空调开一下，太热了。",
+      "py": "kōng tiáo kāi yí xià, tài rè le.",
+      "en": "Turn on the AC — it's too hot.",
+      "notes": [
+        "Polyphone: 空 is kōng in 航空 (aviation, \"air\"), but kòng when it means \"free time\" (有空儿).",
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一下 is yí xià."
+      ]
+    },
+    {
+      "n": 164,
+      "zh": "我出去买点儿东西。",
+      "py": "wǒ chū qù mǎi diǎnr dōng xī.",
+      "en": "I'm going out to grab a few things."
+    },
+    {
+      "n": 165,
+      "zh": "家里没吃的了。",
+      "py": "jiā lǐ méi chī de le.",
+      "en": "There's no food in the house."
+    },
+    {
+      "n": 166,
+      "zh": "点个外卖吧。",
+      "py": "diǎn gè wài mài ba.",
+      "en": "Let's just order delivery."
+    },
+    {
+      "n": 167,
+      "zh": "你在干什么呢？",
+      "py": "nǐ zài gàn shén me ne?",
+      "en": "What are you up to?"
+    },
+    {
+      "n": 168,
+      "zh": "没干什么，在家躺着呢。",
+      "py": "méi gàn shén me, zài jiā tǎng zhe ne.",
+      "en": "Nothing much — just lying around at home."
+    },
+    {
+      "n": 169,
+      "zh": "我觉得还行。",
+      "py": "wǒ jué de hái xíng.",
+      "en": "I think it's okay.",
+      "notes": [
+        "Polyphone: 觉 is jué in 觉得 (to feel / think), but jiào in 睡觉 (to sleep)."
+      ]
+    },
+    {
+      "n": 170,
+      "zh": "一般般吧。",
+      "py": "yì bān bān ba.",
+      "en": "It's just so-so.",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一般 is yì bān."
+      ]
+    },
+    {
+      "n": 171,
+      "zh": "还不错！",
+      "py": "hái bú cuò!",
+      "en": "Pretty good!",
+      "notes": [
+        "Tone change: 不 becomes bú before a 4th tone, otherwise bù — here 不错 is bú cuò."
+      ]
+    },
+    {
+      "n": 172,
+      "zh": "这个特别好吃。",
+      "py": "zhè ge tè bié hǎo chī.",
+      "en": "This one's really good."
+    },
+    {
+      "n": 173,
+      "zh": "没想到啊！",
+      "py": "méi xiǎng dào a!",
+      "en": "I did not see that coming!"
+    },
+    {
+      "n": 174,
+      "zh": "我也这么觉得。",
+      "py": "wǒ yě zhè me jué de.",
+      "en": "That's what I think too.",
+      "notes": [
+        "Polyphone: 觉 is jué in 觉得 (to feel / think), but jiào in 睡觉 (to sleep)."
+      ]
+    },
+    {
+      "n": 175,
+      "zh": "你说得对。",
+      "py": "nǐ shuō de duì.",
+      "en": "You're right."
+    },
+    {
+      "n": 176,
+      "zh": "好主意！",
+      "py": "hǎo zhǔ yì!",
+      "en": "Good idea!"
+    },
+    {
+      "n": 177,
+      "zh": "听你的。",
+      "py": "tīng nǐ de.",
+      "en": "Your call."
+    },
+    {
+      "n": 178,
+      "zh": "应该没问题。",
+      "py": "yīng gāi méi wèn tí.",
+      "en": "Should be fine."
+    },
+    {
+      "n": 179,
+      "zh": "我不太清楚。",
+      "py": "wǒ bú tài qīng chǔ.",
+      "en": "I'm not too sure.",
+      "notes": [
+        "Tone change: 不 becomes bú before a 4th tone, otherwise bù — here 不太 is bú tài."
+      ]
+    },
+    {
+      "n": 180,
+      "zh": "谁知道呢。",
+      "py": "shuí zhī dào ne.",
+      "en": "Who knows."
+    },
+    {
+      "n": 181,
+      "zh": "反正我不去。",
+      "py": "fǎn zhèng wǒ bú qù.",
+      "en": "Either way, I'm not going.",
+      "notes": [
+        "Tone change: 不 becomes bú before a 4th tone, otherwise bù — here 不去 is bú qù."
+      ]
+    },
+    {
+      "n": 182,
+      "zh": "说真的，我有点儿担心。",
+      "py": "shuō zhēn de, wǒ yǒu diǎnr dān xīn.",
+      "en": "Honestly, I'm a little worried."
+    },
+    {
+      "n": 183,
+      "zh": "那就这么定了。",
+      "py": "nà jiù zhè me dìng le.",
+      "en": "Then it's settled."
+    },
+    {
+      "n": 184,
+      "zh": "看情况吧。",
+      "py": "kàn qíng kuàng ba.",
+      "en": "Depends — we'll see."
+    },
+    {
+      "n": 185,
+      "zh": "加个微信吧。",
+      "py": "jiā gè wēi xìn ba.",
+      "en": "Let's add each other on WeChat."
+    },
+    {
+      "n": 186,
+      "zh": "你扫我吧。",
+      "py": "nǐ sǎo wǒ ba.",
+      "en": "You scan mine (my QR code)."
+    },
+    {
+      "n": 187,
+      "zh": "发我微信。",
+      "py": "fā wǒ wēi xìn.",
+      "en": "Send it to me on WeChat."
+    },
+    {
+      "n": 188,
+      "zh": "我把位置发给你。",
+      "py": "wǒ bǎ wèi zhì fā gěi nǐ.",
+      "en": "I'll send you the location."
+    },
+    {
+      "n": 189,
+      "zh": "麻烦帮我们拍张照。",
+      "py": "má fán bāng wǒ men pāi zhāng zhào.",
+      "en": "Could you take a photo of us?"
+    },
+    {
+      "n": 190,
+      "zh": "再拍一张！",
+      "py": "zài pāi yì zhāng!",
+      "en": "Take one more!",
+      "notes": [
+        "Tone change: 一 is yī alone or in numbers/dates, yí before a 4th tone, yì before 1st/2nd/3rd tones — here 一张 is yì zhāng."
+      ]
+    },
+    {
+      "n": 191,
+      "zh": "这张拍得真好。",
+      "py": "zhè zhāng pāi de zhēn hǎo.",
+      "en": "This one came out great."
+    },
+    {
+      "n": 192,
+      "zh": "我手机没电了。",
+      "py": "wǒ shǒu jī méi diàn le.",
+      "en": "My phone died."
+    },
+    {
+      "n": 193,
+      "zh": "你有充电器吗？",
+      "py": "nǐ yǒu chōng diàn qì ma?",
+      "en": "Do you have a charger?"
+    },
+    {
+      "n": 194,
+      "zh": "这儿信号不太好。",
+      "py": "zhèr xìn hào bú tài hǎo.",
+      "en": "The signal's not great here.",
+      "notes": [
+        "Tone change: 不 becomes bú before a 4th tone, otherwise bù — here 不太 is bú tài."
+      ]
+    },
+    {
+      "n": 195,
+      "zh": "密码是多少？",
+      "py": "mì mǎ shì duō shǎo?",
+      "en": "What's the password?"
+    },
+    {
+      "n": 196,
+      "zh": "我看到你发的了。",
+      "py": "wǒ kàn dào nǐ fā de le.",
+      "en": "I saw what you sent."
+    },
+    {
+      "n": 197,
+      "zh": "别玩儿手机了！",
+      "py": "bié wánr shǒu jī le!",
+      "en": "Get off your phone!"
+    },
+    {
+      "n": 198,
+      "zh": "我在刷手机呢。",
+      "py": "wǒ zài shuā shǒu jī ne.",
+      "en": "I'm just scrolling on my phone."
+    },
+    {
+      "n": 199,
+      "zh": "拍好了吗？",
+      "py": "pāi hǎo le ma?",
+      "en": "Did you get the shot?"
+    },
+    {
+      "n": 200,
+      "zh": "到了给我打电话。",
+      "py": "dào le gěi wǒ dǎ diàn huà.",
+      "en": "Call me when you're there."
+    }
+  ],
   "ic1": [
     {
       "n": 1,

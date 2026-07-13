@@ -19,13 +19,13 @@ Decided 2026-07-11. This doc is the source of truth for sessions continuing the 
   Card state: `{stability, difficulty, due, lastReview, reps, lapses}` —
   unchanged from 4.5, so stored states carry over with no migration.
 - **Card IDs:** stable, derived from existing data. Examples:
-  `words/L1D1/你`, `sent/hsk1/42`, `coll/1`, `kana/あ`. ~2,500 cards total.
+  `words/L1D1/你`, `sent/hsk1/42`, `coll/1`, `kana/あ`. ~2,800 cards total.
 - **Card intake:** opt-in by deck/lesson (IC1 lessons individually, topic word
   packs — Food & Drink, Common Verbs, Numbers words, tutor notes — as their own
   deck in sets of 10 (split out of the words deck 2026-07-12; card IDs keep the
   `words/` prefix so history carries over, saved opt-ins migrate via
   `migrateGroupKeys`), colloquial chars in bands of 20, IC1 sentence chapters,
-  HSK recall sets of 50, kana rows split per script (hiragana and katakana
+  HSK recall sets of 50, spoken recall sets of 25, kana rows split per script (hiragana and katakana
   selectable separately), radicals, numbers in magnitude bands (0–10 … 10 000+,
   was one 56-card group) plus clock times, usage). New cards introduced at a
   per-user daily cap (default ~15).
@@ -46,6 +46,14 @@ Decided 2026-07-11. This doc is the source of truth for sessions continuing the 
   history from the retired Chinese-first `sent/hsk1/N` cards never schedules the
   flipped exercise. Old `sent/hsk1`, `sent/hsk2` group opt-ins migrate to all the
   matching `recall/*` groups (same `migrateGroupKeys` mechanism as earlier splits).
+- **Spoken set** (decided 2026-07-13): the HSK sentences read like textbook prose,
+  so the recall deck gained a third set — `spoken`, 200 hand-authored colloquial
+  sentences (`recall/spoken/N`, opt-in bites of 25) covering what people actually
+  say: reactions (行 / 算了 / 真的假的), small talk, ordering, haggling, taxis,
+  texting, WeChat/photos. Beginner-friendly: HSK 1/2 grammar plus unavoidable
+  daily-life vocabulary (微信, 外卖, 师傅, 老板). Entries carry optional usage
+  notes (e.g. 你吃了吗 is a greeting, 下次一定 is a polite no) rendered like tone
+  notes. Same generator (`tools/gen_sentences.py`), same pinyin pipeline.
 - **Four session modes, one engine** (decided 2026-07-11). Every mode grades
   through the same `FSRS.review` with real elapsed time — early/late reviews are
   handled by the math itself (early review ⇒ high retrievability ⇒ tiny stability

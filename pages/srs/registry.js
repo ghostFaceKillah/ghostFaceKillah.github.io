@@ -171,17 +171,18 @@ window.SRS_REGISTRY = (function () {
     });
   }
 
-  // ----- recall: HSK sentences flipped, opt-in in sets of 50 -----------------
+  // ----- recall: sentences flipped, opt-in in sets ---------------------------
   // Production direction: shown in English, recall the Chinese sentence.
-  // These used to live in the sent deck as two 500-card groups shown
+  // The HSK halves used to live in the sent deck as two 500-card groups shown
   // Chinese-first. Fresh card IDs on purpose: the flipped direction is a
   // different exercise, so old recognition history must not schedule it.
+  // The spoken set (everyday colloquial sentences) comes in smaller bites of 25.
   {
     const groups = [];
-    for (const [key, label] of [["hsk1", "HSK 1"], ["hsk2", "HSK 2"]]) {
+    for (const [key, label, step] of [["hsk1", "HSK 1", 50], ["hsk2", "HSK 2", 50], ["spoken", "Spoken", 25]]) {
       const all = SENT[key] || [];
-      for (let lo = 1; lo <= all.length; lo += 50) {
-        const hi = Math.min(lo + 49, all.length);
+      for (let lo = 1; lo <= all.length; lo += step) {
+        const hi = Math.min(lo + step - 1, all.length);
         groups.push({
           id: `${key}-${lo}-${hi}`, name: `${label} · ${lo}–${hi}`,
           cards: all.filter(s => s.n >= lo && s.n <= hi)
@@ -190,7 +191,7 @@ window.SRS_REGISTRY = (function () {
       }
     }
     decks.push({
-      id: "recall", name: "Sentence Recall (HSK)", emoji: "🧠", page: "../sentences.html",
+      id: "recall", name: "Sentence Recall", emoji: "🧠", page: "../sentences.html",
       groups,
       renderFront: d => `<div class="srs-en-front">${esc(d.en)}</div>`,
       renderBack: d =>
