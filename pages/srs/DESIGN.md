@@ -118,7 +118,11 @@ Decided 2026-07-11. This doc is the source of truth for sessions continuing the 
     dropped. New-card intake keeps flowing at the daily cap while unseen cards
     remain and cascades the same way — so future days show scheduled reviews,
     predicted follow-ups (spawned by the sim), and new cards as separate
-    stacked segments. Per-card pace comes from the last 30 days of the log
+    stacked segments. A checkbox under the chart ("♾️ assume I keep adding
+    new material at N/day") lifts the unseen-cards limit so intake flows at
+    the daily cap forever — the steady-state workload view. It's a local
+    display pref (`endlessNew` in the namespaced store, not synced): an
+    assumption about the future, not review state. Per-card pace comes from the last 30 days of the log
     (all time as fallback; 9 s review / 18 s learn defaults for a virgin log)
     with same-day repeats folded in, so no separate repeat factor is needed.
   - Colors stay inside the grade-button mandate: reviews `--w3`, learning/new
