@@ -424,6 +424,16 @@
     width: 10px; height: 10px; border-radius: 3px;
     display: inline-block; margin-right: 5px; vertical-align: -1px;
   }
+  .sim-toggle {
+    display: flex; align-items: center; gap: 8px; margin-top: 12px;
+    padding-top: 10px; border-top: 2px dashed var(--line);
+    font-size: .85rem; color: var(--muted); font-weight: 700;
+    cursor: pointer; user-select: none;
+  }
+  .sim-toggle input {
+    width: 17px; height: 17px; margin: 0; flex: none;
+    accent-color: var(--accent); cursor: pointer;
+  }
 
   /* ----- Retention panel ----- */
   .ret-head { display: flex; align-items: baseline; gap: 10px; margin-bottom: 10px; }
@@ -689,6 +699,10 @@
         <span><i class="w1"></i>predicted follow-ups</span>
         <span><i class="w4"></i>new cards</span>
       </div>
+      <label class="sim-toggle">
+        <input type="checkbox" id="endlessNew">
+        <span id="endlessNewText">♾️ assume I keep adding new material — never run out of cards to learn</span>
+      </label>
     </div>
   </section>
 
@@ -1065,9 +1079,10 @@
   // and a lapse branch (Again now, Good ten minutes later — that extra
   // same-session pass costs no separate time, it is already inside the
   // per-card pace). New-card intake keeps flowing at the daily cap while
-  // unseen cards remain, and its rescheduling cascades the same way.
-  // Fractional branches under 2% of a card are dropped.
-  function simulateBurndown(daysAhead, pRev, pNew) {
+  // unseen cards remain — or forever, when `endless` says the user will
+  // keep adding fresh material — and its rescheduling cascades the same
+  // way. Fractional branches under 2% of a card are dropped.
+  function simulateBurndown(daysAhead, pRev, pNew, endless) {
     const now = Date.now();
     const t = new Date(now); t.setHours(0, 0, 0, 0);
     const t0 = t.getTime();
@@ -1096,8 +1111,9 @@
         push(q.w * (1 - pRev),
           FSRS.review(FSRS.review(q.s, FSRS.AGAIN, ts), FSRS.GOOD, ts + 10 * 60000));
       }
-      const intake = Math.min(d === 0 ? newQuotaLeft(now) : settings.newPerDay, unseen);
-      unseen -= intake;
+      const quota = d === 0 ? newQuotaLeft(now) : settings.newPerDay;
+      const intake = endless ? quota : Math.min(quota, unseen);
+      unseen -= Math.min(intake, unseen);
       if (intake > 0) {
         push(intake * pNew, FSRS.review(null, FSRS.GOOD, ts));
         push(intake * (1 - pNew),
@@ -1605,7 +1621,14 @@
     // --- time to come: burn-down forecast, today headlined -----------------
     const pace = reviewPace(tbd, now);
     const rates = passRates(readAllLog());
-    const sim = simulateBurndown(28, rates.rev, rates.new);
+    // "endless" pretends the decks never run dry: new cards keep arriving at
+    // the daily cap even past what's actually picked. A local display pref —
+    // an assumption about the future, not review state, so it doesn't sync.
+    const endless = !!store.read("endlessNew", false);
+    $("endlessNew").checked = endless;
+    $("endlessNewText").textContent =
+      `♾️ assume I keep adding new material at ${settings.newPerDay}/day — never run out of cards to learn`;
+    const sim = simulateBurndown(28, rates.rev, rates.new, endless);
     const simMs = s => (s.sched + s.fu) * pace.revMs + s.intake * pace.learnMs;
     const t0 = sim[0];
     const cards0 = Math.round(t0.sched) + t0.intake;
@@ -1864,6 +1887,10 @@
   $("homeBtn").addEventListener("click", () => { show("home"); refreshStats(); });
   $("statsBtn").addEventListener("click", () => { renderStats(); show("stats"); });
   $("statsBack").addEventListener("click", () => { show("home"); refreshStats(); });
+  $("endlessNew").addEventListener("change", () => {
+    store.write("endlessNew", $("endlessNew").checked);
+    renderStats();
+  });
   $("card").addEventListener("click", reveal);
   $("revealBtn").addEventListener("click", reveal);
   $("grades").addEventListener("click", e => {
