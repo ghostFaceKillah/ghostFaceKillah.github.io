@@ -74,30 +74,36 @@
     return { hanzi, pinyin: pinyinOf(hanzi) };
   }
 
-  // Time, hours 1–12, minutes 0–59.
+  // Time, hours 1–12, minutes 0–59. For :15/:45 the everyday 十五分/四十五分
+  // reading is primary; textbook 刻 is kept only as an alt — people rarely
+  // say 刻 in real life.
   function timeToChinese(h, m) {
     const hourHanzi = (h === 2 ? "两" : numToHanzi(h)) + "点";
-    let hanzi, alt = "";
+    let hanzi, alt = "", altNote = "";
     if (m === 0) {
       hanzi = hourHanzi;
       alt = hourHanzi + "钟";
     } else if (m === 15) {
-      hanzi = hourHanzi + "一刻";
-      alt = hourHanzi + "十五分";
+      hanzi = hourHanzi + "十五分";
+      alt = hourHanzi + "一刻";
+      altNote = " (textbook — 刻 is rarely said)";
     } else if (m === 30) {
       hanzi = hourHanzi + "半";
       alt = hourHanzi + "三十分";
     } else if (m === 45) {
-      hanzi = hourHanzi + "三刻";
-      alt = hourHanzi + "四十五分";
+      hanzi = hourHanzi + "四十五分";
+      alt = hourHanzi + "三刻";
+      altNote = " (textbook — 刻 is rarely said)";
     } else {
+      // After 点 the minutes need at least two syllables: 2:05 is 两点零五分,
+      // never 两点五分.
       const minHanzi = (m < 10 ? "零" + DIGIT[m] : numToHanzi(m)) + "分";
       hanzi = hourHanzi + minHanzi;
     }
     return {
       hanzi,
       pinyin: pinyinOf(hanzi),
-      alt: alt ? alt + "  ·  " + pinyinOf(alt) : ""
+      alt: alt ? alt + "  ·  " + pinyinOf(alt) + altNote : ""
     };
   }
 
