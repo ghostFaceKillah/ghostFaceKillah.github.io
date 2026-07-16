@@ -250,6 +250,44 @@ window.WORD_LESSONS = {
     },
   },
 
+  "时候": {
+    lesson: {
+      intro: "One word, three jobs: asking “when?”, naming a moment, and building “when …” clauses.",
+      uses: [
+        {
+          h: "什么时候", hPy: "shénme shíhou",
+          g: "“when?” — the question word",
+          ex: "你什么时候过生日？", exPy: "nǐ shén me shí hou guò shēng rì?", exEn: "When is your birthday?",
+        },
+        {
+          g: "on its own: “moment, (a point in) time”",
+        },
+        {
+          h: "……的时候", hPy: "… de shíhou",
+          g: "“when …” in a statement — not a question word",
+          ex: "我五岁的时候，很喜欢看电视。", exPy: "wǒ wǔ suì de shí hou, hěn xǐ huan kàn diàn shì.", exEn: "When I was five, I loved watching TV.",
+        },
+      ],
+    },
+  },
+
+  "生日": {
+    lesson: {
+      intro: "A birthday is something you 过 (pass, celebrate) — not something that “is”.",
+      uses: [
+        {
+          h: "你什么时候过生日？", hPy: "nǐ shénme shíhou guò shēngrì?",
+          g: "the native way to ask — 你的生日是什么时候 is understood but sounds textbook-stiff",
+        },
+        {
+          h: "我 + time + 过生日", hPy: "wǒ + time + guò shēngrì",
+          g: "answer with the same pattern",
+          ex: "我十月过生日。", exPy: "wǒ shí yuè guò shēng rì.", exEn: "My birthday is in October.",
+        },
+      ],
+    },
+  },
+
   "让": {
     lesson: {
       intro: "“Let / make someone do something” — the little pivot verb.",
