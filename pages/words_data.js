@@ -33,6 +33,7 @@ window.WORDS_DATA.topics = [
   { id: "VERBS",   theme: "Common Verbs" },
   { id: "NUMBERS", theme: "Numbers" },
   { id: "TUTOR",   theme: "Tutor Notes" },
+  { id: "FRIENDS", theme: "Friends Tips" },
 ];
 
 // ----- Data: vocabulary (Integrated Chinese, Level 1, Lessons 1–20) -----
@@ -942,4 +943,21 @@ window.WORDS_DATA.words = [
   { w: "您",     pinyin: "nín",         pos: "pr",     def: "you (honorific)",              mnem: "<b>You</b> (你) with a <b>heart</b> (心) underneath — you hold the person in your heart: the respectful “<b>you</b>” for elders, teachers, customers.", parts: "你 you + 心 heart", lesson: "TUTOR" },
   { w: "候",     pinyin: "hòu",         pos: "n",      def: "time; to wait (as in 时候)",   mnem: "The character in 时候 (shíhou, “time”) — read <b>hòu</b>. In 你什么时候过(来)? the 候 is part of “when,” and the final 过 is a different character, guò.", parts: "亻 person + 侯 marquis (≈ <b>hóu</b>, sound)", lesson: "TUTOR" },
   { w: "过",     pinyin: "guò",         pos: "v",      def: "to come over; to pass by",     mnem: "<b>Walking</b> (辶) over to someone's place — 你什么时候过(来)? “When are you <b>coming over</b>?” Don't mix it up with 候 (hòu) in 时候.", parts: "辶 walk + 寸", lesson: "TUTOR" },
+
+  // ----- Topic: Friends Tips (words & tips picked up from friends) -----
+  { w: "画饼",   pinyin: "huà bǐng",    pos: "v/n",    def: "to draw a cake — to make empty promises", mnem: "<b>Drawing</b> (画) a <b>cake</b> (饼) — food on paper that no one can eat: <b>empty promises</b>. From the idiom 画饼充饥 “draw a cake to satisfy hunger.”", parts: "画 draw + 饼 cake/flatbread", lesson: "FRIENDS" },
+  { w: "叫什么？", pinyin: "jiào shénme?", pos: "phrase", def: "what's (your/its) name? — the natural short form", mnem: "Real-life Chinese drops the extras: <b>叫什么？</b> is the more natural thing to ask, instead of spelling out the whole 你叫什么名字.", parts: "叫 to be called + 什么 what", lesson: "FRIENDS" },
+  { w: "四",     pinyin: "sì",          pos: "nu",     def: "four (pronunciation drill)",  mnem: "<b>Close the teeth</b> for the s in <b>sì</b> — no “sh”! — and emphasize the <b>4th tone: spit it out</b>. Practice pair: 四维 sìwéi.", parts: "口 enclosure + 八", lesson: "FRIENDS" },
+  { w: "你什么时候生日？", pinyin: "nǐ shénme shíhou shēngrì?", pos: "phrase", def: "when's your birthday? (real-life casual form)", mnem: "How friends actually ask it — and mind the <b>4th tone</b>: spit out the <b>rì</b> (日) in 生日!", parts: "什么时候 when + 生日 birthday", lesson: "FRIENDS" },
+  { w: "你做什么工作？", pinyin: "nǐ zuò shénme gōngzuò?", pos: "phrase", def: "what do you do for work?", mnem: "什么 is <b>shén</b>me — 2nd tone. An equally fine variant: <b>你的工作是什么？</b> “What is your job?”", parts: "做 do + 什么 what + 工作 work", lesson: "FRIENDS" },
+  { w: "退休",   pinyin: "tuìxiū",      pos: "v",      def: "to retire (from work)",       mnem: "<b>Retreat</b> (退) into <b>rest</b> (休, a person 亻 leaning on a tree 木) — to <b>retire</b>. 我妈妈退休了 “My mom has retired.” Tones 4 + 1: <b>tuì-xiū</b>.", parts: "退 retreat + 休 rest", lesson: "FRIENDS" },
+  { w: "半导体", pinyin: "bàndǎotǐ",    pos: "n",      def: "semiconductor",               mnem: "A <b>half</b> (半) <b>conducting</b> (导) <b>body</b> (体) — literally “semi-conductor.” 我爸爸做半导体 “My dad works in semiconductors.” Tones 4-3-3: <b>bàn-dǎo-tǐ</b>.", parts: "半 half + 导 conduct/guide + 体 body", lesson: "FRIENDS" },
+  { w: "过滤器", pinyin: "guòlǜqì",     pos: "n",      def: "filter (the device)",         mnem: "A <b>device</b> (器) that lets things <b>pass</b> (过) through a <b>strainer</b> (滤) — a <b>filter</b>. 我爸爸给半导体做过滤器 “My dad makes filters for semiconductors.” Three 4th tones: <b>guò-lǜ-qì</b>.", parts: "过 pass + 滤 strain + 器 device", lesson: "FRIENDS" },
+  { w: "小红书", pinyin: "Xiǎohóngshū", pos: "pn",     def: "Xiaohongshu / RED (the app)", mnem: "The “<b>Little</b> (小) <b>Red</b> (红) <b>Book</b> (书)” — China's lifestyle app. 你常看小红书吗？ “Do you often look at Xiaohongshu?” — note single 常 works for “often.”", parts: "小 little + 红 red + 书 book", lesson: "FRIENDS" },
+  { w: "干吗",   pinyin: "gàn má",      pos: "phrase", def: "what are you doing?; what for?", mnem: "你在干吗呀？ nǐ zài gàn má ya — “What are you <b>doing</b> right now?” 在 marks the action in progress; 呀 softens it. Also written 干嘛.", parts: "干 do + 吗/嘛 (question sound)", lesson: "FRIENDS" },
+  { w: "干什么", pinyin: "gàn shénme",  pos: "phrase", def: "what are you doing?; do what?", mnem: "<b>Do</b> (干) <b>what</b> (什么)? — the blunter cousin of 干吗: “<b>What are you doing?</b>”", parts: "干 do + 什么 what", lesson: "FRIENDS" },
+  { w: "打游戏", pinyin: "dǎ yóuxì",    pos: "vo",     def: "to play video games",         mnem: "To “<b>hit</b>” (打) the <b>game</b> (游戏) — same 打 as 打球, 打电话. 我在打游戏 “I'm <b>playing games</b>.” Tones: dǎ <b>yóu-xì</b> (2 + 4).", parts: "打 hit/do + 游戏 game (游 roam + 戏 play)", lesson: "FRIENDS" },
+  { w: "取餐",   pinyin: "qǔ cān",      pos: "vo",     def: "to pick up food (takeout/delivery)", mnem: "<b>Fetch</b> (取) the <b>meal</b> (餐) — what you do at the pickup counter. Tones 3 + 1: <b>qǔ cān</b>.", parts: "取 fetch + 餐 meal", lesson: "FRIENDS" },
+  { w: "取",     pinyin: "qǔ",          pos: "v",      def: "to pick up, fetch, collect",  mnem: "An <b>ear</b> (耳) in a <b>hand</b> (又) — an old battlefield trophy image: to <b>take/fetch</b>. 我取 Mike 的单 “I'm picking up Mike's order.”", parts: "耳 ear + 又 hand", lesson: "FRIENDS" },
+  { w: "单",     pinyin: "dān",         pos: "n",      def: "order; list, bill",           mnem: "A <b>single</b> sheet listing what you bought — an <b>order</b>: 取单 pick up an order, 订单 a placed order, 买单 get the bill.", parts: "单 single/sheet", lesson: "FRIENDS" },
 ];
