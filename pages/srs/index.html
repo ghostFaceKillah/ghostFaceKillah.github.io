@@ -524,14 +524,19 @@
       height: 100vh;
       height: 100dvh;
       overflow: hidden;
-      padding: 12px 14px calc(10px + env(safe-area-inset-bottom));
+      padding: 18px 14px calc(24px + env(safe-area-inset-bottom));
     }
     body.in-review .theme-toggle { display: none; }
     body.in-review .wrap { height: 100%; }
     body.in-review #review.active {
       display: flex; flex-direction: column; height: 100%;
     }
-    body.in-review .bar { margin-bottom: 12px; }
+    /* generous air between the card window and the controls around it —
+       the dotted meadow peeking through is part of the look */
+    body.in-review .topbar { margin-bottom: 16px; }
+    body.in-review .bar { margin-bottom: 72px; }
+    body.in-review .reveal-row,
+    body.in-review .grades { margin-top: 72px; }
     body.in-review .card {
       flex: 1; min-height: 0;
       overflow-y: auto;
