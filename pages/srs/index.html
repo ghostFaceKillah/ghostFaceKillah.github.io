@@ -515,6 +515,37 @@
     .stats { grid-template-columns: repeat(2, 1fr); }
     .srs-big { font-size: 3.6rem; }
   }
+
+  /* On phones a long card (mini lesson…) used to push the grade buttons
+     below the fold. While reviewing, lock the page to the viewport and make
+     the card its own scrolling window — the buttons stay in reach. */
+  @media (max-width: 760px) {
+    body.in-review {
+      height: 100vh;
+      height: 100dvh;
+      overflow: hidden;
+      padding: 12px 14px calc(10px + env(safe-area-inset-bottom));
+    }
+    body.in-review .theme-toggle { display: none; }
+    body.in-review .wrap { height: 100%; }
+    body.in-review #review.active {
+      display: flex; flex-direction: column; height: 100%;
+    }
+    body.in-review .bar { margin-bottom: 12px; }
+    body.in-review .card {
+      flex: 1; min-height: 0;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      padding: 30px 18px 24px;
+      /* flexible spacers instead of justify-content: center — a centered
+         flexbox clips overflowing content past its top edge, spacers don't */
+      justify-content: flex-start;
+    }
+    body.in-review .card::before { content: ""; flex: none; margin-top: auto; }
+    body.in-review .card::after { content: ""; flex: none; margin-bottom: auto; }
+    body.in-review .reveal-row,
+    body.in-review .grades { flex: none; }
+  }
 </style>
 <script src="../words_data.js"></script>
 <script src="../sentences_data.js"></script>
@@ -1190,6 +1221,8 @@
   function show(name) {
     Object.values(screens).forEach(s => s.classList.remove("active"));
     screens[name].classList.add("active");
+    // on phones the review screen is viewport-locked (card scrolls, buttons stay)
+    document.body.classList.toggle("in-review", name === "review");
   }
 
   function refreshStats() {
@@ -1798,6 +1831,7 @@
     $("hintText").style.display = "";
     $("revealRow").style.display = "";
     $("grades").classList.remove("show");
+    $("card").scrollTop = 0;
 
     const left = queue.length;
     const freshLeft = queue.filter(c => !cardStates[c.id]).length;
@@ -1820,6 +1854,9 @@
     $("grades").classList.add("show");
     const s = speakable(current);
     if (s && s.text && Speech.supported) $("speakRow").style.display = "";
+    // a tall front can leave the freshly shown answer below the card window's
+    // fold — nudge it into view (no-op when it's already visible)
+    $("back").scrollIntoView({ block: "nearest", behavior: "smooth" });
   }
 
   function grade(g) {
