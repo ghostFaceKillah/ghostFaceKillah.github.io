@@ -536,13 +536,18 @@
       flex: 1; min-height: 0;
       overflow-y: auto;
       overscroll-behavior: contain;
-      padding: 30px 18px 24px;
+      padding: 34px 20px 26px;
       /* flexible spacers instead of justify-content: center — a centered
-         flexbox clips overflowing content past its top edge, spacers don't */
+         flexbox clips overflowing content past its top edge, spacers don't.
+         min-heights keep breathing room at the window edges even when a
+         long card overflows and the auto margins collapse to zero. */
       justify-content: flex-start;
     }
-    body.in-review .card::before { content: ""; flex: none; margin-top: auto; }
-    body.in-review .card::after { content: ""; flex: none; margin-bottom: auto; }
+    body.in-review .card::before { content: ""; flex: none; margin-top: auto; min-height: 24px; }
+    body.in-review .card::after { content: ""; flex: none; margin-bottom: auto; min-height: 12px; }
+    body.in-review .back { margin-top: 18px; padding-top: 16px; }
+    body.in-review .srs-mnem, body.in-review .srs-note,
+    body.in-review .srs-rule, body.in-review .srs-lesson { margin-top: 16px; }
     body.in-review .reveal-row,
     body.in-review .grades { flex: none; }
   }
