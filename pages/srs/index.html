@@ -541,6 +541,9 @@
       flex: 1; min-height: 0;
       overflow-y: auto;
       overscroll-behavior: contain;
+      /* the window sits a little further from the screen edges than the
+         bar and buttons — a framed picture, not a full-bleed panel */
+      margin: 0 10px;
       padding: 34px 20px 26px;
       /* flexible spacers instead of justify-content: center — a centered
          flexbox clips overflowing content past its top edge, spacers don't.
