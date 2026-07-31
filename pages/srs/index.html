@@ -1868,9 +1868,9 @@
     $("grades").classList.add("show");
     const s = speakable(current);
     if (s && s.text && Speech.supported) $("speakRow").style.display = "";
-    // a tall front can leave the freshly shown answer below the card window's
-    // fold — nudge it into view (no-op when it's already visible)
-    $("back").scrollIntoView({ block: "nearest", behavior: "smooth" });
+    // start reading from the top — character first, then the answer below
+    // (a long lesson would otherwise leave the window scrolled mid-answer)
+    $("card").scrollTo({ top: 0, behavior: "smooth" });
   }
 
   function grade(g) {
