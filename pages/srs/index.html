@@ -866,6 +866,26 @@
         changed = true;
       }
     }
+    // Topic packs grow over time, which shifts the auto-split range groups
+    // (e.g. TUTOR-21-21 → TUTOR-21-30 when more tutor words land). Remap any
+    // saved topics/<id>-lo-hi key that no longer exists onto the current
+    // groups of that topic overlapping the same word range.
+    const topicGroups = REGISTRY.deckById.topics.groups;
+    const liveKeys = new Set(topicGroups.map(g => "topics/" + g.id));
+    for (const key of Object.keys(groups)) {
+      if (!key.startsWith("topics/") || liveKeys.has(key)) continue;
+      const m = key.match(/^topics\/(.+)-(\d+)-(\d+)$/);
+      if (!m) continue;
+      const targets = topicGroups.filter(g => {
+        const gm = g.id.match(/^(.+)-(\d+)-(\d+)$/);
+        return gm && gm[1] === m[1] &&
+          Number(gm[2]) <= Number(m[3]) && Number(gm[3]) >= Number(m[2]);
+      });
+      if (!targets.length) continue;
+      delete groups[key];
+      for (const g of targets) groups["topics/" + g.id] = true;
+      changed = true;
+    }
     return changed;
   }
 
