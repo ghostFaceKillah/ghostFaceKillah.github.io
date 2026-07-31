@@ -532,11 +532,12 @@
       display: flex; flex-direction: column; height: 100%;
     }
     /* generous air between the card window and the controls around it —
-       the dotted meadow peeking through is part of the look */
-    body.in-review .topbar { margin-bottom: 16px; }
-    body.in-review .bar { margin-bottom: 72px; }
+       the dotted meadow peeking through is part of the look. The controls
+       come in a little from the screen edges too; the card a step further. */
+    body.in-review .topbar { margin: 0 6px 16px; }
+    body.in-review .bar { margin: 0 6px 72px; }
     body.in-review .reveal-row,
-    body.in-review .grades { margin-top: 72px; }
+    body.in-review .grades { margin: 72px 6px 0; }
     body.in-review .card {
       flex: 1; min-height: 0;
       overflow-y: auto;
