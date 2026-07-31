@@ -532,15 +532,19 @@
       display: flex; flex-direction: column; height: 100%;
     }
     /* generous air between the card window and the controls around it —
-       the dotted meadow peeking through is part of the look */
-    body.in-review .topbar { margin-bottom: 16px; }
-    body.in-review .bar { margin-bottom: 72px; }
+       the dotted meadow peeking through is part of the look. The controls
+       come in a little from the screen edges too; the card a step further. */
+    body.in-review .topbar { margin: 0 6px 16px; }
+    body.in-review .bar { margin: 0 6px 72px; }
     body.in-review .reveal-row,
-    body.in-review .grades { margin-top: 72px; }
+    body.in-review .grades { margin: 72px 6px 0; }
     body.in-review .card {
       flex: 1; min-height: 0;
       overflow-y: auto;
       overscroll-behavior: contain;
+      /* the window sits a little further from the screen edges than the
+         bar and buttons — a framed picture, not a full-bleed panel */
+      margin: 0 10px;
       padding: 34px 20px 26px;
       /* flexible spacers instead of justify-content: center — a centered
          flexbox clips overflowing content past its top edge, spacers don't.
@@ -1864,9 +1868,9 @@
     $("grades").classList.add("show");
     const s = speakable(current);
     if (s && s.text && Speech.supported) $("speakRow").style.display = "";
-    // a tall front can leave the freshly shown answer below the card window's
-    // fold — nudge it into view (no-op when it's already visible)
-    $("back").scrollIntoView({ block: "nearest", behavior: "smooth" });
+    // start reading from the top — character first, then the answer below
+    // (a long lesson would otherwise leave the window scrolled mid-answer)
+    $("card").scrollTo({ top: 0, behavior: "smooth" });
   }
 
   function grade(g) {
