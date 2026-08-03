@@ -1779,8 +1779,10 @@
     const d = card.data;
     switch (card.deckId) {
       case "words": return { text: d.w, lang: "zh" };
+      case "topics": return { text: d.w, lang: "zh" };
       case "sent": return { text: d.zh, lang: "zh" };
       case "recall": return { text: d.zh, lang: "zh" };
+      case "spokenrec": return { text: d.zh, lang: "zh" };
       case "coll": return { text: d.c + "。" + (d.ex || ""), lang: "zh" };
       case "rad": return { text: d.base, lang: "zh" };
       case "num": return { text: d.hanzi, lang: "zh" };
