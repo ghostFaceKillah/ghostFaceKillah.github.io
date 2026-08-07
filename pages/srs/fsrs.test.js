@@ -125,6 +125,43 @@ const T0 = Date.UTC(2026, 0, 1, 12, 0, 0);
   check("R at t=0 is 1", FSRS.retrievability(0, 5) === 1);
 }
 
+// ----- leech detection ----------------------------------------------------------
+{
+  check("no state: not a leech", !FSRS.isLeech(null));
+  check("unseen card state: not a leech", !FSRS.isLeech({ reps: 0, lapses: 0 }));
+
+  const fresh = FSRS.review(null, AGAIN, T0);
+  check("brand-new card failing its first review: not a leech", !FSRS.isLeech(fresh));
+
+  // A card that lapses at every scheduled review, relearned each time:
+  // the classic leech life cycle.
+  let leech = FSRS.review(null, GOOD, T0);
+  let t = leech.due;
+  for (let i = 0; i < 5; i++) {
+    leech = FSRS.review(leech, AGAIN, t);   // forgot when it came due
+    leech = FSRS.review(leech, GOOD, leech.due); // relearned 10 min later
+    t = leech.due;
+  }
+  check("card failing every scheduled review: flagged as leech", FSRS.isLeech(leech),
+    `lapses ${leech.lapses}, reps ${leech.reps}, D ${leech.difficulty.toFixed(1)}`);
+
+  // A solid card with one slip stays off the list.
+  let ok = null; t = T0;
+  for (let i = 0; i < 10; i++) { ok = FSRS.review(ok, GOOD, t); t = ok.due; }
+  ok = FSRS.review(ok, AGAIN, t);
+  check("one slip after a long streak: not a leech", !FSRS.isLeech(ok));
+
+  // Difficulty path: lapses spread thin over many reps, but FSRS has
+  // pinned the card as very hard — still a leech.
+  const pinned = { stability: 2, difficulty: 9.4, due: 0, lastReview: 0, reps: 30, lapses: 4 };
+  check("difficulty-pinned card: leech even at a low lapse ratio", FSRS.isLeech(pinned));
+  check("same lapses on an easy card: not a leech",
+    !FSRS.isLeech({ ...pinned, difficulty: 4 }));
+
+  check("leechScore: an extra lapse outvotes any difficulty gap",
+    FSRS.leechScore({ lapses: 6, difficulty: 1 }) > FSRS.leechScore({ lapses: 5, difficulty: 10 }));
+}
+
 // ----- guards -------------------------------------------------------------------
 {
   let threw = false;

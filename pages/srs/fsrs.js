@@ -134,6 +134,30 @@ window.FSRS = (function () {
     };
   }
 
+  // ----- Leech detection --------------------------------------------------
+  // A leech keeps lapsing without ever settling — it eats review time out of
+  // all proportion to what sticks. Flagged from existing card state alone:
+  // enough lapses AND (lapses keeping pace with total reps, OR FSRS has
+  // pinned the card near maximum difficulty). The reps ratio keeps freshly
+  // learned cards off the list — their same-session misses also count as
+  // lapses, but the reps pile up just as fast.
+  const LEECH_MIN_LAPSES = 4;
+  const LEECH_LAPSE_RATIO = 0.3;
+  const LEECH_DIFFICULTY = 8.5;
+
+  function isLeech(state) {
+    return !!state && !!state.reps &&
+      state.lapses >= LEECH_MIN_LAPSES &&
+      (state.lapses / state.reps >= LEECH_LAPSE_RATIO ||
+        state.difficulty >= LEECH_DIFFICULTY);
+  }
+
+  // Sort key for "worst first": lapse count, difficulty as the tie-break
+  // (difficulty ≤ 10, so it can never outvote a whole extra lapse).
+  function leechScore(state) {
+    return state.lapses + state.difficulty / 10;
+  }
+
   // Preview the due delay for each grade — used to label the grade buttons.
   // Returns { 1: ms, 2: ms, 3: ms, 4: ms } of delay-from-now per grade.
   function previewIntervals(state, now) {
@@ -151,6 +175,8 @@ window.FSRS = (function () {
     previewIntervals,
     retrievability,
     intervalDays,
+    isLeech,
+    leechScore,
     // exposed for tests
     _internals: { W, initStability, initDifficulty, nextDifficulty, nextRecallStability, nextForgetStability, shortTermStability },
   };
