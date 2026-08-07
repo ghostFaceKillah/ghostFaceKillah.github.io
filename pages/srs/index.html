@@ -333,6 +333,10 @@
   .g-good { background: var(--green); }
   .g-easy { background: var(--sky); }
 
+  /* learn-mode nav — sits in the same slot as the grade buttons */
+  #browseNav .btn { flex: 1; width: auto; margin-top: 0; }
+  #browseNav .btn.ghost { flex: 0 0 auto; padding: 16px 22px; }
+
   /* ----- Done screen ----- */
   .done { text-align: center; }
   .done .big { font-size: 2.6rem; margin: 30px 0 8px; font-weight: 900; }
@@ -612,6 +616,12 @@
       <button class="btn ghost" id="focusBtn" disabled>🎯 Go</button>
     </div>
 
+    <div class="label">Learn mode — flip through a set, nothing is graded or recorded</div>
+    <div class="focus-row">
+      <select id="browseSelect"><option value="">choose a set…</option></select>
+      <button class="btn ghost" id="browseBtn" disabled>📖 Go</button>
+    </div>
+
     <div class="label">New cards per day</div>
     <div class="toggle" id="capToggle">
       <button class="opt" data-cap="5">5</button>
@@ -671,6 +681,11 @@
       <button class="grade g-hard" data-grade="2">Hard<small id="ivl2"></small></button>
       <button class="grade g-good" data-grade="3">Good<small id="ivl3"></small></button>
       <button class="grade g-easy" data-grade="4">Easy<small id="ivl4"></small></button>
+    </div>
+
+    <div class="grades" id="browseNav">
+      <button class="btn ghost" id="browsePrevBtn">←</button>
+      <button class="btn" id="browseNextBtn">Next</button>
     </div>
   </section>
 
@@ -1249,6 +1264,15 @@
     return seen.concat(group.cards.filter(c => !cardStates[c.id]));
   }
 
+  // Cards for learn mode: one group in its natural (curriculum) order —
+  // a read-through, so no shuffling and no seen/unseen split.
+  function browseCards(key) {
+    const slash = key.indexOf("/");
+    const deck = REGISTRY.deckById[key.slice(0, slash)];
+    const group = deck && deck.groups.find(g => g.id === key.slice(slash + 1));
+    return group ? group.cards.slice() : [];
+  }
+
   // ----- Home screen ------------------------------------------------------------
   const $ = id => document.getElementById(id);
   const screens = { home: $("home"), review: $("review"), done: $("doneScreen"), stats: $("statsScreen") };
@@ -1290,10 +1314,11 @@
       : "nothing to pull in";
   }
 
-  // The focus picker lists every group on the site (enabled for daily
-  // review or not) — cramming a chapter shouldn't require opting it in.
-  function buildFocusSelect() {
-    const sel = $("focusSelect");
+  // Both set pickers (focus review and learn mode) list every group on the
+  // site (enabled for daily review or not) — cramming or browsing a chapter
+  // shouldn't require opting it in.
+  function buildGroupSelect(selId, btnId) {
+    const sel = $(selId);
     for (const deck of REGISTRY.decks) {
       const og = document.createElement("optgroup");
       og.label = `${deck.emoji} ${deck.name}`;
@@ -1305,9 +1330,10 @@
       }
       sel.appendChild(og);
     }
-    sel.addEventListener("change", () => { $("focusBtn").disabled = !sel.value; });
+    sel.addEventListener("change", () => { $(btnId).disabled = !sel.value; });
   }
-  buildFocusSelect();
+  buildGroupSelect("focusSelect", "focusBtn");
+  buildGroupSelect("browseSelect", "browseBtn");
 
   function syncCapButtons() {
     document.querySelectorAll("#capToggle .opt").forEach(b => {
@@ -1803,6 +1829,10 @@
   //   focus — every card of one chosen group, due or not (tutor-prep cram)
   //   ahead — extra rounds after the daily queue is clear: the weakest
   //           not-yet-due cards, AHEAD_BATCH at a time
+  //   browse — "learn mode": flip through one group front-to-back with
+  //           Back/Next instead of grades. The one mode OUTSIDE the engine's
+  //           grading path — it never touches card state, the review log or
+  //           the day counters, so it's free of scheduling consequences.
   let queue = [];          // card objects
   let sessionMode = "daily";
   let sessionTotal = 0;
@@ -1811,6 +1841,7 @@
   let current = null;
   let revealed = false;
   let cardShownAt = 0;     // show → grade is the card's logged duration
+  let browseHist = [];     // cards already flipped past, for Back
 
   function shuffle(arr) {
     for (let i = arr.length - 1; i > 0; i--) {
@@ -1827,6 +1858,7 @@
     sessionTotal = queue.length;
     sessionDone = 0;
     sessionNew = 0;
+    browseHist = [];
     show("review");
     showCard();
   }
@@ -1867,6 +1899,8 @@
     $("hintText").style.display = "";
     $("revealRow").style.display = "";
     $("grades").classList.remove("show");
+    $("browseNav").classList.remove("show");
+    $("browsePrevBtn").disabled = !browseHist.length;
     $("card").scrollTop = 0;
 
     const left = queue.length;
@@ -1876,9 +1910,11 @@
     $("barFill").style.width =
       (sessionTotal ? Math.round(100 * sessionDone / sessionTotal) : 0) + "%";
 
-    // interval previews on the grade buttons
-    const prev = FSRS.previewIntervals(cardStates[current.id] || null, Date.now());
-    for (const g of [1, 2, 3, 4]) $("ivl" + g).textContent = fmtDelay(prev[g]);
+    // interval previews on the grade buttons (browse has no grades)
+    if (sessionMode !== "browse") {
+      const prev = FSRS.previewIntervals(cardStates[current.id] || null, Date.now());
+      for (const g of [1, 2, 3, 4]) $("ivl" + g).textContent = fmtDelay(prev[g]);
+    }
   }
 
   function reveal() {
@@ -1887,7 +1923,7 @@
     $("back").classList.add("show");
     $("hintText").style.display = "none";
     $("revealRow").style.display = "none";
-    $("grades").classList.add("show");
+    $(sessionMode === "browse" ? "browseNav" : "grades").classList.add("show");
     const s = speakable(current);
     if (s && s.text && Speech.supported) $("speakRow").style.display = "";
     // start reading from the top — character first, then the answer below
@@ -1895,8 +1931,22 @@
     $("card").scrollTo({ top: 0, behavior: "smooth" });
   }
 
+  // Learn-mode paging. Next only moves the pointer — nothing is written.
+  function browseNext() {
+    if (!current) return;
+    browseHist.push(queue.shift());
+    sessionDone++;
+    showCard();
+  }
+  function browsePrev() {
+    if (!browseHist.length) return;
+    queue.unshift(browseHist.pop());
+    sessionDone = Math.max(0, sessionDone - 1);
+    showCard();
+  }
+
   function grade(g) {
-    if (!current || !revealed) return;
+    if (!current || !revealed || sessionMode === "browse") return;
     const now = Date.now();
     const prev = cardStates[current.id];
     const wasNew = !prev;
@@ -1921,6 +1971,14 @@
   }
 
   function finishSession() {
+    if (sessionMode === "browse") {
+      $("doneBig").textContent = "Set browsed! 📖";
+      $("doneSummary").textContent =
+        `${sessionTotal} card${sessionTotal === 1 ? "" : "s"} flipped through — nothing graded, nothing recorded`;
+      show("done");
+      refreshStats();
+      return;
+    }
     const c = todayCounts(Date.now());
     const opener = {
       daily: "All clear! 🎉",
@@ -1956,6 +2014,12 @@
     await refreshKeepingSlot();
     startSession("focus", focusCards($("focusSelect").value));
   });
+  // learn mode writes nothing, so no cloud rebase needed before starting
+  $("browseBtn").addEventListener("click", () => {
+    startSession("browse", browseCards($("browseSelect").value));
+  });
+  $("browseNextBtn").addEventListener("click", browseNext);
+  $("browsePrevBtn").addEventListener("click", browsePrev);
   $("quitBtn").addEventListener("click", () => { show("home"); refreshStats(); });
   $("homeBtn").addEventListener("click", () => { show("home"); refreshStats(); });
   $("statsBtn").addEventListener("click", () => { renderStats(); show("stats"); });
@@ -1964,7 +2028,11 @@
     store.write("endlessNew", $("endlessNew").checked);
     renderStats();
   });
-  $("card").addEventListener("click", reveal);
+  // in learn mode a second tap on the card pages forward — flip, flip, flip
+  $("card").addEventListener("click", () => {
+    if (revealed && sessionMode === "browse") browseNext();
+    else reveal();
+  });
   $("revealBtn").addEventListener("click", reveal);
   $("grades").addEventListener("click", e => {
     const b = e.target.closest(".grade");
@@ -1981,6 +2049,12 @@
     if (e.key === " " || e.key === "Enter") {
       e.preventDefault();
       if (!revealed) reveal();
+      else if (sessionMode === "browse") browseNext();
+      return;
+    }
+    if (sessionMode === "browse") {
+      if (e.key === "ArrowLeft") browsePrev();
+      else if (e.key === "ArrowRight") revealed ? browseNext() : reveal();
       return;
     }
     if (revealed && e.key >= "1" && e.key <= "4") grade(Number(e.key));
