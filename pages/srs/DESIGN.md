@@ -62,9 +62,19 @@ Decided 2026-07-11. This doc is the source of truth for sessions continuing the 
   handled by the math itself (early review ⇒ high retrievability ⇒ tiny stability
   gain), so no mode needs special scheduling rules:
   - **daily** — due cards + new cards up to the daily cap (the default habit).
-  - **learn** — unseen cards only, one `newPerDay`-sized batch per session.
-    Deliberately allowed past the daily cap (explicit user intent), but each card
-    still counts as introduced, so the daily queue never double-adds new cards.
+  - **leeches** — replaced the **learn** button 2026-08-07 (learn's graded
+    new-card batches duplicated what the daily queue's intake already does;
+    the ungraded browse "learn mode" covers pre-study). Drills the cards that
+    keep lapsing: `FSRS.isLeech(state)` — pure, tested next to the scheduler —
+    flags `lapses ≥ 4 AND (lapses/reps ≥ 0.3 OR difficulty ≥ 8.5)`; the reps
+    ratio keeps freshly learned cards off the list (their same-session misses
+    also count as lapses), the difficulty arm catches cards FSRS has pinned as
+    hard even when lapses spread thin. Sessions take the worst 10
+    (`FSRS.leechScore` = lapses, difficulty as tie-break) among not-due-today
+    cards — due leeches belong to the daily queue. Leeches wear a red
+    `leech 🧛` tag during review (sharing the `new ✨` slot — a leech is never
+    new), and the stats screen lists the top 10 with lapse counts so
+    confusable pairs can be spotted side by side.
   - **focus** — every card of one chosen group (e.g. an IC1 chapter before a tutor
     lesson), due or not, enabled for daily review or not. Cramming a group does
     NOT opt it into the daily rotation — the deck chips stay the only intake switch.

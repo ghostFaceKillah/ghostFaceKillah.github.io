@@ -251,7 +251,7 @@
     box-shadow: 0 6px 0 rgba(0,0,0,.06);
     position: relative;
   }
-  .deckTag, .newTag {
+  .deckTag, .newTag, .leechTag {
     position: absolute; top: 14px;
     font-size: .75rem; font-weight: 700; color: var(--muted);
     border: 2px solid var(--line); border-radius: 999px; padding: 3px 11px;
@@ -259,6 +259,9 @@
   .deckTag { left: 18px; }
   .newTag { right: 18px; color: var(--accent); border-color: var(--accent); display: none; }
   .newTag.show { display: block; }
+  /* a leech is never new (it needs several lapses), so the slot is shared */
+  .leechTag { right: 18px; color: var(--red); border-color: var(--red); display: none; }
+  .leechTag.show { display: block; }
 
   /* card content, front & back (classes emitted by registry render fns) */
   .srs-big { font-size: 4.6rem; line-height: 1.15; font-weight: 700; }
@@ -395,6 +398,19 @@
   .garden-legend b { margin-left: auto; padding-left: 8px; }
   .garden-empty { color: var(--muted); text-align: center; margin: 6px 0; }
   .seeds { color: var(--muted); font-size: .85rem; margin: 12px 0 0; }
+
+  /* ----- Leech panel ----- */
+  .leech-row {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    padding: 8px 2px; border-bottom: 2px dashed var(--line);
+  }
+  .leech-row:last-child { border-bottom: none; }
+  .leech-front { min-width: 0; text-align: left; }
+  /* card fronts reuse the review-screen renderers — shrink them to list size */
+  .leech-front .srs-big { font-size: 1.6rem; line-height: 1.2; }
+  .leech-front .srs-zh { font-size: 1.15rem; line-height: 1.3; }
+  .leech-front .srs-en-front { font-size: .95rem; line-height: 1.3; }
+  .leech-meta { flex: 0 0 auto; color: var(--muted); font-size: .8rem; font-weight: 700; }
 
   .forecast { display: flex; align-items: flex-end; gap: 3px; height: 110px; }
   .fbar {
@@ -603,7 +619,7 @@
     <button class="btn" id="startBtn">Start review</button>
 
     <div class="btn-row">
-      <button class="btn ghost" id="learnBtn">🌱 Learn new<small id="learnCount"></small></button>
+      <button class="btn ghost" id="leechBtn">🧛 Tame leeches<small id="leechCount"></small></button>
       <button class="btn ghost" id="aheadBtn">⏩ Review ahead<small id="aheadCount"></small></button>
     </div>
     <div class="btn-row">
@@ -664,6 +680,7 @@
     <div class="card" id="card">
       <span class="deckTag" id="deckTag"></span>
       <span class="newTag" id="newTag">new ✨</span>
+      <span class="leechTag" id="leechTag">leech 🧛</span>
       <div id="front"></div>
       <div class="back" id="back"></div>
       <div class="speak-row" id="speakRow" style="display:none">
@@ -763,6 +780,12 @@
         <input type="checkbox" id="endlessNew">
         <span id="endlessNewText">♾️ assume I keep adding new material — never run out of cards to learn</span>
       </label>
+    </div>
+
+    <div class="label">🧛 Leeches — the cards that keep slipping away</div>
+    <div class="panel">
+      <div id="leechList"></div>
+      <p class="seeds" id="leechNote"></p>
     </div>
   </section>
 
@@ -1252,6 +1275,20 @@
       .map(x => x.c);
   }
 
+  // Cards for leech taming: cards that keep lapsing (see FSRS.isLeech),
+  // worst first, LEECH_BATCH at a time — a small deliberate dose, not a
+  // grind. Leeches already due today are left to the daily queue; drilling
+  // the rest early is safe for the same reason review-ahead is.
+  const LEECH_BATCH = 10;
+  function leechCards(now) {
+    const cutoff = endOfTodayMs(now);
+    return enabledCards()
+      .map(c => ({ c, s: cardStates[c.id] }))
+      .filter(x => x.s && x.s.due > cutoff && FSRS.isLeech(x.s))
+      .sort((a, b) => FSRS.leechScore(b.s) - FSRS.leechScore(a.s))
+      .map(x => x.c);
+  }
+
   // Cards for a focus session: everything in one group (a chapter, a kana
   // row…), enabled for daily review or not. Seen cards shuffled up front,
   // unseen ones after in their natural order.
@@ -1302,11 +1339,11 @@
       enabledCards().length === 0 ? "Pick some decks below ↓" :
       "All done for today 🎉";
 
-    const unseen = newCardsAvailable().length;
-    $("learnBtn").disabled = unseen === 0;
-    $("learnCount").textContent = unseen
-      ? `${Math.min(settings.newPerDay, unseen)} of ${unseen} waiting`
-      : "decks all met";
+    const leeches = leechCards(now).length;
+    $("leechBtn").disabled = leeches === 0;
+    $("leechCount").textContent = leeches
+      ? `${Math.min(LEECH_BATCH, leeches)} of ${leeches} stuck`
+      : "no leeches 🎉";
     const ahead = aheadCards(now).length;
     $("aheadBtn").disabled = ahead === 0;
     $("aheadCount").textContent = ahead
@@ -1750,6 +1787,36 @@
          { ms: s.sched * pace.revMs, cls: "w2" }],
         bmax, d === 0 && simMs(s) > 0 ? fmtDur(simMs(s)) : "", tipText));
     });
+
+    // --- leeches: the cards eating the most review time --------------------
+    // The full census (due-today ones included — this is a report, not a
+    // queue), worst first, so confusable pairs can be spotted side by side.
+    const LEECH_LIST = 10;
+    const leeches = enabledCards()
+      .map(c => ({ c, s: cardStates[c.id] }))
+      .filter(x => x.s && FSRS.isLeech(x.s))
+      .sort((a, b) => FSRS.leechScore(b.s) - FSRS.leechScore(a.s));
+    const ll = $("leechList");
+    ll.innerHTML = "";
+    for (const { c, s } of leeches.slice(0, LEECH_LIST)) {
+      const deck = REGISTRY.deckById[c.deckId];
+      const row = document.createElement("div");
+      row.className = "leech-row";
+      const front = document.createElement("span");
+      front.className = "leech-front";
+      front.innerHTML = REGISTRY.render(c).front;
+      const meta = document.createElement("span");
+      meta.className = "leech-meta";
+      meta.textContent = `${deck.emoji} · ${s.lapses}× forgotten`;
+      row.append(front, meta);
+      ll.appendChild(row);
+    }
+    $("leechNote").textContent =
+      leeches.length === 0
+        ? "No leeches — nothing keeps slipping away 🎉"
+        : (leeches.length > LEECH_LIST ? `…and ${leeches.length - LEECH_LIST} more. ` : "") +
+          "The 🧛 button on the home screen drills the worst first — " +
+          "if two of these look alike, study them side by side.";
   }
 
   // Shared tooltip for heatmap cells, garden segments and forecast bars.
@@ -1819,13 +1886,13 @@
   }
 
   // ----- Review session -----------------------------------------------------------
-  // Three ways in, one engine. Every mode grades through the same
+  // Several ways in, one engine. Every mode grades through the same
   // FSRS.review with the real elapsed time — the math handles early and
   // late reviews on its own, so no mode needs special scheduling rules.
   //   daily — due cards + new cards up to the daily cap (the default habit)
-  //   learn — only unseen cards, one newPerDay-sized batch per session;
-  //           deliberately allowed past the daily cap, but each card still
-  //           counts as introduced so the daily queue won't double-add
+  //   leeches — cards that keep lapsing (see FSRS.isLeech), worst first,
+  //           LEECH_BATCH at a time: extra deliberate exposure, outside
+  //           the schedule, for the cards eating the most review time
   //   focus — every card of one chosen group, due or not (tutor-prep cram)
   //   ahead — extra rounds after the daily queue is clear: the weakest
   //           not-yet-due cards, AHEAD_BATCH at a time
@@ -1837,7 +1904,6 @@
   let sessionMode = "daily";
   let sessionTotal = 0;
   let sessionDone = 0;
-  let sessionNew = 0;
   let current = null;
   let revealed = false;
   let cardShownAt = 0;     // show → grade is the card's logged duration
@@ -1857,7 +1923,6 @@
     queue = cards;
     sessionTotal = queue.length;
     sessionDone = 0;
-    sessionNew = 0;
     browseHist = [];
     show("review");
     showCard();
@@ -1892,6 +1957,7 @@
     const { front, back } = REGISTRY.render(current);
     $("deckTag").textContent = deck.emoji + " " + deck.name;
     $("newTag").classList.toggle("show", !cardStates[current.id]);
+    $("leechTag").classList.toggle("show", FSRS.isLeech(cardStates[current.id]));
     $("front").innerHTML = front;
     $("back").innerHTML = back;
     $("back").classList.remove("show");
@@ -1955,7 +2021,7 @@
     saveCards();
     if (cloud) cloud.pushCard(current.id, cardStates[current.id]);
     appendLog(current.id, g, prevIvl, now, now - cardShownAt);
-    if (wasNew) { bumpToday(now, "introduced"); sessionNew++; }
+    if (wasNew) bumpToday(now, "introduced");
     bumpToday(now, "reviews");
 
     queue.shift();
@@ -1982,7 +2048,7 @@
     const c = todayCounts(Date.now());
     const opener = {
       daily: "All clear! 🎉",
-      learn: sessionNew ? `${sessionNew} new card${sessionNew === 1 ? "" : "s"} met 🌱` : "All clear! 🎉",
+      leeches: "Leeches tamed! 🧛",
       focus: "Set crammed! 🎯",
       ahead: "Extra round done! ⏩",
     };
@@ -2002,9 +2068,9 @@
     await refreshKeepingSlot();
     startSession("daily", dailyQueue());
   });
-  $("learnBtn").addEventListener("click", async () => {
+  $("leechBtn").addEventListener("click", async () => {
     await refreshKeepingSlot();
-    startSession("learn", newCardsAvailable().slice(0, settings.newPerDay));
+    startSession("leeches", leechCards(Date.now()).slice(0, LEECH_BATCH));
   });
   $("aheadBtn").addEventListener("click", async () => {
     await refreshKeepingSlot();
