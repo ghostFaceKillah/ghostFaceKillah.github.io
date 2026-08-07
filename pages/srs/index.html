@@ -795,6 +795,7 @@
       <p class="big" id="doneBig">All clear! 🎉</p>
       <p class="sub" id="doneSummary"></p>
       <button class="btn" id="nextSetBtn" style="display:none"></button>
+      <button class="btn ghost" id="resumeSetBtn" style="display:none">← Back to the last card</button>
       <button class="btn ghost" id="homeBtn">Back to decks</button>
     </div>
   </section>
@@ -2058,6 +2059,7 @@
 
   function finishSession() {
     const nextBtn = $("nextSetBtn");
+    const resumeBtn = $("resumeSetBtn");
     if (sessionMode === "browse") {
       $("doneBig").textContent = "Set browsed! 📖";
       $("doneSummary").textContent =
@@ -2070,11 +2072,14 @@
           `📖 Next set: ${f.deck.emoji} ${f.group.name} · ${f.group.cards.length}`;
         nextBtn.dataset.key = next;
       }
+      // the flipped-past stack is still intact, so stepping back in is free
+      resumeBtn.style.display = browseHist.length ? "" : "none";
       show("done");
       refreshStats();
       return;
     }
     nextBtn.style.display = "none";
+    resumeBtn.style.display = "none";
     const c = todayCounts(Date.now());
     const opener = {
       daily: "All clear! 🎉",
@@ -2120,6 +2125,13 @@
   }
   $("browseBtn").addEventListener("click", () => startBrowse($("browseSelect").value));
   $("nextSetBtn").addEventListener("click", e => startBrowse(e.currentTarget.dataset.key));
+  // re-enter the set just finished, on its last card (the browse session's
+  // state is untouched on the done screen — this is just Back across it)
+  $("resumeSetBtn").addEventListener("click", () => {
+    if (!browseHist.length) return;
+    show("review");
+    browsePrev();
+  });
   $("browseNextBtn").addEventListener("click", browseNext);
   $("browsePrevBtn").addEventListener("click", browsePrev);
   $("quitBtn").addEventListener("click", () => { show("home"); refreshStats(); });
