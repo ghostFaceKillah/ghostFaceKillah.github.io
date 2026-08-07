@@ -771,6 +771,7 @@
     <div class="done">
       <p class="big" id="doneBig">All clear! 🎉</p>
       <p class="sub" id="doneSummary"></p>
+      <button class="btn" id="nextSetBtn" style="display:none"></button>
       <button class="btn ghost" id="homeBtn">Back to decks</button>
     </div>
   </section>
@@ -1266,11 +1267,24 @@
 
   // Cards for learn mode: one group in its natural (curriculum) order —
   // a read-through, so no shuffling and no seen/unseen split.
-  function browseCards(key) {
+  function findGroup(key) {
     const slash = key.indexOf("/");
     const deck = REGISTRY.deckById[key.slice(0, slash)];
     const group = deck && deck.groups.find(g => g.id === key.slice(slash + 1));
-    return group ? group.cards.slice() : [];
+    return group ? { deck, group } : null;
+  }
+  function browseCards(key) {
+    const f = findGroup(key);
+    return f ? f.group.cards.slice() : [];
+  }
+  // The set after `key` in picker order — crossing into the next deck when a
+  // deck's last group is done, null at the very end of the site.
+  function nextGroupKey(key) {
+    const keys = [];
+    for (const deck of REGISTRY.decks)
+      for (const g of deck.groups) keys.push(groupKey(deck.id, g.id));
+    const i = keys.indexOf(key);
+    return i >= 0 && i + 1 < keys.length ? keys[i + 1] : null;
   }
 
   // ----- Home screen ------------------------------------------------------------
@@ -1830,7 +1844,9 @@
   //   ahead — extra rounds after the daily queue is clear: the weakest
   //           not-yet-due cards, AHEAD_BATCH at a time
   //   browse — "learn mode": flip through one group front-to-back with
-  //           Back/Next instead of grades. The one mode OUTSIDE the engine's
+  //           Back/Next instead of grades, both card sides open at once (no
+  //           reveal step — it's reading, not self-testing), rolling into
+  //           the next set when one ends. The one mode OUTSIDE the engine's
   //           grading path — it never touches card state, the review log or
   //           the day counters, so it's free of scheduling consequences.
   let queue = [];          // card objects
@@ -1842,6 +1858,7 @@
   let revealed = false;
   let cardShownAt = 0;     // show → grade is the card's logged duration
   let browseHist = [];     // cards already flipped past, for Back
+  let browseKey = null;    // the set being browsed, for "next set" rollover
 
   function shuffle(arr) {
     for (let i = arr.length - 1; i > 0; i--) {
@@ -1915,6 +1932,9 @@
       const prev = FSRS.previewIntervals(cardStates[current.id] || null, Date.now());
       for (const g of [1, 2, 3, 4]) $("ivl" + g).textContent = fmtDelay(prev[g]);
     }
+
+    // learn mode is a read-through: both sides open at once, no reveal step
+    if (sessionMode === "browse") reveal();
   }
 
   function reveal() {
@@ -1971,14 +1991,24 @@
   }
 
   function finishSession() {
+    const nextBtn = $("nextSetBtn");
     if (sessionMode === "browse") {
       $("doneBig").textContent = "Set browsed! 📖";
       $("doneSummary").textContent =
         `${sessionTotal} card${sessionTotal === 1 ? "" : "s"} flipped through — nothing graded, nothing recorded`;
+      const next = nextGroupKey(browseKey);
+      const f = next && findGroup(next);
+      nextBtn.style.display = f ? "" : "none";
+      if (f) {
+        nextBtn.textContent =
+          `📖 Next set: ${f.deck.emoji} ${f.group.name} · ${f.group.cards.length}`;
+        nextBtn.dataset.key = next;
+      }
       show("done");
       refreshStats();
       return;
     }
+    nextBtn.style.display = "none";
     const c = todayCounts(Date.now());
     const opener = {
       daily: "All clear! 🎉",
@@ -2015,9 +2045,15 @@
     startSession("focus", focusCards($("focusSelect").value));
   });
   // learn mode writes nothing, so no cloud rebase needed before starting
-  $("browseBtn").addEventListener("click", () => {
-    startSession("browse", browseCards($("browseSelect").value));
-  });
+  function startBrowse(key) {
+    browseKey = key;
+    // keep the home-screen picker pointing at what's actually being browsed
+    $("browseSelect").value = key;
+    $("browseBtn").disabled = false;
+    startSession("browse", browseCards(key));
+  }
+  $("browseBtn").addEventListener("click", () => startBrowse($("browseSelect").value));
+  $("nextSetBtn").addEventListener("click", e => startBrowse(e.currentTarget.dataset.key));
   $("browseNextBtn").addEventListener("click", browseNext);
   $("browsePrevBtn").addEventListener("click", browsePrev);
   $("quitBtn").addEventListener("click", () => { show("home"); refreshStats(); });
