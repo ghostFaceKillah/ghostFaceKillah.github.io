@@ -1822,7 +1822,7 @@
       front.innerHTML = REGISTRY.render(c).front;
       const meta = document.createElement("span");
       meta.className = "leech-meta";
-      meta.textContent = `${deck.emoji} · ${s.lapses}× forgotten`;
+      meta.textContent = `${deck.emoji} · forgot ${FSRS.recentLapses(s)} of last ${FSRS.LEECH_WINDOW}`;
       row.append(front, meta);
       ll.appendChild(row);
     }

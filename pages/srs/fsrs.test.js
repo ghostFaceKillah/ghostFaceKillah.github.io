@@ -143,7 +143,7 @@ const T0 = Date.UTC(2026, 0, 1, 12, 0, 0);
     t = leech.due;
   }
   check("card failing every scheduled review: flagged as leech", FSRS.isLeech(leech),
-    `lapses ${leech.lapses}, reps ${leech.reps}, D ${leech.difficulty.toFixed(1)}`);
+    `recent ${leech.recent}, D ${leech.difficulty.toFixed(1)}`);
 
   // A solid card with one slip stays off the list.
   let ok = null; t = T0;
@@ -151,15 +151,34 @@ const T0 = Date.UTC(2026, 0, 1, 12, 0, 0);
   ok = FSRS.review(ok, AGAIN, t);
   check("one slip after a long streak: not a leech", !FSRS.isLeech(ok));
 
-  // Difficulty path: lapses spread thin over many reps, but FSRS has
-  // pinned the card as very hard — still a leech.
-  const pinned = { stability: 2, difficulty: 9.4, due: 0, lastReview: 0, reps: 30, lapses: 4 };
-  check("difficulty-pinned card: leech even at a low lapse ratio", FSRS.isLeech(pinned));
-  check("same lapses on an easy card: not a leech",
+  // The escape hatch: drill the classic leech from above with clean reviews.
+  // The old lapses scroll out of the window and the flag clears — even
+  // though FSRS still has the difficulty pinned sky-high.
+  let cured = leech;
+  for (let i = 0; i < 10; i++) cured = FSRS.review(cured, GOOD, cured.due);
+  check("leech reviewed cleanly: flag clears", !FSRS.isLeech(cured),
+    `recent ${cured.recent}, D ${cured.difficulty.toFixed(1)}`);
+  check("…while difficulty stays pinned (the flag cleared on the record alone)",
+    cured.difficulty >= 8.5, `D ${cured.difficulty.toFixed(1)}`);
+
+  // Difficulty path: only a couple of recent lapses, but FSRS has pinned
+  // the card as very hard — still a leech.
+  const pinned = { stability: 2, difficulty: 9.4, due: 0, lastReview: 0,
+    reps: 30, lapses: 4, recent: "0100000100" };
+  check("difficulty-pinned card: leech even at few recent lapses", FSRS.isLeech(pinned));
+  check("same recent lapses on an easy card: not a leech",
     !FSRS.isLeech({ ...pinned, difficulty: 4 }));
 
-  check("leechScore: an extra lapse outvotes any difficulty gap",
-    FSRS.leechScore({ lapses: 6, difficulty: 1 }) > FSRS.leechScore({ lapses: 5, difficulty: 10 }));
+  // States written before the `recent` field: an empty window, so an old
+  // permanent leech starts clean and must re-earn the flag by lapsing again.
+  const legacy = { stability: 2, difficulty: 9.9, due: 0, lastReview: 0, reps: 40, lapses: 12 };
+  check("legacy state without `recent`: not a leech", !FSRS.isLeech(legacy));
+  const relapsed = FSRS.review(legacy, AGAIN, T0);
+  check("legacy state starts recording on the next review", relapsed.recent === "1");
+
+  check("leechScore: an extra recent lapse outvotes any difficulty gap",
+    FSRS.leechScore({ recent: "0111111", difficulty: 1 }) >
+    FSRS.leechScore({ recent: "0011111", difficulty: 10 }));
 }
 
 // ----- guards -------------------------------------------------------------------

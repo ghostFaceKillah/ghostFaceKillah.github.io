@@ -1,10 +1,14 @@
 // FSRS-6 scheduler — pure functions, no I/O (see DESIGN.md).
 //
 // Card state shape (all times are epoch milliseconds):
-//   { stability, difficulty, due, lastReview, reps, lapses }
+//   { stability, difficulty, due, lastReview, reps, lapses, recent }
+// `recent` is the last ≤LEECH_WINDOW review outcomes as a "0"/"1" string,
+// newest last, "1" = Again — the memory leech detection runs on.
 // A card that has never been reviewed has no state (null/undefined).
 // State written by the earlier FSRS-4.5 scheduler is read as-is: stability
-// and difficulty live on the same scales, so no migration is needed.
+// and difficulty live on the same scales, so no migration is needed. States
+// from before `recent` existed read as an empty window and fill in as
+// reviews happen.
 //
 // Grades: 1 = Again, 2 = Hard, 3 = Good, 4 = Easy.
 //
@@ -98,6 +102,9 @@ window.FSRS = (function () {
     if (!(grade >= AGAIN && grade <= EASY)) throw new Error("FSRS: bad grade " + grade);
 
     let stability, difficulty, lapses, reps;
+    const recent = (!state || !state.reps ? "" : state.recent || "")
+      .concat(grade === AGAIN ? "1" : "0")
+      .slice(-LEECH_WINDOW);
     if (!state || !state.reps) {
       // First review of a new card.
       stability = initStability(grade);
@@ -131,31 +138,44 @@ window.FSRS = (function () {
       lastReview: now,
       reps,
       lapses,
+      recent,
     };
   }
 
   // ----- Leech detection --------------------------------------------------
   // A leech keeps lapsing without ever settling — it eats review time out of
-  // all proportion to what sticks. Flagged from existing card state alone:
-  // enough lapses AND (lapses keeping pace with total reps, OR FSRS has
-  // pinned the card near maximum difficulty). The reps ratio keeps freshly
-  // learned cards off the list — their same-session misses also count as
-  // lapses, but the reps pile up just as fast.
-  const LEECH_MIN_LAPSES = 4;
-  const LEECH_LAPSE_RATIO = 0.3;
+  // all proportion to what sticks. Detection reads only the RECENT record
+  // (`recent`, the last LEECH_WINDOW outcomes): the lifetime lapse count
+  // never shrinks and difficulty is damped near D=10 (the grade effect is
+  // scaled by (10-D)/9), so any rule built on those brands a card forever no
+  // matter how well it does afterwards. Flagged when the window alone is bad
+  // enough, or merely shaky on a card FSRS has pinned as very hard; either
+  // way a run of clean reviews scrolls the lapses out of the window and the
+  // flag clears. A couple of first-session misses stay off the list:
+  // outright flagging takes 4 recent lapses, and difficulty needs several
+  // Agains to reach the pinned zone.
+  const LEECH_WINDOW = 10;        // review outcomes the flag can see
+  const LEECH_RECENT_LAPSES = 4;  // lapses in the window ⇒ leech outright
+  const LEECH_HARD_LAPSES = 2;    // enough when FSRS pins the card as hard
   const LEECH_DIFFICULTY = 8.5;
 
-  function isLeech(state) {
-    return !!state && !!state.reps &&
-      state.lapses >= LEECH_MIN_LAPSES &&
-      (state.lapses / state.reps >= LEECH_LAPSE_RATIO ||
-        state.difficulty >= LEECH_DIFFICULTY);
+  function recentLapses(state) {
+    let n = 0;
+    for (const o of state.recent || "") if (o === "1") n++;
+    return n;
   }
 
-  // Sort key for "worst first": lapse count, difficulty as the tie-break
-  // (difficulty ≤ 10, so it can never outvote a whole extra lapse).
+  function isLeech(state) {
+    if (!state || !state.reps) return false;
+    const misses = recentLapses(state);
+    return misses >= LEECH_RECENT_LAPSES ||
+      (misses >= LEECH_HARD_LAPSES && state.difficulty >= LEECH_DIFFICULTY);
+  }
+
+  // Sort key for "worst first": recent lapse count, difficulty as the
+  // tie-break (difficulty ≤ 10, so it can never outvote a whole extra lapse).
   function leechScore(state) {
-    return state.lapses + state.difficulty / 10;
+    return recentLapses(state) + state.difficulty / 10;
   }
 
   // Preview the due delay for each grade — used to label the grade buttons.
@@ -177,6 +197,8 @@ window.FSRS = (function () {
     intervalDays,
     isLeech,
     leechScore,
+    recentLapses,
+    LEECH_WINDOW,
     // exposed for tests
     _internals: { W, initStability, initDifficulty, nextDifficulty, nextRecallStability, nextForgetStability, shortTermStability },
   };
