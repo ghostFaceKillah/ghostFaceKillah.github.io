@@ -16,8 +16,12 @@ Decided 2026-07-11. This doc is the source of truth for sessions continuing the 
   memory formulas, so grades differentiate stability within a session; the
   1-day interval floor still shows "1d" on all passing grades while a card's
   stability is under ~1.5 days — same as Anki, working as intended.
-  Card state: `{stability, difficulty, due, lastReview, reps, lapses}` —
-  unchanged from 4.5, so stored states carry over with no migration.
+  Card state: `{stability, difficulty, due, lastReview, reps, lapses, recent}`
+  — the FSRS fields are unchanged from 4.5, so stored states carried over with
+  no migration. `recent` (added 2026-08-08) is the last ≤10 review outcomes as
+  a "0"/"1" string ("1" = Again, newest last), kept by `FSRS.review` for leech
+  detection; states from before the field read as an empty window and fill in
+  as reviews happen — again no migration.
 - **Card IDs:** stable, derived from existing data. Examples:
   `words/L1D1/你`, `sent/hsk1/42`, `coll/1`, `kana/あ`. ~3,000 cards total.
 - **Card intake:** opt-in by deck/lesson (IC1 lessons individually, topic word
@@ -66,15 +70,23 @@ Decided 2026-07-11. This doc is the source of truth for sessions continuing the 
     new-card batches duplicated what the daily queue's intake already does;
     the ungraded browse "learn mode" covers pre-study). Drills the cards that
     keep lapsing: `FSRS.isLeech(state)` — pure, tested next to the scheduler —
-    flags `lapses ≥ 4 AND (lapses/reps ≥ 0.3 OR difficulty ≥ 8.5)`; the reps
-    ratio keeps freshly learned cards off the list (their same-session misses
-    also count as lapses), the difficulty arm catches cards FSRS has pinned as
-    hard even when lapses spread thin. Sessions take the worst 10
-    (`FSRS.leechScore` = lapses, difficulty as tie-break) among not-due-today
-    cards — due leeches belong to the daily queue. Leeches wear a red
-    `leech 🧛` tag during review (sharing the `new ✨` slot — a leech is never
-    new), and the stats screen lists the top 10 with lapse counts so
-    confusable pairs can be spotted side by side.
+    reads only the card's recent record (`recent`, last 10 outcomes) and flags
+    ≥ 4 lapses in the window, or ≥ 2 while difficulty ≥ 8.5 (the arm that
+    catches cards FSRS has pinned as hard even when lapses spread thin).
+    Windowed on purpose (reworked 2026-08-08 — the original lifetime rule
+    `lapses ≥ 4 AND (lapses/reps ≥ 0.3 OR difficulty ≥ 8.5)` had no realistic
+    exit: lifetime lapses never shrink and FSRS-6 damps difficulty changes
+    near D=10, so the owner's drilled leeches never cleared): a run of clean
+    reviews scrolls the lapses out of the window and the flag drops even
+    while difficulty stays pinned. Freshly learned cards still mostly stay
+    off the list — outright flagging takes 4 recent lapses and the difficulty
+    arm needs several Agains to reach 8.5. Pre-`recent` states read as a
+    clean window, so old leeches re-earn the flag by lapsing again. Sessions
+    take the worst 10 (`FSRS.leechScore` = recent lapses, difficulty as
+    tie-break) among not-due-today cards — due leeches belong to the daily
+    queue. Leeches wear a red `leech 🧛` tag during review (sharing the
+    `new ✨` slot — a leech is never new), and the stats screen lists the top
+    10 with recent-lapse counts so confusable pairs can be spotted side by side.
   - **focus** — every card of one chosen group (e.g. an IC1 chapter before a tutor
     lesson), due or not, enabled for daily review or not. Cramming a group does
     NOT opt it into the daily rotation — the deck chips stay the only intake switch.
