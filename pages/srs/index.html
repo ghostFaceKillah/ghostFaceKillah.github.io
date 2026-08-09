@@ -397,6 +397,14 @@
   .garden-legend span { color: var(--muted); font-size: .8rem; }
   .garden-legend b { margin-left: auto; padding-left: 8px; }
   .garden-empty { color: var(--muted); text-align: center; margin: 6px 0; }
+  /* collapsible glossary of the scheduler variables behind the stages */
+  .garden-how { margin: 12px 0 0; border-top: 2px dashed var(--line); padding-top: 10px; }
+  .garden-how summary {
+    cursor: pointer; color: var(--muted); font-size: .85rem; font-weight: 700;
+    list-style-position: inside;
+  }
+  .garden-how p { margin: 9px 0 0; font-size: .8rem; line-height: 1.5; color: var(--muted); }
+  .garden-how p b { color: var(--ink); }
   .seeds { color: var(--muted); font-size: .85rem; margin: 12px 0 0; }
 
   /* ----- Leech panel ----- */
@@ -759,6 +767,22 @@
     <div class="panel" id="gardenPanel">
       <div class="garden-bar" id="gardenBar"></div>
       <div class="garden-legend" id="gardenLegend"></div>
+      <details class="garden-how">
+        <summary>🔍 what decides a stage — the scheduler's variables</summary>
+        <p><b>📏 interval</b> — the gap the scheduler set between your last review
+          and the next due date. It's the one variable the garden reads: under a
+          week 🌱 sprouts, 1–3 weeks 🌿 growing, 3+ weeks 🌸 blooming.</p>
+        <p><b>💪 stability</b> — how long the memory holds: the days until your
+          odds of recalling the card fade to 90%. Each remembered review grows
+          it — that's what stretches the interval and moves a card up a stage.
+          A miss shrinks it back toward the sprouts.</p>
+        <p><b>🧗 difficulty</b> — 1–10, how stubborn the card is. High-difficulty
+          cards grow stability slowly, so they linger among the sprouts — and
+          when one gets pinned near the top, it can be flagged a leech 🧛.</p>
+        <p><b>🫧 retrievability</b> — your odds of recalling the card right now:
+          100% just after a review, sliding ever since. When it dips to 90%,
+          the card comes due and shows up in your queue.</p>
+      </details>
       <p class="seeds" id="seedNote"></p>
     </div>
 
