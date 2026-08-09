@@ -177,6 +177,8 @@ window.FSRS = (function () {
     intervalDays,
     isLeech,
     leechScore,
+    // isLeech's thresholds, exported so the UI can draw them (leech meters)
+    leechThresholds: { minLapses: LEECH_MIN_LAPSES, lapseRatio: LEECH_LAPSE_RATIO, difficulty: LEECH_DIFFICULTY },
     // exposed for tests
     _internals: { W, initStability, initDifficulty, nextDifficulty, nextRecallStability, nextForgetStability, shortTermStability },
   };

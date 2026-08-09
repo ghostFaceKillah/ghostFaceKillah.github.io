@@ -415,7 +415,19 @@
     display: block; color: var(--muted); font-size: .8rem; line-height: 1.3;
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
-  .leech-meta { flex: 0 0 auto; color: var(--muted); font-size: .8rem; font-weight: 700; }
+  .leech-meta {
+    flex: 0 0 auto; display: flex; align-items: center; gap: 8px;
+    color: var(--muted); font-size: .8rem; font-weight: 700;
+  }
+  /* three tiny meters, one per isLeech decision variable; the tick marks the
+     threshold, a red fill is past it — the variable doing the biting */
+  .leech-meters { display: grid; gap: 3px; }
+  .leech-meter { display: flex; align-items: center; gap: 6px; font-size: .7rem; }
+  .leech-meter > span { width: 34px; text-align: right; }
+  .leech-meter .bar { position: relative; width: 72px; height: 5px; border-radius: 3px; background: var(--track); }
+  .leech-meter .bar i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 3px; background: var(--muted); opacity: .55; }
+  .leech-meter .bar i.hot { background: var(--red); opacity: 1; }
+  .leech-meter .bar b { position: absolute; top: -2px; bottom: -2px; width: 2px; background: var(--ink); opacity: .45; border-radius: 1px; }
 
   .forecast { display: flex; align-items: flex-end; gap: 3px; height: 110px; }
   .fbar {
@@ -1816,6 +1828,36 @@
       .map(c => ({ c, s: cardStates[c.id] }))
       .filter(x => x.s && FSRS.isLeech(x.s))
       .sort((a, b) => FSRS.leechScore(b.s) - FSRS.leechScore(a.s));
+    // Each row shows the three isLeech decision variables as tiny meters —
+    // misses, miss rate, difficulty — with a tick at each threshold. A red
+    // fill is past its tick, i.e. load-bearing for the verdict (misses gate,
+    // the other two are the OR arms, so at least two bars are always red).
+    const METER_LAPSES_MAX = 12; // display scale only; the fill clamps at 100%
+    function leechMeters(s) {
+      const t = FSRS.leechThresholds;
+      const ratio = s.lapses / s.reps, pct = Math.round(100 * ratio);
+      const wrap = document.createElement("span");
+      wrap.className = "leech-meters";
+      const meter = (label, frac, tick, hot, tipText) => {
+        const m = document.createElement("span");
+        m.className = "leech-meter";
+        m.dataset.tip = tipText;
+        m.innerHTML = `<span>${label}</span><span class="bar">` +
+          `<i class="${hot ? "hot" : ""}" style="width:${Math.min(100, 100 * frac)}%"></i>` +
+          `<b style="left:${100 * tick}%"></b></span>`;
+        return m;
+      };
+      wrap.append(
+        meter(`${s.lapses}×`, s.lapses / METER_LAPSES_MAX, t.minLapses / METER_LAPSES_MAX,
+          s.lapses >= t.minLapses,
+          `missed ${s.lapses} of ${s.reps} reviews — a leech needs ≥ ${t.minLapses} misses`),
+        meter(`${pct}%`, ratio, t.lapseRatio, ratio >= t.lapseRatio,
+          `${pct}% miss rate — flags the card at ≥ ${Math.round(100 * t.lapseRatio)}%`),
+        meter(`D${s.difficulty.toFixed(1)}`, s.difficulty / 10, t.difficulty / 10,
+          s.difficulty >= t.difficulty,
+          `FSRS difficulty ${s.difficulty.toFixed(1)} of 10 — flags the card at ≥ ${t.difficulty}`));
+      return wrap;
+    }
     const ll = $("leechList");
     ll.innerHTML = "";
     for (const { c, s } of leeches.slice(0, LEECH_LIST)) {
@@ -1831,14 +1873,15 @@
       front.appendChild(gloss);
       const meta = document.createElement("span");
       meta.className = "leech-meta";
-      meta.textContent = `${deck.emoji} · ${s.lapses}× forgotten`;
+      meta.append(deck.emoji, leechMeters(s));
       row.append(front, meta);
       ll.appendChild(row);
     }
     $("leechNote").textContent =
       leeches.length === 0
         ? "No leeches — nothing keeps slipping away 🎉"
-        : (leeches.length > LEECH_LIST ? `…and ${leeches.length - LEECH_LIST} more. ` : "") +
+        : "Bars: misses · miss rate · difficulty; the tick is the leech threshold, red = past it. " +
+          (leeches.length > LEECH_LIST ? `…and ${leeches.length - LEECH_LIST} more. ` : "") +
           "The 🧛 button on the home screen drills the worst first — " +
           "if two of these look alike, study them side by side.";
   }
