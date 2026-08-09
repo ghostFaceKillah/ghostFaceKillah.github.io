@@ -410,6 +410,11 @@
   .leech-front .srs-big { font-size: 1.6rem; line-height: 1.2; }
   .leech-front .srs-zh { font-size: 1.15rem; line-height: 1.3; }
   .leech-front .srs-en-front { font-size: .95rem; line-height: 1.3; }
+  /* one-line answer under the front (this is a report, not a quiz) */
+  .leech-gloss {
+    display: block; color: var(--muted); font-size: .8rem; line-height: 1.3;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
   .leech-meta { flex: 0 0 auto; color: var(--muted); font-size: .8rem; font-weight: 700; }
 
   .forecast { display: flex; align-items: flex-end; gap: 3px; height: 110px; }
@@ -1820,6 +1825,10 @@
       const front = document.createElement("span");
       front.className = "leech-front";
       front.innerHTML = REGISTRY.render(c).front;
+      const gloss = document.createElement("span");
+      gloss.className = "leech-gloss";
+      gloss.textContent = REGISTRY.gloss(c);
+      front.appendChild(gloss);
       const meta = document.createElement("span");
       meta.className = "leech-meta";
       meta.textContent = `${deck.emoji} · ${s.lapses}× forgotten`;
