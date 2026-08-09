@@ -19,7 +19,8 @@
 //
 // Shapes:
 //   deck  = { id, name, emoji, page, groups: [group…],
-//             renderFront(data) → html, renderBack(data) → html }
+//             renderFront(data) → html, renderBack(data) → html,
+//             gloss(data) → plain text }   // one-line answer, for list views
 //   group = { id, name, cards: [card…] }   // opt-in unit for intake
 //   card  = { id, deckId, groupId, data }  // data = the original data object
 window.SRS_REGISTRY = (function () {
@@ -86,6 +87,7 @@ window.SRS_REGISTRY = (function () {
   // topic pack, so the words and topics decks share these.
   const wordCard = w => ({ id: `words/${w.lesson}/${w.w}`, data: w });
   const wordFront = d => `<div class="srs-zh srs-big">${esc(d.w)}</div>`;
+  const wordGloss = d => `${d.pinyin} · ${d.def}`;
   const wordBack = d =>
     line("py", d.pinyin) +
     line("pos", d.pos) +
@@ -117,6 +119,7 @@ window.SRS_REGISTRY = (function () {
       groups,
       renderFront: wordFront,
       renderBack: wordBack,
+      gloss: wordGloss,
     });
   }
 
@@ -146,6 +149,7 @@ window.SRS_REGISTRY = (function () {
       groups,
       renderFront: wordFront,
       renderBack: wordBack,
+      gloss: wordGloss,
     });
   }
 
@@ -168,6 +172,7 @@ window.SRS_REGISTRY = (function () {
         line("py", d.py) +
         line("en", d.en) +
         (d.notes || []).map(n => line("tone", n)).join(""),
+      gloss: d => d.en,
     });
   }
 
@@ -198,6 +203,7 @@ window.SRS_REGISTRY = (function () {
         line("zh", d.zh) +
         line("py", d.py) +
         (d.notes || []).map(n => line("tone", n)).join(""),
+      gloss: d => `${d.zh} · ${d.py}`,
     });
   }
 
@@ -225,6 +231,7 @@ window.SRS_REGISTRY = (function () {
         line("py", d.py) +
         line("en", d.en) +
         (d.notes || []).map(n => line("tone", n)).join(""),
+      gloss: d => d.en,
     });
   }
 
@@ -250,6 +257,7 @@ window.SRS_REGISTRY = (function () {
         line("mnem", d.mnem, true) +
         line("ex", d.ex ? `${esc(d.ex)} — ${esc(d.exPy)} — ${esc(d.exEn)}` : "", true) +
         miniLessonHtml(d),
+      gloss: d => `${d.py} · ${d.en}`,
     });
   }
 
@@ -279,6 +287,7 @@ window.SRS_REGISTRY = (function () {
           line("note", d.note) +
           (kata ? line("note", d.noteK) : "");
       },
+      gloss: d => d.r,
     });
   }
 
@@ -295,6 +304,7 @@ window.SRS_REGISTRY = (function () {
       line("py", d.pinyin) +
       line("en", d.english) +
       line("ex", "e.g. " + d.examples),
+    gloss: d => `${d.pinyin} · ${d.english}`,
   });
 
   // ----- num: numbers & clock times (generated, fixed curated list) ---------
@@ -348,6 +358,7 @@ window.SRS_REGISTRY = (function () {
         line("zh", d.hanzi) +
         line("py", d.pinyin) +
         line("alt", d.alt),
+      gloss: d => `${d.hanzi} · ${d.pinyin}`,
     });
   }
 
@@ -376,6 +387,7 @@ window.SRS_REGISTRY = (function () {
         line("en", d.en) +
         line("why", d.why) +
         line("rule", setById[d.set].rule),
+      gloss: d => `${d.zh} · ${d.en}`,
     });
   }
 
@@ -384,6 +396,7 @@ window.SRS_REGISTRY = (function () {
   const byId = new Map();
   const deckById = {};
   for (const deck of decks) {
+    if (!deck.gloss) throw new Error("SRS registry: deck " + deck.id + " has no gloss");
     deckById[deck.id] = deck;
     for (const group of deck.groups) {
       for (const card of group.cards) {
@@ -405,5 +418,6 @@ window.SRS_REGISTRY = (function () {
       const deck = deckById[card.deckId];
       return { front: deck.renderFront(card.data), back: deck.renderBack(card.data) };
     },
+    gloss: card => deckById[card.deckId].gloss(card.data),
   };
 })();

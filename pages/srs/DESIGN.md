@@ -74,7 +74,11 @@ Decided 2026-07-11. This doc is the source of truth for sessions continuing the 
     cards — due leeches belong to the daily queue. Leeches wear a red
     `leech 🧛` tag during review (sharing the `new ✨` slot — a leech is never
     new), and the stats screen lists the top 10 with lapse counts so
-    confusable pairs can be spotted side by side.
+    confusable pairs can be spotted side by side. Each stats row also shows a
+    one-line answer gloss (added 2026-08-09: per-deck `gloss(data)` in the
+    registry, e.g. pinyin · definition for word cards, ellipsized to one
+    line) — the list is a report, not a quiz, so revealing the answer is fine
+    and beats opening each card to remember why it keeps slipping.
   - **focus** — every card of one chosen group (e.g. an IC1 chapter before a tutor
     lesson), due or not, enabled for daily review or not. Cramming a group does
     NOT opt it into the daily rotation — the deck chips stay the only intake switch.
