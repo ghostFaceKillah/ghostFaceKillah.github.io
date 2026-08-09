@@ -73,8 +73,11 @@ Decided 2026-07-11. This doc is the source of truth for sessions continuing the 
     (`FSRS.leechScore` = lapses, difficulty as tie-break) among not-due-today
     cards — due leeches belong to the daily queue. Leeches wear a red
     `leech 🧛` tag during review (sharing the `new ✨` slot — a leech is never
-    new), and the stats screen lists the top 10 with lapse counts so
-    confusable pairs can be spotted side by side. Each stats row also shows a
+    new), and the stats screen lists the top 10 so confusable pairs can be
+    spotted side by side. Each stats row shows the three `isLeech` decision
+    variables as tiny meters (added 2026-08-09) — misses, miss rate,
+    difficulty, a tick at each threshold, red fill = past it — so it's visible
+    which variable is doing the biting. Each stats row also shows a
     one-line answer gloss (added 2026-08-09: per-deck `gloss(data)` in the
     registry, e.g. pinyin · definition for word cards, ellipsized to one
     line) — the list is a report, not a quiz, so revealing the answer is fine
