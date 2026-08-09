@@ -92,9 +92,11 @@ Decided 2026-07-11. This doc is the source of truth for sessions continuing the 
   review heatmap + streak (18 Monday-first weeks ≈ 4 months, GitHub-style), a card-maturity
   "garden" (🌱 <7d, 🌿 7–21d, 🌸 ≥21d — Anki's 21-day "mature" idiom), and a
   28-day due forecast for enabled decks. The garden panel carries a collapsed
-  `<details>` glossary (added 2026-08-09) explaining the scheduler's decision
-  variables — interval (the one the stages read), stability, difficulty,
-  retrievability — in plain words, so the stage names aren't magic. Styling (owner iterated twice on
+  `<details>` glossary (added 2026-08-09) explaining the FSRS-6 decision
+  variables — interval (the one number the stages bin), stability, difficulty,
+  retrievability. Owner asked for scientific-and-concrete wording (first cut
+  was too casual): the text states the 90% retention target, the (11 − D)
+  stability-gain factor, and the power-law forgetting curve R(t) = (1 + F·t/S)^−d. Styling (owner iterated twice on
   2026-07-11: single-hue ramps felt monochrome → kana rainbow → final ask:
   chart colors must be EXACTLY the four grade-button hues, and heatmap days
   should be cute emoji, not dots — a different one per day): all chart vars

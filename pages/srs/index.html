@@ -768,20 +768,29 @@
       <div class="garden-bar" id="gardenBar"></div>
       <div class="garden-legend" id="gardenLegend"></div>
       <details class="garden-how">
-        <summary>🔍 what decides a stage — the scheduler's variables</summary>
-        <p><b>📏 interval</b> — the gap the scheduler set between your last review
-          and the next due date. It's the one variable the garden reads: under a
-          week 🌱 sprouts, 1–3 weeks 🌿 growing, 3+ weeks 🌸 blooming.</p>
-        <p><b>💪 stability</b> — how long the memory holds: the days until your
-          odds of recalling the card fade to 90%. Each remembered review grows
-          it — that's what stretches the interval and moves a card up a stage.
-          A miss shrinks it back toward the sprouts.</p>
-        <p><b>🧗 difficulty</b> — 1–10, how stubborn the card is. High-difficulty
-          cards grow stability slowly, so they linger among the sprouts — and
-          when one gets pinned near the top, it can be flagged a leech 🧛.</p>
-        <p><b>🫧 retrievability</b> — your odds of recalling the card right now:
-          100% just after a review, sliding ever since. When it dips to 90%,
-          the card comes due and shows up in your queue.</p>
+        <summary>🔍 the scheduler's decision variables (FSRS‑6)</summary>
+        <p><b>📏 interval I</b> — days from the last review to the due date,
+          chosen so that predicted recall at the due date equals the 90%
+          retention target. The stages bin this one number: I&nbsp;&lt;&nbsp;7&nbsp;d
+          🌱, 7–21&nbsp;d 🌿, I&nbsp;≥&nbsp;21&nbsp;d 🌸 (Anki's 21‑day
+          "mature" convention).</p>
+        <p><b>💪 stability S</b> — memory strength, in days: the elapsed time at
+          which predicted recall decays to 90% — so I&nbsp;≈&nbsp;S. Each
+          successful review multiplies S by a gain that is larger the closer
+          the review came to forgetting (the spacing effect) and smaller at
+          high difficulty; a lapse (Again) collapses S to a fraction of its
+          value.</p>
+        <p><b>🧗 difficulty D</b> — a per‑card parameter on a 1–10 scale.
+          Again/Hard raise it, Easy lowers it, with mean reversion toward the
+          Easy baseline. Stability gains scale with (11&nbsp;−&nbsp;D), so a
+          D&nbsp;=&nbsp;10 card's interval barely grows per review while a
+          D&nbsp;=&nbsp;1 card's grows ~10× faster; D&nbsp;≥&nbsp;8.5 is one
+          arm of the leech 🧛 flag.</p>
+        <p><b>🫧 retrievability R</b> — the predicted probability of recall,
+          following a power‑law forgetting curve
+          R(t)&nbsp;=&nbsp;(1&nbsp;+&nbsp;F·t∕S)<sup>−d</sup>: 1 at
+          t&nbsp;=&nbsp;0, decaying with elapsed time t, more slowly the larger
+          S. The card comes due exactly when R reaches the 0.9 target.</p>
       </details>
       <p class="seeds" id="seedNote"></p>
     </div>
