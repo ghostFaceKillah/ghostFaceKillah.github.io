@@ -23,12 +23,12 @@ window.COLLOQUIAL_DATA = [
           "exEn": "These are mom's keys."
         },
         {
-          "g": "glues any description to a noun: description + 的 + noun",
-          "h": "红色的",
-          "hPy": "hóng sè de",
-          "ex": "我喜欢红色的车。",
-          "exPy": "wǒ xǐ huān hóng sè de chē.",
-          "exEn": "I like red cars."
+          "g": "connector: glues any description to a noun — description + 的 + noun",
+          "h": "妈妈做的菜",
+          "hPy": "māma zuò de cài",
+          "ex": "妈妈做的菜很好吃。",
+          "exPy": "mā ma zuò de cài hěn hǎo chī.",
+          "exEn": "The dishes mom makes are delicious."
         },
         {
           "g": "drop the noun and 的 means “the … one / … stuff”",
@@ -39,7 +39,15 @@ window.COLLOQUIAL_DATA = [
           "exEn": "Anything tasty around?"
         },
         {
-          "g": "wraps up how/when/where something happened, for emphasis",
+          "g": "past-tense storyteller: both speakers know the event happened — the details (when, with whom, how) end in 的",
+          "h": "……的",
+          "hPy": "… de",
+          "ex": "你什么时候去的？——2018年去的。",
+          "exPy": "nǐ shén me shí hou qù de? — èr líng yī bā nián qù de.",
+          "exEn": "When did you go? — In 2018."
+        },
+        {
+          "g": "the fuller form is 是……的 — 是 is often dropped in speech",
           "h": "是……的",
           "hPy": "shì … de",
           "ex": "我是坐飞机来的。",
@@ -50,7 +58,7 @@ window.COLLOQUIAL_DATA = [
           "g": "Watch the readings: dì in 目的 (mùdì, goal), dí in 的确 (díquè, indeed)."
         }
       ],
-      "intro": "The single most common character in Chinese — a little glue word with three main jobs."
+      "intro": "The single most common character in Chinese — three jobs: possessive, connector, and past-tense storyteller."
     }
   },
   {
@@ -668,16 +676,24 @@ window.COLLOQUIAL_DATA = [
     "lesson": {
       "uses": [
         {
-          "g": "“right away, as soon as” — sooner than expected",
-          "ex": "我马上就好。",
-          "exPy": "wǒ mǎ shàng jiù hǎo.",
-          "exEn": "I'll be ready in a sec."
+          "g": "quickness — “right now, without delay”; 马上 nearly always brings it along: 马上就",
+          "ex": "我们现在就去吃饭吧！",
+          "exPy": "wǒ men xiàn zài jiù qù chī fàn ba!",
+          "exEn": "Let's go eat right now!"
         },
         {
-          "g": "“then” — links a condition to its result",
-          "ex": "你累了就休息吧。",
-          "exPy": "nǐ lèi le jiù xiū xī ba.",
-          "exEn": "If you're tired, then rest."
+          "g": "earliness — already by then, sooner than expected (the flip side of 才, which is later than expected)",
+          "ex": "他昨天早上五点半就起床了。",
+          "exPy": "tā zuó tiān zǎo shàng wǔ diǎn bàn jiù qǐ chuáng le.",
+          "exEn": "He was already up at 5:30 yesterday — implying that's not his usual routine."
+        },
+        {
+          "g": "conditional “then” — 就 opens the result clause after 如果/要是, right before its verb",
+          "h": "如果……就",
+          "hPy": "rúguǒ … jiù",
+          "ex": "如果你好好学中文，你就可以讲流利的中文。",
+          "exPy": "rú guǒ nǐ hǎo hǎo xué zhōng wén, nǐ jiù kě yǐ jiǎng liú lì de zhōng wén.",
+          "exEn": "If you study Chinese well, you'll be able to speak fluent Chinese."
         },
         {
           "g": "“only, just”",
@@ -692,7 +708,7 @@ window.COLLOQUIAL_DATA = [
           "exEn": "This is exactly what I wanted!"
         }
       ],
-      "intro": "Tiny but everywhere — 就 flavors sentences more than it translates."
+      "intro": "Tiny but everywhere — 就 adds speed, earliness, or the “then” of a condition."
     }
   },
   {
@@ -1125,7 +1141,7 @@ window.COLLOQUIAL_DATA = [
           "exEn": "Be careful crossing the street."
         },
         {
-          "g": "verb + 过: “have ever done” — life experience",
+          "g": "verb + 过: “have ever done” — life experience, English “have you (ever) been”",
           "h": "吃过",
           "hPy": "chī guò",
           "ex": "你吃过北京烤鸭吗？",
@@ -1133,12 +1149,27 @@ window.COLLOQUIAL_DATA = [
           "exEn": "Have you ever had Peking duck?"
         },
         {
+          "g": "once a 过-question settles that it happened, follow-up details switch to 的",
+          "ex": "你去过中国吗？——去过。你什么时候去的？",
+          "exPy": "nǐ qù guò zhōng guó ma? — qù guò. nǐ shén me shí hou qù de?",
+          "exEn": "Ever been to China? — Yes. When did you go?"
+        },
+        {
+          "g": "“to spend, celebrate” — a full verb, not the experience marker",
+          "h": "过生日",
+          "hPy": "guò shēngrì",
+          "ex": "你什么时候过生日？",
+          "exPy": "nǐ shén me shí hou guò shēng rì?",
+          "exEn": "When is your birthday?"
+        },
+        {
           "g": "with time: after, in (some days)",
           "ex": "过两天再说。",
           "exPy": "guò liǎng tiān zài shuō.",
           "exEn": "Let's revisit in a couple of days."
         }
-      ]
+      ],
+      "intro": "Two 过s to keep apart: the have-ever experience marker after a verb, and the full verb “to pass / celebrate.”"
     }
   },
   {
