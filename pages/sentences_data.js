@@ -7976,6 +7976,231 @@ window.SENTENCE_DATA = {
       "zh": "到了给我打电话。",
       "py": "dào le gěi wǒ dǎ diàn huà.",
       "en": "Call me when you're there."
+    },
+    {
+      "n": 201,
+      "zh": "我们现在就去吃饭吧！",
+      "py": "wǒ men xiàn zài jiù qù chī fàn ba!",
+      "en": "Let's go eat right now!",
+      "notes": [
+        "就 adds quickness — right now, without delay."
+      ]
+    },
+    {
+      "n": 202,
+      "zh": "吃完早饭后我马上就去工作了。",
+      "py": "chī wán zǎo fàn hòu wǒ mǎ shàng jiù qù gōng zuò le.",
+      "en": "After finishing breakfast I went straight to work.",
+      "notes": [
+        "Verb + 完 is the result complement — 吃完 “finish eating” — and 马上 almost always pairs with 就."
+      ]
+    },
+    {
+      "n": 203,
+      "zh": "如果你好好学中文，你就可以讲流利的中文。",
+      "py": "rú guǒ nǐ hǎo hǎo xué zhōng wén, nǐ jiù kě yǐ jiǎng liú lì de zhōng wén.",
+      "en": "If you study Chinese well, you'll be able to speak fluent Chinese.",
+      "notes": [
+        "如果……就: the result clause takes 就 right before its verb."
+      ]
+    },
+    {
+      "n": 204,
+      "zh": "你去过中国吗？",
+      "py": "nǐ qù guò zhōng guó ma?",
+      "en": "Have you ever been to China?",
+      "notes": [
+        "Verb + 过 asks about life experience — answer by echoing it: 去过."
+      ]
+    },
+    {
+      "n": 205,
+      "zh": "你什么时候去的？",
+      "py": "nǐ shén me shí hou qù de?",
+      "en": "When did you go?",
+      "notes": [
+        "The trip is already established, so the detail question ends in 的 — not 过."
+      ]
+    },
+    {
+      "n": 206,
+      "zh": "我和我妈妈2018年去的。",
+      "py": "wǒ hé wǒ mā ma èr líng yī bā nián qù de.",
+      "en": "I went with my mom, in 2018.",
+      "notes": [
+        "The answer mirrors the 的-question: who/when + verb + 的."
+      ]
+    },
+    {
+      "n": 207,
+      "zh": "他昨天早上五点半就起床了。",
+      "py": "tā zuó tiān zǎo shàng wǔ diǎn bàn jiù qǐ chuáng le.",
+      "en": "He was already up at 5:30 yesterday morning.",
+      "notes": [
+        "就 = earlier than expected — it implies this isn't his daily routine.",
+        "Pronounce 半 bàn with a wide open “an” — don't let it drift toward “ang.”"
+      ]
+    },
+    {
+      "n": 208,
+      "zh": "他昨天早上五点半起的床。",
+      "py": "tā zuó tiān zǎo shàng wǔ diǎn bàn qǐ de chuáng.",
+      "en": "He got up at 5:30 yesterday morning (that's when).",
+      "notes": [
+        "Past-tense 的 sits inside the separable verb 起…床 — plain information, no earliness flavor."
+      ]
+    },
+    {
+      "n": 209,
+      "zh": "我们昨天中午十二点半在学校见了个面。",
+      "py": "wǒ men zuó tiān zhōng wǔ shí èr diǎn bàn zài xué xiào jiàn le ge miàn.",
+      "en": "We met up at school at 12:30 yesterday.",
+      "notes": [
+        "见了个面 with the casual 个 is more natural than 见了一面."
+      ]
+    },
+    {
+      "n": 210,
+      "zh": "我上周每天都睡九个小时的觉。",
+      "py": "wǒ shàng zhōu měi tiān dōu shuì jiǔ ge xiǎo shí de jiào.",
+      "en": "Last week I slept nine hours every day.",
+      "notes": [
+        "每天都 marks a habit — no completion, so no 了; the duration links to 觉 with 的."
+      ]
+    },
+    {
+      "n": 211,
+      "zh": "我们昨天聊了一个小时的天。",
+      "py": "wǒ men zuó tiān liáo le yí ge xiǎo shí de tiān.",
+      "en": "We chatted for an hour yesterday.",
+      "notes": [
+        "聊天 splits: 聊 + 了 + duration + 的 + 天."
+      ]
+    },
+    {
+      "n": 212,
+      "zh": "我今天早上洗了十五分钟的冷水澡。",
+      "py": "wǒ jīn tiān zǎo shàng xǐ le shí wǔ fēn zhōng de lěng shuǐ zǎo.",
+      "en": "This morning I took a 15-minute cold shower.",
+      "notes": [
+        "洗…澡 wraps around 了, the duration and the adjective 冷水 — everything stacks before 澡."
+      ]
+    },
+    {
+      "n": 213,
+      "zh": "你明天下班后可不可以帮我个小忙？",
+      "py": "nǐ míng tiān xià bān hòu kě bu kě yǐ bāng wǒ ge xiǎo máng?",
+      "en": "After work tomorrow, could you do me a small favor?",
+      "notes": [
+        "Link 可不可以 into one beat — the middle 不 goes light and quick.",
+        "帮我个小忙: person, casual 个 and adjective all slot inside 帮…忙."
+      ]
+    },
+    {
+      "n": 214,
+      "zh": "因为他生病了，所以他要请四天假。",
+      "py": "yīn wèi tā shēng bìng le, suǒ yǐ tā yào qǐng sì tiān jià.",
+      "en": "Because he's sick, he's taking four days off.",
+      "notes": [
+        "Chinese keeps both halves: 因为……所以……, and the duration goes inside 请…假."
+      ]
+    },
+    {
+      "n": 215,
+      "zh": "你为什么生我的气？",
+      "py": "nǐ wèi shén me shēng wǒ de qì?",
+      "en": "Why are you mad at me?",
+      "notes": [
+        "The target of the anger goes inside the separable verb: 生 + 我的 + 气."
+      ]
+    },
+    {
+      "n": 216,
+      "zh": "你不要担心她，你可以放一百个心！",
+      "py": "nǐ bú yào dān xīn tā, nǐ kě yǐ fàng yì bǎi ge xīn!",
+      "en": "Don't worry about her — you can totally relax!",
+      "notes": [
+        "担心 takes its object directly (担心她); 放心 splits open for the number: put down a hundred hearts.",
+        "担 is 1st tone: dān."
+      ]
+    },
+    {
+      "n": 217,
+      "zh": "你在哪家公司工作？",
+      "py": "nǐ zài nǎ jiā gōng sī gōng zuò?",
+      "en": "Which company do you work at?",
+      "notes": [
+        "Companies and shops are counted with 家: 哪家公司, 一家咖啡店."
+      ]
+    },
+    {
+      "n": 218,
+      "zh": "我可能要工作。",
+      "py": "wǒ kě néng yào gōng zuò.",
+      "en": "I might have to work."
+    },
+    {
+      "n": 219,
+      "zh": "那明天呢？",
+      "py": "nà míng tiān ne?",
+      "en": "Then what about tomorrow?",
+      "notes": [
+        "那(么) + topic + 呢 — the follow-up question: 那周末呢? “What about the weekend?”"
+      ]
+    },
+    {
+      "n": 220,
+      "zh": "我明天要去看医生。",
+      "py": "wǒ míng tiān yào qù kàn yī shēng.",
+      "en": "I'm going to see a doctor tomorrow.",
+      "notes": [
+        "要 + verb = a planned future: “am going to.”"
+      ]
+    },
+    {
+      "n": 221,
+      "zh": "我要帮我朋友看狗。",
+      "py": "wǒ yào bāng wǒ péng you kān gǒu.",
+      "en": "I'm going to dog-sit for my friend.",
+      "notes": [
+        "看 here means “look after” — often read 1st tone kān."
+      ]
+    },
+    {
+      "n": 222,
+      "zh": "好吧……",
+      "py": "hǎo ba…",
+      "en": "Fine, alright then…",
+      "notes": [
+        "The reluctant sigh-and-agree — compare the enthusiastic 好啊！"
+      ]
+    },
+    {
+      "n": 223,
+      "zh": "她以前做什么工作？",
+      "py": "tā yǐ qián zuò shén me gōng zuò?",
+      "en": "What did she do for work before?",
+      "notes": [
+        "以前 “formerly” sits in the time slot, right where 今天 or 明天 would go."
+      ]
+    },
+    {
+      "n": 224,
+      "zh": "我今天早上十点和我老板在一家咖啡店开了一小时的会。",
+      "py": "wǒ jīn tiān zǎo shàng shí diǎn hé wǒ lǎo bǎn zài yì jiā kā fēi diàn kāi le yì xiǎo shí de huì.",
+      "en": "This morning at 10 I had a one-hour meeting with my boss in a coffee shop.",
+      "notes": [
+        "The full frame: subject + time + 和 who + 在 where + verb + 了 + duration + 的 + object."
+      ]
+    },
+    {
+      "n": 225,
+      "zh": "我下星期去洛杉矶，你想见个面吗？",
+      "py": "wǒ xià xīng qī qù luò shān jī, nǐ xiǎng jiàn ge miàn ma?",
+      "en": "I'm going to LA next week — want to meet up?",
+      "notes": [
+        "见个面 — the casual 个 makes the invitation sound friendly."
+      ]
     }
   ],
   "ic1": [

@@ -288,6 +288,69 @@ window.WORD_LESSONS = {
     },
   },
 
+  "完": {
+    lesson: {
+      intro: "The result complement — glue 完 right onto a verb to say the action ran to its finish.",
+      uses: [
+        {
+          h: "verb + 完", hPy: "verb + wán",
+          g: "“finish …ing” — 完 sits immediately after the verb, before anything else",
+          ex: "吃完早饭后我马上就去工作了。", exPy: "chī wán zǎo fàn hòu wǒ mǎ shàng jiù qù gōng zuò le.", exEn: "After finishing breakfast I went straight to work.",
+        },
+        {
+          h: "verb + 完了", hPy: "verb + wán le",
+          g: "add 了 for a one-off that's done and dusted",
+          ex: "我看完了这本书。", exPy: "wǒ kàn wán le zhè běn shū.", exEn: "I finished reading this book.",
+        },
+        {
+          g: "“run out, sold out” — the thing itself is finished",
+          ex: "咖啡卖完了。", exPy: "kā fēi mài wán le.", exEn: "The coffee is sold out.",
+        },
+      ],
+    },
+  },
+
+  "如果": {
+    lesson: {
+      intro: "“If” — and 就 opens the result.",
+      uses: [
+        {
+          h: "如果……，就……", hPy: "rúguǒ …, jiù …",
+          g: "“if …, then …” — the result clause takes 就 right before its verb",
+          ex: "如果你好好学中文，你就可以讲流利的中文。", exPy: "rú guǒ nǐ hǎo hǎo xué zhōng wén, nǐ jiù kě yǐ jiǎng liú lì de zhōng wén.", exEn: "If you study Chinese well, you'll be able to speak fluent Chinese.",
+        },
+        {
+          h: "如果……的话", hPy: "rúguǒ … dehuà",
+          g: "an optional 的话 closes off the if-part",
+          ex: "如果明天下雨的话，我们就不去了。", exPy: "rú guǒ míng tiān xià yǔ de huà, wǒ men jiù bú qù le.", exEn: "If it rains tomorrow, we won't go.",
+        },
+        {
+          g: "vs 要是: same meaning, same 就 — 如果 is the neutral default, 要是 the chattier spoken one",
+        },
+      ],
+    },
+  },
+
+  "马上": {
+    lesson: {
+      intro: "“Right away” — and it loves a backing 就.",
+      uses: [
+        {
+          h: "马上就 + verb", hPy: "mǎshàng jiù + verb",
+          g: "“immediately, in no time” — 马上 nearly always teams up with 就 before the verb",
+          ex: "我马上就到！", exPy: "wǒ mǎ shàng jiù dào!", exEn: "I'll be right there!",
+        },
+        {
+          g: "“right after” an event — often with verb + 完 for the finished action",
+          ex: "吃完早饭后我马上就去工作了。", exPy: "chī wán zǎo fàn hòu wǒ mǎ shàng jiù qù gōng zuò le.", exEn: "After finishing breakfast I went straight to work.",
+        },
+        {
+          g: "the image: 马上 = “on horseback” — news arriving at a gallop",
+        },
+      ],
+    },
+  },
+
   "让": {
     lesson: {
       intro: "“Let / make someone do something” — the little pivot verb.",
