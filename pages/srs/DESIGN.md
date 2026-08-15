@@ -140,7 +140,14 @@ Decided 2026-07-11. This doc is the source of truth for sessions continuing the 
   - **⏱ Time at the desk**: all-time totals (reviewing vs learning) + a 28-day
     stacked bar chart. A card counts as *learning* for a whole day when its
     first grade that day was its first sight ever (same-day repeats included);
-    everything else is review time.
+    everything else is review time. The same panel carries a second chart
+    (added 2026-08-15, owner's ask for per-week summaries): 12 Monday-first
+    weekly totals, same stacked reviews/learning split and same `timeBar()`
+    renderer, so a week here is the week you'd name out loud (and matches the
+    retention chart's buckets). The running week is tipped "so far" and left
+    out of the averaging line under the chart; that average runs from the
+    first week with any time in it, so weeks from before the user started
+    don't dilute it.
   - **⏳ Time to come**: the owner's main ask — predicted minutes per day to
     burn down the queue, today headlined (`≈ Xm to clear today — N due + M new
     · at your pace of ~Ns a card`). An expected-value simulation pushes every

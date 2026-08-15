@@ -461,6 +461,12 @@
   .tbar i + i { margin-top: 2px; }              /* surface gap between stacked fills */
   .tbar i:first-of-type { border-radius: 4px 4px 0 0; }
   .tbar i.zero { height: 2px; background: var(--track); }
+  /* a second chart in the same panel: dashed rule + its own little heading */
+  .sub-label {
+    margin: 18px 0 12px; padding-top: 14px; border-top: 2px dashed var(--line);
+    font-size: .72rem; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--muted); font-weight: 700;
+  }
   .chart-key {
     display: flex; flex-wrap: wrap; gap: 4px 14px; margin-top: 10px;
     font-size: .72rem; color: var(--muted); font-weight: 700;
@@ -803,11 +809,15 @@
       </div>
     </div>
 
-    <div class="label">⏱️ Time at the desk — the last 4 weeks</div>
+    <div class="label">⏱️ Time at the desk — day by day, week by week</div>
     <div class="panel">
       <div class="ret-head"><b id="timeTotal">–</b><span id="timeSplit"></span></div>
       <div class="tchart" id="timeChart"></div>
       <div class="ret-axis"><span>4 weeks ago</span><span>today</span></div>
+      <div class="sub-label">📅 by week — the last 12 weeks</div>
+      <div class="tchart" id="weekChart"></div>
+      <div class="ret-axis"><span>12 weeks ago</span><span>this week</span></div>
+      <p class="seeds" id="weekNote"></p>
       <div class="chart-key">
         <span><i class="w3"></i>reviews</span>
         <span><i class="w4"></i>learning new cards</span>
@@ -1812,6 +1822,52 @@
         [{ ms: x.t.learnMs, cls: "w4" }, { ms: x.t.revMs, cls: "w3" }],
         tmax, tot === tmax && tot > 0 ? fmtDur(tot) : "", tipText));
     }
+
+    // --- the same time summed per week: 12 Monday-first weeks --------------
+    // Calendar weeks, like the retention chart above, so a week here is the
+    // week you'd name out loud. The last one is still running: it's tipped
+    // "so far" and left out of the average, which would otherwise be dragged
+    // down by a Monday morning.
+    const weeks = [];
+    for (let w = 11; w >= 0; w--) {
+      const from = new Date(thisMonday); from.setDate(thisMonday.getDate() - w * 7);
+      let revMs = 0, learnMs = 0;
+      for (let i = 0; i < 7; i++) {
+        const d = new Date(from); d.setDate(from.getDate() + i);
+        const t = tbd[todayKey(d.getTime())];
+        if (t) { revMs += t.revMs; learnMs += t.learnMs; }
+      }
+      weeks.push({ from, revMs, learnMs, ms: revMs + learnMs, running: w === 0 });
+    }
+    const wmax = Math.max(1, ...weeks.map(w => w.ms));
+    const wc = $("weekChart");
+    wc.innerHTML = "";
+    for (const w of weeks) {
+      const tipText = `week of ${fmtDay(w.from)} — ${fmtDur(w.ms)}` +
+        (w.running ? " so far" : "") +
+        (w.ms ? ` (${fmtDur(w.revMs)} reviews · ${fmtDur(w.learnMs)} learning)` : "");
+      wc.appendChild(timeBar(
+        [{ ms: w.learnMs, cls: "w4" }, { ms: w.revMs, cls: "w3" }],
+        wmax, w.ms === wmax && w.ms > 0 ? fmtDur(w.ms) : "", tipText));
+    }
+    // Average over the finished weeks, counted from the first one with any
+    // time in it — averaging across empty weeks from before you started here
+    // would just report how long ago you started.
+    const finished = weeks.slice(0, 11);
+    const firstSeen = finished.findIndex(w => w.ms > 0);
+    const span = firstSeen < 0 ? [] : finished.slice(firstSeen);
+    const thisWeek = weeks[11];
+    const note = [];
+    if (span.length) {
+      const avg = span.reduce((s, w) => s + w.ms, 0) / span.length;
+      note.push(span.length > 1
+        ? `≈ ${fmtDur(avg)} a week over the ${span.length} weeks since ${fmtDay(span[0].from)}`
+        : `${fmtDur(avg)} in the week of ${fmtDay(span[0].from)}`);
+    }
+    if (span.length || thisWeek.ms) {
+      note.push(`this week ${fmtDur(thisWeek.ms)} so far`);
+    }
+    $("weekNote").textContent = note.join(" · ");
 
     // --- time to come: burn-down forecast, today headlined -----------------
     const pace = reviewPace(tbd, now);
