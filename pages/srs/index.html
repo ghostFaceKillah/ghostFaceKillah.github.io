@@ -651,7 +651,7 @@
 
     <div class="btn-row">
       <button class="btn ghost" id="leechBtn">🧛 Tame leeches<small id="leechCount"></small></button>
-      <button class="btn ghost" id="aheadBtn">⏩ Review ahead<small id="aheadCount"></small></button>
+      <button class="btn ghost" id="learnBtn">📖 Learn<small id="learnCount"></small></button>
     </div>
     <div class="btn-row">
       <button class="btn ghost" id="statsBtn">📈 My progress &amp; garden</button>
@@ -1320,27 +1320,18 @@
     return Math.max(0, settings.newPerDay - todayCounts(now).introduced);
   }
 
-  // Cards for "review ahead": seen, not due today, weakest memories first.
-  // Grading them early is safe — FSRS uses the true elapsed time, so a card
-  // reviewed ahead of schedule earns only a small stability bump.
-  const AHEAD_BATCH = 20;
-  function aheadCards(now) {
-    const cutoff = endOfTodayMs(now);
-    // shuffle before the (stable) sort so cards tied on retrievability —
-    // e.g. a lesson learned together — come out in a fresh order each time
-    return shuffle(enabledCards()
-      .map(c => ({ c, s: cardStates[c.id] }))
-      .filter(x => x.s && x.s.due > cutoff))
-      .sort((a, b) =>
-        FSRS.retrievability((now - a.s.lastReview) / FSRS.DAY_MS, a.s.stability) -
-        FSRS.retrievability((now - b.s.lastReview) / FSRS.DAY_MS, b.s.stability))
-      .map(x => x.c);
+  // Cards for the Learn button: today's new-card intake — the same slice the
+  // daily queue would introduce (unseen cards up to the day's quota, in
+  // curriculum order). Opened in learn mode, so peeking costs nothing.
+  function learnNewCards(now) {
+    return newCardsAvailable().slice(0, newQuotaLeft(now));
   }
 
   // Cards for leech taming: cards that keep lapsing (see FSRS.isLeech),
   // worst first, LEECH_BATCH at a time — a small deliberate dose, not a
   // grind. Leeches already due today are left to the daily queue; drilling
-  // the rest early is safe for the same reason review-ahead is.
+  // the rest early is safe — FSRS uses the true elapsed time, so a card
+  // reviewed ahead of schedule earns only a small stability bump.
   const LEECH_BATCH = 10;
   function leechCards(now) {
     const cutoff = endOfTodayMs(now);
@@ -1419,11 +1410,10 @@
     $("leechCount").textContent = leeches
       ? `${Math.min(LEECH_BATCH, leeches)} of ${leeches} stuck`
       : "no leeches 🎉";
-    const ahead = aheadCards(now).length;
-    $("aheadBtn").disabled = ahead === 0;
-    $("aheadCount").textContent = ahead
-      ? `${Math.min(AHEAD_BATCH, ahead)} weakest`
-      : "nothing to pull in";
+    $("learnBtn").disabled = fresh === 0;
+    $("learnCount").textContent = fresh
+      ? `${fresh} new today`
+      : newCardsAvailable().length ? "daily quota met" : "no unseen cards";
   }
 
   // Both set pickers (focus review and learn mode) list every group on the
@@ -2050,14 +2040,14 @@
   //           LEECH_BATCH at a time: extra deliberate exposure, outside
   //           the schedule, for the cards eating the most review time
   //   focus — every card of one chosen group, due or not (tutor-prep cram)
-  //   ahead — extra rounds after the daily queue is clear: the weakest
-  //           not-yet-due cards, AHEAD_BATCH at a time
   //   browse — "learn mode": flip through one group front-to-back with
   //           Back/Next instead of grades, both card sides open at once (no
   //           reveal step — it's reading, not self-testing), rolling into
   //           the next set when one ends. The one mode OUTSIDE the engine's
   //           grading path — it never touches card state, the review log or
   //           the day counters, so it's free of scheduling consequences.
+  //           The 📖 Learn button enters the same mode over today's
+  //           new-card intake — a look at what's coming before it counts.
   let queue = [];          // card objects
   let sessionMode = "daily";
   let sessionTotal = 0;
@@ -2226,7 +2216,6 @@
       daily: "All clear! 🎉",
       leeches: "Leeches tamed! 🧛",
       focus: "Set crammed! 🎯",
-      ahead: "Extra round done! ⏩",
     };
     $("doneBig").textContent = opener[sessionMode] || "All clear! 🎉";
     $("doneSummary").textContent =
@@ -2248,9 +2237,11 @@
     await refreshKeepingSlot();
     startSession("leeches", leechCards(Date.now()).slice(0, LEECH_BATCH));
   });
-  $("aheadBtn").addEventListener("click", async () => {
-    await refreshKeepingSlot();
-    startSession("ahead", aheadCards(Date.now()).slice(0, AHEAD_BATCH));
+  // Learn (today's new cards) runs as a browse session: writes nothing, so
+  // no cloud rebase needed — same as the per-set learn mode below
+  $("learnBtn").addEventListener("click", () => {
+    browseKey = null; // not a picker set — no next-set rollover when done
+    startSession("browse", learnNewCards(Date.now()));
   });
   $("focusBtn").addEventListener("click", async () => {
     await refreshKeepingSlot();

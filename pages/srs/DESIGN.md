@@ -57,7 +57,8 @@ Decided 2026-07-11. This doc is the source of truth for sessions continuing the 
   The set also exists in recognition direction as its own deck `spokenrec`
   (Chinese front → English back, card IDs `sent/spoken/N`, same bites of 25) —
   separate IDs so the two directions are opted into and scheduled independently.
-- **Four session modes, one engine** (decided 2026-07-11). Every mode grades
+- **Session modes, one engine** (decided 2026-07-11, four graded modes
+  originally; three since the **ahead** removal below). Every mode grades
   through the same `FSRS.review` with real elapsed time — early/late reviews are
   handled by the math itself (early review ⇒ high retrievability ⇒ tiny stability
   gain), so no mode needs special scheduling rules:
@@ -85,8 +86,13 @@ Decided 2026-07-11. This doc is the source of truth for sessions continuing the 
   - **focus** — every card of one chosen group (e.g. an IC1 chapter before a tutor
     lesson), due or not, enabled for daily review or not. Cramming a group does
     NOT opt it into the daily rotation — the deck chips stay the only intake switch.
-  - **ahead** — extra rounds after the daily queue is clear: not-yet-due cards
-    sorted by retrievability (weakest first), 20 at a time, repeatable.
+  - **ahead** — removed 2026-08-26 (extra rounds of not-yet-due cards, weakest
+    first, 20 at a time). Its home-screen button became **📖 Learn**: today's
+    new-card intake (`newCardsAvailable()` up to the day's remaining quota, in
+    curriculum order) opened in the ungraded browse "learn mode" — a
+    consequence-free preview of what the daily queue will introduce, mirroring
+    the per-set learn mode. Nothing is graded or recorded, so peeking doesn't
+    spend the quota; the graded path for those cards stays the daily queue.
 - **Stats screen** (decided 2026-07-11): the three idiomatic SRS charts, computed
   entirely from existing state (`days` + card states, nothing new persisted):
   review heatmap + streak (18 Monday-first weeks ≈ 4 months, GitHub-style), a card-maturity
