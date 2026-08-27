@@ -836,6 +836,7 @@
         <span><i class="w1"></i>predicted follow-ups</span>
         <span><i class="w4"></i>new cards</span>
       </div>
+      <p class="seeds" id="burnNote"></p>
       <label class="sim-toggle">
         <input type="checkbox" id="endlessNew">
         <span id="endlessNewText">♾️ assume I keep adding new material — never run out of cards to learn</span>
@@ -1410,10 +1411,14 @@
     $("leechCount").textContent = leeches
       ? `${Math.min(LEECH_BATCH, leeches)} of ${leeches} stuck`
       : "no leeches 🎉";
+    // the Learn button is the door new cards enter through, so its caption
+    // also carries the backlog: enabled-but-unseen cards beyond today's slice
+    const unseen = newCardsAvailable().length;
+    const waiting = unseen - fresh;
     $("learnBtn").disabled = fresh === 0;
     $("learnCount").textContent = fresh
-      ? `${fresh} new today`
-      : newCardsAvailable().length ? "daily quota met" : "no unseen cards";
+      ? `${fresh} new today` + (waiting ? ` · ${waiting} waiting` : "")
+      : unseen ? `daily quota met · ${unseen} waiting` : "no unseen cards";
   }
 
   // Both set pickers (focus review and learn mode) list every group on the
@@ -1898,6 +1903,15 @@
          { ms: s.sched * pace.revMs, cls: "w2" }],
         bmax, d === 0 && simMs(s) > 0 ? fmtDur(simMs(s)) : "", tipText));
     });
+    // Runway: how much picked material hasn't entered the rotation yet, and
+    // how long the intake keeps flowing at the current cap — the number the
+    // ♾️ checkbox below pretends is infinite.
+    const waiting = newCardsAvailable().length;
+    const runway = Math.ceil(waiting / settings.newPerDay);
+    $("burnNote").textContent = waiting
+      ? `${waiting} card${waiting === 1 ? "" : "s"} waiting to join the rotation — ` +
+        `≈ ${runway} more day${runway === 1 ? "" : "s"} of new cards at ${settings.newPerDay}/day`
+      : "every picked card is already in the rotation 🎉";
 
     // --- leeches: the cards eating the most review time --------------------
     // The full census (due-today ones included — this is a report, not a

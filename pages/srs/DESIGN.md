@@ -93,6 +93,11 @@ Decided 2026-07-11. This doc is the source of truth for sessions continuing the 
     consequence-free preview of what the daily queue will introduce, mirroring
     the per-set learn mode. Nothing is graded or recorded, so peeking doesn't
     spend the quota; the graded path for those cards stays the daily queue.
+    The button caption also shows the intake backlog (added 2026-08-27):
+    "15 new today · 230 waiting" / "daily quota met · 230 waiting" — enabled
+    cards with no saved state (`newCardsAvailable()`), i.e. picked but not yet
+    in the rotation; the Learn button is the door they enter through, so the
+    queue length lives there.
 - **Stats screen** (decided 2026-07-11): the three idiomatic SRS charts, computed
   entirely from existing state (`days` + card states, nothing new persisted):
   review heatmap + streak (18 Monday-first weeks ≈ 4 months, GitHub-style), a card-maturity
@@ -168,7 +173,11 @@ Decided 2026-07-11. This doc is the source of truth for sessions continuing the 
     new material at N/day") lifts the unseen-cards limit so intake flows at
     the daily cap forever — the steady-state workload view. It's a local
     display pref (`endlessNew` in the namespaced store, not synced): an
-    assumption about the future, not review state. Per-card pace comes from the last 30 days of the log
+    assumption about the future, not review state. Under the chart a runway
+    line (added 2026-08-27) turns the backlog into days: "230 cards waiting
+    to join the rotation — ≈ 16 more days of new cards at 15/day" — the
+    number the ♾️ checkbox pretends is infinite, so it doubles as an
+    explanation of what the checkbox overrides. Per-card pace comes from the last 30 days of the log
     (all time as fallback; 9 s review / 18 s learn defaults for a virgin log)
     with same-day repeats folded in, so no separate repeat factor is needed.
   - Colors stay inside the grade-button mandate: reviews `--w3`, learning/new
