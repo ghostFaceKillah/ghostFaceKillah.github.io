@@ -117,13 +117,59 @@ Decided 2026-07-11. This doc is the source of truth for sessions continuing the 
   at use-time, so dark mode follows the buttons' dark values with no
   per-theme chart overrides. Heatmap: it IS a garden (owner iterated from
   hearts → 136-emoji jar → garden, 2026-07-11): a practiced day grows a plant
-  / garden visitor (48-emoji set) whose font-size carries the review count
+  / garden visitor (47-emoji set) whose font-size carries the review count
   (s1–s4); a skipped day shows bare ground (🪨🪵🍂🌰, small + faded), window
   trimmed to 18 weeks ≈ 4 months. Picks are a deterministic hash of the
   calendar day (`scatter()` — wild-looking but stable across visits; different
   salt for ground); the month-hue cycle (`--m1..--m5`) is gone. Magnitude never rides
   on color, stages carry emoji + labeled counts, weeks carry axis labels, and
   every mark has a tooltip + aria-label.
+- **Today's plot** (decided 2026-09-03; the owner asked for a reward for
+  *completing* the day's queue, on top of the garden's reward for showing
+  up, picked from five mocked-up ideas): a garden bed on the home screen,
+  above the Start button, with one cell per card in today's work — cards
+  already **put to bed** (graded today and not due again before tomorrow,
+  a 🌿 sprout; 🌱 when the card was met today) plus what is still to do
+  (soil dots: plain for a due card, an accent ring for a new one). The
+  caption reads "12 of 35 planted · 23 to go". When nothing is left in
+  the ground the bed turns golden and every cell flowers ("35 of 35
+  planted · in full bloom ☘️"), and a daily session that gets there ends
+  on a bloom done screen instead of "All clear!": the day's own heatmap
+  plant, large, under drifting petals (none under
+  `prefers-reduced-motion`), with "35 cards put to bed · nothing left in
+  the ground · tomorrow brings a fresh bed". Reward in the moment, nothing
+  to lose: **no new state is persisted** — `todaysPlot()` reads the day's
+  log entries (first grade per card tells whether it was new) and the
+  current card states, so the bed agrees across devices as soon as the
+  log has synced. Consequences of that choice: focus/leech reviews of
+  enabled cards count as planted too (they were tended today), the bed
+  grows if the cap is raised mid-day, and a bed with nothing due and
+  nothing new "rests" (the panel shows a one-line note; it is hidden
+  entirely while no decks are picked). Cell size steps down at 60 and
+  160 cards so a backlog day still fits on a phone.
+- **Field guide** (decided 2026-09-03, the "collector" half of the owner's
+  ask, lifted from the garden-visitors idea): a pokédex of the heatmap
+  garden, its own screen (`guideScreen`, 图鉴) behind a "📔 Field guide ·
+  N of 47 found" button in the stats garden panel. Every practiced day's
+  plant is a pure function of the date (`plantOfDay(dayNumber)`, shared
+  now by the heatmap, the plot, the done screen and the guide), so
+  "encountered" is **derived** from `days`: walk every practiced day ever
+  (not just the 18-week window — the plant grew that day whether or not
+  it is still on screen), collect what came up, count it, and note first
+  and last dates. Rest days between the first practiced day and yesterday
+  contribute ground (🪨🪵🍂🌰) the same way. Entries are grouped Greens /
+  Flowers / Harvest / Visitors / Ground with names in `GUIDE_NAMES`; the
+  pool (`GARDEN`) stays the single source of truth for what exists and
+  how rare it is — an emoji added to the pool but not named lands in an
+  "✨ Other" group rather than going missing. Unseen finds are grey
+  silhouettes carrying their odds (weight / pool size, rounded to tens
+  past 50: "1 in 500 days"); seen ones show ×count and first-seen date,
+  rare (weight 1) ones tinted lavender. Tiles: found of 47, rare finds of
+  39, days practiced, ground of 4. Honest about the math: with 39 rare
+  finds at 1/499 each, a practiced day has a ~8% chance of a rare find,
+  so the full book is a multi-year project by design. The done screen
+  also announces a first-ever find after any graded session ("🍓 first
+  time this one has grown in your garden — it's in the field guide now").
 - **Review log & retention** (decided 2026-07-11): every grade appends
   `"ts,grade,prevIvl,cardId"` to a month-chunked log (`log:YYYY-MM` in
   localStorage; `users/{uid}/log/{YYYY-MM}` docs in Firestore — covered by the
