@@ -2,14 +2,15 @@
 //
 // Loaded as <script type="module"> — it pulls the Firebase SDK from the
 // gstatic CDN, then publishes window.SRS_CLOUD and dispatches "srs-cloud-ready"
-// on window. If the SDK can't load (offline, blocked), nothing is published
-// and the app simply stays in guest mode; every app feature works without
-// this file succeeding.
+// on window. If the SDK can't load (offline, blocked), nothing is published,
+// "srs-cloud-unavailable" is dispatched instead and the app settles into
+// guest mode; every app feature works without this file succeeding.
 //
 // Data model (guarded by /firestore.rules — each user owns users/{uid}/**):
 //   users/{uid}/cards/{docId}     — one doc per card: the FSRS state
-//   users/{uid}/settings/app      — { groups, newPerDay }
-//   users/{uid}/log/{YYYY-MM}     — { entries: ["ts,grade,prevIvl,cardId", …] }
+//   users/{uid}/settings/app      — { slot, slots: [g0, g1, g2], groups, newPerDay }
+//                                   (groups mirrors slots[slot]; see index.html)
+//   users/{uid}/log/{YYYY-MM}     — { entries: ["ts,grade,prevIvl,cardId[,ms]", …] }
 //                                   one doc per month of review-log entries
 //
 // Card IDs contain "/" (e.g. "words/L1D1/你"), which Firestore forbids in
@@ -135,4 +136,8 @@ async function boot() {
   window.dispatchEvent(new CustomEvent("srs-cloud-ready"));
 }
 
-boot().catch(e => console.warn("srs sync: cloud unavailable, staying in guest mode", e));
+boot().catch(e => {
+  console.warn("srs sync: cloud unavailable, staying in guest mode", e);
+  // lets the app stop waiting for an identity and open up as a guest
+  window.dispatchEvent(new CustomEvent("srs-cloud-unavailable"));
+});

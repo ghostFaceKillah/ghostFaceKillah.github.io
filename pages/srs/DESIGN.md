@@ -265,6 +265,40 @@ Decided 2026-07-11. This doc is the source of truth for sessions continuing the 
     locally but not queued for push (the gate); they can be overwritten by
     the next successful hydration. Reviews (cards + log + days) survive
     offline fine via Firestore's queued per-card writes and the log merge.
+- **State-loss hardening** (2026-09-03, after the owner saw a session's grades
+  come back as "TODO" and Start needing several taps). Reproduced in a
+  Playwright harness driving the page with a fake `window.SRS_CLOUD`:
+  - **Identity gate.** The page rendered and enabled Start on the guest
+    namespace (`srs:anon:`) while cloud.js was still fetching the SDK; a
+    signed-in user tapping Start in that window graded cards as a guest, then
+    got yanked home and re-namespaced when auth resolved — every grade stranded
+    in `srs:anon:cards`, the account showing them all still due. Now graded
+    sessions and settings changes wait until identity has settled (first
+    `onAuthStateChanged`, `srs-cloud-unavailable` from cloud.js when the SDK
+    import fails, or a 15 s last-resort timer); Start reads "☁️ connecting…"
+    meanwhile. Learn mode never writes, so it isn't gated. `handleUser` only
+    ends a *graded* session, and only when the uid actually changes.
+  - **Merge on adopt.** `adoptCloudState` used to replace `cardStates` with
+    the fetch wholesale, so any snapshot older than local state (a second tab
+    on Firestore's memory-only cache, a tab closed with unsent writes, an old
+    cache, an exhausted read quota) silently undid the reviews just made. Now
+    `mergeCardStates`: per card, the later `lastReview` wins, and local-newer
+    cards are pushed back up — the cloud heals the way the log already did.
+    A fetch that lands mid-review keeps the slot the user is looking at.
+  - **Session start feedback + timeout.** Start/leeches/focus awaited a full
+    Firestore fetch with the button looking idle (offline detection alone is
+    ~10 s), so people tapped again; every tap that landed restarted the
+    session. Now one start at a time, the button says "☁️ syncing…", and past
+    `SESSION_SYNC_TIMEOUT_MS` (5 s) the session opens on local state — the
+    fetch carries on and is merged in when it lands (safe, per the above).
+    Settings changes still wait the full fetch: they must land on the cloud's
+    picks or a stale doc would clobber them.
+  - Smaller: `store.write` no longer throws (a full localStorage would have
+    aborted `grade()` half-way, before the cloud push); log pushes are
+    debounced (`queueLogPush`, 1.5 s, flushed on quit / session end / tab
+    hidden / pagehide) instead of rewriting the whole month doc on every
+    grade; a chip tapped twice while its rebase is in flight nets out to the
+    second tap; the guest import pushes the normalized settings.
 - **Guest mode:** the app fully works signed-out on localStorage. On first sign-in,
   offer a one-time "import this progress into your account?" — never merge silently.
 - **Multi-user:** open to any Google account. All state private per user.
