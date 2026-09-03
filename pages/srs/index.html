@@ -144,6 +144,17 @@
   .btn-row { display: flex; gap: 10px; }
   .btn-row .btn { margin-top: 12px; padding: 13px 8px; font-size: 1rem; }
   .btn-row .btn small { display: block; font-weight: 700; font-size: .78rem; color: var(--muted); margin-top: 2px; }
+  /* a session button waiting on the cloud: the label is hidden under a status
+     overlay — the real caption stays in the DOM so refreshStats() can keep
+     updating it (and its <small>) while the fetch runs */
+  .btn { --btn-ink: #fff; position: relative; }
+  .btn.ghost { --btn-ink: var(--ink); }
+  .btn.syncing, .btn.syncing small { color: transparent; }
+  .btn.syncing::after {
+    content: "☁️ syncing…"; color: var(--btn-ink);
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
 
   /* ----- Focus review picker ----- */
   .focus-row { display: flex; gap: 10px; }
@@ -918,8 +929,15 @@
         return raw ? JSON.parse(raw) : fallback;
       } catch (e) { return fallback; }
     },
+    // Never throws: a full/blocked localStorage (quota, private mode) must not
+    // abort a grade half-way — the in-memory state and the cloud push still
+    // happen, and the cache simply catches up on the next successful write.
     write(key, value) {
-      localStorage.setItem(NS() + key, JSON.stringify(value));
+      try {
+        localStorage.setItem(NS() + key, JSON.stringify(value));
+      } catch (e) {
+        console.warn("srs: localStorage write failed for", key, e);
+      }
     },
   };
   // Read from an explicit namespace (for the guest-import flow).
@@ -1061,7 +1079,27 @@
     chunk.push(now + "," + grade + "," + Math.round(prevIvlDays) + "," + cardId +
       "," + Math.min(TIME_CAP_MS, Math.max(0, Math.round(durMs))));
     store.write(key, chunk);
-    if (cloud && cloudHydrated) cloud.pushLog(monthKey(now), chunk);
+    queueLogPush(monthKey(now));
+  }
+  // A log push rewrites the WHOLE month doc (tens of KB late in a month), so
+  // pushing on every grade uploaded the same chunk a hundred times a session
+  // and queued the small per-card writes behind it. Coalesce: one push per
+  // month chunk once grading pauses, and a flush when a session ends or the
+  // tab is hidden/closed. Lossless — the doc is always the full chunk.
+  const LOG_PUSH_DEBOUNCE_MS = 1500;
+  const dirtyLogMonths = new Set();
+  let logPushTimer = null;
+  function queueLogPush(month) {
+    dirtyLogMonths.add(month);
+    clearTimeout(logPushTimer);
+    logPushTimer = setTimeout(flushLogPush, LOG_PUSH_DEBOUNCE_MS);
+  }
+  function flushLogPush() {
+    clearTimeout(logPushTimer);
+    logPushTimer = null;
+    if (!cloud || !cloudHydrated) return; // stays dirty; adopt heals it later
+    for (const month of dirtyLogMonths) cloud.pushLog(month, store.read("log:" + month, []));
+    dirtyLogMonths.clear();
   }
   // Card ids never contain ASCII commas, so the optional trailing ms field is
   // recognizable as "one more comma after the id slot, all digits behind it".
@@ -1400,14 +1438,20 @@
     $("statSeen").textContent =
       Object.keys(cardStates).filter(id => REGISTRY.cardById(id)).length;
     const startBtn = $("startBtn");
-    startBtn.disabled = due + fresh === 0;
+    // Until the cloud layer has said who we are, the numbers above may belong
+    // to the wrong namespace (guest vs account) — graded sessions wait for
+    // that, and say so, instead of silently starting in the wrong place.
+    const gated = identityPending || sessionStarting; // one session start at a time, too
+    startBtn.disabled = gated || due + fresh === 0;
     startBtn.textContent =
+      identityPending ? "☁️ connecting…" :
       due + fresh > 0 ? "Start review" :
       enabledCards().length === 0 ? "Pick some decks below ↓" :
       "All done for today 🎉";
 
     const leeches = leechCards(now).length;
-    $("leechBtn").disabled = leeches === 0;
+    $("leechBtn").disabled = gated || leeches === 0;
+    $("focusBtn").disabled = gated || !$("focusSelect").value;
     $("leechCount").textContent = leeches
       ? `${Math.min(LEECH_BATCH, leeches)} of ${leeches} stuck`
       : "no leeches 🎉";
@@ -1437,7 +1481,10 @@
       }
       sel.appendChild(og);
     }
-    sel.addEventListener("change", () => { $(btnId).disabled = !sel.value; });
+    sel.addEventListener("change", () => {
+      // focus sessions are graded, so they also wait for the identity gate
+      $(btnId).disabled = !sel.value || (btnId === "focusBtn" && identityPending);
+    });
   }
   buildGroupSelect("focusSelect", "focusBtn");
   buildGroupSelect("browseSelect", "browseBtn");
@@ -1529,6 +1576,7 @@
     }
   }
 
+  const pendingChip = {}; // chip key → intended on/off while its rebase is in flight
   $("deckList").addEventListener("click", async e => {
     const head = e.target.closest(".deck-head");
     if (head) { head.parentElement.classList.toggle("open"); return; }
@@ -1537,11 +1585,16 @@
     if (chip) {
       // capture the intent from what the user saw, THEN rebase on the cloud —
       // a stale tab pushing its whole old settings doc would erase picks
-      // made on another device
+      // made on another device. A second click on the same chip while the
+      // first is still rebasing flips the pending intent (the old click is
+      // superseded) instead of re-reading stale settings and doubling up.
       const key = chip.dataset.key;
-      const on = !settings.groups[key];
+      const on = key in pendingChip ? !pendingChip[key] : !settings.groups[key];
+      pendingChip[key] = on;
       chip.classList.toggle("sel", on); // instant feedback; redrawn below
       await refreshKeepingSlot();
+      if (pendingChip[key] !== on) return; // a later click on this chip wins
+      delete pendingChip[key];
       if (on) settings.groups[key] = true;
       else delete settings.groups[key];
       saveSettings();
@@ -2225,6 +2278,7 @@
     }
     nextBtn.style.display = "none";
     resumeBtn.style.display = "none";
+    flushLogPush(); // the session's log entries go up now, not after the debounce
     const c = todayCounts(Date.now());
     const opener = {
       daily: "All clear! 🎉",
@@ -2242,24 +2296,41 @@
   // ----- Wiring ---------------------------------------------------------------------
   // Sessions rebase on the cloud first: the queue is built from fresh card
   // states, and the log pushes the session makes won't overwrite another
-  // device's same-month entries.
-  $("startBtn").addEventListener("click", async () => {
-    await refreshKeepingSlot();
-    startSession("daily", dailyQueue());
-  });
-  $("leechBtn").addEventListener("click", async () => {
-    await refreshKeepingSlot();
-    startSession("leeches", leechCards(Date.now()).slice(0, LEECH_BATCH));
-  });
+  // device's same-month entries. The rebase is a full Firestore fetch, which
+  // on a flaky connection can take many seconds (offline detection alone is
+  // ~10 s) — the button used to look dead meanwhile, inviting more taps, and
+  // every tap that landed started the session over. Now: one start at a time,
+  // the button says it's syncing, and past SESSION_SYNC_TIMEOUT_MS the
+  // session opens on local state; the fetch keeps running and, when it lands,
+  // is merged in (adoptCloudState never drops a local-newer review).
+  const SESSION_SYNC_TIMEOUT_MS = 5000;
+  async function startAfterSync(btn, mode, buildCards) {
+    if (sessionStarting) return;
+    sessionStarting = true;
+    btn.classList.add("syncing");
+    btn.disabled = true;
+    try {
+      await refreshKeepingSlot({ timeoutMs: SESSION_SYNC_TIMEOUT_MS });
+    } finally {
+      sessionStarting = false;
+      btn.classList.remove("syncing");
+      refreshStats(); // re-enables the buttons from the (possibly refreshed) state
+    }
+    startSession(mode, buildCards());
+  }
+  $("startBtn").addEventListener("click", e =>
+    startAfterSync(e.currentTarget, "daily", dailyQueue));
+  $("leechBtn").addEventListener("click", e =>
+    startAfterSync(e.currentTarget, "leeches", () => leechCards(Date.now()).slice(0, LEECH_BATCH)));
   // Learn (today's new cards) runs as a browse session: writes nothing, so
   // no cloud rebase needed — same as the per-set learn mode below
   $("learnBtn").addEventListener("click", () => {
     browseKey = null; // not a picker set — no next-set rollover when done
     startSession("browse", learnNewCards(Date.now()));
   });
-  $("focusBtn").addEventListener("click", async () => {
-    await refreshKeepingSlot();
-    startSession("focus", focusCards($("focusSelect").value));
+  $("focusBtn").addEventListener("click", e => {
+    const key = $("focusSelect").value;
+    startAfterSync(e.currentTarget, "focus", () => focusCards(key));
   });
   // learn mode writes nothing, so no cloud rebase needed before starting
   function startBrowse(key) {
@@ -2280,7 +2351,7 @@
   });
   $("browseNextBtn").addEventListener("click", browseNext);
   $("browsePrevBtn").addEventListener("click", browsePrev);
-  $("quitBtn").addEventListener("click", () => { show("home"); refreshStats(); });
+  $("quitBtn").addEventListener("click", () => { flushLogPush(); show("home"); refreshStats(); });
   $("homeBtn").addEventListener("click", () => { show("home"); refreshStats(); });
   $("statsBtn").addEventListener("click", () => { renderStats(); show("stats"); });
   $("statsBack").addEventListener("click", () => { show("home"); refreshStats(); });
@@ -2325,6 +2396,31 @@
   // "srs-cloud-ready" never fires and everything below stays dormant.
   let cloud = null;
 
+  // Identity gate. Before cloud.js has resolved the auth state, the app runs
+  // in the guest namespace — and a signed-in user tapping Start in that first
+  // second reviewed as a guest, then got yanked home and re-namespaced when
+  // auth landed, with every grade stranded in srs:anon:. Graded sessions and
+  // settings changes now wait for the identity to settle: the first
+  // onAuthStateChanged, the SDK failing to load, or a last-resort timer.
+  // Learn mode never writes, so it's not gated.
+  const IDENTITY_TIMEOUT_MS = 15000;
+  let identityPending = !!window.FIREBASE_CONFIG;
+  let sessionStarting = false; // a Start/leeches/focus tap is awaiting its rebase
+  let settleIdentity = null;
+  const identityReady = new Promise(resolve => { settleIdentity = resolve; });
+  function identitySettled() {
+    if (!identityPending) return;
+    identityPending = false;
+    settleIdentity();
+    refreshStats();
+  }
+  if (!identityPending) settleIdentity();
+  else setTimeout(identitySettled, IDENTITY_TIMEOUT_MS); // SDK never answered — go on as a guest
+  window.addEventListener("srs-cloud-unavailable", identitySettled);
+  // a graded session is running (browse writes nothing, so it doesn't count)
+  const gradedSessionActive = () =>
+    screens.review.classList.contains("active") && sessionMode !== "browse";
+
   function refreshHome() {
     buildDeckList();
     syncCapButtons();
@@ -2341,10 +2437,38 @@
       : "Progress is saved in this browser (nothing leaves your device).<br>Browse &amp; study on the trainer pages; review here every day. 🌱";
   }
 
+  // Per-card merge: the newer review wins, never the fetch. The cloud snapshot
+  // can be BEHIND this tab (a second tab runs Firestore's memory cache only,
+  // a tab closed with unsent writes, a fetch served from an old cache, the
+  // daily read quota exhausted…) and replacing wholesale then silently undid
+  // the reviews just made — "I did some cards and they're all due again".
+  // Local-newer cards are pushed back up so the cloud heals like the log does.
+  function mergeCardStates(local, remote) {
+    const merged = Object.assign({}, remote);
+    const localNewer = [];
+    for (const id in local) {
+      const s = local[id], r = remote[id];
+      if (!r || (s.lastReview || 0) > (r.lastReview || 0)) {
+        merged[id] = s;
+        localNewer.push(id);
+      }
+    }
+    return { merged, localNewer };
+  }
+
   function adoptCloudState(cloudState) {
-    cardStates = cloudState.cards || {};
+    const { merged, localNewer } = mergeCardStates(cardStates, cloudState.cards || {});
+    cardStates = merged;
+    if (cloud) for (const id of localNewer) cloud.pushCard(id, cardStates[id]);
     if (cloudState.settings) {
+      // a fetch that outlived the session-start timeout lands mid-review:
+      // take the cloud's picks, but keep the slot the user is looking at
+      const keepSlot = gradedSessionActive() ? settings.slot : null;
       settings = normalizeSettings(cloudState.settings);
+      if (keepSlot !== null && keepSlot !== settings.slot) {
+        settings.slot = keepSlot;
+        settings.groups = settings.slots[keepSlot];
+      }
     }
     // Merge (not replace) log chunks: a chunk push overwrites the whole month
     // doc, so entries only one side has must survive in the union — and when
@@ -2360,6 +2484,7 @@
     }
     cloudHydrated = true;        // cloud is the base now — pushes are safe
     lastHydrate = Date.now();
+    dirtyLogMonths.clear();      // the merge above already pushed what the cloud lacked
     // cloud may still hold pre-split group keys — rewrite and push back once
     if (migrateAllSlots()) cloudPushSettings();
     rebuildDaysFromLog();        // "reviews today", streak, heatmap, new-card quota
@@ -2375,10 +2500,13 @@
   const STALE_MS = 60000;
   let lastHydrate = 0;
   let refreshInFlight = null;
-  function maybeRefreshCloud() {
-    if (!cloud || !cloud.user || Date.now() - lastHydrate < STALE_MS) {
-      return Promise.resolve();
-    }
+  // opts.timeoutMs: give up WAITING after that long (the fetch itself carries
+  // on and is adopted when it lands) — for actions that are safe on local
+  // state, like opening a session. Settings changes pass no timeout: they
+  // must land on top of the cloud's picks or a stale doc would clobber them.
+  async function maybeRefreshCloud(opts) {
+    await identityReady; // whose state are we refreshing? wait until we know
+    if (!cloud || !cloud.user || Date.now() - lastHydrate < STALE_MS) return;
     if (!refreshInFlight) {
       const u = cloud.user.uid;
       refreshInFlight = cloud.fetchAll()
@@ -2388,14 +2516,19 @@
         .catch(e => console.warn("srs: cloud refresh failed — using local state", e))
         .finally(() => { refreshInFlight = null; });
     }
-    return refreshInFlight;
+    const timeoutMs = opts && opts.timeoutMs;
+    if (!timeoutMs) return refreshInFlight;
+    let timer;
+    const timeout = new Promise(resolve => { timer = setTimeout(resolve, timeoutMs); });
+    await Promise.race([refreshInFlight, timeout]);
+    clearTimeout(timer);
   }
 
   // Rebase on the cloud but keep the slot the user is looking at — their
   // action applies where they aimed it, not where another device left off.
-  async function refreshKeepingSlot() {
+  async function refreshKeepingSlot(opts) {
     const at = settings.slot;
-    await maybeRefreshCloud();
+    await maybeRefreshCloud(opts);
     if (settings.slot !== at) {
       settings.slot = at;
       settings.groups = settings.slots[at];
@@ -2416,14 +2549,36 @@
   }
   document.addEventListener("visibilitychange", refreshOnReturn);
   window.addEventListener("focus", refreshOnReturn);
+  // Leaving the tab (or closing it) sends any log entries still waiting on
+  // the debounce; Firestore's persistence carries them if the tab dies.
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "hidden") flushLogPush();
+  });
+  window.addEventListener("pagehide", flushLogPush);
 
+  let handledUid; // undefined until the first auth answer; null = guest
   async function handleUser(user) {
-    uid = user ? user.uid : null;
+    const nextUid = user ? user.uid : null;
+    if (handledUid !== undefined && nextUid === handledUid) {
+      // same identity re-announced (token refresh, duplicate event): nothing
+      // to re-load, and above all no reason to yank a running session
+      syncAccountWidget(user);
+      identitySettled();
+      return;
+    }
+    handledUid = nextUid;
+    uid = nextUid;
     cloudHydrated = false;        // block whole-doc pushes until we've fetched
     lastHydrate = 0;
-    show("home");                 // never leave a stale review session running
+    clearTimeout(logPushTimer);   // pending log pushes belonged to the old namespace
+    dirtyLogMonths.clear();
+    // the namespace is changing under a graded session — end it rather than
+    // let further grades land in the wrong account (learn mode writes
+    // nothing and may carry on)
+    if (gradedSessionActive()) show("home");
     loadState();                  // instant hydrate from this namespace's cache
     syncAccountWidget(user);
+    identitySettled();            // opens the gate; refreshes the buttons
     refreshHome();
     if (!user) return;
 
@@ -2473,7 +2628,9 @@
     lastHydrate = Date.now();
     refreshHome();
     try {
-      await cloud.importAll(cards, anonSettings || settings, anonLog);
+      // push the normalized, migrated settings — the raw guest doc would just
+      // be re-normalized and pushed again on the next hydration
+      await cloud.importAll(cards, settings, anonLog);
     } catch (e) {
       console.warn("srs: import upload failed — progress is cached locally and",
         "will not be lost; it re-uploads as cards are reviewed", e);
