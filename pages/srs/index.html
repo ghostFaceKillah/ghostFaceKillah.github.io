@@ -35,6 +35,7 @@
     --gs: var(--red); --gg: var(--amber); --gb: var(--green);    /* 🌱 🌿 🌸 */
     --w1: var(--red); --w2: var(--amber); --w3: var(--green); --w4: var(--sky);
     --ret: var(--green);                                         /* retention 🧠 */
+    --soil: rgba(0,0,0,.06);                                     /* today's plot: unplanted cell */
     color-scheme: light;
   }
   @media (prefers-color-scheme: dark) {
@@ -56,6 +57,7 @@
       --amber: #ffb765;
       --red: #ff9a7d;
       --track: #3a4a40;
+      --soil: rgba(0,0,0,.2);
       color-scheme: dark;
     }
   }
@@ -77,6 +79,7 @@
     --amber: #ffb765;
     --red: #ff9a7d;
     --track: #3a4a40;
+    --soil: rgba(0,0,0,.2);
     color-scheme: dark;
   }
 
@@ -340,9 +343,48 @@
   #browseNav .btn { flex: 1; width: auto; margin-top: 0; }
   #browseNav .btn.ghost { flex: 0 0 auto; padding: 16px 22px; }
 
+  /* ----- Today's plot (home) ----- */
+  /* one cell per card in today's work: soil = still to do, a sprout = put
+     to bed; the whole bed turns golden and flowers when nothing is left */
+  .plot { margin-top: 12px; padding: 14px 16px 12px; }
+  .plot-head { display: flex; align-items: baseline; gap: 8px; margin-bottom: 10px; }
+  .plot-head b { font-size: 1.45rem; font-weight: 900; font-variant-numeric: tabular-nums; }
+  .plot-head span { color: var(--muted); font-size: .85rem; font-weight: 700; }
+  .bed {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(22px, 1fr)); gap: 4px;
+    padding: 10px; border-radius: 16px; background: var(--peach-soft); transition: background .4s;
+  }
+  .bed.mid { grid-template-columns: repeat(auto-fill, minmax(17px, 1fr)); gap: 3px; }
+  .bed.tiny { grid-template-columns: repeat(auto-fill, minmax(12px, 1fr)); gap: 2px; padding: 8px; }
+  .bed i {
+    aspect-ratio: 1; display: flex; align-items: center; justify-content: center;
+    font-style: normal; font-size: 13px; line-height: 1; border-radius: 6px; background: var(--soil);
+  }
+  .bed.mid i { font-size: 11px; border-radius: 4px; }
+  .bed.tiny i { font-size: 8px; border-radius: 3px; }
+  .bed i.soil::before { content: "·"; font-size: 1.1em; font-weight: 900; color: var(--muted); opacity: .7; }
+  .bed i.newc { box-shadow: 0 0 0 2px var(--accent) inset; }
+  .bed i.grown { background: transparent; }
+  .bed.bloom { background: var(--lemon-soft); }
+  .plot-key { display: flex; flex-wrap: wrap; gap: 4px 14px; margin-top: 8px; font-size: .72rem; color: var(--muted); font-weight: 700; }
+  .plot-key i {
+    display: inline-block; width: 11px; height: 11px; border-radius: 3px; background: var(--soil);
+    vertical-align: -1px; margin-right: 5px; font-style: normal;
+  }
+  .plot-key i.newc { box-shadow: 0 0 0 2px var(--accent) inset; }
+  .plot-rest { color: var(--muted); font-size: .9rem; text-align: center; margin: 0; }
+
   /* ----- Done screen ----- */
   .done { text-align: center; }
   .done .big { font-size: 2.6rem; margin: 30px 0 8px; font-weight: 900; }
+  .done .big.bloom { font-size: 1.9rem; margin-top: 6px; }
+  /* the day's plant, large, with petals drifting down over it */
+  .done .bloom-hero { position: relative; overflow: hidden; margin: 22px 0 0; padding: 10px 0 4px; }
+  .done .hero { font-size: 4rem; line-height: 1; margin: 0; }
+  .done .petal { position: absolute; top: -24px; font-size: 15px; animation: fall 3.4s linear infinite; pointer-events: none; }
+  @keyframes fall { to { transform: translateY(150px) rotate(300deg); opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) { .done .petal { display: none; } }
+  .done .note { color: var(--muted); font-size: .95rem; line-height: 1.6; margin: 0 0 6px; }
 
   /* ----- Stats screen ----- */
   .panel {
@@ -350,11 +392,11 @@
     padding: 16px;
   }
   /* pastel-washed stat tiles, echoing the home-screen bubbles */
-  #statsScreen .stat { border-color: transparent; }
-  #statsScreen .stat:nth-child(1) { background: var(--peach-soft); }
-  #statsScreen .stat:nth-child(2) { background: var(--sky-soft); }
-  #statsScreen .stat:nth-child(3) { background: var(--lav-soft); }
-  #statsScreen .stat:nth-child(4) { background: var(--pink-soft); }
+  #statsScreen .stat, #guideScreen .stat { border-color: transparent; }
+  #statsScreen .stat:nth-child(1), #guideScreen .stat:nth-child(1) { background: var(--peach-soft); }
+  #statsScreen .stat:nth-child(2), #guideScreen .stat:nth-child(2) { background: var(--sky-soft); }
+  #statsScreen .stat:nth-child(3), #guideScreen .stat:nth-child(3) { background: var(--lav-soft); }
+  #statsScreen .stat:nth-child(4), #guideScreen .stat:nth-child(4) { background: var(--pink-soft); }
   .heatwrap { overflow-x: auto; padding-bottom: 2px; }
   .heat-months {
     display: grid; grid-auto-flow: column; grid-auto-columns: 15px; gap: 2px;
@@ -406,6 +448,25 @@
   .garden-how p { margin: 9px 0 0; font-size: .8rem; line-height: 1.5; color: var(--muted); }
   .garden-how p b { color: var(--ink); }
   .seeds { color: var(--muted); font-size: .85rem; margin: 12px 0 0; }
+  .panel .btn-row .btn { margin-top: 12px; }
+
+  /* ----- Field guide ----- */
+  /* a pokédex of the garden: every plant and visitor the heatmap can grow,
+     the ones never encountered greyed out as silhouettes */
+  .guide-intro { color: var(--muted); font-size: .88rem; line-height: 1.5; margin: 14px 0 0; }
+  .guide-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  @media (max-width: 480px) { .guide-grid { grid-template-columns: repeat(3, 1fr); } }
+  .find {
+    min-width: 0; text-align: center; border: 2px solid var(--line); border-radius: 16px;
+    padding: 9px 4px 7px; font-size: .72rem; color: var(--muted); font-weight: 700;
+  }
+  .find .e { display: block; font-size: 1.7rem; line-height: 1.2; }
+  .find .n { display: block; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .find .r { display: block; font-size: .66rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .find.seen { border-color: var(--accent); }
+  .find.rare.seen { border-color: var(--lav); background: var(--lav-soft); }
+  .find.unseen .e { filter: grayscale(1) contrast(.25) brightness(.95); opacity: .5; }
+  .find.unseen .n { color: var(--muted); }
 
   /* ----- Leech panel ----- */
   .leech-row {
@@ -647,6 +708,15 @@
       <div class="stat"><b id="statSeen">0</b><span>cards learning</span></div>
     </div>
 
+    <div class="panel plot" id="plotPanel">
+      <div class="plot-head"><b id="plotDone">0</b><span id="plotSub"></span></div>
+      <div class="bed" id="plotBed" aria-label="today's plot"></div>
+      <div class="plot-key" id="plotKey">
+        <span><i></i>due card</span><span><i class="newc"></i>new card</span><span>🌿 put to bed</span>
+      </div>
+      <p class="plot-rest" id="plotRest" style="display:none"></p>
+    </div>
+
     <button class="btn" id="startBtn">Start review</button>
 
     <div class="btn-row">
@@ -760,6 +830,9 @@
       <div class="heat-legend">fewer
         <i class="day s1">🌱</i><i class="day s2">🌿</i><i class="day s3">🌷</i><i class="day s4">🌻</i>
       more · 🪨 rest day</div>
+      <div class="btn-row">
+        <button class="btn ghost" id="guideBtn">📔 Field guide<small id="guideCount"></small></button>
+      </div>
     </div>
 
     <div class="label">🧠 Retention — how much sticks</div>
@@ -850,11 +923,31 @@
     </div>
   </section>
 
+  <!-- FIELD GUIDE -->
+  <section id="guideScreen" class="screen">
+    <div class="topbar">
+      <a id="guideBack">← back to the garden</a>
+      <span>图鉴 field guide</span>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><b id="gdFound">0</b><span id="gdFoundSub">found 🌱</span></div>
+      <div class="stat"><b id="gdRare">0</b><span id="gdRareSub">rare finds ✨</span></div>
+      <div class="stat"><b id="gdDays">0</b><span>days practiced</span></div>
+      <div class="stat"><b id="gdGround">0</b><span id="gdGroundSub">ground 🪨</span></div>
+    </div>
+    <p class="guide-intro" id="guideIntro"></p>
+
+    <div id="guideSections"></div>
+  </section>
+
   <!-- DONE -->
   <section id="doneScreen" class="screen">
     <div class="done">
+      <div class="bloom-hero" id="bloomHero" style="display:none"><p class="hero" id="doneHero"></p></div>
       <p class="big" id="doneBig">All clear! 🎉</p>
       <p class="sub" id="doneSummary"></p>
+      <p class="note" id="doneNote" style="display:none"></p>
       <button class="btn" id="nextSetBtn" style="display:none"></button>
       <button class="btn ghost" id="resumeSetBtn" style="display:none">← Back to the last card</button>
       <button class="btn ghost" id="homeBtn">Back to decks</button>
@@ -1379,7 +1472,10 @@
 
   // ----- Home screen ------------------------------------------------------------
   const $ = id => document.getElementById(id);
-  const screens = { home: $("home"), review: $("review"), done: $("doneScreen"), stats: $("statsScreen") };
+  const screens = {
+    home: $("home"), review: $("review"), done: $("doneScreen"),
+    stats: $("statsScreen"), guide: $("guideScreen"),
+  };
   function show(name) {
     Object.values(screens).forEach(s => s.classList.remove("active"));
     screens[name].classList.add("active");
@@ -1419,6 +1515,60 @@
     $("learnCount").textContent = fresh
       ? `${fresh} new today` + (waiting ? ` · ${waiting} waiting` : "")
       : unseen ? `daily quota met · ${unseen} waiting` : "no unseen cards";
+    renderPlot(now);
+  }
+
+  // ----- Today's plot ---------------------------------------------------------
+  // A garden bed with one cell per card in today's work: the cards already
+  // put to bed (graded today and not coming back before tomorrow) plus what
+  // is still to do (due now + today's new-card slice). Read live from the
+  // day's log entries and the card states — nothing new is persisted, and
+  // the bed is the same on every device the log has reached.
+  function todaysPlot(now) {
+    const dayStart = new Date(now); dayStart.setHours(0, 0, 0, 0);
+    const cutoff = endOfTodayMs(now);
+    // the first grade of the day tells whether the card was met today
+    const firstIvl = new Map();
+    for (const e of readLog(dayStart.getTime(), now)) if (!firstIvl.has(e.id)) firstIvl.set(e.id, e.ivl);
+    const planted = [];
+    for (const [id, ivl] of firstIvl) {
+      const card = REGISTRY.cardById(id), s = cardStates[id];
+      if (card && isEnabled(card) && s && s.due > cutoff) planted.push({ card, fresh: ivl < 0 });
+    }
+    const due = dueCards(now);                 // disjoint from planted: due ≤ cutoff
+    const fresh = newCardsAvailable().slice(0, newQuotaLeft(now));
+    return { planted, due, fresh, left: due.length + fresh.length,
+             total: planted.length + due.length + fresh.length };
+  }
+  // The bed flowers when nothing is left in the ground — hash-picked blooms
+  // per cell (BLOOMS, defined with the garden pools), the day's own heatmap
+  // plant in the caption.
+  function renderPlot(now) {
+    const panel = $("plotPanel"), bed = $("plotBed");
+    if (!enabledCards().length) { panel.style.display = "none"; return; }
+    panel.style.display = "";
+    const p = todaysPlot(now);
+    const n = p.planted.length;
+    const bloom = n > 0 && p.left === 0;
+    const todayN = dayNumber(now);
+    bed.innerHTML = "";
+    bed.className = "bed" + (p.total > 160 ? " tiny" : p.total > 60 ? " mid" : "") + (bloom ? " bloom" : "");
+    p.planted.forEach((x, i) => {
+      const cell = document.createElement("i");
+      cell.className = "grown";
+      cell.textContent = bloom ? scatter(BLOOMS, todayN + i, 3) : x.fresh ? "🌱" : "🌿";
+      bed.appendChild(cell);
+    });
+    for (let i = 0; i < p.due.length; i++) bed.appendChild(Object.assign(document.createElement("i"), { className: "soil" }));
+    for (let i = 0; i < p.fresh.length; i++) bed.appendChild(Object.assign(document.createElement("i"), { className: "soil newc" }));
+    bed.style.display = p.total ? "" : "none";
+    $("plotKey").style.display = p.total ? "" : "none";
+    $("plotRest").style.display = p.total ? "none" : "";
+    $("plotRest").textContent = "nothing to plant today — the bed rests 🪨";
+    $("plotDone").textContent = n;
+    $("plotSub").textContent = !p.total ? "planted today"
+      : bloom ? `of ${p.total} planted · in full bloom ${plantOfDay(todayN)}`
+      : `of ${p.total} planted · ${p.left} to go`;
   }
 
   // Both set pickers (focus review and learn mode) list every group on the
@@ -1598,6 +1748,15 @@
     "🐝 🦋 🐞 🐌 🐛 🐸 🐿️ 🦔 🐇 🐦"
   );
   const GROUND = weighted("🪨*7 🪵*5 🍂*3 🌰");
+  const BLOOMS = weighted("🌸*3 🌼*2 🌻*2 🌷*2 🌺 🌹");   // today's plot, in bloom
+  // The calendar-day number the garden hashes on (local midnight / 1 day) —
+  // the heatmap, today's plot, the done screen and the field guide must all
+  // agree on which plant a day grew, so they all go through these.
+  const dayNumber = ts => { const d = new Date(ts); d.setHours(0, 0, 0, 0); return Math.round(d.getTime() / FSRS.DAY_MS); };
+  const keyToDayNumber = k => dayNumber(new Date(+k.slice(0, 4), +k.slice(5, 7) - 1, +k.slice(8, 10)).getTime());
+  const dayFromNumber = n => new Date(n * FSRS.DAY_MS + FSRS.DAY_MS / 2); // noon UTC lands on the right local date
+  const plantOfDay = n => scatter(GARDEN, n, 0);
+  const groundOfDay = n => scatter(GROUND, n, 7);
   // Deterministic scatter — hash the calendar day so the garden looks wild
   // but never reshuffles between visits. The xor-shift rounds matter: a
   // bare multiply keeps the hash's low bits periodic, and `% arr.length`
@@ -1658,14 +1817,14 @@
           cell.style.visibility = "hidden";
         } else {
           const n = (days[todayKey(day.getTime())] || {}).reviews || 0;
-          const dayN = Math.round(day.getTime() / FSRS.DAY_MS);
+          const dayN = dayNumber(day.getTime());
           if (n > 0) {
             const size = Math.max(1, Math.ceil(4 * n / max));
             cell.className = `day s${size}`;
-            cell.textContent = scatter(GARDEN, dayN, 0);
+            cell.textContent = plantOfDay(dayN);
           } else {
             cell.className = "bare";
-            cell.textContent = scatter(GROUND, dayN, 7);
+            cell.textContent = groundOfDay(dayN);
           }
           const r = ret[todayKey(day.getTime())];
           const tipText = `${fmtDay(day)} — ${n} review${n === 1 ? "" : "s"}` +
@@ -1678,6 +1837,8 @@
     }
     const wrap = $("heatWrap");
     wrap.scrollLeft = wrap.scrollWidth; // land on the most recent weeks
+    const found = Object.keys(guideEncounters().seen).length;
+    $("guideCount").textContent = `${found} of ${GUIDE_POOL.length} found`;
 
     // --- retention: 30-day headline + 12 weekly bars vs the 90% goal -------
     let p30 = 0, t30 = 0;
@@ -1995,6 +2156,152 @@
   });
   document.addEventListener("scroll", () => tip.classList.remove("show"), true);
 
+  // ----- Field guide ------------------------------------------------------------
+  // A pokédex of the garden. Every practiced day grows one plant, picked by
+  // the date, so "encountered" is derivable: walk every practiced day in
+  // `days` (all time, not just the heatmap's 18-week window — the plant
+  // grew that day whether or not it is still on screen) and collect what
+  // came up. Rest days between the first practiced day and yesterday leave
+  // ground the same way. Names and groups live here; the pool itself stays
+  // the single source of truth for what exists and how rare it is, so an
+  // emoji added to GARDEN shows up in the guide unnamed rather than missing.
+  const GUIDE_NAMES = {
+    "🌳": ["greens", "tree"], "🌿": ["greens", "herb"], "🌱": ["greens", "seedling"],
+    "🌲": ["greens", "evergreen"], "🌾": ["greens", "rice"], "🍃": ["greens", "leaf on the wind"],
+    "☘️": ["greens", "shamrock"], "🍁": ["greens", "maple leaf"], "🍀": ["greens", "four-leaf clover"],
+    "🌵": ["greens", "cactus"], "🌴": ["greens", "palm"], "🍄": ["greens", "mushroom"],
+    "🌸": ["flowers", "cherry blossom"], "🌺": ["flowers", "hibiscus"], "🌼": ["flowers", "daisy"],
+    "🌻": ["flowers", "sunflower"], "🌷": ["flowers", "tulip"], "🌹": ["flowers", "rose"], "💐": ["flowers", "bouquet"],
+    "🍓": ["harvest", "strawberry"], "🍒": ["harvest", "cherries"], "🍎": ["harvest", "apple"],
+    "🍑": ["harvest", "peach"], "🍊": ["harvest", "tangerine"], "🍋": ["harvest", "lemon"],
+    "🍇": ["harvest", "grapes"], "🍉": ["harvest", "watermelon"], "🥝": ["harvest", "kiwi"],
+    "🫐": ["harvest", "blueberries"], "🍅": ["harvest", "tomato"], "🥕": ["harvest", "carrot"],
+    "🌽": ["harvest", "corn"], "🎃": ["harvest", "pumpkin"], "🥒": ["harvest", "cucumber"],
+    "🍆": ["harvest", "aubergine"], "🥔": ["harvest", "potato"], "🍠": ["harvest", "sweet potato"],
+    "🐝": ["visitors", "bee"], "🦋": ["visitors", "butterfly"], "🐞": ["visitors", "ladybird"],
+    "🐌": ["visitors", "snail"], "🐛": ["visitors", "caterpillar"], "🐸": ["visitors", "frog"],
+    "🐿️": ["visitors", "squirrel"], "🦔": ["visitors", "hedgehog"], "🐇": ["visitors", "rabbit"], "🐦": ["visitors", "bird"],
+    "🪨": ["ground", "rock"], "🪵": ["ground", "log"], "🍂": ["ground", "fallen leaves"], "🌰": ["ground", "chestnut"],
+  };
+  const GUIDE_GROUPS = [
+    { id: "greens", title: "🌿 Greens", note: "the everyday growth — most practiced days grow one of these" },
+    { id: "flowers", title: "🌸 Flowers", note: "rare finds — each has about a 1-in-500 chance on any practiced day" },
+    { id: "harvest", title: "🍓 Harvest", note: "rare finds — fruit and vegetables, same odds as the flowers" },
+    { id: "visitors", title: "🐝 Visitors", note: "rare finds — someone dropped by the garden that day" },
+    { id: "other", title: "✨ Other", note: "in the garden's pool but not yet in this guide" },
+  ];
+  const GUIDE_POOL = [...new Set(GARDEN)];
+  const GROUND_POOL = [...new Set(GROUND)];
+  function guideEncounters() {
+    const practicedN = new Set();
+    let first = Infinity;
+    for (const k in days) {
+      if (!(days[k].reviews > 0)) continue;
+      const n = keyToDayNumber(k);
+      practicedN.add(n);
+      if (n < first) first = n;
+    }
+    const seen = {};
+    for (const n of practicedN) {
+      const e = plantOfDay(n);
+      const s = seen[e] || (seen[e] = { count: 0, first: n, last: n });
+      s.count++; s.first = Math.min(s.first, n); s.last = Math.max(s.last, n);
+    }
+    const ground = {};
+    let rest = 0;
+    const todayN = dayNumber(Date.now());
+    for (let n = first; n < todayN; n++) {
+      if (practicedN.has(n)) continue;
+      const e = groundOfDay(n);
+      const g = ground[e] || (ground[e] = { count: 0, first: n, last: n });
+      g.count++; g.first = Math.min(g.first, n); g.last = Math.max(g.last, n);
+      rest++;
+    }
+    return { seen, ground, practiced: practicedN.size, rest };
+  }
+  // Has today's plant ever grown on an earlier practiced day? (done screen)
+  function firstFind(todayN) {
+    const plant = plantOfDay(todayN);
+    for (const k in days) {
+      if (!(days[k].reviews > 0)) continue;
+      const n = keyToDayNumber(k);
+      if (n < todayN && plantOfDay(n) === plant) return false;
+    }
+    return true;
+  }
+  function renderGuide() {
+    const enc = guideEncounters();
+    const weightIn = (pool, e) => pool.filter(x => x === e).length;
+    const isRare = e => weightIn(GARDEN, e) === 1;
+    const found = GUIDE_POOL.filter(e => enc.seen[e]).length;
+    const rareAll = GUIDE_POOL.filter(isRare);
+    const rareFound = rareAll.filter(e => enc.seen[e]).length;
+    const groundFound = GROUND_POOL.filter(e => enc.ground[e]).length;
+    $("gdFound").textContent = found;
+    $("gdFoundSub").textContent = `of ${GUIDE_POOL.length} found 🌱`;
+    $("gdRare").textContent = rareFound;
+    $("gdRareSub").textContent = `of ${rareAll.length} rare finds ✨`;
+    $("gdDays").textContent = enc.practiced;
+    $("gdGround").textContent = groundFound;
+    $("gdGroundSub").textContent = `of ${GROUND_POOL.length} kinds of\u00a0ground\u00a0🪨`;
+    $("guideIntro").textContent = enc.practiced
+      ? "Every practiced day grows one plant, picked by the date — the same one the garden shows, " +
+        "counted here from your very first day. Greyed-out finds haven't come up yet."
+      : "Every practiced day grows one plant, picked by the date. Review a card and the first find appears here 🌰";
+
+    const host = $("guideSections");
+    host.innerHTML = "";
+    // long odds rounded to tens: "1 in 500", not "1 in 499"
+    const oddsOf = (pool, e) => {
+      let odds = Math.round(pool.length / weightIn(pool, e));
+      if (odds > 50) odds = Math.round(odds / 10) * 10;
+      return odds <= 1 ? "most days" : `1 in ${odds} days`;
+    };
+    const section = (title, note, entries, pool, hits, dayWord) => {
+      if (!entries.length) return;
+      const label = document.createElement("div");
+      label.className = "label";
+      label.textContent = title;
+      const panel = document.createElement("div");
+      panel.className = "panel";
+      const grid = document.createElement("div");
+      grid.className = "guide-grid";
+      for (const e of entries) {
+        const name = (GUIDE_NAMES[e] || [])[1] || "";
+        const hit = hits[e];
+        const rare = pool === GARDEN && isRare(e);
+        const odds = oddsOf(pool, e);
+        const el = document.createElement("div");
+        el.className = "find " + (hit ? "seen" : "unseen") + (rare ? " rare" : "");
+        el.innerHTML = `<span class="e">${e}</span><span class="n">${name}</span><span class="r"></span>`;
+        el.querySelector(".r").textContent = hit
+          ? `×${hit.count} · ${fmtDay(dayFromNumber(hit.first))}`
+          : odds;
+        const tipText = hit
+          ? `${e} ${name} — grew on ${hit.count} ${dayWord}${hit.count === 1 ? "" : "s"}, ` +
+            `first ${fmtDay(dayFromNumber(hit.first))}, last ${fmtDay(dayFromNumber(hit.last))} · ${odds}`
+          : `${e} ${name} — not found yet · comes up ${odds}`;
+        el.dataset.tip = tipText;
+        el.setAttribute("aria-label", tipText);
+        grid.appendChild(el);
+      }
+      panel.appendChild(grid);
+      if (note) {
+        const p = document.createElement("p");
+        p.className = "seeds";
+        p.textContent = note;
+        panel.appendChild(p);
+      }
+      host.append(label, panel);
+    };
+    for (const g of GUIDE_GROUPS) {
+      const entries = GUIDE_POOL.filter(e => ((GUIDE_NAMES[e] || ["other"])[0]) === g.id);
+      section(g.title, g.note, entries, GARDEN, enc.seen, "practiced day");
+    }
+    section("🪨 Ground", "what a rest day leaves behind — counted from your first practiced day",
+      GROUND_POOL, GROUND, enc.ground, "rest day");
+  }
+
   // ----- Pronunciation (Web Speech API) ----------------------------------------
   const Speech = (() => {
     const synth = window.speechSynthesis;
@@ -2225,16 +2532,49 @@
     }
     nextBtn.style.display = "none";
     resumeBtn.style.display = "none";
-    const c = todayCounts(Date.now());
+    const now = Date.now();
+    const c = todayCounts(now);
     const opener = {
       daily: "All clear! 🎉",
       leeches: "Leeches tamed! 🧛",
       focus: "Set crammed! 🎯",
     };
     $("doneBig").textContent = opener[sessionMode] || "All clear! 🎉";
+    $("doneBig").classList.remove("bloom");
     $("doneSummary").textContent =
       `${c.reviews} review${c.reviews === 1 ? "" : "s"} today` +
       (c.introduced ? ` — ${c.introduced} new card${c.introduced === 1 ? "" : "s"} met 🌱` : "");
+    // Today's plot: a daily session that leaves nothing in the ground
+    // blooms — the day's own heatmap plant, large, under drifting petals.
+    const hero = $("bloomHero"), note = $("doneNote");
+    hero.style.display = "none";
+    hero.querySelectorAll(".petal").forEach(el => el.remove());
+    const todayN = dayNumber(now), plant = plantOfDay(todayN);
+    const lines = [];
+    if (sessionMode === "daily") {
+      const p = todaysPlot(now);
+      if (p.total > 0 && p.left === 0) {
+        hero.style.display = "";
+        $("doneHero").textContent = plant;
+        $("doneBig").textContent = "Today's plot is in full bloom";
+        $("doneBig").classList.add("bloom");
+        lines.push(`${p.planted.length} card${p.planted.length === 1 ? "" : "s"} put to bed · ` +
+          "nothing left in the ground · tomorrow brings a fresh bed");
+        ["🌸", "🍃", "🌼", "🌸", "🌷", "🍃", "🌸", "🌼"].forEach((petal, i) => {
+          const s = document.createElement("span");
+          s.className = "petal";
+          s.textContent = petal;
+          s.style.left = (6 + i * 12) + "%";
+          s.style.animationDelay = (i * 0.4) + "s";
+          s.style.animationDuration = (2.8 + (i % 3) * 0.5) + "s";
+          hero.appendChild(s);
+        });
+      }
+    }
+    // any graded session grows the day's plant — say so when it's a new one
+    if (firstFind(todayN)) lines.push(`${plant} first time this one has grown in your garden — it's in the field guide now`);
+    note.style.display = lines.length ? "" : "none";
+    note.innerHTML = lines.join("<br>");
     show("done");
     refreshStats();
   }
@@ -2284,6 +2624,8 @@
   $("homeBtn").addEventListener("click", () => { show("home"); refreshStats(); });
   $("statsBtn").addEventListener("click", () => { renderStats(); show("stats"); });
   $("statsBack").addEventListener("click", () => { show("home"); refreshStats(); });
+  $("guideBtn").addEventListener("click", () => { renderGuide(); show("guide"); });
+  $("guideBack").addEventListener("click", () => { renderStats(); show("stats"); });
   $("endlessNew").addEventListener("change", () => {
     store.write("endlessNew", $("endlessNew").checked);
     renderStats();
@@ -2413,6 +2755,7 @@
     if ($("importModal").classList.contains("show")) return;  // pending question
     await maybeRefreshCloud();
     if (screens.stats.classList.contains("active")) renderStats();
+    if (screens.guide.classList.contains("active")) renderGuide();
   }
   document.addEventListener("visibilitychange", refreshOnReturn);
   window.addEventListener("focus", refreshOnReturn);
