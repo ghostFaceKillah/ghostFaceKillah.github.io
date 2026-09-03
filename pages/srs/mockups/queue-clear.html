@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clearing the Plot</title>
+<style>
+  :root {
+    --bg: #f2f7f3; --dots: #dcefe2; --card: #ffffff; --ink: #47564c; --muted: #8fa697;
+    --line: #d9ebde; --pink: #ff9ec3; --pink-soft: #ffe3ef; --peach: #ffb88a; --peach-soft: #ffeede;
+    --mint: #7fd8b4; --mint-soft: #e0f7ec; --sky: #8ecbf5; --sky-soft: #e3f2fd; --lav: #c3aef0;
+    --lav-soft: #f0e9fd; --lemon: #ffd66b; --lemon-soft: #fff6dc; --accent: #3fae7e; --green: #4fbf8f;
+    --amber: #f5a54c; --red: #ef8368; --track: #edf1ee; --sun: #ffe9a3; --sun-ring: #f2c94c;
+    --gs: var(--red); --gg: var(--amber); --gb: var(--green);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #222b25; --dots: #2b362f; --card: #2f3c34; --ink: #e9f3ec; --muted: #9fb3a6; --line: #40514660;
+      --pink-soft: #4d3a44; --peach-soft: #4d4136; --mint-soft: #31473c; --sky-soft: #32424d; --lav-soft: #413a52;
+      --lemon-soft: #4c4534; --accent: #5fd6a2; --green: #5fd6a2; --amber: #ffb765; --red: #ff9a7d; --track: #3a4a40;
+      --sun: #5a4d2a; --sun-ring: #d9b24a;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #222b25; --dots: #2b362f; --card: #2f3c34; --ink: #e9f3ec; --muted: #9fb3a6; --line: #40514660;
+    --pink-soft: #4d3a44; --peach-soft: #4d4136; --mint-soft: #31473c; --sky-soft: #32424d; --lav-soft: #413a52;
+    --lemon-soft: #4c4534; --accent: #5fd6a2; --green: #5fd6a2; --amber: #ffb765; --red: #ff9a7d; --track: #3a4a40;
+    --sun: #5a4d2a; --sun-ring: #d9b24a;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg);
+    background-image: radial-gradient(var(--dots) 12%, transparent 13%), radial-gradient(var(--dots) 12%, transparent 13%);
+    background-size: 46px 46px; background-position: 0 0, 23px 23px;
+    color: var(--ink); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    padding: 32px 20px 64px; line-height: 1.5;
+  }
+  .wrap { max-width: 640px; margin: 0 auto; }
+  h1 { font-size: 1.9rem; font-weight: 900; margin: 0 0 6px; text-wrap: balance; letter-spacing: -.01em; }
+  .lede { color: var(--muted); margin: 0 0 8px; max-width: 60ch; }
+  .lede b { color: var(--ink); }
+  .bubbles { display: flex; gap: 6px; margin: 0 0 14px; }
+  .bubble { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            color: #fff; font-size: 1.25rem; font-weight: 900; box-shadow: 0 3px 0 rgba(0,0,0,.10); }
+  .b1 { background: #66c98d; } .b2 { background: #59b7e8; } .b3 { background: #ffa04d; } .b4 { background: #f76e9c; }
+
+  .toc { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 0; }
+  .toc a { border: 2px solid var(--line); background: var(--card); color: var(--ink); border-radius: 999px;
+           padding: 7px 13px; font-size: .85rem; font-weight: 700; text-decoration: none; }
+  .toc a:hover, .toc a:focus-visible { border-color: var(--accent); outline: none; }
+
+  .label { font-size: .8rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 26px 0 10px; font-weight: 700; }
+  .idea { margin-top: 48px; padding-top: 28px; border-top: 3px dashed var(--line); }
+  .idea h2 { font-size: 1.45rem; font-weight: 900; margin: 0; text-wrap: balance; display: flex; align-items: baseline; gap: 10px; }
+  .idea h2 small { font-size: .8rem; color: var(--muted); letter-spacing: .08em; text-transform: uppercase; font-weight: 700; }
+  .pitch { margin: 8px 0 0; font-size: 1.02rem; max-width: 60ch; }
+  .facts { display: grid; grid-template-columns: max-content 1fr; gap: 6px 14px; margin: 16px 0 0; font-size: .88rem; max-width: 62ch; }
+  .facts dt { color: var(--muted); font-weight: 700; }
+  .facts dd { margin: 0; }
+  .facts dd b { color: var(--accent); }
+
+  .panel { background: var(--card); border: 2px solid var(--line); border-radius: 22px; padding: 16px; }
+  .mock { position: relative; }
+  .mock::before { content: "mockup · sample data"; position: absolute; top: -10px; right: 16px; background: var(--lemon-soft);
+                  color: var(--ink); font-size: .66rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+                  border-radius: 999px; padding: 2px 9px; }
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .stats.two { grid-template-columns: repeat(2, 1fr); }
+  .stat { background: var(--card); border: 2px solid var(--line); border-radius: 20px; padding: 12px 8px 10px; text-align: center; }
+  .stat b { display: block; font-size: 1.6rem; font-weight: 900; font-variant-numeric: tabular-nums; }
+  .stat span { font-size: .78rem; color: var(--muted); font-weight: 700; }
+  .stat.due b { color: var(--amber); } .stat.new b { color: var(--accent); }
+  .stat.wash1 { background: var(--peach-soft); border-color: transparent; }
+  .stat.wash2 { background: var(--sky-soft); border-color: transparent; }
+  .stat.wash3 { background: var(--lav-soft); border-color: transparent; }
+  .stat.wash4 { background: var(--pink-soft); border-color: transparent; }
+  .stat.sunny { background: var(--lemon-soft); border-color: transparent; }
+  .btn { display: block; width: 100%; border: none; border-radius: 999px; padding: 15px; font-size: 1.05rem; font-weight: 900;
+         font-family: inherit; cursor: pointer; background: var(--accent); color: #fff; box-shadow: 0 4px 0 rgba(0,0,0,.12); margin-top: 16px; }
+  .btn:disabled { opacity: .45; cursor: default; }
+  .btn.ghost { background: var(--card); color: var(--ink); border: 2px solid var(--line); box-shadow: none; }
+  .btn:focus-visible { outline: 3px solid var(--sky); outline-offset: 2px; }
+  .btn.small { width: auto; display: inline-block; padding: 9px 16px; font-size: .88rem; margin-top: 0; }
+  .ctl { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 12px 0 0; font-size: .85rem; color: var(--muted); font-weight: 700; }
+  .ctl input[type=range] { flex: 1; min-width: 140px; accent-color: var(--accent); }
+
+  /* heatmap, copied from the app */
+  .heatwrap { overflow-x: auto; padding-bottom: 2px; }
+  .heat-months { display: grid; grid-auto-flow: column; grid-auto-columns: 15px; gap: 2px; height: 15px; margin: 0 auto 4px;
+                 width: max-content; font-size: .68rem; color: var(--muted); font-weight: 700; }
+  .heat-months span { white-space: nowrap; }
+  .heat-grid { display: grid; grid-auto-flow: column; grid-template-rows: repeat(7, 15px); grid-auto-columns: 15px; gap: 2px; width: max-content; margin: 0 auto; }
+  .heat-grid i { place-self: center; font-style: normal; line-height: 1; position: relative; width: 15px; height: 15px;
+                 display: flex; align-items: center; justify-content: center; border-radius: 50%; }
+  .heat-grid i.bare { font-size: 9px; opacity: .55; }
+  .s1 { font-size: 7px; } .s2 { font-size: 9.5px; } .s3 { font-size: 12px; } .s4 { font-size: 14px; }
+  .heat-grid i.sunny { background: var(--sun); box-shadow: 0 0 0 1px var(--sun-ring) inset; }
+  .heat-grid i.today { outline: 2px solid var(--accent); outline-offset: 0; }
+  .heat-grid i em { position: absolute; right: -4px; bottom: -4px; font-size: 8px; font-style: normal; line-height: 1;
+                    background: var(--card); border-radius: 50%; padding: 1px; }
+  .heat-legend { display: flex; align-items: center; flex-wrap: wrap; justify-content: flex-end; gap: 4px; margin-top: 10px;
+                 font-size: .72rem; color: var(--muted); font-weight: 700; }
+  .heat-legend i { font-style: normal; flex: none; }
+  .heat-legend .sw { width: 13px; height: 13px; border-radius: 50%; background: var(--sun); box-shadow: 0 0 0 1px var(--sun-ring) inset; display: inline-block; }
+  .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .compare .cap { font-size: .72rem; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); font-weight: 700; margin: 0 0 8px; }
+  @media (max-width: 560px) { .compare { grid-template-columns: 1fr; } }
+
+  /* streak caption under the start button */
+  .streak-cap { text-align: center; color: var(--muted); font-size: .88rem; font-weight: 700; margin: 10px 0 0; }
+  .streak-cap b { color: var(--ink); }
+  .shelf { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 12px; }
+  .trophy { text-align: center; border: 2px dashed var(--line); border-radius: 18px; padding: 10px 6px; font-size: .78rem; color: var(--muted); font-weight: 700; }
+  .trophy .e { display: block; font-size: 1.9rem; margin-bottom: 2px; }
+  .trophy.earned { border-style: solid; border-color: var(--sun-ring); background: var(--lemon-soft); color: var(--ink); }
+  .trophy.locked .e { filter: grayscale(1); opacity: .45; }
+  .trophy .p { display: block; height: 5px; border-radius: 3px; background: var(--track); margin-top: 6px; overflow: hidden; }
+  .trophy .p i { display: block; height: 100%; background: var(--sun-ring); }
+  .done { text-align: center; }
+  .done .big { font-size: 2rem; margin: 18px 0 6px; font-weight: 900; }
+  .done .sub { color: var(--muted); margin: 0 0 8px; }
+
+  /* today's plot */
+  .plot-head { display: flex; align-items: baseline; gap: 10px; margin-bottom: 10px; }
+  .plot-head b { font-size: 1.5rem; font-weight: 900; font-variant-numeric: tabular-nums; }
+  .plot-head span { color: var(--muted); font-size: .85rem; font-weight: 700; }
+  .bed { display: grid; grid-template-columns: repeat(auto-fill, minmax(22px, 1fr)); gap: 4px; padding: 10px; border-radius: 16px;
+         background: var(--peach-soft); transition: background .4s; }
+  .bed i { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-style: normal; font-size: 13px;
+           border-radius: 6px; background: rgba(0,0,0,.05); color: var(--muted); }
+  .bed i.soil::before { content: "·"; font-size: 14px; font-weight: 900; opacity: .6; }
+  .bed i.newc { box-shadow: 0 0 0 2px var(--accent) inset; }
+  .bed i.grown { background: transparent; animation: pop .25s ease-out; }
+  .bed.bloom { background: var(--lemon-soft); }
+  .bed.bloom i { background: transparent; }
+  @keyframes pop { from { transform: scale(.4); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+  .plot-key { display: flex; gap: 14px; margin-top: 8px; font-size: .72rem; color: var(--muted); font-weight: 700; }
+  .plot-key i { display: inline-block; width: 11px; height: 11px; border-radius: 3px; background: rgba(0,0,0,.05); vertical-align: -1px; margin-right: 5px; }
+  .plot-key i.newc { box-shadow: 0 0 0 2px var(--accent) inset; }
+  .bloomCard { position: relative; overflow: hidden; text-align: center; padding: 22px 16px 18px; }
+  .bloomCard .hero { font-size: 3.4rem; line-height: 1; margin: 0; }
+  .bloomCard .big { font-size: 1.5rem; font-weight: 900; margin: 10px 0 2px; }
+  .bloomCard .sub { color: var(--muted); font-size: .9rem; margin: 0; }
+  .petal { position: absolute; top: -20px; font-size: 14px; animation: fall 3.2s linear infinite; pointer-events: none; }
+  @keyframes fall { to { transform: translateY(260px) rotate(300deg); opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) { .petal { animation: none; display: none; } .bed i.grown { animation: none; } }
+
+  /* visitors' book */
+  .book { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; margin-top: 4px; }
+  @media (max-width: 480px) { .book { grid-template-columns: repeat(4, 1fr); } }
+  .visitor { text-align: center; border: 2px solid var(--line); border-radius: 16px; padding: 8px 4px 6px; font-size: .7rem; color: var(--muted); font-weight: 700; }
+  .visitor .e { display: block; font-size: 1.6rem; line-height: 1.2; }
+  .visitor.unseen .e { filter: grayscale(1) contrast(.3); opacity: .5; }
+  .visitor.rare { border-color: var(--lav); background: var(--lav-soft); }
+  .visitor.seen { border-color: var(--accent); }
+  .seeds { color: var(--muted); font-size: .85rem; margin: 12px 0 0; }
+
+  /* orchard */
+  .orchard { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: center; }
+  @media (max-width: 560px) { .orchard { grid-template-columns: 1fr; } }
+  .orchard svg { width: 100%; height: auto; display: block; }
+  .orchard .stage { font-size: 1.3rem; font-weight: 900; margin: 0; }
+  .orchard .sub { color: var(--muted); font-size: .88rem; margin: 4px 0 0; }
+  .stages { list-style: none; padding: 0; margin: 12px 0 0; display: grid; gap: 4px; font-size: .8rem; color: var(--muted); font-weight: 700; }
+  .stages li.cur { color: var(--ink); }
+  .stages li span { display: inline-block; width: 26px; }
+
+  /* comparison */
+  .tablewrap { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; font-size: .85rem; min-width: 560px; }
+  th, td { text-align: left; padding: 9px 10px; border-bottom: 2px dashed var(--line); vertical-align: top; }
+  th { font-size: .72rem; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+  td:first-child { font-weight: 800; white-space: nowrap; }
+  .pill { display: inline-block; border-radius: 999px; padding: 1px 8px; font-size: .72rem; font-weight: 700; }
+  .pill.lo { background: var(--mint-soft); color: var(--accent); }
+  .pill.mid { background: var(--lemon-soft); color: #9a7a1a; }
+  .pill.hi { background: var(--pink-soft); color: #c2557f; }
+  :root[data-theme="dark"] .pill.mid, :root[data-theme="dark"] .pill.hi { color: var(--ink); }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .pill.mid, :root:not([data-theme="light"]) .pill.hi { color: var(--ink); } }
+  .note { background: var(--card); border: 2px solid var(--line); border-radius: 22px; padding: 16px 18px; font-size: .9rem; max-width: 66ch; }
+  .note p { margin: 0 0 10px; } .note p:last-child { margin: 0; }
+  code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .85em; background: var(--track); padding: 1px 5px; border-radius: 5px; }
+  .foot { color: var(--muted); font-size: .82rem; text-align: center; margin-top: 40px; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="bubbles"><div class="bubble b1">清</div><div class="bubble b2">空</div><div class="bubble b3">奖</div><div class="bubble b4">励</div></div>
+  <h1>Clearing the plot</h1>
+  <p class="lede">Five ways the garden could reward <b>finishing the whole queue</b> for a day, on top of the consistency reward it already gives for showing up. Each mockup is drawn in the app's own styling with sample data, so it reads the way it would on the stats or home screen.</p>
+  <p class="lede">The shared premise: a day is <b>cleared</b> when the daily session ends with nothing due and the day's new-card quota met (or no new cards left to meet it). That moment already exists in the app as the home screen's "All done for today 🎉" state; none of these ideas changes the scheduler.</p>
+  <nav class="toc">
+    <a href="#i1">1 · Blooms only on cleared days</a>
+    <a href="#i2">2 · Sunny streak</a>
+    <a href="#i3">3 · Today's plot</a>
+    <a href="#i4">4 · Garden visitors</a>
+    <a href="#i5">5 · The orchard tree</a>
+    <a href="#cmp">Side by side</a>
+  </nav>
+
+  <!-- ============ 1 ============ -->
+  <section class="idea" id="i1">
+    <h2>Blooms only on cleared days <small>idea 1</small></h2>
+    <p class="pitch">Today the heatmap grows a random plant on any practiced day, flowers included. Instead: a practiced day grows <b>foliage</b>, and only a <b>cleared</b> day gets to <b>flower or fruit</b>, sitting on a little sun-lit disc. The garden you already have starts telling the difference at a glance.</p>
+    <dl class="facts">
+      <dt>Rewards</dt><dd>every cleared day, forever visible in the 18-week garden</dd>
+      <dt>Lives on</dt><dd>stats screen (the existing heatmap + two tiles)</dd>
+      <dt>Adds</dt><dd>a <code>cleared</code> flag per day, the pool split, one legend entry, tiles "cleared days" and "cleared in a row"</dd>
+      <dt>Effort</dt><dd><b>small</b>, mostly a re-partition of the existing emoji pools</dd>
+    </dl>
+    <div class="label">🌷 Your garden</div>
+    <div class="panel mock">
+      <div class="compare">
+        <div>
+          <p class="cap">now · any plant on any day</p>
+          <div class="heatwrap"><div class="heat-months" id="m1a"></div><div class="heat-grid" id="h1a"></div></div>
+        </div>
+        <div>
+          <p class="cap">proposed · blooms need a cleared day</p>
+          <div class="heatwrap"><div class="heat-months" id="m1b"></div><div class="heat-grid" id="h1b"></div></div>
+        </div>
+      </div>
+      <div class="heat-legend">
+        practiced <i class="s2">🌿</i><i class="s3">🌳</i> · cleared <i class="sw"></i><i class="s3">🌸</i><i class="s3">🍓</i> · 🪨 rest day
+      </div>
+    </div>
+    <div class="label">tiles</div>
+    <div class="stats">
+      <div class="stat wash1"><b>23</b><span>day streak 🔥</span></div>
+      <div class="stat sunny"><b>4</b><span>cleared in a row 🌸</span></div>
+      <div class="stat wash3"><b>41</b><span>days cleared</span></div>
+      <div class="stat wash4"><b>67%</b><span>of practiced days</span></div>
+    </div>
+  </section>
+
+  <!-- ============ 2 ============ -->
+  <section class="idea" id="i2">
+    <h2>Sunny streak <small>idea 2</small></h2>
+    <p class="pitch">A second streak next to the 🔥 one: <b>☀️ days cleared in a row</b>. It sits under the Start button so you see what's at stake before you begin, and the done screen counts it up when you finish. Milestones at 7, 30 and 100 put a pot, a bouquet and a tree on a little shelf.</p>
+    <dl class="facts">
+      <dt>Rewards</dt><dd>the <em>run</em> of cleared days: loss-aversion, Duolingo-style, but for finishing rather than opening the app</dd>
+      <dt>Lives on</dt><dd>home screen caption, done screen, stats tiles + shelf</dd>
+      <dt>Adds</dt><dd><code>cleared</code> per day, best-streak bookkeeping (derivable), three milestone thresholds</dd>
+      <dt>Effort</dt><dd><b>small to medium</b>, mostly copy and two small components</dd>
+    </dl>
+    <div class="label">home screen · before the session</div>
+    <div class="panel mock">
+      <div class="stats">
+        <div class="stat due"><b>19</b><span>due now</span></div>
+        <div class="stat new"><b>12</b><span>new today</span></div>
+        <div class="stat"><b>0</b><span>reviews today</span></div>
+        <div class="stat"><b>612</b><span>cards learning</span></div>
+      </div>
+      <button class="btn" type="button">Start review</button>
+      <p class="streak-cap">☀️ <b>4 days</b> cleared in a row · clear today to make it 5 · best run 11</p>
+    </div>
+    <div class="label">done screen · after clearing</div>
+    <div class="panel mock done">
+      <p class="big">All clear! ☀️</p>
+      <p class="sub">31 reviews today — 12 new cards met 🌱</p>
+      <p class="streak-cap"><b>5 days</b> cleared in a row · 2 more for your first 🪴</p>
+    </div>
+    <div class="label">stats · the shelf</div>
+    <div class="stats two">
+      <div class="stat wash1"><b>23</b><span>day streak 🔥</span></div>
+      <div class="stat sunny"><b>5</b><span>cleared in a row ☀️</span></div>
+    </div>
+    <div class="shelf">
+      <div class="trophy locked"><span class="e">🪴</span>7 in a row<span class="p"><i style="width:71%"></i></span></div>
+      <div class="trophy locked"><span class="e">💐</span>30 in a row<span class="p"><i style="width:17%"></i></span></div>
+      <div class="trophy locked"><span class="e">🌳</span>100 in a row<span class="p"><i style="width:5%"></i></span></div>
+    </div>
+    <p class="seeds">Variant worth discussing: the shelf could count <em>total</em> cleared days instead of the run, which never punishes a missed day. The streak is the sharper motivator; the total is the kinder one.</p>
+  </section>
+
+  <!-- ============ 3 ============ -->
+  <section class="idea" id="i3">
+    <h2>Today's plot <small>idea 3</small></h2>
+    <p class="pitch">A garden bed on the home screen with <b>one cell per card in today's queue</b>. Each graded card plants a sprout; the last one makes the whole bed bloom. The reward is the moment itself: you watch the day's plot fill, and the finished bed is the day's plant shown large. Nothing to collect, nothing to lose.</p>
+    <dl class="facts">
+      <dt>Rewards</dt><dd>the act of finishing, right when it happens, with a visible "what's left" beforehand</dd>
+      <dt>Lives on</dt><dd>home screen (replaces or joins the four tiles) and the done screen</dd>
+      <dt>Adds</dt><dd>no new persisted state at all: it's due + new quota vs. reviews today, all already known</dd>
+      <dt>Effort</dt><dd><b>medium</b>, one new component with a fill animation; the cleared flag is optional here</dd>
+    </dl>
+    <div class="label">home screen · mid-day</div>
+    <div class="panel mock">
+      <div class="plot-head"><b id="plotDone">12</b><span id="plotSub">of 31 planted · 19 to go</span></div>
+      <div class="bed" id="bed" aria-label="today's plot"></div>
+      <div class="plot-key"><span><i></i>due card</span><span><i class="newc"></i>new card</span><span>🌱 graded</span></div>
+      <div class="ctl">
+        <button class="btn small" type="button" id="plotGrow">▶ grade the rest</button>
+        <button class="btn small ghost" type="button" id="plotReset">↺ reset to 12 of 31</button>
+      </div>
+    </div>
+    <div class="label">done screen · the bed in bloom</div>
+    <div class="panel mock bloomCard" id="bloomCard">
+      <p class="hero">🌻</p>
+      <p class="big">Today's plot is in full bloom</p>
+      <p class="sub">31 cards planted · nothing left in the ground · come back tomorrow for the next bed</p>
+    </div>
+    <p class="seeds">The bloom emoji is the same hash-picked plant the heatmap will show for the day, so the done screen and the garden agree.</p>
+  </section>
+
+  <!-- ============ 4 ============ -->
+  <section class="idea" id="i4">
+    <h2>Garden visitors <small>idea 4</small></h2>
+    <p class="pitch">The emoji pool already has bees, butterflies and hedgehogs, scattered at random. Make them earned: a <b>visitor only comes to a cleared day</b>, perched next to that day's plant in the heatmap. A visitors' book on the stats screen collects them, and three rare visitors turn up only on clear-streak milestones.</p>
+    <dl class="facts">
+      <dt>Rewards</dt><dd>each cleared day (a visitor), plus long runs (rare visitors); collection gives a reason to keep going after the streak breaks</dd>
+      <dt>Lives on</dt><dd>stats screen: heatmap overlay + a visitors' book panel; a "🐝 a bee came by" line on the done screen</dd>
+      <dt>Adds</dt><dd><code>cleared</code> per day; visitor per day is hash-derived, so no extra state; three milestone rules</dd>
+      <dt>Effort</dt><dd><b>medium</b>, the overlay in 15 px cells needs care on phones</dd>
+    </dl>
+    <div class="label">🌷 Your garden · visitors perch on cleared days</div>
+    <div class="panel mock">
+      <div class="heatwrap"><div class="heat-months" id="m4"></div><div class="heat-grid" id="h4"></div></div>
+      <div class="heat-legend">practiced <i class="s3">🌿</i> · cleared <i class="s3">🌿</i><i style="font-size:9px">🐝</i> · 🪨 rest day</div>
+    </div>
+    <div class="label">📖 Visitors' book</div>
+    <div class="panel mock">
+      <div class="book" id="book"></div>
+      <p class="seeds">9 of 13 visitors have come by · 🦉 arrives on a 7-day clear run, 🦊 on 30, 🦌 on 100</p>
+    </div>
+  </section>
+
+  <!-- ============ 5 ============ -->
+  <section class="idea" id="i5">
+    <h2>The orchard tree <small>idea 5</small></h2>
+    <p class="pitch">One persistent tree on the stats screen that grows <b>only on cleared days</b>: every cleared day hangs one more fruit in the canopy, and the tree itself moves through sapling, young tree and grown tree stages by the total. Missed days don't hurt it; the tree just waits. A long-term, cumulative reward that the heatmap's 18-week window can't hold.</p>
+    <dl class="facts">
+      <dt>Rewards</dt><dd>every cleared day, cumulatively; growth stages give medium-term goals without a streak's fragility</dd>
+      <dt>Lives on</dt><dd>stats screen, a panel of its own above the garden bar</dd>
+      <dt>Adds</dt><dd><code>cleared</code> per day (the fruit count is derived); an SVG tree drawn from a few circles, fruit positions hashed</dd>
+      <dt>Effort</dt><dd><b>medium</b>, the drawing is the work; state is trivial</dd>
+    </dl>
+    <div class="label">🌳 Your orchard tree</div>
+    <div class="panel mock">
+      <div class="orchard">
+        <svg id="tree" viewBox="0 0 240 220" role="img" aria-label="orchard tree with one fruit per cleared day"></svg>
+        <div>
+          <p class="stage" id="treeStage">Young tree</p>
+          <p class="sub" id="treeSub">41 cleared days · 41 fruit · 9 more days to a grown tree</p>
+          <ul class="stages" id="treeStages">
+            <li data-min="0"><span>🌰</span>seed · 0</li>
+            <li data-min="1"><span>🌱</span>seedling · 1 to 4</li>
+            <li data-min="5"><span>🌿</span>sapling · 5 to 14</li>
+            <li data-min="15"><span>🌳</span>young tree · 15 to 49</li>
+            <li data-min="50"><span>🍎</span>grown tree · 50 to 149</li>
+            <li data-min="150"><span>🏡</span>old tree · 150+</li>
+          </ul>
+        </div>
+      </div>
+      <div class="ctl"><label for="treeRange">cleared days</label><input type="range" id="treeRange" min="0" max="180" value="41"><b id="treeVal">41</b></div>
+    </div>
+  </section>
+
+  <!-- ============ compare ============ -->
+  <section class="idea" id="cmp">
+    <h2>Side by side</h2>
+    <div class="tablewrap panel" style="margin-top:14px">
+      <table>
+        <thead><tr><th>idea</th><th>what it rewards</th><th>where</th><th>new state</th><th>effort</th><th>how loud</th></tr></thead>
+        <tbody>
+          <tr><td>1 · Blooms</td><td>each cleared day, permanently</td><td>stats</td><td>cleared flag</td><td><span class="pill lo">small</span></td><td>quiet, ambient</td></tr>
+          <tr><td>2 · Sunny streak</td><td>the run of cleared days</td><td>home · done · stats</td><td>cleared flag</td><td><span class="pill lo">small</span></td><td>loud, can sting when it breaks</td></tr>
+          <tr><td>3 · Today's plot</td><td>finishing, in the moment</td><td>home · done</td><td>none</td><td><span class="pill mid">medium</span></td><td>loud today, silent tomorrow</td></tr>
+          <tr><td>4 · Visitors</td><td>each cleared day + long runs</td><td>stats · done</td><td>cleared flag</td><td><span class="pill mid">medium</span></td><td>playful, collectible</td></tr>
+          <tr><td>5 · Orchard tree</td><td>cumulative cleared days</td><td>stats</td><td>cleared flag</td><td><span class="pill mid">medium</span></td><td>slow and steady</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="label">natural pairings</div>
+    <div class="note">
+      <p><b>1 + 4</b> are the same change to the heatmap seen twice: blooms on cleared days, and visitors on cleared days. Either alone is coherent; together the pool split is foliage / blooms / visitors.</p>
+      <p><b>3 + anything</b>: the plot is the only idea that lives on the home screen before you start, so it complements any of the stats-screen rewards rather than competing with them.</p>
+      <p><b>2 vs 5</b> is the real fork: a streak (fragile, motivating) or a cumulative tree (forgiving, slower). Picking one sets the tone of the whole feature.</p>
+    </div>
+    <div class="label">recording a cleared day (shared by 1, 2, 4, 5)</div>
+    <div class="note">
+      <p><b>When:</b> a daily session ends via <code>finishSession</code> with the queue empty, or <code>refreshStats</code> finds due + new = 0 with reviews today &gt; 0 (so finishing across two sittings still counts). Once earned it stays for the day, even if the cap is raised or a deck enabled afterwards; the alternative, re-evaluating at midnight, would make the reward feel revocable.</p>
+      <p><b>Where:</b> <code>days[key].cleared = true</code> locally, next to <code>introduced</code> and <code>reviews</code>. Because <code>days</code> is derived from the review log on every hydration, the flag needs one synced source too. Cheapest option: a marker entry in the month log chunk (grade 0, id <code>day/cleared</code>) that <code>rebuildDaysFromLog</code> and the retention/time readers skip; it rides the existing merge, so two devices can't clobber it. Alternative: a <code>clearedDays</code> list in the settings doc, which is simpler to read but goes through whole-doc pushes.</p>
+      <p><b>Idea 3</b> needs none of this: it is computed live from what the home screen already knows.</p>
+    </div>
+  </section>
+
+  <p class="foot">Drawn to the SRS app's tokens, light and dark. Sample data is hashed, not real. 🌱</p>
+</div>
+
+<script>
+(function () {
+  const DAY = 86400000;
+  // same deterministic scatter the app uses
+  const scatter = (arr, dayN, salt) => {
+    let h = Math.imul(dayN ^ salt, 2654435761);
+    h = Math.imul(h ^ (h >>> 16), 2246822507);
+    h = Math.imul(h ^ (h >>> 13), 3266489909);
+    return arr[((h ^ (h >>> 16)) >>> 0) % arr.length];
+  };
+  const hash = (dayN, salt) => {
+    let h = Math.imul(dayN ^ salt, 2654435761);
+    h = Math.imul(h ^ (h >>> 16), 2246822507);
+    h = Math.imul(h ^ (h >>> 13), 3266489909);
+    return ((h ^ (h >>> 16)) >>> 0) % 1000;
+  };
+  const weighted = spec => spec.split(" ").flatMap(tok => { const [e, w] = tok.split("*"); return Array(+w || 1).fill(e); });
+  const GARDEN = weighted("🌳*90 🌿*90 🌱*60 🌲*90 🌾*40 🍃*40 ☘️*30 🍁*20 🍀 🌸 🌺 🌼 🌻 🌷 🌹 💐 🌵 🌴 🍄 🍓 🍒 🍎 🍑 🍊 🍋 🍇 🍉 🥝 🫐 🍅 🥕 🌽 🎃 🥒 🍆 🥔 🍠 🐝 🦋 🐞 🐌 🐛 🐸 🐿️ 🦔 🐇 🐦");
+  const FOLIAGE = weighted("🌳*90 🌿*90 🌱*60 🌲*90 🌾*40 🍃*40 ☘️*30 🍁*20 🍀 🌵 🌴 🍄");
+  const BLOOMS = weighted("🌸*3 🌺 🌼*2 🌻*2 🌷*2 🌹 💐 🍓 🍒 🍎 🍑 🍊 🍋 🍇 🍉 🥝 🫐 🍅 🥕 🌽 🎃");
+  const GROUND = weighted("🪨*7 🪵*5 🍂*3 🌰");
+  const VISITORS = ["🐝", "🦋", "🐞", "🐌", "🐛", "🐸", "🐿️", "🦔", "🐇", "🐦"];
+  const RARE = [["🦉", "7-day run"], ["🦊", "30-day run"], ["🦌", "100-day run"]];
+
+  // ---- sample calendar: 18 Monday-first weeks ending today --------------
+  const WEEKS = 18;
+  const today = new Date(); today.setHours(0, 0, 0, 0);
+  const start = new Date(today); start.setDate(today.getDate() - ((today.getDay() + 6) % 7) - (WEEKS - 1) * 7);
+  const days = [];
+  for (let w = 0; w < WEEKS; w++) for (let r = 0; r < 7; r++) {
+    const d = new Date(start); d.setDate(start.getDate() + w * 7 + r);
+    if (d > today) { days.push({ d, future: true }); continue; }
+    const n = Math.round(d.getTime() / DAY);
+    const ago = Math.round((today - d) / DAY);
+    const practiced = ago <= 23 || hash(n, 3) < 780;
+    const reviews = practiced ? 6 + hash(n, 5) % 58 : 0;
+    let cleared = practiced && hash(n, 9) < 600;
+    if (ago >= 1 && ago <= 4) cleared = true;   // the current 4-day run
+    if (ago === 5) cleared = false;
+    if (ago === 0) cleared = false;             // today is mid-way
+    days.push({ d, n, ago, reviews: ago === 0 ? 12 : reviews, cleared, rare: ago === 6 ? "🦉" : null });
+  }
+  const max = Math.max(...days.map(x => x.reviews || 0));
+  const fmt = d => d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+
+  function heat(gridId, monthsId, mode) {
+    const grid = document.getElementById(gridId), months = document.getElementById(monthsId);
+    let prev = -1;
+    days.forEach((x, i) => {
+      if (i % 7 === 0) {
+        const s = document.createElement("span");
+        if (x.d.getMonth() !== prev) { s.textContent = x.d.toLocaleDateString("en-US", { month: "short" }); prev = x.d.getMonth(); }
+        months.appendChild(s);
+      }
+      const c = document.createElement("i");
+      if (x.future) { c.style.visibility = "hidden"; grid.appendChild(c); return; }
+      let tip = `${fmt(x.d)} — ${x.reviews} review${x.reviews === 1 ? "" : "s"}`;
+      if (x.reviews > 0) {
+        c.className = "s" + Math.max(1, Math.ceil(4 * x.reviews / max));
+        if (mode === "now") c.textContent = scatter(GARDEN, x.n, 0);
+        else if (mode === "blooms") {
+          c.textContent = scatter(x.cleared ? BLOOMS : FOLIAGE, x.n, 0);
+          if (x.cleared) { c.classList.add("sunny"); tip += " · queue cleared"; }
+        } else if (mode === "visitors") {
+          c.textContent = scatter(FOLIAGE, x.n, 0);
+          if (x.cleared) {
+            const v = x.rare || scatter(VISITORS, x.n, 11);
+            c.insertAdjacentHTML("beforeend", `<em>${v}</em>`);
+            tip += ` · queue cleared · ${v} came by`;
+          }
+        }
+        if (x.ago === 0) { c.classList.add("today"); tip += " · so far"; }
+      } else {
+        c.className = "bare"; c.textContent = scatter(GROUND, x.n, 7);
+      }
+      c.title = tip; c.setAttribute("aria-label", tip);
+      grid.appendChild(c);
+    });
+  }
+  heat("h1a", "m1a", "now");
+  heat("h1b", "m1b", "blooms");
+  heat("h4", "m4", "visitors");
+  document.querySelectorAll(".heatwrap").forEach(w => { w.scrollLeft = w.scrollWidth; });
+
+  // ---- idea 3: today's plot -----------------------------------------------
+  const TOTAL = 31, NEW = 12, START = 12;
+  const bed = document.getElementById("bed");
+  const kinds = Array.from({ length: TOTAL }, (_, i) => (i % 3 === 1 && i < NEW * 3) ? "newc" : "due"); // 12 new cards mixed in
+  const todayN = Math.round(today.getTime() / DAY);
+  const bloom = scatter(BLOOMS, todayN, 0);
+  let done = START, timer = null;
+  function drawBed() {
+    bed.innerHTML = "";
+    kinds.forEach((k, i) => {
+      const c = document.createElement("i");
+      if (i < done) { c.className = "grown"; c.textContent = done === TOTAL ? scatter(BLOOMS, todayN + i, 0) : (k === "newc" ? "🌱" : "🌿"); }
+      else c.className = "soil" + (k === "newc" ? " newc" : "");
+      bed.appendChild(c);
+    });
+    bed.classList.toggle("bloom", done === TOTAL);
+    document.getElementById("plotDone").textContent = done;
+    document.getElementById("plotSub").textContent = done === TOTAL
+      ? `of ${TOTAL} planted · the bed is in bloom ${bloom}`
+      : `of ${TOTAL} planted · ${TOTAL - done} to go`;
+  }
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  document.getElementById("plotGrow").addEventListener("click", () => {
+    clearInterval(timer);
+    if (reduced) { done = TOTAL; drawBed(); return; }
+    timer = setInterval(() => { done = Math.min(TOTAL, done + 1); drawBed(); if (done === TOTAL) clearInterval(timer); }, 70);
+  });
+  document.getElementById("plotReset").addEventListener("click", () => { clearInterval(timer); done = START; drawBed(); });
+  drawBed();
+  document.querySelector("#bloomCard .hero").textContent = bloom;
+  if (!reduced) {
+    const card = document.getElementById("bloomCard");
+    ["🌸", "🌼", "🍃", "🌸", "🌷", "🍃", "🌸", "🌼"].forEach((p, i) => {
+      const s = document.createElement("span");
+      s.className = "petal"; s.textContent = p;
+      s.style.left = (6 + i * 12) + "%"; s.style.animationDelay = (i * 0.4) + "s"; s.style.animationDuration = (2.8 + (i % 3) * 0.5) + "s";
+      card.appendChild(s);
+    });
+  }
+
+  // ---- idea 4: visitors' book ---------------------------------------------
+  const counts = {};
+  days.forEach(x => { if (x.cleared && !x.future) { const v = x.rare || scatter(VISITORS, x.n, 11); counts[v] = (counts[v] || 0) + 1; } });
+  const book = document.getElementById("book");
+  VISITORS.concat(RARE.map(r => r[0])).forEach(v => {
+    const rare = RARE.find(r => r[0] === v);
+    const n = counts[v] || 0;
+    const el = document.createElement("div");
+    el.className = "visitor " + (n ? "seen" : "unseen") + (rare ? " rare" : "");
+    el.innerHTML = `<span class="e">${v}</span>${n ? `×${n}` : rare ? rare[1] : "not yet"}`;
+    el.title = n ? `${v} came by ${n} time${n === 1 ? "" : "s"}` : rare ? `${v} arrives on a ${rare[1]}` : `${v} hasn't visited yet`;
+    book.appendChild(el);
+  });
+
+  // ---- idea 5: orchard tree -----------------------------------------------
+  const svg = document.getElementById("tree");
+  const NS = "http://www.w3.org/2000/svg";
+  const el = (tag, attrs) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); return e; };
+  const STAGES = [[0, "Seed"], [1, "Seedling"], [5, "Sapling"], [15, "Young tree"], [50, "Grown tree"], [150, "Old tree"]];
+  function drawTree(count) {
+    svg.innerHTML = "";
+    const stage = STAGES.filter(s => count >= s[0]).pop();
+    const next = STAGES.find(s => s[0] > count);
+    // ground
+    svg.appendChild(el("ellipse", { cx: 120, cy: 205, rx: 95, ry: 9, fill: "var(--track)" }));
+    if (count === 0) {
+      svg.appendChild(el("circle", { cx: 120, cy: 196, r: 7, fill: "#8b5e3c" }));
+    } else {
+      const g = Math.min(count, 150) / 150;                  // growth 0..1
+      const trunkH = 30 + 60 * g, trunkW = 6 + 14 * g;
+      const top = 200 - trunkH;
+      svg.appendChild(el("rect", { x: 120 - trunkW / 2, y: top - 4, width: trunkW, height: trunkH + 4, rx: trunkW / 2, fill: "#8b5e3c" }));
+      const R = 22 + 58 * g;
+      const canopy = [[120, top - R * 0.55, R], [120 - R * 0.6, top - R * 0.15, R * 0.75], [120 + R * 0.6, top - R * 0.15, R * 0.75], [120, top - R * 1.05, R * 0.7]];
+      canopy.forEach(([cx, cy, r], i) => svg.appendChild(el("circle", { cx, cy, r, fill: i % 2 ? "var(--mint)" : "var(--green)", opacity: .95 })));
+      // one fruit per cleared day, hashed into the canopy
+      for (let i = 0; i < Math.min(count, 150); i++) {
+        const a = hash(i + 1, 21) / 1000 * Math.PI * 2, rr = Math.sqrt(hash(i + 1, 33) / 1000) * R * 0.95;
+        const cx = 120 + Math.cos(a) * rr * 1.25, cy = top - R * 0.55 + Math.sin(a) * rr * 0.9;
+        svg.appendChild(el("circle", { cx, cy, r: 3.2 + g * 1.5, fill: "var(--red)", stroke: "var(--card)", "stroke-width": 1 }));
+      }
+      if (count > 150) svg.appendChild(el("text", { x: 120, y: 30, "text-anchor": "middle", "font-size": 18 })).textContent = "🐦";
+    }
+    document.getElementById("treeStage").textContent = stage[1];
+    document.getElementById("treeSub").textContent =
+      `${count} cleared day${count === 1 ? "" : "s"} · ${Math.min(count, 150)} fruit` +
+      (next ? ` · ${next[0] - count} more day${next[0] - count === 1 ? "" : "s"} to a ${next[1].toLowerCase()}` : " · the tree is fully grown 🐦");
+    document.querySelectorAll("#treeStages li").forEach(li => li.classList.toggle("cur", +li.dataset.min === stage[0]));
+    document.getElementById("treeVal").textContent = count;
+  }
+  const range = document.getElementById("treeRange");
+  range.addEventListener("input", () => drawTree(+range.value));
+  drawTree(+range.value);
+})();
+</script>
+
+</body>
+</html>
