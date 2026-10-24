@@ -71,7 +71,8 @@ const ids = list => list.map(c => c.id);
 
 // ----- time --------------------------------------------------------------------
 // "Today" is Tue 1 Sep 2026, local time. History and breaks fall in
-// June–August (90 days back at most), clear of the usual DST changes in either hemisphere.
+// June–August (90 days back at most), clear of the usual DST changes in
+// either hemisphere.
 const day = (offset, h = 0, m = 0) => new Date(2026, 8, 1 + offset, h, m).getTime();
 const midnightOf = offset => new Date(2026, 8, 1 + offset).setHours(0, 0, 0, 0);
 const endOfDay = offset => new Date(2026, 8, 1 + offset).setHours(23, 59, 59, 999);
@@ -347,13 +348,13 @@ function runDay(w0, budgetMs, seed, ctx) {
 
   // 8: keep going past the goal, a budget's worth at a time
   for (let round = 0; round < 2 && s.plan.met; round++) {
-    const chunk = GOAL.nextChunk(s.plan), more = s.plan.more;
+    const chunk = GOAL.nextChunk(s.plan), more = s.plan.more, r = s.plan.relearnN;
     let sum = 0;
     for (const c of chunk) sum += s.plan.costOf(c.id);
-    PN.expect(chunk.every((c, i) => c === more[i]) && chunk.length >= s.plan.relearnN &&
-      (chunk.length === more.length || (sum >= budgetMs && sum - s.plan.costOf(chunk[chunk.length - 1].id) < budgetMs) ||
-        chunk.length === s.plan.relearnN), ctx,
-      `chunk ${chunk.length} of ${more.length}, relearnN ${s.plan.relearnN}, Σ ${sum} vs budget ${budgetMs}`);
+    const lastCost = chunk.length ? s.plan.costOf(chunk[chunk.length - 1].id) : 0;
+    const covers = chunk.length === more.length || (sum >= budgetMs && (chunk.length === r || sum - lastCost < budgetMs));
+    PN.expect(chunk.every((c, i) => c === more[i]) && chunk.length >= r && covers, ctx,
+      `chunk ${chunk.length} of ${more.length}, relearnN ${r}, Σ ${sum} vs budget ${budgetMs}`);
     const q = ids(chunk);
     while (q.length) {
       const x = q.shift();
@@ -408,6 +409,14 @@ for (const seed of SEEDS) {
       const want = w0.cards.map(c => c.id).filter(id => id === x || id === y).join();
       P12r.expect(p2.spentMs === 0 && p2.relearnN === 2 && ids(p2.goal).join() === want, wctx,
         `after failing ${x}, ${y}: goal [${ids(p2.goal)}], relearnN ${p2.relearnN}, spent ${p2.spentMs}`);
+      // then pass a third card: the 1 ms is spent, the day is met with both
+      // steps pending, and the next chunk is exactly those two steps
+      const z = ids(p.goal.concat(p.more))[2];
+      if (z) {
+        const p3 = planOf(grade(w2, z, GOOD, day(0, 9, 2), 9000), 1);
+        PN.expect(p3.met && p3.goal.length === 0 && ids(GOAL.nextChunk(p3)).join() === want, wctx,
+          `after passing ${z}: met ${p3.met}, goal [${ids(p3.goal)}], next chunk [${ids(GOAL.nextChunk(p3))}], want [${want}]`);
+      }
     }
 
     for (const minutes of BUDGETS) {
@@ -499,10 +508,11 @@ for (const seed of SEEDS) {
 
 // ----- prior sanity (synthetic logs) ------------------------------------------------
 const T0 = midnightOf(0);
-// n card-days, one per card, spread over the 28 days before T0
+// n card-days, one per card, spread over 28 days ending `daysBack` before
+// T0 (at most 36 a day, a minute apart from 08:00)
 function synthLog(n, { grade: g = GOOD, ivl = 5, ms = 40000, daysBack = 1 } = {}) {
   return Array.from({ length: n }, (_, i) => ({
-    ts: day(-(daysBack + (i % 28)), 10, 0) + i * 61000,
+    ts: day(-(daysBack + (i % 28)), 8, 0) + Math.floor(i / 28) * 61000,
     grade: g, ivl, id: "s" + i, ms,
   }));
 }
