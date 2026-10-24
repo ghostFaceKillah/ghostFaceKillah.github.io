@@ -171,6 +171,7 @@ window.FSRS = (function () {
   return {
     AGAIN, HARD, GOOD, EASY,
     DAY_MS,
+    REQUEST_RETENTION,
     review,
     previewIntervals,
     retrievability,

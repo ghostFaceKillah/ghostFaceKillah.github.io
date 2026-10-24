@@ -63,6 +63,8 @@ Decided 2026-07-11. This doc is the source of truth for sessions continuing the 
   handled by the math itself (early review ⇒ high retrievability ⇒ tiny stability
   gain), so no mode needs special scheduling rules:
   - **daily** — due cards + new cards up to the daily cap (the default habit).
+    Under a **daily goal** (2026-10-24, below) a session serves just the goal,
+    then optional budget-sized helpings past it.
   - **leeches** — replaced the **learn** button 2026-08-07 (learn's graded
     new-card batches duplicated what the daily queue's intake already does;
     the ungraded browse "learn mode" covers pre-study). Drills the cards that
@@ -93,6 +95,9 @@ Decided 2026-07-11. This doc is the source of truth for sessions continuing the 
     consequence-free preview of what the daily queue will introduce, mirroring
     the per-set learn mode. Nothing is graded or recorded, so peeking doesn't
     spend the quota; the graded path for those cards stays the daily queue.
+    Under a daily goal it previews the goal's new cards (or the next
+    helping's), and reads "paused · reviews first · N waiting" while due
+    cards fill the goal.
     The button caption also shows the intake backlog (added 2026-08-27):
     "15 new today · 230 waiting" / "daily quota met · 230 waiting" — enabled
     cards with no saved state (`newCardsAvailable()`), i.e. picked but not yet
@@ -146,7 +151,9 @@ Decided 2026-07-11. This doc is the source of truth for sessions continuing the 
   grows if the cap is raised mid-day, and a bed with nothing due and
   nothing new "rests" (the panel shows a one-line note; it is hidden
   entirely while no decks are picked). Cell size steps down at 60 and
-  160 cards so a backlog day still fits on a phone.
+  160 cards so a backlog day still fits on a phone. Under a daily goal
+  (2026-10-24, below) the still-to-do cells are the goal's, and meeting the
+  goal is what blooms; "full bloom" stays for an empty ground.
 - **Field guide** (decided 2026-09-03, the "collector" half of the owner's
   ask, lifted from the garden-visitors idea): a pokédex of the heatmap
   garden, its own screen (`guideScreen`, 图鉴) behind a "📔 Field guide ·
@@ -170,6 +177,116 @@ Decided 2026-07-11. This doc is the source of truth for sessions continuing the 
   so the full book is a multi-year project by design. The done screen
   also announces a first-ever find after any graded session ("🍓 first
   time this one has grown in your garden — it's in the field guide now").
+- **Daily goal** (decided 2026-10-24; the owner, back from a break and
+  overwhelmed by the queue, asked for a limit by estimated time — "e.g.
+  15 minutes in expectation" — that keeps the SRS as principled as
+  possible, counts reaching it as success, and leaves continuing optional).
+  - **Setting:** `settings.minutesPerDay` ∈ {0 = off, 10, 15, 20, 30}, in
+    the synced settings doc (a scheduling preference like `newPerDay`),
+    toggle "Daily goal" under new cards per day. Off is the app exactly as
+    before — same queue, tiles and bloom rule. `adoptCloudState` reads a
+    cloud doc without the field as "unknown", not "off" (a push from a tab
+    running older code), keeps this device's goal and heals the doc.
+  - **A soft cap, never state surgery.** Cards past the cut keep their due
+    dates and FSRS state. FSRS-6 prices the delay itself through the true
+    elapsed time (a late pass earns a bigger stability gain, a late lapse
+    takes the post-lapse formula) — the same as Anki's Maximum reviews/day
+    and the FSRS simulator's `max_cost_perday`, which defer what doesn't fit
+    without touching memory state. No Postpone-style due-date rewrites.
+  - **Order** (goal.js `planDay`): relearning steps first (graded today and
+    still due — the 10-minute step is the tail of the same review; Anki
+    gathers intraday learning cards first too), then due cards **oldest due
+    first** (a relearning step left over from an earlier day leads), then
+    today's new-card slice in curriculum order. Chosen in that order, shown
+    shuffled (the idiom new cards already used). Why oldest-first and not
+    the FSRS community's "descending retrievability": that recommendation
+    comes from the FSRS team's sort-order simulation of a *permanent*
+    backlog under a review-count cap (open-spaced-repetition/
+    review-sort-order-comparison; Anki 24.11 added the order but kept "due
+    date, then random" as its default — issue #3460 still open), measured
+    as seconds per remembered card. Here the backlog is *temporary* (a
+    break) and the cap is time: descending-R serves the freshest cards
+    first and leaves the most overdue ones waiting the longest, while
+    oldest-first never starves a card (nothing waits longer than the break)
+    and needs no model prediction to sort — so the cut is the same at any
+    hour and on every device. It's Anki's default and its manual's
+    recommendation for a small backlog. The sort is one line in goal.js;
+    revisit it if the forecast says the pile never clears (a permanent
+    backlog).
+  - **New cards** only get the room the due cards leave (Anki's default —
+    the review limit also limits new cards — and its advice to stop adding
+    new cards during a backlog): after a break they pause by themselves and
+    resume as the pile clears; `newPerDay` stays the ceiling. Consequence,
+    accepted: a goal below the steady daily load throttles new cards every
+    day — the forecast says how many a day fit.
+  - **Cost model** (goal.js `prior`, `cardCost`). A review's expected time
+    is `q·c_pass + (1−q)·c_lapse`, q = the card's recall R calibrated by
+    measured retention (`R·retention/0.9`, clamped); a new card costs
+    `c_learn`. R is read from the card as it stood before today's first
+    grade — its first log entry today, else its untouched state (both give
+    the same `round((due − lastReview)/day)` interval, and at the 0.9 target
+    FSRS-6's interval IS round(S), so S ≈ that interval) — with the elapsed
+    time from its last log entry before today to midnight (no history → R
+    at target). `c_pass / c_lapse / c_learn` come from card-days in the 30
+    days before today (all history if that's under 50), classified by the
+    card's first grade that day, each costing all its entries that day (so
+    a lapse carries its relearning pass), means shrunk toward 8 s / 23 s /
+    18 s with weight 50/(n+50) (fsrs-rs's idiom), `c_lapse ≥ c_pass`.
+    R-dependent because after a break due cards sit well below 90% recall
+    and lapses cost ~3× a pass — a flat per-card pace would undercount
+    exactly the days the goal exists for.
+  - **Budget accounting:** per local calendar day, summed across sessions
+    and devices. Spent = Σ cost of the cards planted today (today's plot's
+    definition — focus/leech plantings of enabled cards count, they were
+    tended today). Charged **in expectation**, not wall-clock and not by
+    outcome: dawdling doesn't count, a slow day isn't punished ("in
+    expectation" was the ask), and it's what keeps the plan stable. The goal
+    is the shortest prefix of the order whose cost covers budget − spent;
+    the card that crosses the line is admitted (fsrs-rs's check), so a
+    budget smaller than one card still gets one.
+  - **Stability** (the invariant the tests pin down): every cost and sort
+    key is fixed for the day — the yardstick reads only log entries from
+    before midnight (memoized per day; a cloud merge or an import bumps
+    `logRev` and recomputes it), recall is taken at midnight. So the plan
+    changes only when something is graded, and grading a goal card can only
+    shrink the goal: a pass moves its cost from the goal into spent, an
+    Again moves the card into the forced relearning block. The daily
+    session serves exactly the goal, so working through it always blooms.
+    Safety net `topUpGoal`: when the queue empties, goal cards this session
+    hasn't passed (a mid-session fetch brought another device's lapse) are
+    served before the done screen — never across midnight. Accepted
+    wrinkles: passing the crossing card early can drop one more card out of
+    the goal (it's still queued, so it's served as a bonus); changing the
+    goal, the cap or the decks mid-day re-sizes the bed (as raising the cap
+    always did); a merge of older log entries can shift costs once;
+    young-card costs are approximate (S < 1 reads as 1).
+  - **Success, two levels:** `met` = something planted and the goal empty →
+    the bed turns golden and flowers, and a daily session ends on the bloom
+    done screen: "Today's goal is in bloom · N cards put to bed · ≈ 15m of
+    reviewing" (+ "≈ 8m past your 15m goal 🌟" when well over), "N more due
+    can wait — FSRS accounts for the extra days when they come up".
+    `clear` = nothing left at all keeps the old "Today's plot is in full
+    bloom", so emptying the pile still means something. With the goal off
+    the two coincide, which is exactly the old rule. A session that ran
+    past midnight claims neither.
+  - **Keep going:** optional helpings past a met goal — Start reads
+    "🌱 Keep going · ≈ 15m more", the done screen offers "🌱 Keep going ·
+    N more ≈ 15m". `GOAL.nextChunk` serves one budget's worth in the same
+    order (leftover relearning steps first, new cards only after every due
+    card); progress reads "bonus · …", the done title "Bonus round done 🌼".
+    Bonus Agains can't un-bloom the day (the budget is already spent).
+  - **Home:** the due tile reads "in today's goal" while due cards lie past
+    the cut; Start "Start review · ≈ 12m"; the bed draws planted + goal only
+    (a wall of soil is the overwhelm), with one quiet line under it — "＋ 389
+    more due · 11 new can wait — oldest first next time". With the goal off
+    and over 30 minutes in the ground, the same line suggests one ("a daily
+    goal ↓ makes it bite-size"). Review progress gains "· ≈ 6m", which only
+    counts down as cards pass.
+  - Code: `goal.js` (pure, like fsrs.js: `prior`, `cardCost`, `planDay`,
+    `cut`, `nextChunk`, and `entryDurations`, moved out of `timeByDay` so
+    the desk charts and the yardstick measure time the same way);
+    `goal.test.js` (node property tests of the invariants);
+    `goal.harness.js` (Playwright, the screens end to end).
 - **Review log & retention** (decided 2026-07-11): every grade appends
   `"ts,grade,prevIvl,cardId"` to a month-chunked log (`log:YYYY-MM` in
   localStorage; `users/{uid}/log/{YYYY-MM}` docs in Firestore — covered by the
@@ -205,7 +322,8 @@ Decided 2026-07-11. This doc is the source of truth for sessions continuing the 
     out of the averaging line under the chart; that average runs from the
     first week with any time in it, so weeks from before the user started
     don't dilute it.
-  - **⏳ Time to come**: the owner's main ask — predicted minutes per day to
+  - **⏳ Time to come** (reworked 2026-10-24 for the daily goal — see the
+    last bullet here): the owner's main ask — predicted minutes per day to
     burn down the queue, today headlined (`≈ Xm to clear today — N due + M new
     · at your pace of ~Ns a card`). An expected-value simulation pushes every
     enabled card due in the next 28 days through the real `FSRS.review`
@@ -231,6 +349,28 @@ Decided 2026-07-11. This doc is the source of truth for sessions continuing the 
     generic lightness/chroma lint by design, so both charts carry the required
     secondary encoding: legends, per-bar tooltips, direct labels (peak on the
     past chart, today on the forecast), 2 px gaps between stacked fills.
+  - **Goal-aware forecast** (2026-10-24, with the daily goal): one cost
+    model for the whole app — the flat `reviewPace` / `passRates` are
+    retired, and the forecast costs every review with the goal's yardstick
+    (expected time from predicted recall; pass/lapse branch weights from the
+    same calibrated recall, new cards from measured first-sight passes).
+    `simulateBurndown(days, plan, prior, endless)` takes today's plan as day
+    0 (the goal is worked, the rest waits) and the goal as every later
+    day's budget: due cards oldest first while there's room, the rest
+    carried to the next day untouched (tooltips "· N wait for the next
+    day"), new cards only into room left once nothing waits; with no goal
+    the budget is infinite and nothing changes but the costs. A dashed rule
+    marks the goal on the chart. Headline under a goal: "≈ 9m left of
+    today's 15m goal — 52 due · all 230 due ≈ 1h 10m", pace as "~8s a
+    remembered card, ~23s a forgotten one". A goal note sizes the pile in
+    days — "🎯 at 15m a day the pile clears in ≈ 6 days (by Oct 30) — new
+    cards resume as it does", or "won't clear within 4 weeks — 20m clears it
+    in ≈ 11 days" — warns if the reviews alone outgrow the goal later, and
+    says how many new cards a day fit once the pile is down ("room for ≈ 9
+    new cards a day at this goal (cap 15)", the mean intake of days 14–27 of
+    an endless run): Mochi's objection to review caps is that a cap below
+    the steady load silently grows the pile, so the forecast says so out
+    loud. The time-at-the-desk charts keep `timeByDay`.
 - **Cross-device sync hardening** (decided 2026-07-12, after the owner saw
   slot picks vanish and "reviews today" read 0 on a second computer):
   - Root causes, both reproduced in a two-browser-profile harness against the
