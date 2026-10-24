@@ -403,6 +403,33 @@ function backlog(ids, ns, t0, settings) {
     await ctx.close();
   }
 
+  // ---- J. The goal tapped, then Start, while a slow rebase is in flight ----
+  console.log("\n[J] Tap '10m' then Start on a slow connection");
+  {
+    const seed = backlog(ids, "srs:u1:", T0, {});
+    seed["srs:u1:importOffered"] = true;
+    const { ctx, page, errors } = await newPage(browser, seed);
+    const settings = { groups: GROUPS, newPerDay: 15 };      // the cloud doc: no goal yet
+    await signIn(page, { cards: {}, settings, log: {} });
+    await page.clock.fastForward(61000);                     // stale → both taps rebase
+    await page.evaluate(() => { window.__fetchDelay = 20000; });
+    await page.click(`#goalToggle .opt[data-min="10"]`);
+    await settle(page);
+    check("the goal shows as picked at once", (await goalSel(page)) === "10", await goalSel(page));
+    await page.click("#startBtn");
+    await page.clock.runFor(5200);                           // Start gives up waiting → opens
+    await page.waitForSelector("#review.active", { timeout: 5000 });
+    const queued = await page.evaluate(() => queue.length);
+    check("the session serves the 10m goal, not the whole pile", queued < 60, `${queued} cards queued`);
+    await page.clock.runFor(16000);                          // the fetch lands mid-session
+    await settle(page);
+    const pushed = await page.evaluate(() => window.__pushes.settings.map(s => s.minutesPerDay));
+    check("after the rebase the goal is kept and pushed", pushed[pushed.length - 1] === 10 &&
+      (await page.evaluate(() => settings.minutesPerDay)) === 10, JSON.stringify(pushed));
+    check("[J] no page errors", errors.length === 0, errors.join(" | "));
+    await ctx.close();
+  }
+
   await browser.close();
   console.log(failures ? `\n${failures} FAILURE(S)` : "\nAll harness checks passed.");
   process.exit(failures ? 1 : 0);

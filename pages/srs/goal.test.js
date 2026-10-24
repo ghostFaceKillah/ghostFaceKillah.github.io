@@ -250,7 +250,7 @@ function planDiff(a, b, cards) {
 
 const copy = x => JSON.parse(JSON.stringify(x));
 function priorKey(p) {
-  return JSON.stringify([p.t0, p.cost, p.n, p.retention, p.newPass, [...p.lastTs].sort()]);
+  return JSON.stringify([p.t0, p.cost, p.n, p.calibration, p.newPass, [...p.lastTs].sort()]);
 }
 
 // A session in progress: the world, its current plan, and the checks every
@@ -522,7 +522,7 @@ function synthLog(n, { grade: g = GOOD, ivl = 5, ms = 40000, daysBack = 1 } = {}
   priors.push(["empty log", p]);
   check("13. prior, empty log: costs are DEFAULT_COST",
     p.cost.pass === D.pass && p.cost.lapse === D.lapse && p.cost.learn === D.learn, JSON.stringify(p.cost));
-  check("13. prior, empty log: retention = 0.9", Math.abs(p.retention - 0.9) < 1e-12, `retention ${p.retention}`);
+  check("13. prior, empty log: calibration = 1", Math.abs(p.calibration - 1) < 1e-12, `calibration ${p.calibration}`);
 
   const passCost = n => { const q = GOAL.prior(synthLog(n), T0); priors.push([`${n}× 40 s passes`, q]); return q.cost.pass; };
   const c50 = passCost(50), c200 = passCost(200), c1000 = passCost(1000);
@@ -538,10 +538,34 @@ function synthLog(n, { grade: g = GOOD, ivl = 5, ms = 40000, daysBack = 1 } = {}
   const old = GOAL.prior(synthLog(200, { daysBack: 40 }), T0).cost.pass;
   check("13. prior: with an empty 30-day window, costs come from older history", old > 30000, `${old.toFixed(0)} ms`);
 
-  const lapses = GOAL.prior(synthLog(300, { grade: AGAIN, ms: 25000 }), T0);
-  priors.push(["300 lapses", lapses]);
-  check("13. prior: a log of lapses drives retention well below the target", lapses.retention < 0.3,
-    `retention ${lapses.retention}`);
+  // Calibration compares passes with the recall the model predicted for the
+  // same reviews. Each card is reviewed once long ago, then again 12–39 days
+  // later at a 5-day interval — badly overdue, the way a break leaves them.
+  const overdue = grader => {
+    const out = [];
+    for (let i = 0; i < 300; i++) {
+      const prev = day(-60, 8, 0) + i * 61000, ts = day(-(12 + (i % 28)), 8, 0) + i * 61000;
+      const r = FSRS.retrievability((ts - prev) / DAY_MS, 5);
+      out.push({ ts: prev, grade: GOOD, ivl: 5, id: "o" + i, ms: 9000 },
+               { ts, grade: grader(i, r), ivl: 5, id: "o" + i, ms: 9000 });
+    }
+    return out;
+  };
+  const lapses = GOAL.prior(overdue(() => AGAIN), T0);
+  priors.push(["300 overdue lapses", lapses]);
+  check("13. prior: reviews that keep failing the model's predictions drive calibration well below 1",
+    lapses.calibration < 0.3, `calibration ${lapses.calibration}`);
+  // passes exactly as often as the model predicts (a deterministic low-
+  // discrepancy draw): the pass RATE is far below 0.9 because every review
+  // was late, but that's the model being right — lateness must not be
+  // counted twice, so calibration stays ≈ 1 and an on-time card stays cheap
+  const honest = GOAL.prior(overdue((i, r) => ((i * 0.6180339887) % 1) < r ? GOOD : AGAIN), T0);
+  priors.push(["300 overdue reviews, model-calibrated", honest]);
+  const rate = overdue((i, r) => ((i * 0.6180339887) % 1) < r ? GOOD : AGAIN)
+    .filter((e, i) => i % 2).filter(e => e.grade > 1).length / 300;
+  check("13. prior: overdue reviews that pass as the model predicts leave calibration ≈ 1 (lateness isn't counted twice)",
+    rate < 0.8 && Math.abs(honest.calibration - 1) < 0.08 && GOAL.passProb(0.9, honest) > 0.83,
+    `pass rate ${rate.toFixed(2)}, calibration ${honest.calibration.toFixed(3)}, passProb(0.9) ${GOAL.passProb(0.9, honest).toFixed(3)}`);
 }
 
 for (const [ctx, p] of priors) {
@@ -554,6 +578,40 @@ for (const [ctx, p] of priors) {
     prev = e;
   }
   P9.expect(!worst, ctx, worst);
+}
+
+// ----- graded today without a log line; the 25-hour fall-back night -----------------
+{
+  const t0 = midnightOf(0), cutoff = endOfDay(0);
+  const pr = GOAL.prior([], t0);
+  const cards = ["a", "b", "c", "d"].map(id => ({ id }));
+  const due = (lastReview, dueAt) => ({ stability: 5, difficulty: 5, due: dueAt, lastReview, reps: 4, lapses: 0 });
+  const plan = (states, cut = cutoff, today = []) => GOAL.planDay({
+    cards, states, today, quotaLeft: 0, prior: pr, cutoff: cut, budgetMs: 10 * 60000,
+  });
+  // a passed today on another device: its state synced, its log line didn't
+  // (or this device's log write failed) — still put to bed, and charged
+  const s1 = {
+    a: due(t0 + 9 * 3600e3, t0 + 6 * DAY_MS), b: due(t0 - 9 * DAY_MS, t0 - 4 * DAY_MS),
+    c: due(t0 - 8 * DAY_MS, t0 - 3 * DAY_MS), d: due(t0 - 7 * DAY_MS, t0 - 2 * DAY_MS),
+  };
+  const p1 = plan(s1);
+  check("graded today with no log line yet: planted and charged, not dropped from the plan",
+    ids(p1.planted.map(x => x.card)).join() === "a" && p1.spentMs > 0 && !ids(p1.goal.concat(p1.more)).includes("a"),
+    `planted [${ids(p1.planted.map(x => x.card))}], spent ${p1.spentMs}`);
+  // …and when it's sitting in an Again step, it's a relearning step (first in the goal)
+  const s2 = Object.assign({}, s1, { a: due(t0 + 9 * 3600e3, t0 + 9 * 3600e3 + 600e3) });
+  const p2 = plan(s2);
+  check("graded today with no log line, in an Again step: a forced relearning step",
+    p2.relearnN === 1 && p2.goal[0].id === "a" && p2.planted.length === 0, `goal [${ids(p2.goal)}], relearnN ${p2.relearnN}`);
+  // fall-back night: a 25-hour day; a pass at 00:30 with a 1-day interval
+  // comes due at 23:30 the same calendar day — still put to bed
+  const long = t0 + 25 * 3600e3 - 1;
+  const s3 = Object.assign({}, s1, { a: due(t0 + 1800e3, t0 + 1800e3 + DAY_MS) });
+  const p3 = plan(s3, long, [{ ts: t0 + 1800e3, grade: GOOD, ivl: 5, id: "a", ms: 8000 }]);
+  check("a pass whose 1-day interval lands before midnight on a 25-hour day is put to bed",
+    ids(p3.planted.map(x => x.card)).join() === "a" && p3.relearnN === 0,
+    `planted [${ids(p3.planted.map(x => x.card))}], relearnN ${p3.relearnN}`);
 }
 
 for (const P of [P1, P2, P2s, P3, P3c, P4, P5, P6, P7, P8, PN, P9, P10, P11, P12, P12r, P13, P13t, PC, PF, PO]) {

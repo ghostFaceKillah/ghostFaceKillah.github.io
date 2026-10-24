@@ -9,7 +9,7 @@
 //
 // Everything is derived from the review log, the card states and the
 // settings, so every device holding the synced log computes the same goal:
-//   GOAL.prior(entries, t0)   → the day's yardstick: costs, retention, last
+//   GOAL.prior(entries, t0)   → the day's yardstick: costs, calibration, last
 //                               review per card (log entries before t0 only)
 //   GOAL.planDay({...})       → { planted, goal, more, met, clear, … }
 //   GOAL.nextChunk(plan)      → the next budget-sized helping past the goal
@@ -58,26 +58,30 @@ window.GOAL = (function () {
   // so nothing graded today can move it. A card-day (one card on one day) is
   // classified by its first grade that day — learn (first sight), pass, or
   // lapse — and costs the sum of all its entries that day, so a lapse carries
-  // its same-session relearning pass with it.
+  // its same-session relearning pass with it. A review card-day also records
+  // the recall the model predicted for it (S ≈ the logged interval, elapsed
+  // since the card's previous entry), which calibrates passProb below.
   function prior(entries, t0) {
     const lastTs = new Map();
     const byDay = new Map();
-    for (const e of entries) {
-      if (e.ts >= t0) continue;
-      if (!(lastTs.get(e.id) >= e.ts)) lastTs.set(e.id, e.ts);
+    const sorted = entries.filter(e => e.ts < t0).sort((x, y) => x.ts - y.ts);
+    for (const e of sorted) {
       const d = midnight(e.ts);
       if (!byDay.has(d)) byDay.set(d, []);
-      byDay.get(d).push(e);
+      byDay.get(d).push({ e, prev: lastTs.get(e.id) });
+      lastTs.set(e.id, e.ts);
     }
     const cardDays = [];
     for (const [day, list] of byDay) {
-      list.sort((x, y) => x.ts - y.ts);
-      const durs = entryDurations(list);
+      const durs = entryDurations(list.map(x => x.e));
       const perCard = new Map();
-      list.forEach((e, i) => {
+      list.forEach(({ e, prev }, i) => {
         let g = perCard.get(e.id);
         if (!g) {
-          g = { day, kind: e.ivl < 0 ? "learn" : e.grade > 1 ? "pass" : "lapse", passed: e.grade > 1, ms: 0 };
+          g = { day, kind: e.ivl < 0 ? "learn" : e.grade > 1 ? "pass" : "lapse", passed: e.grade > 1, ms: 0, rPred: -1 };
+          if (e.ivl >= 0 && prev !== undefined) {
+            g.rPred = FSRS.retrievability(Math.max(0, (e.ts - prev) / DAY), Math.max(1, e.ivl));
+          }
           perCard.set(e.id, g);
         }
         g.ms += durs[i];
@@ -89,11 +93,12 @@ window.GOAL = (function () {
     if (use.length < MIN_CARD_DAYS) use = cardDays; // e.g. back from a long break
     const sum = { pass: 0, lapse: 0, learn: 0 };
     const n = { pass: 0, lapse: 0, learn: 0 };
-    let newPassed = 0;
+    let newPassed = 0, predicted = 0, observed = 0;
     for (const g of use) {
       sum[g.kind] += g.ms;
       n[g.kind]++;
       if (g.kind === "learn" && g.passed) newPassed++;
+      if (g.rPred >= 0) { predicted += g.rPred; if (g.passed) observed++; }
     }
     const shrink = (total, count, dflt) => (total + SHRINK_N * dflt) / (count + SHRINK_N);
     const cost = {
@@ -102,22 +107,26 @@ window.GOAL = (function () {
       learn: shrink(sum.learn, n.learn, DEFAULT_COST.learn),
     };
     cost.lapse = Math.max(cost.lapse, cost.pass);
+    // Calibration = passes seen / passes the model predicted, over the same
+    // reviews (pulled toward 1 by 50 pseudo-reviews at target). Measuring it
+    // against the model's own prediction — not against the 0.9 target — keeps
+    // lateness from counting twice: a week of overdue reviews after a break
+    // passes less often, but the model predicted exactly that.
+    const K = SHRINK_N * FSRS.REQUEST_RETENTION;
     return {
       t0,
       lastTs,
       cost,
       n,
-      // true retention (first review of a learned card per day), shrunk toward the target
-      retention: shrink(n.pass, n.pass + n.lapse, FSRS.REQUEST_RETENTION),
+      calibration: (observed + K) / (predicted + K),
       newPass: shrink(newPassed, n.learn, FSRS.REQUEST_RETENTION),
     };
   }
 
-  // Chance a review at model recall r passes, calibrated to the measured
-  // retention (the model aims reviews at the target, so measured/target is
-  // how far reality sits from it).
+  // Chance a review at model recall r passes, scaled by how the model's
+  // predictions have fared on this user's reviews.
   function passProb(r, p) {
-    return clamp(r * p.retention / FSRS.REQUEST_RETENTION, 0.05, 0.98);
+    return clamp(r * p.calibration, 0.05, 0.98);
   }
   // Expected time of a review at recall r: lapses cost more, so an overdue
   // card (low r) costs more than one reviewed on time.
@@ -165,6 +174,8 @@ window.GOAL = (function () {
   // }
   // planted = enabled cards graded today and not due again before tomorrow
   //           (today's plot's "put to bed"); they've spent their cost.
+  //           Graded today = a log entry since midnight, or a review stamped
+  //           after midnight whose entry hasn't landed.
   // Today's work, in order: relearning steps (graded today, still due —
   // the 10-minute step is part of the same review), then due cards oldest
   // due first, then today's new-card slice in curriculum order. The goal is
@@ -180,34 +191,51 @@ window.GOAL = (function () {
     const byId = new Map(cards.map(c => [c.id, c]));
     const first = new Map();
     for (const e of today) if (!first.has(e.id)) first.set(e.id, e);
+    // A card graded today whose log line hasn't landed (its state synced
+    // first, or the log write failed) has no record of how it stood before:
+    // price it plainly — a first sight, or a review at the target recall.
+    const unlogged = (id, s) => !first.has(id) && !!s && s.lastReview >= p.t0;
     const costs = new Map();
     const costOf = id => {
       let c = costs.get(id);
-      if (c === undefined) costs.set(id, c = cardCost(id, states[id], first.get(id), p));
+      if (c === undefined) {
+        const s = states[id];
+        c = unlogged(id, s)
+          ? (s.reps <= 1 ? p.cost.learn : expectedMs(FSRS.REQUEST_RETENTION, p))
+          : cardCost(id, s, first.get(id), p);
+        costs.set(id, c);
+      }
       return c;
     };
 
+    // In a relearning step: an Again's 10-minute step (vs a scheduled
+    // interval of a day or more). A card graded today is put to bed unless
+    // such a step brings it back before tomorrow — judged by the step, not
+    // the clock alone, so a pass that lands before midnight on the 25-hour
+    // fall-back night still counts as put to bed.
+    const step = s => s.due - s.lastReview < DAY / 2;
+    const putToBed = s => s.due > cutoff || !step(s);
     const planted = [];
     let spentMs = 0;
+    const plant = (c, fresh) => { planted.push({ card: c, fresh }); spentMs += costOf(c.id); };
     for (const [id, e] of first) {
       const c = byId.get(id), s = states[id];
-      if (c && s && s.due > cutoff) {
-        planted.push({ card: c, fresh: e.ivl < 0 });
-        spentMs += costOf(id);
-      }
+      if (c && s && putToBed(s)) plant(c, e.ivl < 0);
     }
     const relearn = [], due = [], fresh = [];
     for (const c of cards) {
       const s = states[c.id];
-      if (!s) { if (fresh.length < quotaLeft) fresh.push(c); }
-      else if (s.due <= cutoff) (first.has(c.id) ? relearn : due).push(c);
+      if (!s) { if (fresh.length < quotaLeft) fresh.push(c); continue; }
+      if (first.has(c.id) || unlogged(c.id, s)) {           // graded today
+        if (!putToBed(s)) relearn.push(c);
+        else if (!first.has(c.id)) plant(c, s.reps <= 1);
+      } else if (s.due <= cutoff) due.push(c);
     }
     // a relearning step left over from an earlier day (Again, then the
     // session ended) is the tail of that day's review — it goes first
-    const stepLeft = s => s.due - s.lastReview < DAY / 2;
     due.sort((a, b) => {
       const sa = states[a.id], sb = states[b.id];
-      return stepLeft(sb) - stepLeft(sa) || sa.due - sb.due || (a.id < b.id ? -1 : a.id > b.id ? 1 : 0);
+      return step(sb) - step(sa) || sa.due - sb.due || (a.id < b.id ? -1 : a.id > b.id ? 1 : 0);
     });
     const order = relearn.concat(due, fresh);
     const k = cut(order, costOf, budgetMs - spentMs, relearn.length);

@@ -210,19 +210,38 @@ Decided 2026-07-11. This doc is the source of truth for sessions continuing the 
     oldest-first never starves a card (nothing waits longer than the break)
     and needs no model prediction to sort — so the cut is the same at any
     hour and on every device. It's Anki's default and its manual's
-    recommendation for a small backlog. The sort is one line in goal.js;
-    revisit it if the forecast says the pile never clears (a permanent
-    backlog).
+    recommendation for a small backlog. Checked with an independent
+    simulation on this app's own fsrs.js (model as ground truth, 2,250
+    learned cards, 15-min goal, reviews before new cards, 30 seeds, breaks
+    of 7/14/30 days): order moved Σ recall by under 1% at days 30 and 60,
+    and oldest-first was the best or tied; its median days to clear the
+    pile (10/13/18) was never more than a day behind the fastest order;
+    and it was the only order where nothing waited longer than the break
+    (max wait 8/15/31 days vs 16/26/48 for descending recall, 12/22/40 for
+    ascending, and similar to descending for random). Ascending recall
+    ("most forgotten first", the manual's large-backlog advice) cleared
+    2–3 days slower — mostly from re-serving fast-decaying young cards
+    ahead of the long-interval pile, not from its lapses. The sort is one
+    line in goal.js; revisit it if the forecast says the pile never clears
+    (a permanent backlog).
   - **New cards** only get the room the due cards leave (Anki's default —
     the review limit also limits new cards — and its advice to stop adding
     new cards during a backlog): after a break they pause by themselves and
     resume as the pile clears; `newPerDay` stays the ceiling. Consequence,
     accepted: a goal below the steady daily load throttles new cards every
-    day — the forecast says how many a day fit.
+    day — the forecast says how many a day fit. (In the simulation above,
+    the steady load at 15 new/day was ~18–20 min, so a 15-minute goal
+    settles at ~8–9 new cards a day; 20 minutes keeps the full 15.)
   - **Cost model** (goal.js `prior`, `cardCost`). A review's expected time
-    is `q·c_pass + (1−q)·c_lapse`, q = the card's recall R calibrated by
-    measured retention (`R·retention/0.9`, clamped); a new card costs
-    `c_learn`. R is read from the card as it stood before today's first
+    is `q·c_pass + (1−q)·c_lapse`, q = the card's recall R times a
+    calibration (clamped); a new card costs `c_learn`. The calibration is
+    passes seen ÷ recall the model predicted for those same reviews (each
+    review card-day's R from its logged interval and the time since the
+    card's previous entry), pulled toward 1 by 50 pseudo-reviews. Not
+    measured retention ÷ 0.9: after a break the measured pass rate is low
+    *because* every review was late, and R already says so — dividing by
+    the target would count the lateness twice and overprice every card for
+    the whole catch-up month. R is read from the card as it stood before today's first
     grade — its first log entry today, else its untouched state (both give
     the same `round((due − lastReview)/day)` interval, and at the 0.9 target
     FSRS-6's interval IS round(S), so S ≈ that interval) — with the elapsed
@@ -238,7 +257,14 @@ Decided 2026-07-11. This doc is the source of truth for sessions continuing the 
   - **Budget accounting:** per local calendar day, summed across sessions
     and devices. Spent = Σ cost of the cards planted today (today's plot's
     definition — focus/leech plantings of enabled cards count, they were
-    tended today). Charged **in expectation**, not wall-clock and not by
+    tended today). "Graded today" also covers a card whose review is stamped
+    after midnight but whose log line hasn't landed (its state synced first,
+    or the local log write failed — a full localStorage would otherwise
+    keep refilling the goal forever); it's priced plainly (a first sight,
+    or a review at the target recall) until the line arrives. A graded card
+    is put to bed unless an Again step brings it back before tomorrow —
+    judged by the step, not the clock alone, so a pass that lands before
+    midnight on the 25-hour fall-back night still counts. Charged **in expectation**, not wall-clock and not by
     outcome: dawdling doesn't count, a slow day isn't punished ("in
     expectation" was the ask), and it's what keeps the plan stable. The goal
     is the shortest prefix of the order whose cost covers budget − spent;
@@ -373,7 +399,12 @@ Decided 2026-07-11. This doc is the source of truth for sessions continuing the 
     new cards a day at this goal (cap 15)", the mean intake of days 14–27 of
     an endless run): Mochi's objection to review caps is that a cap below
     the steady load silently grows the pile, so the forecast says so out
-    loud. The time-at-the-desk charts keep `timeByDay`.
+    loud. A day or two of spill-over is noise (the sim fills every spare
+    minute with new cards, so a bump in follow-ups spills a few cards), so
+    "outgrows it" means the window's last week carries a pile every day;
+    a suggested bigger goal must clear the pile *and* keep up with it.
+    Day 0 takes its split from the plan itself (the local-day cutoff), not
+    from fixed 24-hour steps, which disagree on DST days. The time-at-the-desk charts keep `timeByDay`.
 - **Cross-device sync hardening** (decided 2026-07-12, after the owner saw
   slot picks vanish and "reviews today" read 0 on a second computer):
   - Root causes, both reproduced in a two-browser-profile harness against the

@@ -1370,17 +1370,22 @@
       const d = dayOf(s.due);
       if (w >= 0.02 && d < daysAhead) queues[d].push({ w, s, fu: true });
     };
+    // Day 0 is the plan's own split (by its local-day cutoff, which a fixed
+    // 24 h step gets wrong on DST days): goal cards are worked today, the
+    // rest waits for tomorrow; everything else lands on its due day.
     const inGoal = new Set(plan.goal.map(c => c.id));
+    const waits = new Set(plan.more.map(c => c.id));
     let waiting0 = 0;
     for (const c of enabledCards()) {
       const s = cardStates[c.id];
       if (!s) continue;
-      const d = Math.max(0, dayOf(s.due));
-      if (d >= daysAhead) continue;
-      if (d === 0 && !inGoal.has(c.id)) {          // past today's goal: tomorrow
+      if (waits.has(c.id)) {
         waiting0++;
         if (daysAhead > 1) queues[1].push({ w: 1, s, fu: false });
-      } else queues[d].push({ w: 1, s, fu: false });
+        continue;
+      }
+      const d = inGoal.has(c.id) ? 0 : Math.max(1, dayOf(s.due));
+      if (d < daysAhead) queues[d].push({ w: 1, s, fu: false });
     }
     let unseen = newCardsAvailable().length;
     const out = [];
@@ -1584,7 +1589,7 @@
   // cut stay due; FSRS prices the extra days in when they're reviewed.
   const goalBudgetMs = () =>
     settings.minutesPerDay ? settings.minutesPerDay * 60000 : Infinity;
-  // The yardstick (costs, retention, each card's last review before today)
+  // The yardstick (costs, calibration, each card's last review before today)
   // only reads log entries from before midnight, so it's computed once a
   // day — and again when a cloud merge or an import may have changed the
   // past (logRev).
@@ -1739,11 +1744,22 @@
       b.classList.toggle("sel", Number(b.dataset.min) === settings.minutesPerDay);
     });
   }
+  // The goal applies at once — a Start tapped while the rebase below is
+  // still in flight must already get the new goal (the user asked for a
+  // short sitting, not the whole pile) — and again on top of the rebase,
+  // which may bring the cloud's older doc. A later tap wins.
+  let pendingGoal = null;
   $("goalToggle").addEventListener("click", async e => {
     const b = e.target.closest(".opt");
     if (!b) return;
     const min = Number(b.dataset.min);
+    pendingGoal = min;
+    settings.minutesPerDay = min;
+    syncGoalButtons();
+    refreshStats();
     await refreshKeepingSlot();
+    if (pendingGoal !== min) return;
+    pendingGoal = null;
     settings.minutesPerDay = min;
     saveSettings();
     cloudPushSettings();
@@ -2203,35 +2219,50 @@
         bmax, d === 0 && s.ms > 0 ? fmtDur(s.ms) : "", tipText));
     });
     if (goalMin) {
+      // on the bars' own scale: a bar at the goal is 88·goal/max px of fill
+      // plus the 2 px gaps between its stacked segments
+      const segs = Math.max(1, ...sim.filter(s => s.ms >= 0.9 * plan.budgetMs)
+        .map(s => [s.newMs, s.fuMs, s.schedMs].filter(ms => ms > 0).length));
       const line = document.createElement("span");
       line.className = "goal-line";
-      line.style.bottom = Math.round(88 * plan.budgetMs / bmax) + "px";
+      line.style.bottom = Math.round(88 * plan.budgetMs / bmax) + 2 * (segs - 1) + "px";
       line.innerHTML = `<em>goal ${goalMin}m</em>`;
       bc.appendChild(line);
     }
     // What the goal means for the pile: how many days the backlog takes to
     // clear at this goal (or which bigger goal gets there), whether the
-    // reviews alone later outgrow it, and how many new cards a day it leaves
-    // room for once the pile is down.
-    const clearDay = sm => sm.findIndex(s => s.waiting < 0.5);
+    // reviews alone keep outgrowing it, and how many new cards a day it
+    // leaves room for once the pile is down. A day or two of spill-over is
+    // noise (the sim fills every spare minute with new cards, so a bump in
+    // follow-ups spills a few cards for a day); "outgrows" means the last
+    // week of the window carries a pile every single day.
+    const outlook = sm => {
+      const clearIn = sm.findIndex(s => s.waiting < 0.5);
+      const lastClear = sm.map(s => s.waiting < 0.5).lastIndexOf(true);
+      const outgrows = sm.slice(-7).every(s => s.waiting >= 0.5);
+      return { clearIn, outgrowsFrom: outgrows && clearIn >= 0 ? lastClear + 1 : -1, keepsUp: clearIn >= 0 && !outgrows };
+    };
+    const dateIn = n => { const d = new Date(today); d.setDate(today.getDate() + n); return fmtDay(d); };
+    const inDays = n => n === 0 ? "today" : `in ≈ ${n} day${n === 1 ? "" : "s"}`;
     let goalNote = "";
     if (goalMin) {
-      const at = clearDay(sim);
-      const dateIn = n => { const d = new Date(today); d.setDate(today.getDate() + n); return fmtDay(d); };
-      if (at === 0) goalNote = `🎯 today's due cards fit your ${goalMin}m goal`;
-      else if (at > 0) {
-        goalNote = `🎯 at ${goalMin}m a day the pile clears in ≈ ${at} day${at === 1 ? "" : "s"}` +
-          ` (by ${dateIn(at)}) — new cards resume as it does`;
-      } else {
-        const alt = GOAL_MINUTES.filter(m => m > goalMin).map(m =>
-          [m, clearDay(simulateBurndown(28, todaysPlot(now, m * 60000), prior, endless))])
-          .find(([, d]) => d >= 0);
-        goalNote = `🎯 at ${goalMin}m a day the pile won't clear within 4 weeks` +
-          (alt ? ` — ${alt[0]}m clears it in ≈ ${alt[1]} day${alt[1] === 1 ? "" : "s"}` : "");
+      const o = outlook(sim);
+      const newLeft = endless || newCardsAvailable().length > 0;
+      if (o.clearIn === 0) goalNote = `🎯 today's due cards fit your ${goalMin}m goal`;
+      else if (o.clearIn > 0) {
+        goalNote = `🎯 at ${goalMin}m a day the pile clears in ≈ ${o.clearIn} day${o.clearIn === 1 ? "" : "s"}` +
+          ` (by ${dateIn(o.clearIn)})` + (newLeft ? " — new cards resume as it does" : "");
       }
-      const regrow = at >= 0 ? sim.findIndex((s, d) => d > at && s.waiting >= 0.5) : -1;
-      if (regrow > 0) goalNote += ` · from ≈ ${dateIn(regrow)} the reviews alone outgrow it`;
-      else if (at >= 0 && at <= 14) {
+      if (!o.keepsUp) {
+        // a bigger goal that clears the pile AND keeps up with it afterwards
+        const alt = GOAL_MINUTES.filter(m => m > goalMin).map(m =>
+          [m, outlook(simulateBurndown(28, todaysPlot(now, m * 60000), prior, endless))])
+          .find(([, a]) => a.keepsUp);
+        goalNote = (o.clearIn < 0
+          ? `🎯 at ${goalMin}m a day the pile won't clear within 4 weeks`
+          : goalNote + ` · from ≈ ${dateIn(o.outgrowsFrom)} the reviews alone outgrow it`) +
+          (alt ? ` — ${alt[0]}m a day ` + (alt[1].clearIn ? `clears it ${inDays(alt[1].clearIn)} and keeps up` : "keeps up") : "");
+      } else if (o.clearIn <= 14 && newLeft) {
         // the steady state: an endless intake squeezed into the goal's room
         const late = (endless ? sim : simulateBurndown(28, plan, prior, true)).slice(14);
         const room = late.reduce((a, s) => a + s.intake, 0) / late.length;
@@ -2855,9 +2886,14 @@
   }
   $("startBtn").addEventListener("click", e =>
     startAfterSync(e.currentTarget, "daily", dailyQueue));
-  // past a met goal: the next helping (dailyQueue serves it once the goal is empty)
-  $("keepGoingBtn").addEventListener("click", e =>
-    startAfterSync(e.currentTarget, "daily", dailyQueue));
+  // past a met goal: the next helping (dailyQueue serves it once the goal is
+  // empty). If the rebase shows nothing left to serve (another device
+  // finished the pile), don't leave a dead button behind.
+  $("keepGoingBtn").addEventListener("click", async e => {
+    const btn = e.currentTarget;
+    await startAfterSync(btn, "daily", dailyQueue);
+    if (!sessionStarting && screens.done.classList.contains("active")) btn.style.display = "none";
+  });
   $("leechBtn").addEventListener("click", e =>
     startAfterSync(e.currentTarget, "leeches", () => leechCards(Date.now()).slice(0, LEECH_BATCH)));
   // Learn (today's new cards) runs as a browse session: writes nothing, so
@@ -3021,15 +3057,18 @@
     // doc, so entries only one side has must survive in the union — and when
     // the union holds entries the cloud copy lacks, push it back to heal it.
     const cloudLog = cloudState.log || {};
+    let logGrew = false;
     for (const [month, entries] of Object.entries(cloudLog)) {
-      const merged = mergeLogChunks(entries, store.read("log:" + month, []));
+      const local = store.read("log:" + month, []);
+      const merged = mergeLogChunks(entries, local);
       store.write("log:" + month, merged);
+      if (merged.length > local.length) logGrew = true;
       if (merged.length > entries.length && cloud) cloud.pushLog(month, merged);
     }
     for (const month of localLogMonths()) {
       if (!cloudLog[month] && cloud) cloud.pushLog(month, store.read("log:" + month, []));
     }
-    logRev++;                    // merged entries may change the goal's yardstick
+    if (logGrew) logRev++;       // new entries may change the goal's yardstick
     cloudHydrated = true;        // cloud is the base now — pushes are safe
     lastHydrate = Date.now();
     dirtyLogMonths.clear();      // the merge above already pushed what the cloud lacked
