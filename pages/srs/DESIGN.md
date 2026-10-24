@@ -18,6 +18,12 @@ Decided 2026-07-11. This doc is the source of truth for sessions continuing the 
   stability is under ~1.5 days — same as Anki, working as intended.
   Card state: `{stability, difficulty, due, lastReview, reps, lapses}` —
   unchanged from 4.5, so stored states carry over with no migration.
+  **Two buttons** (decided 2026-10-24, the owner's ask): the review screen
+  shows only Again and Good (keys 1 and 2; 3 still means Good); the
+  scheduler keeps all four grades. Pass/fail grading is a sound way to
+  drive FSRS: stability still moves with the real elapsed time and the
+  spacing effect, and difficulty now rises on Again and otherwise drifts
+  back only slowly (mean reversion), since Hard/Easy were its other levers.
 - **Card IDs:** stable, derived from existing data. Examples:
   `words/L1D1/你`, `sent/hsk1/42`, `coll/1`, `kana/あ`. ~3,000 cards total.
 - **Card intake:** opt-in by deck/lesson (IC1 lessons individually, topic word
