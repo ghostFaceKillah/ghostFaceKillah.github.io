@@ -2611,7 +2611,12 @@
     const now = Date.now();
     if (todayKey(now) !== g.day) return false;
     const p = todaysPlot(now);
-    const extra = p.goal.filter(c => !g.passed.has(c.id));
+    // Relearning steps are only forced into the goal while budget is left,
+    // and a finished goal has always spent it — so look past the goal for
+    // them too. This session re-serves its own Agains before its queue
+    // empties, so any step still due here came from elsewhere.
+    const steps = p.more.slice(0, Math.max(0, p.relearnN - p.goal.length));
+    const extra = p.goal.concat(steps).filter(c => !g.passed.has(c.id));
     if (!extra.length) return false;
     for (const c of extra) g.cost.set(c.id, p.costOf(c.id));
     queue = servePicks(extra);

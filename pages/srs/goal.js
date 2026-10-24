@@ -143,8 +143,9 @@ window.GOAL = (function () {
 
   // Longest-needed prefix of `order` whose cost covers `needMs` — the card
   // that crosses the line is admitted (fsrs-rs's max_cost_perday check), so
-  // a budget smaller than one card still gets one card. The first `forced`
-  // cards are always in.
+  // a budget smaller than one card still gets one card. While any budget is
+  // left, the first `forced` cards are always in; once it's spent, nothing
+  // is (so an Again in a helping past a met goal can't un-bloom the day).
   function cut(order, costOf, needMs, forced) {
     if (!(needMs > 0)) return 0;
     if (needMs === Infinity) return order.length;

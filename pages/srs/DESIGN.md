@@ -252,9 +252,12 @@ Decided 2026-07-11. This doc is the source of truth for sessions continuing the 
     shrink the goal: a pass moves its cost from the goal into spent, an
     Again moves the card into the forced relearning block. The daily
     session serves exactly the goal, so working through it always blooms.
-    Safety net `topUpGoal`: when the queue empties, goal cards this session
-    hasn't passed (a mid-session fetch brought another device's lapse) are
-    served before the done screen — never across midnight. Accepted
+    Safety net `topUpGoal`: when the queue empties, goal cards and
+    relearning steps this session hasn't passed (a mid-session fetch
+    brought another device's lapse) are served before the done screen —
+    never across midnight. It has to look past the goal for the steps: they
+    are forced in only while budget is left, and a finished goal has always
+    spent it (which is also why a bonus Again can't un-bloom the day). Accepted
     wrinkles: passing the crossing card early can drop one more card out of
     the goal (it's still queued, so it's served as a bonus); changing the
     goal, the cap or the decks mid-day re-sizes the bed (as raising the cap
