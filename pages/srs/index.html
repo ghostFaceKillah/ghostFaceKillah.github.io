@@ -384,6 +384,7 @@
   }
   .plot-key i.newc { box-shadow: 0 0 0 2px var(--accent) inset; }
   .plot-rest { color: var(--muted); font-size: .9rem; text-align: center; margin: 0; }
+  .plot-more { color: var(--muted); font-size: .78rem; font-weight: 700; margin: 8px 0 0; }
 
   /* ----- Done screen ----- */
   .done { text-align: center; }
@@ -533,6 +534,16 @@
   .tbar i + i { margin-top: 2px; }              /* surface gap between stacked fills */
   .tbar i:first-of-type { border-radius: 4px 4px 0 0; }
   .tbar i.zero { height: 2px; background: var(--track); }
+  /* the daily goal as a rule across the burn-down chart */
+  #burnChart { position: relative; }
+  .goal-line {
+    position: absolute; left: 0; right: 0;
+    border-top: 1px dashed var(--muted); pointer-events: none;
+  }
+  .goal-line em {
+    position: absolute; right: 0; top: -15px;
+    font-style: normal; font-size: .68rem; color: var(--muted); font-weight: 700;
+  }
   /* a second chart in the same panel: dashed rule + its own little heading */
   .sub-label {
     margin: 18px 0 12px; padding-top: 14px; border-top: 2px dashed var(--line);
@@ -694,6 +705,7 @@
 <script src="../word_lessons_data.js"></script>
 <script src="registry.js"></script>
 <script src="fsrs.js"></script>
+<script src="goal.js"></script>
 <script src="firebase-config.js"></script>
 <script type="module" src="cloud.js"></script>
 </head>
@@ -713,7 +725,7 @@
     <p class="mascots">🌱🧠🌸</p>
 
     <div class="stats">
-      <div class="stat due"><b id="statDue">0</b><span>due now</span></div>
+      <div class="stat due"><b id="statDue">0</b><span id="statDueLabel">due now</span></div>
       <div class="stat new"><b id="statNew">0</b><span>new today</span></div>
       <div class="stat"><b id="statReviews">0</b><span>reviews today</span></div>
       <div class="stat"><b id="statSeen">0</b><span>cards learning</span></div>
@@ -726,6 +738,7 @@
         <span><i></i>due card</span><span><i class="newc"></i>new card</span><span>🌿 put to bed</span>
       </div>
       <p class="plot-rest" id="plotRest" style="display:none"></p>
+      <p class="plot-more" id="plotMore" style="display:none"></p>
     </div>
 
     <button class="btn" id="startBtn">Start review</button>
@@ -756,6 +769,15 @@
       <button class="opt" data-cap="15">15</button>
       <button class="opt" data-cap="30">30</button>
       <button class="opt" data-cap="50">50</button>
+    </div>
+
+    <div class="label">Daily goal — minutes of expected work; the rest waits its turn</div>
+    <div class="toggle" id="goalToggle">
+      <button class="opt" data-min="0">off</button>
+      <button class="opt" data-min="10">10m</button>
+      <button class="opt" data-min="15">15m</button>
+      <button class="opt" data-min="20">20m</button>
+      <button class="opt" data-min="30">30m</button>
     </div>
 
     <div class="label">Selection groups — each remembers its own deck picks</div>
@@ -920,6 +942,7 @@
         <span><i class="w1"></i>predicted follow-ups</span>
         <span><i class="w4"></i>new cards</span>
       </div>
+      <p class="seeds" id="goalNote" style="display:none"></p>
       <p class="seeds" id="burnNote"></p>
       <label class="sim-toggle">
         <input type="checkbox" id="endlessNew">
@@ -960,6 +983,7 @@
       <p class="sub" id="doneSummary"></p>
       <p class="note" id="doneNote" style="display:none"></p>
       <button class="btn" id="nextSetBtn" style="display:none"></button>
+      <button class="btn ghost" id="keepGoingBtn" style="display:none"></button>
       <button class="btn ghost" id="resumeSetBtn" style="display:none">← Back to the last card</button>
       <button class="btn ghost" id="homeBtn">Back to decks</button>
     </div>
@@ -1110,12 +1134,16 @@
   // slot's object, so every reader/writer of `groups` transparently works on
   // the current slot. References don't survive JSON, so normalize re-ties
   // them after every load/adopt. Legacy settings (plain `groups`) become slot 0.
+  // The daily goal (minutesPerDay, 0 = off) is a scheduling preference like
+  // newPerDay, so it lives in the synced settings doc.
+  const GOAL_MINUTES = [0, 10, 15, 20, 30];
   function normalizeSettings(raw) {
-    const s = Object.assign({ groups: {}, newPerDay: 15, slot: 0 }, raw || {});
+    const s = Object.assign({ groups: {}, newPerDay: 15, slot: 0, minutesPerDay: 0 }, raw || {});
     if (!Array.isArray(s.slots) || s.slots.length !== 3) s.slots = [s.groups, {}, {}];
     s.slots = s.slots.map(g => (g && typeof g === "object") ? g : {});
     s.slot = Math.min(2, Math.max(0, s.slot | 0));
     s.groups = s.slots[s.slot];
+    if (!GOAL_MINUTES.includes(s.minutesPerDay)) s.minutesPerDay = 0;
     return s;
   }
   function migrateAllSlots() {
@@ -1164,7 +1192,7 @@
   // ms (added 2026-07-12) is the time the card was on screen, show → grade,
   // capped at TIME_CAP_MS; entries written before the field exists have none
   // and get their time estimated from grade-to-grade gaps instead.
-  const TIME_CAP_MS = 60000;
+  const TIME_CAP_MS = GOAL.TIME_CAP_MS;
   const monthKey = t => todayKey(t).slice(0, 7);
   function appendLog(cardId, grade, prevIvlDays, now, durMs) {
     const key = "log:" + monthKey(now);
@@ -1295,8 +1323,9 @@
   // grade in the same sitting (a longer gap = a break, charged as the day's
   // median instead). A card counts as "learning" for a whole day when its
   // first grade that day was its first sight ever — its same-day repeats are
-  // part of meeting the card; everything else is review time.
-  const NOMINAL_MS = 15000; // a day with no measurable pace at all
+  // part of meeting the card; everything else is review time. (The
+  // per-entry estimate lives in goal.js — the daily goal's cost yardstick
+  // measures time the same way.)
   function timeByDay() {
     const byDay = {};
     for (const e of readAllLog()) {
@@ -1306,80 +1335,32 @@
     const out = {};
     for (const [day, list] of Object.entries(byDay)) {
       list.sort((x, y) => x.ts - y.ts);
-      const known = [];
-      const durs = list.map((e, i) => {
-        if (e.ms >= 0) { const d = Math.min(e.ms, TIME_CAP_MS); known.push(d); return d; }
-        const gap = i > 0 ? e.ts - list[i - 1].ts : -1;
-        if (gap > 0 && gap <= TIME_CAP_MS) { known.push(gap); return gap; }
-        return -1;
-      });
-      known.sort((x, y) => x - y);
-      const median = known.length ? known[known.length >> 1] : NOMINAL_MS;
+      const durs = GOAL.entryDurations(list);
       const isNew = {};
       for (const e of list) if (!(e.id in isNew)) isNew[e.id] = e.ivl < 0;
-      const d = { revMs: 0, learnMs: 0, revCards: 0, learnCards: 0 };
-      const counted = new Set();
+      const d = { revMs: 0, learnMs: 0 };
       list.forEach((e, i) => {
-        const ms = durs[i] >= 0 ? durs[i] : median;
-        if (isNew[e.id]) d.learnMs += ms; else d.revMs += ms;
-        if (!counted.has(e.id)) {
-          counted.add(e.id);
-          if (isNew[e.id]) d.learnCards++; else d.revCards++;
-        }
+        if (isNew[e.id]) d.learnMs += durs[i]; else d.revMs += durs[i];
       });
       out[day] = d;
     }
     return out;
   }
 
-  // Per-card pace with same-day repeats folded in (an Again costs its extra
-  // pass through the queue right here, so the forecast never needs a
-  // separate repeat factor). Last 30 days preferred, all time as fallback,
-  // gentle guesses for a virgin log.
-  function reviewPace(byDay, now) {
-    const win = { revMs: 0, revCards: 0, learnMs: 0, learnCards: 0 };
-    const all = { revMs: 0, revCards: 0, learnMs: 0, learnCards: 0 };
-    const cutoff = todayKey(now - 30 * FSRS.DAY_MS);
-    for (const [day, d] of Object.entries(byDay)) {
-      for (const f in all) all[f] += d[f];
-      if (day >= cutoff) for (const f in win) win[f] += d[f];
-    }
-    const pick = (msF, cardsF, dflt) =>
-      win[cardsF] >= 10 ? win[msF] / win[cardsF] :
-      all[cardsF] > 0 ? all[msF] / all[cardsF] : dflt;
-    return {
-      revMs: pick("revMs", "revCards", 9000),
-      learnMs: pick("learnMs", "learnCards", 18000),
-      measured: all.revCards + all.learnCards > 0,
-    };
-  }
-
-  // How often a review passes (grade above Again) — feeds the lapse branches
-  // of the burn-down forecast. Reviews use the true-retention idiom (first
-  // grade per card per day, so same-session repeats don't flatter the rate);
-  // first sights are measured separately.
-  function passRates(entries) {
-    let rp = 0, rt = 0, np = 0, nt = 0;
-    const ret = retentionByDay(entries);
-    for (const day in ret) { rp += ret[day].pass; rt += ret[day].total; }
-    for (const e of entries) if (e.ivl < 0) { nt++; if (e.grade > 1) np++; }
-    const clamp01 = x => Math.min(0.98, Math.max(0.6, x));
-    return {
-      rev: rt >= 20 ? clamp01(rp / rt) : 0.9,
-      new: nt >= 20 ? clamp01(np / nt) : 0.9,
-    };
-  }
-
-  // Expected-value burn-down forecast. Every enabled card due inside the
-  // window is pushed through the real FSRS scheduler day by day: a review
-  // splits into a pass branch (weight = measured pass rate, graded Good)
-  // and a lapse branch (Again now, Good ten minutes later — that extra
-  // same-session pass costs no separate time, it is already inside the
-  // per-card pace). New-card intake keeps flowing at the daily cap while
-  // unseen cards remain — or forever, when `endless` says the user will
-  // keep adding fresh material — and its rescheduling cascades the same
-  // way. Fractional branches under 2% of a card are dropped.
-  function simulateBurndown(daysAhead, pRev, pNew, endless) {
+  // Expected-value burn-down forecast, goal-aware. Day 0 is today's plan:
+  // the goal is worked, everything past it waits. Each later day takes its
+  // due cards oldest first while the daily goal has room; what doesn't fit
+  // carries to the next day with its state untouched, exactly as the real
+  // queue defers it (fsrs-rs's max_cost_perday). A review is costed at the
+  // goal's yardstick for its predicted recall and splits into a pass branch
+  // (graded Good) and a lapse branch (Again now, Good ten minutes later),
+  // both pushed through the real FSRS scheduler. New cards only fill room
+  // left once nothing waits, at the daily cap, while unseen cards remain —
+  // or forever, when `endless` says the user will keep adding fresh
+  // material. Fractional branches under 2% of a card are dropped.
+  // `plan` is todaysPlot() for the same budget (Infinity = no goal).
+  function simulateBurndown(daysAhead, plan, prior, endless) {
+    const budgetMs = plan.budgetMs;
     const now = Date.now();
     const t = new Date(now); t.setHours(0, 0, 0, 0);
     const t0 = t.getTime();
@@ -1389,10 +1370,21 @@
       const d = dayOf(s.due);
       if (w >= 0.02 && d < daysAhead) queues[d].push({ w, s, fu: true });
     };
+    // Day 0 is the plan's own split (by its local-day cutoff, which a fixed
+    // 24 h step gets wrong on DST days): goal cards are worked today, the
+    // rest waits for tomorrow; everything else lands on its due day.
+    const inGoal = new Set(plan.goal.map(c => c.id));
+    const waits = new Set(plan.more.map(c => c.id));
+    let waiting0 = 0;
     for (const c of enabledCards()) {
       const s = cardStates[c.id];
       if (!s) continue;
-      const d = Math.max(0, dayOf(s.due));
+      if (waits.has(c.id)) {
+        waiting0++;
+        if (daysAhead > 1) queues[1].push({ w: 1, s, fu: false });
+        continue;
+      }
+      const d = inGoal.has(c.id) ? 0 : Math.max(1, dayOf(s.due));
       if (d < daysAhead) queues[d].push({ w: 1, s, fu: false });
     }
     let unseen = newCardsAvailable().length;
@@ -1401,22 +1393,43 @@
       // pretend the session happens midday; Again's ~10 min relearning step
       // plus the 1-day interval floor keeps every reschedule strictly ahead
       const ts = t0 + d * FSRS.DAY_MS + 12 * 3600 * 1000;
-      let sched = 0, fu = 0;
+      let sched = 0, fu = 0, schedMs = 0, fuMs = 0, waiting = d === 0 ? waiting0 : 0;
+      let need = d === 0 ? Infinity : budgetMs;      // day 0's cut is the plan's
+      queues[d].sort((a, b) => a.s.due - b.s.due);   // oldest due first, like the goal
       for (const q of queues[d]) {
-        if (q.fu) fu += q.w; else sched += q.w;
-        push(q.w * pRev, FSRS.review(q.s, FSRS.GOOD, ts));
-        push(q.w * (1 - pRev),
+        if (!(need > 0)) {                           // no room left: waits a day
+          waiting += q.w;
+          if (d + 1 < daysAhead) queues[d + 1].push(q);
+          continue;
+        }
+        const r = FSRS.retrievability(Math.max(0, (ts - q.s.lastReview) / FSRS.DAY_MS), q.s.stability);
+        const p = GOAL.passProb(r, prior);
+        const ms = q.w * GOAL.expectedMs(r, prior);
+        need -= ms;
+        if (q.fu) { fu += q.w; fuMs += ms; } else { sched += q.w; schedMs += ms; }
+        push(q.w * p, FSRS.review(q.s, FSRS.GOOD, ts));
+        push(q.w * (1 - p),
           FSRS.review(FSRS.review(q.s, FSRS.AGAIN, ts), FSRS.GOOD, ts + 10 * 60000));
       }
-      const quota = d === 0 ? newQuotaLeft(now) : settings.newPerDay;
-      const intake = endless ? quota : Math.min(quota, unseen);
+      let intake;
+      if (d === 0) {
+        // today is the plan itself, costed with the plan's own numbers
+        intake = plan.goal.filter(c => !cardStates[c.id]).length;
+        schedMs = plan.goalMs - intake * prior.cost.learn;
+      } else {
+        const room = waiting > 0 ? 0
+          : need === Infinity ? settings.newPerDay
+          : Math.max(0, Math.ceil(need / prior.cost.learn)); // the crossing card is admitted
+        intake = Math.min(settings.newPerDay, room, endless ? Infinity : unseen);
+      }
       unseen -= Math.min(intake, unseen);
       if (intake > 0) {
-        push(intake * pNew, FSRS.review(null, FSRS.GOOD, ts));
-        push(intake * (1 - pNew),
+        push(intake * prior.newPass, FSRS.review(null, FSRS.GOOD, ts));
+        push(intake * (1 - prior.newPass),
           FSRS.review(FSRS.review(null, FSRS.AGAIN, ts), FSRS.GOOD, ts + 10 * 60000));
       }
-      out.push({ sched, fu, intake });
+      const newMs = intake * prior.cost.learn;
+      out.push({ sched, fu, intake, waiting, schedMs, fuMs, newMs, ms: schedMs + fuMs + newMs });
     }
     return out;
   }
@@ -1437,14 +1450,6 @@
     const d = new Date(now); d.setHours(23, 59, 59, 999);
     return d.getTime();
   }
-  function dueCards(now) {
-    // due = reviewed before and scheduled for any time today (or overdue)
-    const cutoff = endOfTodayMs(now);
-    return enabledCards().filter(c => {
-      const s = cardStates[c.id];
-      return s && s.due <= cutoff;
-    });
-  }
   function newCardsAvailable() {
     return enabledCards().filter(c => !cardStates[c.id]);
   }
@@ -1452,11 +1457,15 @@
     return Math.max(0, settings.newPerDay - todayCounts(now).introduced);
   }
 
-  // Cards for the Learn button: today's new-card intake — the same slice the
-  // daily queue would introduce (unseen cards up to the day's quota, in
+  // What the next daily session serves: today's goal, or — once the goal is
+  // met — the next budget-sized helping past it (see todaysPlot).
+  const nextDailyPick = p => p.goal.length ? p.goal : GOAL.nextChunk(p);
+
+  // Cards for the Learn button: the new cards the next daily session would
+  // introduce (with no goal: unseen cards up to the day's quota, in
   // curriculum order). Opened in learn mode, so peeking costs nothing.
   function learnNewCards(now) {
-    return newCardsAvailable().slice(0, newQuotaLeft(now));
+    return nextDailyPick(todaysPlot(now)).filter(c => !cardStates[c.id]);
   }
 
   // Cards for leech taming: cards that keep lapsing (see FSRS.isLeech),
@@ -1523,10 +1532,13 @@
 
   function refreshStats() {
     const now = Date.now();
-    const due = dueCards(now).length;
-    const fresh = Math.min(newQuotaLeft(now), newCardsAvailable().length);
-    $("statDue").textContent = due;
-    $("statNew").textContent = fresh;
+    const p = todaysPlot(now);
+    const goalOn = !!settings.minutesPerDay;
+    const goalNew = p.goal.filter(c => !cardStates[c.id]).length;
+    const moreDue = p.more.filter(c => cardStates[c.id]).length;
+    $("statDue").textContent = p.goal.length - goalNew;
+    $("statDueLabel").textContent = moreDue ? "in today's goal" : "due now";
+    $("statNew").textContent = goalNew;
     $("statReviews").textContent = todayCounts(now).reviews;
     // count only cards still in the registry — retired ids (e.g. the old
     // Chinese-first HSK sentence cards) keep their saved state but don't
@@ -1538,10 +1550,13 @@
     // to the wrong namespace (guest vs account) — graded sessions wait for
     // that, and say so, instead of silently starting in the wrong place.
     const gated = identityPending || sessionStarting; // one session start at a time, too
-    startBtn.disabled = gated || due + fresh === 0;
+    // once the goal is met, Start offers the next helping past it
+    const pick = nextDailyPick(p);
+    startBtn.disabled = gated || pick.length === 0;
     startBtn.textContent =
       identityPending ? "☁️ connecting…" :
-      due + fresh > 0 ? "Start review" :
+      p.goal.length ? "Start review" + (goalOn ? ` · ≈ ${fmtDur(p.goalMs)}` : "") :
+      pick.length ? `🌱 Keep going · ≈ ${fmtDur(pickMs(p, pick))} more` :
       enabledCards().length === 0 ? "Pick some decks below ↓" :
       "All done for today 🎉";
 
@@ -1552,68 +1567,112 @@
       ? `${Math.min(LEECH_BATCH, leeches)} of ${leeches} stuck`
       : "no leeches 🎉";
     // the Learn button is the door new cards enter through, so its caption
-    // also carries the backlog: enabled-but-unseen cards beyond today's slice
+    // also carries the backlog: enabled-but-unseen cards beyond today's slice.
+    // Under a daily goal new cards only get room the due cards leave, so
+    // after a break they pause until the pile is down (Anki's advice too).
     const unseen = newCardsAvailable().length;
+    const fresh = pick.filter(c => !cardStates[c.id]).length;
+    const slice = Math.min(newQuotaLeft(now), unseen);
     const waiting = unseen - fresh;
     $("learnBtn").disabled = fresh === 0;
     $("learnCount").textContent = fresh
       ? `${fresh} new today` + (waiting ? ` · ${waiting} waiting` : "")
+      : slice ? `paused · reviews first · ${unseen} waiting`
       : unseen ? `daily quota met · ${unseen} waiting` : "no unseen cards";
-    renderPlot(now);
+    renderPlot(now, p);
   }
+
+  // ----- Daily goal ------------------------------------------------------------
+  // An optional cap on the day in EXPECTED minutes (settings.minutesPerDay),
+  // computed by goal.js from the log, the card states and the settings —
+  // nothing new is persisted (see DESIGN.md, "Daily goal"). Cards past the
+  // cut stay due; FSRS prices the extra days in when they're reviewed.
+  const goalBudgetMs = () =>
+    settings.minutesPerDay ? settings.minutesPerDay * 60000 : Infinity;
+  // The yardstick (costs, calibration, each card's last review before today)
+  // only reads log entries from before midnight, so it's computed once a
+  // day — and again when a cloud merge or an import may have changed the
+  // past (logRev).
+  let logRev = 0;
+  let priorMemo = null;
+  function goalPrior(now) {
+    const t = new Date(now); t.setHours(0, 0, 0, 0);
+    const key = NS() + t.getTime() + "#" + logRev;
+    if (!priorMemo || priorMemo.key !== key) {
+      priorMemo = { key, prior: GOAL.prior(readAllLog(), t.getTime()) };
+    }
+    return priorMemo.prior;
+  }
+  const pickMs = (p, cards) => cards.reduce((ms, c) => ms + p.costOf(c.id), 0);
 
   // ----- Today's plot ---------------------------------------------------------
   // A garden bed with one cell per card in today's work: the cards already
   // put to bed (graded today and not coming back before tomorrow) plus what
-  // is still to do (due now + today's new-card slice). Read live from the
-  // day's log entries and the card states — nothing new is persisted, and
-  // the bed is the same on every device the log has reached.
-  function todaysPlot(now) {
+  // is still to do — today's goal (with no goal: everything due + today's
+  // new-card slice). Read live from the day's log entries and the card
+  // states — nothing new is persisted, and the bed is the same on every
+  // device the log has reached. `budgetMs` overrides the goal (forecasts).
+  function todaysPlot(now, budgetMs = goalBudgetMs()) {
     const dayStart = new Date(now); dayStart.setHours(0, 0, 0, 0);
     const cutoff = endOfTodayMs(now);
-    // the first grade of the day tells whether the card was met today
-    const firstIvl = new Map();
-    for (const e of readLog(dayStart.getTime(), now)) if (!firstIvl.has(e.id)) firstIvl.set(e.id, e.ivl);
-    const planted = [];
-    for (const [id, ivl] of firstIvl) {
-      const card = REGISTRY.cardById(id), s = cardStates[id];
-      if (card && isEnabled(card) && s && s.due > cutoff) planted.push({ card, fresh: ivl < 0 });
-    }
-    const due = dueCards(now);                 // disjoint from planted: due ≤ cutoff
-    const fresh = newCardsAvailable().slice(0, newQuotaLeft(now));
-    return { planted, due, fresh, left: due.length + fresh.length,
-             total: planted.length + due.length + fresh.length };
+    return GOAL.planDay({
+      cards: enabledCards(),
+      states: cardStates,
+      today: readLog(dayStart.getTime(), cutoff),
+      quotaLeft: newQuotaLeft(now),
+      prior: goalPrior(now),
+      cutoff,
+      budgetMs,
+    });
   }
-  // The bed flowers when nothing is left in the ground — hash-picked blooms
-  // per cell (BLOOMS, defined with the garden pools), the day's own heatmap
-  // plant in the caption.
-  function renderPlot(now) {
+  // The bed flowers when today's goal is met — hash-picked blooms per cell
+  // (BLOOMS, defined with the garden pools), the day's own heatmap plant in
+  // the caption when nothing at all is left. Cards past the goal aren't
+  // drawn (a wall of soil is exactly the overwhelm the goal is for); one
+  // quiet line counts them instead.
+  function renderPlot(now, p) {
     const panel = $("plotPanel"), bed = $("plotBed");
     if (!enabledCards().length) { panel.style.display = "none"; return; }
     panel.style.display = "";
-    const p = todaysPlot(now);
     const n = p.planted.length;
-    const bloom = n > 0 && p.left === 0;
+    const total = n + p.goal.length;
+    const bloom = p.met;
     const todayN = dayNumber(now);
     bed.innerHTML = "";
-    bed.className = "bed" + (p.total > 160 ? " tiny" : p.total > 60 ? " mid" : "") + (bloom ? " bloom" : "");
+    bed.className = "bed" + (total > 160 ? " tiny" : total > 60 ? " mid" : "") + (bloom ? " bloom" : "");
     p.planted.forEach((x, i) => {
       const cell = document.createElement("i");
       cell.className = "grown";
       cell.textContent = bloom ? scatter(BLOOMS, todayN + i, 3) : x.fresh ? "🌱" : "🌿";
       bed.appendChild(cell);
     });
-    for (let i = 0; i < p.due.length; i++) bed.appendChild(Object.assign(document.createElement("i"), { className: "soil" }));
-    for (let i = 0; i < p.fresh.length; i++) bed.appendChild(Object.assign(document.createElement("i"), { className: "soil newc" }));
-    bed.style.display = p.total ? "" : "none";
-    $("plotKey").style.display = p.total ? "" : "none";
-    $("plotRest").style.display = p.total ? "none" : "";
+    for (const c of p.goal) {
+      bed.appendChild(Object.assign(document.createElement("i"),
+        { className: cardStates[c.id] ? "soil" : "soil newc" }));
+    }
+    bed.style.display = total ? "" : "none";
+    $("plotKey").style.display = total ? "" : "none";
+    $("plotRest").style.display = total ? "none" : "";
     $("plotRest").textContent = "nothing to plant today — the bed rests 🪨";
     $("plotDone").textContent = n;
-    $("plotSub").textContent = !p.total ? "planted today"
-      : bloom ? `of ${p.total} planted · in full bloom ${plantOfDay(todayN)}`
-      : `of ${p.total} planted · ${p.left} to go`;
+    $("plotSub").textContent = !total ? "planted today"
+      : p.clear ? `of ${total} planted · in full bloom ${plantOfDay(todayN)}`
+      : bloom ? `of ${total} planted · today's goal in bloom 🌻`
+      : `of ${total} planted · ${p.goal.length} to go` +
+        (settings.minutesPerDay ? ` · ≈ ${fmtDur(p.goalMs)}` : "");
+    const moreDue = p.more.filter(c => cardStates[c.id]).length;
+    const moreNew = p.more.length - moreDue;
+    const more =
+      moreDue ? `＋ ${moreDue} more due` + (moreNew ? ` · ${moreNew} new` : "") +
+        " can wait — oldest first next time" :
+      moreNew ? `＋ ${moreNew} new can wait — reviews come first` :
+      // no goal set and a long day ahead: point at the control that helps
+      !settings.minutesPerDay && p.goalMs > 30 * 60000 ?
+        `≈ ${fmtDur(p.goalMs)} in the ground today — a daily goal ↓ makes it bite-size` : "";
+    $("plotMore").textContent = more;
+    $("plotMore").style.display = more ? "" : "none";
   }
+
 
   // Both set pickers (focus review and learn mode) list every group on the
   // site (enabled for daily review or not) — cramming or browsing a chapter
@@ -1677,6 +1736,34 @@
     saveSettings();
     cloudPushSettings();
     syncCapButtons();
+    refreshStats();
+  });
+
+  function syncGoalButtons() {
+    document.querySelectorAll("#goalToggle .opt").forEach(b => {
+      b.classList.toggle("sel", Number(b.dataset.min) === settings.minutesPerDay);
+    });
+  }
+  // The goal applies at once — a Start tapped while the rebase below is
+  // still in flight must already get the new goal (the user asked for a
+  // short sitting, not the whole pile) — and again on top of the rebase,
+  // which may bring the cloud's older doc. A later tap wins.
+  let pendingGoal = null;
+  $("goalToggle").addEventListener("click", async e => {
+    const b = e.target.closest(".opt");
+    if (!b) return;
+    const min = Number(b.dataset.min);
+    pendingGoal = min;
+    settings.minutesPerDay = min;
+    syncGoalButtons();
+    refreshStats();
+    await refreshKeepingSlot();
+    if (pendingGoal !== min) return;
+    pendingGoal = null;
+    settings.minutesPerDay = min;
+    saveSettings();
+    cloudPushSettings();
+    syncGoalButtons();
     refreshStats();
   });
 
@@ -2079,8 +2166,12 @@
     $("weekNote").textContent = note.join(" · ");
 
     // --- time to come: burn-down forecast, today headlined -----------------
-    const pace = reviewPace(tbd, now);
-    const rates = passRates(readAllLog());
+    // Costed with the daily goal's yardstick (each card's expected time from
+    // its predicted recall), so this panel, the plot and the Start button
+    // all quote the same minutes.
+    const prior = goalPrior(now);
+    const plan = todaysPlot(now);
+    const goalMin = settings.minutesPerDay;
     // "endless" pretends the decks never run dry: new cards keep arriving at
     // the daily cap even past what's actually picked. A local display pref —
     // an assumption about the future, not review state, so it doesn't sync.
@@ -2088,19 +2179,30 @@
     $("endlessNew").checked = endless;
     $("endlessNewText").textContent =
       `♾️ assume I keep adding new material at ${settings.newPerDay}/day — never run out of cards to learn`;
-    const sim = simulateBurndown(28, rates.rev, rates.new, endless);
-    const simMs = s => (s.sched + s.fu) * pace.revMs + s.intake * pace.learnMs;
-    const t0 = sim[0];
-    const cards0 = Math.round(t0.sched) + t0.intake;
-    $("burnToday").textContent = cards0 ? "≈ " + fmtDur(simMs(t0)) : "0m";
-    $("burnSub").textContent = cards0
-      ? `to clear today — ${Math.round(t0.sched)} due` +
-        (t0.intake ? ` + ${t0.intake} new` : "") +
-        (pace.measured
-          ? ` · at your pace of ~${Math.round(pace.revMs / 1000)}s a card`
-          : " · a rough guess until your pace fills in")
-      : "nothing on today's plate 🎉";
-    const bmax = Math.max(1, ...sim.map(simMs));
+    const sim = simulateBurndown(28, plan, prior, endless);
+    const goalDue = plan.goal.filter(c => cardStates[c.id]);
+    const moreDue = plan.more.filter(c => cardStates[c.id]);
+    const new0 = plan.goal.length - goalDue.length;
+    const allDueMs = pickMs(plan, goalDue.concat(moreDue));
+    const paceText = prior.n.pass + prior.n.lapse + prior.n.learn > 0
+      ? ` · at your pace: ~${Math.round(prior.cost.pass / 1000)}s a remembered card,` +
+        ` ~${Math.round(prior.cost.lapse / 1000)}s a forgotten one`
+      : " · a rough guess until your pace fills in";
+    if (plan.goal.length) {
+      $("burnToday").textContent = "≈ " + fmtDur(plan.goalMs);
+      $("burnSub").textContent = (goalMin
+        ? `left of today's ${goalMin}m goal — ${goalDue.length} due` + (new0 ? ` + ${new0} new` : "") +
+          (moreDue.length ? ` · all ${goalDue.length + moreDue.length} due ≈ ${fmtDur(allDueMs)}` : "")
+        : `to clear today — ${goalDue.length} due` + (new0 ? ` + ${new0} new` : "")) + paceText;
+    } else if (plan.met && !plan.clear) {
+      $("burnToday").textContent = "🌻";
+      $("burnSub").textContent = `today's ${goalMin}m goal is met` +
+        (moreDue.length ? ` · ${moreDue.length} more due ≈ ${fmtDur(allDueMs)} if you keep going` : "");
+    } else {
+      $("burnToday").textContent = "0m";
+      $("burnSub").textContent = "nothing on today's plate 🎉";
+    }
+    const bmax = Math.max(1, goalMin ? plan.budgetMs : 0, ...sim.map(s => s.ms));
     const bc = $("burnChart");
     bc.innerHTML = "";
     sim.forEach((s, d) => {
@@ -2109,14 +2211,69 @@
       if (Math.round(s.sched)) parts.push(`${Math.round(s.sched)} due`);
       if (Math.round(s.fu)) parts.push(`~${Math.round(s.fu)} follow-ups`);
       if (s.intake) parts.push(`${s.intake} new`);
-      const tipText = `${fmtDay(day)} — ≈ ${fmtDur(simMs(s))}` +
-        (parts.length ? ` · ${parts.join(" + ")}` : "");
+      const tipText = `${fmtDay(day)} — ≈ ${fmtDur(s.ms)}` +
+        (parts.length ? ` · ${parts.join(" + ")}` : "") +
+        (Math.round(s.waiting) ? ` · ${Math.round(s.waiting)} wait for the next day` : "");
       bc.appendChild(timeBar(
-        [{ ms: s.intake * pace.learnMs, cls: "w4" },
-         { ms: s.fu * pace.revMs, cls: "w1" },
-         { ms: s.sched * pace.revMs, cls: "w2" }],
-        bmax, d === 0 && simMs(s) > 0 ? fmtDur(simMs(s)) : "", tipText));
+        [{ ms: s.newMs, cls: "w4" }, { ms: s.fuMs, cls: "w1" }, { ms: s.schedMs, cls: "w2" }],
+        bmax, d === 0 && s.ms > 0 ? fmtDur(s.ms) : "", tipText));
     });
+    if (goalMin) {
+      // on the bars' own scale: a bar at the goal is 88·goal/max px of fill
+      // plus the 2 px gaps between its stacked segments
+      const segs = Math.max(1, ...sim.filter(s => s.ms >= 0.9 * plan.budgetMs)
+        .map(s => [s.newMs, s.fuMs, s.schedMs].filter(ms => ms > 0).length));
+      const line = document.createElement("span");
+      line.className = "goal-line";
+      line.style.bottom = Math.round(88 * plan.budgetMs / bmax) + 2 * (segs - 1) + "px";
+      line.innerHTML = `<em>goal ${goalMin}m</em>`;
+      bc.appendChild(line);
+    }
+    // What the goal means for the pile: how many days the backlog takes to
+    // clear at this goal (or which bigger goal gets there), whether the
+    // reviews alone keep outgrowing it, and how many new cards a day it
+    // leaves room for once the pile is down. A day or two of spill-over is
+    // noise (the sim fills every spare minute with new cards, so a bump in
+    // follow-ups spills a few cards for a day); "outgrows" means the last
+    // week of the window carries a pile every single day.
+    const outlook = sm => {
+      const clearIn = sm.findIndex(s => s.waiting < 0.5);
+      const lastClear = sm.map(s => s.waiting < 0.5).lastIndexOf(true);
+      const outgrows = sm.slice(-7).every(s => s.waiting >= 0.5);
+      return { clearIn, outgrowsFrom: outgrows && clearIn >= 0 ? lastClear + 1 : -1, keepsUp: clearIn >= 0 && !outgrows };
+    };
+    const dateIn = n => { const d = new Date(today); d.setDate(today.getDate() + n); return fmtDay(d); };
+    const inDays = n => n === 0 ? "today" : `in ≈ ${n} day${n === 1 ? "" : "s"}`;
+    let goalNote = "";
+    if (goalMin) {
+      const o = outlook(sim);
+      const newLeft = endless || newCardsAvailable().length > 0;
+      if (o.clearIn === 0) goalNote = `🎯 today's due cards fit your ${goalMin}m goal`;
+      else if (o.clearIn > 0) {
+        goalNote = `🎯 at ${goalMin}m a day the pile clears in ≈ ${o.clearIn} day${o.clearIn === 1 ? "" : "s"}` +
+          ` (by ${dateIn(o.clearIn)})` + (newLeft ? " — new cards resume as it does" : "");
+      }
+      if (!o.keepsUp) {
+        // a bigger goal that clears the pile AND keeps up with it afterwards
+        const alt = GOAL_MINUTES.filter(m => m > goalMin).map(m =>
+          [m, outlook(simulateBurndown(28, todaysPlot(now, m * 60000), prior, endless))])
+          .find(([, a]) => a.keepsUp);
+        goalNote = (o.clearIn < 0
+          ? `🎯 at ${goalMin}m a day the pile won't clear within 4 weeks`
+          : goalNote + ` · from ≈ ${dateIn(o.outgrowsFrom)} the reviews alone outgrow it`) +
+          (alt ? ` — ${alt[0]}m a day ` + (alt[1].clearIn ? `clears it ${inDays(alt[1].clearIn)} and keeps up` : "keeps up") : "");
+      } else if (o.clearIn <= 14 && newLeft) {
+        // the steady state: an endless intake squeezed into the goal's room
+        const late = (endless ? sim : simulateBurndown(28, plan, prior, true)).slice(14);
+        const room = late.reduce((a, s) => a + s.intake, 0) / late.length;
+        if (room < settings.newPerDay - 0.5) {
+          goalNote += ` · room for ≈ ${Math.round(room)} new card${Math.round(room) === 1 ? "" : "s"}` +
+            ` a day at this goal (cap ${settings.newPerDay})`;
+        }
+      }
+    }
+    $("goalNote").textContent = goalNote;
+    $("goalNote").style.display = goalNote ? "" : "none";
     // Runway: how much picked material hasn't entered the rotation yet, and
     // how long the intake keeps flowing at the current cap — the number the
     // ♾️ checkbox below pretends is infinite.
@@ -2409,7 +2566,9 @@
   // Several ways in, one engine. Every mode grades through the same
   // FSRS.review with the real elapsed time — the math handles early and
   // late reviews on its own, so no mode needs special scheduling rules.
-  //   daily — due cards + new cards up to the daily cap (the default habit)
+  //   daily — due cards + new cards up to the daily cap (the default habit);
+  //           under a daily goal, just the goal — then, if wanted, more
+  //           budget-sized helpings past it ("keep going")
   //   leeches — cards that keep lapsing (see FSRS.isLeech), worst first,
   //           LEECH_BATCH at a time: extra deliberate exposure, outside
   //           the schedule, for the cards eating the most review time
@@ -2427,6 +2586,10 @@
   let sessionTotal = 0;
   let sessionDone = 0;
   let current = null;
+  // A daily session's bookkeeping for the goal: which day it served, whether
+  // it's a helping past a met goal, each card's expected cost (the progress
+  // line's ≈ minutes) and which cards it has passed (the top-up below).
+  let goalSession = null;
   let revealed = false;
   let cardShownAt = 0;     // show → grade is the card's logged duration
   let browseHist = [];     // cards already flipped past, for Back
@@ -2441,6 +2604,7 @@
   }
 
   function startSession(mode, cards) {
+    if (mode !== "daily") goalSession = null;
     if (!cards.length) { refreshStats(); return; }
     sessionMode = mode;
     queue = cards;
@@ -2451,11 +2615,44 @@
     showCard();
   }
 
+  // The goal picks oldest-due first and today's intake in curriculum order;
+  // the shuffles only randomize the order those picks are shown in.
+  const servePicks = cards =>
+    shuffle(cards.filter(c => cardStates[c.id])).concat(shuffle(cards.filter(c => !cardStates[c.id])));
   function dailyQueue() {
     const now = Date.now();
-    // slice picks today's intake in curriculum order; the shuffle only
-    // randomizes the order those picks are shown in
-    return shuffle(dueCards(now)).concat(shuffle(newCardsAvailable().slice(0, newQuotaLeft(now))));
+    const p = todaysPlot(now);
+    const pick = nextDailyPick(p);
+    goalSession = {
+      day: todayKey(now),
+      bonus: !p.goal.length,     // a helping past a goal already met
+      cost: new Map(pick.map(c => [c.id, p.costOf(c.id)])),
+      passed: new Set(),
+    };
+    return servePicks(pick);
+  }
+  // Safety net. A daily session's queue IS the goal, and working through it
+  // only ever shrinks the goal — but the goal is re-derived from synced
+  // state, so a fetch landing mid-session can add another device's lapse
+  // (or shift the costs once). Before calling the day done, serve whatever
+  // goal cards this session hasn't passed yet; never across midnight.
+  function topUpGoal() {
+    const g = goalSession;
+    if (sessionMode !== "daily" || !g || g.bonus) return false;
+    const now = Date.now();
+    if (todayKey(now) !== g.day) return false;
+    const p = todaysPlot(now);
+    // Relearning steps are only forced into the goal while budget is left,
+    // and a finished goal has always spent it — so look past the goal for
+    // them too. This session re-serves its own Agains before its queue
+    // empties, so any step still due here came from elsewhere.
+    const steps = p.more.slice(0, Math.max(0, p.relearnN - p.goal.length));
+    const extra = p.goal.concat(steps).filter(c => !g.passed.has(c.id));
+    if (!extra.length) return false;
+    for (const c of extra) g.cost.set(c.id, p.costOf(c.id));
+    queue = servePicks(extra);
+    sessionTotal += extra.length;
+    return true;
   }
 
   function fmtDelay(ms) {
@@ -2471,7 +2668,7 @@
   }
 
   function showCard() {
-    if (!queue.length) { finishSession(); return; }
+    if (!queue.length && !topUpGoal()) { finishSession(); return; }
     current = queue[0];
     revealed = false;
     cardShownAt = Date.now();
@@ -2494,8 +2691,14 @@
 
     const left = queue.length;
     const freshLeft = queue.filter(c => !cardStates[c.id]).length;
+    // under a daily goal: the expected minutes still queued (a card's cost
+    // leaves only when it's passed, so this only ever counts down)
+    const goalOn = sessionMode === "daily" && goalSession && settings.minutesPerDay;
+    const msLeft = goalOn ? queue.reduce((ms, c) => ms + (goalSession.cost.get(c.id) || 0), 0) : 0;
     $("progressText").textContent =
-      left + " to go" + (freshLeft ? ` · ${freshLeft} new` : "");
+      (goalOn && goalSession.bonus ? "bonus · " : "") +
+      left + " to go" + (freshLeft ? ` · ${freshLeft} new` : "") +
+      (msLeft ? ` · ≈ ${fmtDur(msLeft)}` : "");
     $("barFill").style.width =
       (sessionTotal ? Math.round(100 * sessionDone / sessionTotal) : 0) + "%";
 
@@ -2551,6 +2754,7 @@
     bumpToday(now, "reviews");
 
     queue.shift();
+    if (goalSession && g !== FSRS.AGAIN) goalSession.passed.add(current.id);
     if (g === FSRS.AGAIN) {
       // relearning: bring it back a few cards later in this same session,
       // at a jittered spot so several misses don't march back in lockstep
@@ -2565,6 +2769,8 @@
   function finishSession() {
     const nextBtn = $("nextSetBtn");
     const resumeBtn = $("resumeSetBtn");
+    const keepBtn = $("keepGoingBtn");
+    keepBtn.style.display = "none";
     if (sessionMode === "browse") {
       $("doneBig").textContent = "Set browsed! 📖";
       $("doneSummary").textContent =
@@ -2598,22 +2804,42 @@
     $("doneSummary").textContent =
       `${c.reviews} review${c.reviews === 1 ? "" : "s"} today` +
       (c.introduced ? ` — ${c.introduced} new card${c.introduced === 1 ? "" : "s"} met 🌱` : "");
-    // Today's plot: a daily session that leaves nothing in the ground
-    // blooms — the day's own heatmap plant, large, under drifting petals.
+    // Today's plot: a daily session that meets the day's goal blooms — the
+    // day's own heatmap plant, large, under drifting petals. Two levels: the
+    // goal met with cards still waiting ("goal in bloom", the owner's ask:
+    // success counts at the goal), and nothing left at all ("full bloom" —
+    // with no goal set, the only level). A session that ran past midnight
+    // claims neither: its goal belonged to yesterday.
     const hero = $("bloomHero"), note = $("doneNote");
     hero.style.display = "none";
     hero.querySelectorAll(".petal").forEach(el => el.remove());
     const todayN = dayNumber(now), plant = plantOfDay(todayN);
     const lines = [];
-    if (sessionMode === "daily") {
+    const sameDay = goalSession && goalSession.day === todayKey(now);
+    if (sessionMode === "daily" && sameDay) {
       const p = todaysPlot(now);
-      if (p.total > 0 && p.left === 0) {
+      if (p.met) {
+        const planted = `${p.planted.length} card${p.planted.length === 1 ? "" : "s"} put to bed`;
         hero.style.display = "";
         $("doneHero").textContent = plant;
-        $("doneBig").textContent = "Today's plot is in full bloom";
         $("doneBig").classList.add("bloom");
-        lines.push(`${p.planted.length} card${p.planted.length === 1 ? "" : "s"} put to bed · ` +
-          "nothing left in the ground · tomorrow brings a fresh bed");
+        if (p.clear) {
+          $("doneBig").textContent = "Today's plot is in full bloom";
+          lines.push(`${planted} · nothing left in the ground · tomorrow brings a fresh bed`);
+        } else {
+          const goalMs = p.budgetMs;
+          const moreDue = p.more.filter(c => cardStates[c.id]).length;
+          $("doneBig").textContent = goalSession.bonus ? "Bonus round done 🌼" : "Today's goal is in bloom";
+          lines.push(`${planted} · ≈ ${fmtDur(p.spentMs)} of reviewing` +
+            (p.spentMs - goalMs >= 60000 ? ` — ≈ ${fmtDur(p.spentMs - goalMs)} past your ${fmtDur(goalMs)} goal 🌟` : ""));
+          lines.push(moreDue
+            ? `${moreDue} more due can wait — FSRS accounts for the extra days when they come up`
+            : `${p.more.length} new card${p.more.length === 1 ? "" : "s"} can wait for another day`);
+          const pick = GOAL.nextChunk(p);
+          keepBtn.textContent = `🌱 Keep going · ${pick.length} more ≈ ${fmtDur(pickMs(p, pick))}`;
+          keepBtn.disabled = false;
+          keepBtn.style.display = "";
+        }
         ["🌸", "🍃", "🌼", "🌸", "🌷", "🍃", "🌸", "🌼"].forEach((petal, i) => {
           const s = document.createElement("span");
           s.className = "petal";
@@ -2660,6 +2886,14 @@
   }
   $("startBtn").addEventListener("click", e =>
     startAfterSync(e.currentTarget, "daily", dailyQueue));
+  // past a met goal: the next helping (dailyQueue serves it once the goal is
+  // empty). If the rebase shows nothing left to serve (another device
+  // finished the pile), don't leave a dead button behind.
+  $("keepGoingBtn").addEventListener("click", async e => {
+    const btn = e.currentTarget;
+    await startAfterSync(btn, "daily", dailyQueue);
+    if (!sessionStarting && screens.done.classList.contains("active")) btn.style.display = "none";
+  });
   $("leechBtn").addEventListener("click", e =>
     startAfterSync(e.currentTarget, "leeches", () => leechCards(Date.now()).slice(0, LEECH_BATCH)));
   // Learn (today's new cards) runs as a browse session: writes nothing, so
@@ -2766,6 +3000,7 @@
   function refreshHome() {
     buildDeckList();
     syncCapButtons();
+    syncGoalButtons();
     syncSlotButtons();
     refreshStats();
   }
@@ -2802,33 +3037,43 @@
     const { merged, localNewer } = mergeCardStates(cardStates, cloudState.cards || {});
     cardStates = merged;
     if (cloud) for (const id of localNewer) cloud.pushCard(id, cardStates[id]);
+    let healGoal = false;
     if (cloudState.settings) {
       // a fetch that outlived the session-start timeout lands mid-review:
       // take the cloud's picks, but keep the slot the user is looking at
       const keepSlot = gradedSessionActive() ? settings.slot : null;
+      // a settings doc written before the daily goal existed has no field
+      // for it — absent isn't "off", so keep this device's goal (and heal
+      // the cloud doc below)
+      const keepGoal = "minutesPerDay" in cloudState.settings ? null : settings.minutesPerDay;
       settings = normalizeSettings(cloudState.settings);
       if (keepSlot !== null && keepSlot !== settings.slot) {
         settings.slot = keepSlot;
         settings.groups = settings.slots[keepSlot];
       }
+      if (keepGoal) { settings.minutesPerDay = keepGoal; healGoal = true; }
     }
     // Merge (not replace) log chunks: a chunk push overwrites the whole month
     // doc, so entries only one side has must survive in the union — and when
     // the union holds entries the cloud copy lacks, push it back to heal it.
     const cloudLog = cloudState.log || {};
+    let logGrew = false;
     for (const [month, entries] of Object.entries(cloudLog)) {
-      const merged = mergeLogChunks(entries, store.read("log:" + month, []));
+      const local = store.read("log:" + month, []);
+      const merged = mergeLogChunks(entries, local);
       store.write("log:" + month, merged);
+      if (merged.length > local.length) logGrew = true;
       if (merged.length > entries.length && cloud) cloud.pushLog(month, merged);
     }
     for (const month of localLogMonths()) {
       if (!cloudLog[month] && cloud) cloud.pushLog(month, store.read("log:" + month, []));
     }
+    if (logGrew) logRev++;       // new entries may change the goal's yardstick
     cloudHydrated = true;        // cloud is the base now — pushes are safe
     lastHydrate = Date.now();
     dirtyLogMonths.clear();      // the merge above already pushed what the cloud lacked
     // cloud may still hold pre-split group keys — rewrite and push back once
-    if (migrateAllSlots()) cloudPushSettings();
+    if (migrateAllSlots() || healGoal) cloudPushSettings();
     rebuildDaysFromLog();        // "reviews today", streak, heatmap, new-card quota
     saveCards();
     saveSettings();
@@ -2966,6 +3211,7 @@
     days = anonDays;
     saveCards(); saveSettings(); saveDays();
     for (const [month, entries] of Object.entries(anonLog)) store.write("log:" + month, entries);
+    logRev++;
     store.write("importOffered", true);
     cloudHydrated = true;         // the import IS the hydration (cloud was empty)
     lastHydrate = Date.now();

@@ -8,7 +8,7 @@
 //
 // Data model (guarded by /firestore.rules — each user owns users/{uid}/**):
 //   users/{uid}/cards/{docId}     — one doc per card: the FSRS state
-//   users/{uid}/settings/app      — { slot, slots: [g0, g1, g2], groups, newPerDay }
+//   users/{uid}/settings/app      — { slot, slots: [g0, g1, g2], groups, newPerDay, minutesPerDay }
 //                                   (groups mirrors slots[slot]; see index.html)
 //   users/{uid}/log/{YYYY-MM}     — { entries: ["ts,grade,prevIvl,cardId[,ms]", …] }
 //                                   one doc per month of review-log entries
