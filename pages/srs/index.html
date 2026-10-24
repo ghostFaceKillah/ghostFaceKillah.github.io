@@ -346,9 +346,7 @@
   .grade:active { transform: translateY(2px); box-shadow: 0 2px 0 rgba(0,0,0,.12); }
   .grade small { display: block; font-weight: 700; font-size: .75rem; opacity: .85; margin-top: 2px; }
   .g-again { background: var(--red); }
-  .g-hard { background: var(--amber); }
   .g-good { background: var(--green); }
-  .g-easy { background: var(--sky); }
 
   /* learn-mode nav — sits in the same slot as the grade buttons */
   #browseNav .btn { flex: 1; width: auto; margin-top: 0; }
@@ -829,9 +827,7 @@
 
     <div class="grades" id="grades">
       <button class="grade g-again" data-grade="1">Again<small id="ivl1"></small></button>
-      <button class="grade g-hard" data-grade="2">Hard<small id="ivl2"></small></button>
       <button class="grade g-good" data-grade="3">Good<small id="ivl3"></small></button>
-      <button class="grade g-easy" data-grade="4">Easy<small id="ivl4"></small></button>
     </div>
 
     <div class="grades" id="browseNav">
@@ -893,8 +889,8 @@
           high difficulty; a lapse (Again) collapses S to a fraction of its
           value.</p>
         <p><b>🧗 difficulty D</b> — a per‑card parameter on a 1–10 scale.
-          Again/Hard raise it, Easy lowers it, with mean reversion toward the
-          Easy baseline. Stability gains scale with (11&nbsp;−&nbsp;D), so a
+          Again raises it; Good leaves it nearly where it is (a slow mean
+          reversion toward the easiest baseline). Stability gains scale with (11&nbsp;−&nbsp;D), so a
           D&nbsp;=&nbsp;10 card's interval barely grows per review while a
           D&nbsp;=&nbsp;1 card's grows ~10× faster; D&nbsp;≥&nbsp;8.5 is one
           arm of the leech 🧛 flag.</p>
@@ -2705,7 +2701,7 @@
     // interval previews on the grade buttons (browse has no grades)
     if (sessionMode !== "browse") {
       const prev = FSRS.previewIntervals(cardStates[current.id] || null, Date.now());
-      for (const g of [1, 2, 3, 4]) $("ivl" + g).textContent = fmtDelay(prev[g]);
+      for (const g of [FSRS.AGAIN, FSRS.GOOD]) $("ivl" + g).textContent = fmtDelay(prev[g]);
     }
 
     // learn mode is a read-through: both sides open at once, no reveal step
@@ -2964,7 +2960,10 @@
       else if (e.key === "ArrowRight") revealed ? browseNext() : reveal();
       return;
     }
-    if (revealed && e.key >= "1" && e.key <= "4") grade(Number(e.key));
+    // two buttons, keys by position (1 = Again, 2 = Good); 3 still means
+    // Good, where it sat when the row had four buttons
+    const g = { "1": FSRS.AGAIN, "2": FSRS.GOOD, "3": FSRS.GOOD }[e.key];
+    if (revealed && g) grade(g);
   });
 
   // ----- Cloud sync (Firebase — optional, see cloud.js) -------------------------------
