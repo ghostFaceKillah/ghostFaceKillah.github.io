@@ -12,14 +12,17 @@
 //                                   (groups mirrors slots[slot]; see index.html)
 //   users/{uid}/log/{YYYY-MM}     — { entries: ["ts,grade,prevIvl,cardId[,ms]", …] }
 //                                   one doc per month of review-log entries
+//   users/{uid}/garden/blooms     — { days: ["YYYY-MM-DD", …] } days whose plot
+//                                   bloomed (gold in the heatmap); grow-only,
+//                                   written with arrayUnion
 //
 // Card IDs contain "/" (e.g. "words/L1D1/你"), which Firestore forbids in
 // document IDs, so doc IDs store them with "/" swapped for "|". The mapping
 // must never change: review history is keyed by it.
 //
 // Sync contract with the app (index.html):
-//   - reviews NEVER block on the network: pushCard/pushSettings are
-//     fire-and-forget; Firestore's IndexedDB persistence queues writes
+//   - reviews NEVER block on the network: pushCard/pushSettings/pushBlooms
+//     are fire-and-forget; Firestore's IndexedDB persistence queues writes
 //     offline and replays them when connectivity returns.
 //   - fetchAll() is called once per sign-in to hydrate local state.
 //   - importAll() is only called from the explicit one-time import flow.
@@ -43,7 +46,7 @@ async function boot() {
   } = authMod;
   const {
     initializeFirestore, persistentLocalCache,
-    doc, setDoc, getDoc, getDocs, collection, writeBatch,
+    doc, setDoc, getDoc, getDocs, collection, writeBatch, arrayUnion,
   } = fsMod;
 
   const app = initializeApp(config);
@@ -62,6 +65,7 @@ async function boot() {
   const cardDoc = id => doc(db, "users", user.uid, "cards", encodeId(id));
   const settingsDoc = () => doc(db, "users", user.uid, "settings", "app");
   const logDoc = month => doc(db, "users", user.uid, "log", month);
+  const bloomsDoc = () => doc(db, "users", user.uid, "garden", "blooms");
 
   window.SRS_CLOUD = {
     get user() { return user; },
@@ -94,24 +98,36 @@ async function boot() {
       setDoc(logDoc(month), { entries }).catch(e => console.warn("srs sync: log push failed", e));
     },
 
+    // Days whose plot bloomed — a grow-only set. arrayUnion commutes, so
+    // writes queued offline on several devices land in any order and no
+    // day is lost: unlike settings and log chunks, no hydration gate needed.
+    pushBlooms(days) {
+      if (!user || !days.length) return;
+      setDoc(bloomsDoc(), { days: arrayUnion(...days) }, { merge: true })
+        .catch(e => console.warn("srs sync: blooms push failed", e));
+    },
+
     // One-shot hydration after sign-in →
-    // { cards: {cardId: state}, settings|null, log: {YYYY-MM: entries} }.
+    // { cards: {cardId: state}, settings|null, log: {YYYY-MM: entries},
+    //   blooms: ["YYYY-MM-DD", …] }.
     async fetchAll() {
       if (!user) return null;
-      const [cardsSnap, settingsSnap, logSnap] = await Promise.all([
+      const [cardsSnap, settingsSnap, logSnap, bloomsSnap] = await Promise.all([
         getDocs(collection(db, "users", user.uid, "cards")),
         getDoc(settingsDoc()),
         getDocs(collection(db, "users", user.uid, "log")),
+        getDoc(bloomsDoc()),
       ]);
       const cards = {};
       cardsSnap.forEach(d => { cards[decodeId(d.id)] = d.data(); });
       const log = {};
       logSnap.forEach(d => { log[d.id] = d.data().entries || []; });
-      return { cards, settings: settingsSnap.exists() ? settingsSnap.data() : null, log };
+      const blooms = bloomsSnap.exists() ? (bloomsSnap.data().days || []) : [];
+      return { cards, settings: settingsSnap.exists() ? settingsSnap.data() : null, log, blooms };
     },
 
     // Explicit guest-progress import: batched writes (Firestore caps at 500/batch).
-    async importAll(cards, settings, log) {
+    async importAll(cards, settings, log, blooms) {
       if (!user) return;
       const ids = Object.keys(cards);
       for (let i = 0; i < ids.length; i += 450) {
@@ -122,6 +138,7 @@ async function boot() {
           for (const [month, entries] of Object.entries(log || {})) {
             batch.set(logDoc(month), { entries });
           }
+          if (blooms && blooms.length) batch.set(bloomsDoc(), { days: arrayUnion(...blooms) }, { merge: true });
         }
         await batch.commit();
       }

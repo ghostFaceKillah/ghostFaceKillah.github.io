@@ -134,7 +134,8 @@ Decided 2026-07-11. This doc is the source of truth for sessions continuing the 
   calendar day (`scatter()` — wild-looking but stable across visits; different
   salt for ground); the month-hue cycle (`--m1..--m5`) is gone. Magnitude never rides
   on color, stages carry emoji + labeled counts, weeks carry axis labels, and
-  every mark has a tooltip + aria-label.
+  every mark has a tooltip + aria-label. Since 2026-11-24 every day also sits
+  on a clod of soil that says how the day went (**Garden soil**, below).
 - **Today's plot** (decided 2026-09-03; the owner asked for a reward for
   *completing* the day's queue, on top of the garden's reward for showing
   up, picked from five mocked-up ideas): a garden bed on the home screen,
@@ -149,7 +150,9 @@ Decided 2026-07-11. This doc is the source of truth for sessions continuing the 
   plant, large, under drifting petals (none under
   `prefers-reduced-motion`), with "35 cards put to bed · nothing left in
   the ground · tomorrow brings a fresh bed". Reward in the moment, nothing
-  to lose: **no new state is persisted** — `todaysPlot()` reads the day's
+  to lose: **no new state is persisted** (one later exception: the fact
+  that a day bloomed is recorded for the heatmap's gold, see **Garden
+  soil**) — `todaysPlot()` reads the day's
   log entries (first grade per card tells whether it was new) and the
   current card states, so the bed agrees across devices as soon as the
   log has synced. Consequences of that choice: focus/leech reviews of
@@ -322,6 +325,67 @@ Decided 2026-07-11. This doc is the source of truth for sessions continuing the 
     the desk charts and the yardstick measure time the same way);
     `goal.test.js` (node property tests of the invariants);
     `goal.harness.js` (Playwright, the screens end to end).
+- **Garden soil** (decided 2026-11-24; the owner asked for ground under the
+  heatmap emoji: brown or greyish and randomized, "reminiscent of barren
+  earth", on rest days; greener on days with some reviews; "vibrant
+  beautiful golden green" on days where everything got done, with the
+  overall vibe mattering most). Three prototypes were mocked up in both
+  themes (A pastel tiles, B tilled soil, C one blurred meadow seen from
+  above); the owner picked **B**.
+  - **Look:** every heatmap day sits on a hand-shaped clod (a `::before`
+    with a hashed eight-value border-radius), its emoji on top. Rest day:
+    bare earth from five weighted families (loam, sand, clay, ash, stone),
+    two dark grains and a light one, a dry crack on about 1 day in 5, the
+    ground emoji faded (.6) but not its clod. Practiced: moss with lighter
+    tufts and a deep grain, deepening with the plant's size step k (a
+    redundant cue; size still carries the review count). Bloomed: a sunlit
+    golden dome (highlight → gold → lime → leaf) with a soft glow, and a
+    glint that sweeps across it every 9 s, staggered per day — none under
+    `prefers-reduced-motion`. Gold differs from moss in lightness as well as
+    hue, and the tooltip / aria-label add "· plot in bloom 🌻". The legend
+    is built from the same clods: four moss sizes, a rest day, a bloomed day.
+  - **Random but never reshuffled:** `soilStyle(kind, dayN, k)` hashes all
+    of it from the date with the plants' `dayHash` (inputs `dayN·64 + salt`,
+    so no two draws share a hash). `scatter()` now goes through `dayHash`
+    too; the harness checks 4,000 days still grow the same plants.
+  - **Themes without a re-render:** `soilStyle` emits theme-free numbers as
+    custom properties (hue, chroma, lightness jitter, k, grain spots, crack
+    angle/alpha, radius, glint delay); the `.clod` rules mix them in
+    `oklch()` with theme tokens (`--earth-l`, `--moss-l/-dl/-c/-dc`,
+    `--gold-1..4`, `--gold-glow`, `--plant-shadow`), so the theme toggle
+    recolors the same nodes. Math inside `oklch()` is guarded by
+    `@supports`: an engine without it gets flat pastel clods
+    (`--peach-soft` earth, `--mint-soft` moss) rather than none; one
+    without `oklch()` at all shows the emoji alone, as before. Only
+    verified in Chromium (the harness simulates the fallback).
+  - **"Everything done" = the day's plot bloomed**: `todaysPlot(now).met`
+    (the goal met; with no goal, nothing left), the same rule that turns
+    the home bed golden. It is the one garden fact that can't be derived
+    later (the plan depended on that day's decks, goal and card states),
+    so it is recorded: `noteBloom` runs in `refreshStats` (boot, session
+    end, trips home, every cloud merge) and when the tab is hidden or
+    closed, adding today to `blooms` (localStorage, sorted "YYYY-MM-DD"
+    keys). Sticky: a day that bloomed stays gold if the bed grows later
+    (more decks picked, a higher cap). A day with no reviews stays bare
+    even if its bloom syncs in before its log.
+  - **Sync:** `users/{uid}/garden/blooms` = `{ days: [...] }`, written with
+    `arrayUnion` (`setDoc` with `merge`): commutative and idempotent, so
+    no hydration gate (the rule OFFLINE-SYNC-DESIGN.md proposes for every
+    write). `fetchAll` returns `blooms`; `adoptCloudState` takes the union
+    and pushes back the days the cloud lacks; a cloud answer without the
+    field (an older cloud.js) keeps local as is. A plot finished on another
+    device turns gold here as soon as its cards and log merge, before its
+    own push lands. The guest import carries `blooms`. Covered by the
+    existing per-UID rules.
+  - **No backfill:** days before this release stay green. The log could
+    estimate them ("nothing that was due was left for a later day") but
+    not that day's decks or goal, so the record starts now (as proposed
+    with the prototypes).
+  - Code: `EARTH`, `soilStyle` and the `.clod` CSS in index.html;
+    `noteBloom`; `pushBlooms` in cloud.js; `garden.harness.js` (Playwright:
+    soil kinds and colors in both themes, reduced motion, recording,
+    stickiness, tab close, cloud union and push-back, another device's
+    bloom, guest import).
 - **Review log & retention** (decided 2026-07-11): every grade appends
   `"ts,grade,prevIvl,cardId"` to a month-chunked log (`log:YYYY-MM` in
   localStorage; `users/{uid}/log/{YYYY-MM}` docs in Firestore — covered by the
@@ -485,8 +549,10 @@ Decided 2026-07-11. This doc is the source of truth for sessions continuing the 
   localStorage cache namespaced `srs:{uid}:` / `srs:anon:`.
 - **Persistence:** Firebase Firestore, localStorage as write-through cache
   (reviews never block on network; Firestore offline persistence enabled).
-  Data model: `users/{uid}/settings` (enabled decks, daily cap) and
-  `users/{uid}/cards/{cardId}` (FSRS state) — docs created lazily on first review.
+  Data model: `users/{uid}/settings` (enabled decks, daily cap),
+  `users/{uid}/cards/{cardId}` (FSRS state), `users/{uid}/log/{YYYY-MM}`
+  (review log) and `users/{uid}/garden/blooms` (days whose plot bloomed) —
+  docs created lazily on first write.
 
 ## Data sources
 

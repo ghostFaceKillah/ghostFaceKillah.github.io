@@ -36,6 +36,19 @@
     --w1: var(--red); --w2: var(--amber); --w3: var(--green); --w4: var(--sky);
     --ret: var(--green);                                         /* retention 🧠 */
     --soil: rgba(0,0,0,.06);                                     /* today's plot: unplanted cell */
+    /* garden soil under the heatmap days (DESIGN.md, "Garden soil"): bare
+       earth on a rest day, moss on a practiced one (lightness and chroma
+       step with the plant's size k), a golden dome when the day's plot
+       bloomed. Per-day hue and jitter come from soilStyle(). */
+    --earth-l: .72;
+    --moss-l: .80; --moss-dl: -.03;
+    --moss-c: .08; --moss-dc: .025;
+    --gold-1: oklch(.955 .085 100);
+    --gold-2: oklch(.91 .17 104);
+    --gold-3: oklch(.82 .19 124);
+    --gold-4: oklch(.74 .18 136);
+    --gold-glow: oklch(.9 .17 104 / .7);
+    --plant-shadow: oklch(.25 .03 60 / .45);
     color-scheme: light;
   }
   @media (prefers-color-scheme: dark) {
@@ -58,6 +71,15 @@
       --red: #ff9a7d;
       --track: #3a4a40;
       --soil: rgba(0,0,0,.2);
+      --earth-l: .37;
+      --moss-l: .43; --moss-dl: .03;
+      --moss-c: .07; --moss-dc: .02;
+      --gold-1: oklch(.95 .085 100);
+      --gold-2: oklch(.86 .17 104);
+      --gold-3: oklch(.74 .18 126);
+      --gold-4: oklch(.64 .16 138);
+      --gold-glow: oklch(.85 .17 104 / .5);
+      --plant-shadow: oklch(.1 .02 60 / .6);
       color-scheme: dark;
     }
   }
@@ -80,6 +102,15 @@
     --red: #ff9a7d;
     --track: #3a4a40;
     --soil: rgba(0,0,0,.2);
+    --earth-l: .37;
+    --moss-l: .43; --moss-dl: .03;
+    --moss-c: .07; --moss-dc: .02;
+    --gold-1: oklch(.95 .085 100);
+    --gold-2: oklch(.86 .17 104);
+    --gold-3: oklch(.74 .18 126);
+    --gold-4: oklch(.64 .16 138);
+    --gold-glow: oklch(.85 .17 104 / .5);
+    --plant-shadow: oklch(.1 .02 60 / .6);
     color-scheme: dark;
   }
 
@@ -419,11 +450,64 @@
     grid-template-rows: repeat(7, 15px); grid-auto-columns: 15px; gap: 2px;
     width: max-content; margin: 0 auto;
   }
-  /* a practiced day grows a plant (size = reviews); a bare day is ground */
-  .heat-grid i, .heat-legend i.day {
-    place-self: center; font-style: normal; line-height: 1;
+  /* a practiced day grows a plant (size = reviews); a bare day is ground.
+     Each one sits on a clod of soil (DESIGN.md, "Garden soil"): soilStyle()
+     hashes the clod's shape, earth, grains and glint timing from the date
+     into theme-free custom properties, and the rules below turn them into
+     colors with the theme tokens, so a theme switch needs no re-render. */
+  .clod {
+    position: relative; isolation: isolate;
+    display: grid; place-items: center; width: 15px; height: 15px;
+    font-style: normal; line-height: 1;
   }
-  .heat-grid i.bare { font-size: 9px; opacity: .55; }
+  .clod::before, .clod.met::after {
+    content: ""; position: absolute; inset: -.5px; z-index: -1;
+    border-radius: var(--br); pointer-events: none;
+  }
+  .clod.bare { font-size: 9px; }
+  .clod.bare span { opacity: .6; }
+  .clod.grown span, .clod.met span { filter: drop-shadow(0 .7px .5px var(--plant-shadow)); }
+  /* a browser that can't do math inside oklch() gets flat pastel clods
+     instead of none (the guarded rules below replace these) */
+  .clod.bare::before { background: var(--peach-soft); }
+  .clod.grown::before { background: var(--mint-soft); }
+  @supports (color: oklch(calc(.5 + .1) max(0, .1 - .05) calc(120 + 6))) {
+    /* rest day: loam, sand, clay, ash or stone, with grains and the odd crack */
+    .clod.bare::before {
+      --L: calc(var(--earth-l) + var(--dl));
+      background:
+        radial-gradient(circle at var(--g1), oklch(calc(var(--L) - .14) calc(var(--c) + .01) var(--h)) 0 1.1px, transparent 1.6px),
+        radial-gradient(circle at var(--g2), oklch(calc(var(--L) - .14) calc(var(--c) + .01) var(--h)) 0 .8px, transparent 1.3px),
+        radial-gradient(circle at var(--g3), oklch(calc(var(--L) + .1) max(0, var(--c) - .015) var(--h)) 0 .9px, transparent 1.4px),
+        linear-gradient(var(--ca), transparent 47%, oklch(calc(var(--L) - .13) var(--c) var(--h) / var(--cr)) 48% 52%, transparent 53%),
+        radial-gradient(circle at 34% 30%, oklch(calc(var(--L) + .05) var(--c) var(--h)), oklch(var(--L) var(--c) var(--h)) 55%,
+          oklch(calc(var(--L) - .06) calc(var(--c) + .005) var(--h)));
+    }
+    /* practiced: tufts of moss, deeper and richer as the plant's size k grows */
+    .clod.grown::before {
+      --L: calc(var(--moss-l) + var(--moss-dl) * var(--k) + var(--dl));
+      --C: calc((var(--moss-c) + var(--moss-dc) * var(--k)) * var(--cm));
+      background:
+        radial-gradient(circle at var(--g1), oklch(calc(var(--L) + .1) calc(var(--C) + .02) calc(var(--h) - 10)) 0 1px, transparent 1.5px),
+        radial-gradient(circle at var(--g2), oklch(calc(var(--L) + .1) calc(var(--C) + .02) calc(var(--h) - 10)) 0 .8px, transparent 1.3px),
+        radial-gradient(circle at var(--g3), oklch(calc(var(--L) - .11) calc(var(--C) * .7) calc(var(--h) + 6)) 0 .9px, transparent 1.4px),
+        radial-gradient(circle at 34% 30%, oklch(calc(var(--L) + .05) var(--C) var(--h)), oklch(var(--L) var(--C) var(--h)) 55%,
+          oklch(calc(var(--L) - .06) calc(var(--C) + .005) var(--h)));
+    }
+  }
+  /* the day's plot bloomed: a sunlit golden dome that catches a slow glint */
+  .clod.met::before {
+    background: radial-gradient(circle at 32% 28%, var(--gold-1), var(--gold-2) 32%, var(--gold-3) 72%, var(--gold-4));
+    box-shadow: 0 0 5px var(--gold-glow);
+  }
+  .clod.met::after {
+    background: linear-gradient(110deg, transparent 42%, oklch(1 0 0 / .7) 50%, transparent 58%) no-repeat;
+    background-size: 300% 100%; background-position: 120% 0;
+    animation: glint 9s ease-in-out infinite;
+    animation-delay: var(--d, 0s);
+  }
+  @keyframes glint { 0%, 86% { background-position: 120% 0; } 100% { background-position: -20% 0; } }
+  @media (prefers-reduced-motion: reduce) { .clod.met::after { animation: none; opacity: 0; } }
   .s1 { font-size: 7px; }
   .s2 { font-size: 9.5px; }
   .s3 { font-size: 12px; }
@@ -436,9 +520,10 @@
   .w3 { background: var(--w3) !important; }
   .w4 { background: var(--w4) !important; }
   .heat-legend {
-    display: flex; align-items: center; justify-content: flex-end; gap: 4px;
+    display: flex; align-items: center; justify-content: flex-end; flex-wrap: wrap; gap: 6px 12px;
     margin-top: 10px; font-size: .72rem; color: var(--muted); font-weight: 700;
   }
+  .heat-legend > span { display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; }
   .heat-legend i { flex: none; }
 
   .garden-bar { display: flex; gap: 2px; height: 24px; border-radius: 999px; overflow: hidden; }
@@ -856,9 +941,7 @@
         <div class="heat-months" id="heatMonths"></div>
         <div class="heat-grid" id="heatGrid"></div>
       </div>
-      <div class="heat-legend">fewer
-        <i class="day s1">🌱</i><i class="day s2">🌿</i><i class="day s3">🌷</i><i class="day s4">🌻</i>
-      more · 🪨 rest day</div>
+      <div class="heat-legend" id="heatLegend"></div>
       <div class="btn-row">
         <button class="btn ghost" id="guideBtn">📔 Field guide<small id="guideCount"></small></button>
       </div>
@@ -1148,11 +1231,12 @@
     return changed;
   }
 
-  let cardStates, settings, days;
+  let cardStates, settings, days, blooms;
   function loadState() {
     cardStates = store.read("cards", {});             // cardId → FSRS state
     settings = normalizeSettings(store.read("settings", {}));
     days = store.read("days", {});                    // "YYYY-MM-DD" → {introduced, reviews}
+    blooms = new Set(store.read("blooms", []));       // days whose plot bloomed (noteBloom)
     if (migrateAllSlots()) store.write("settings", settings);
   }
   loadState();
@@ -1160,6 +1244,7 @@
   const saveCards = () => store.write("cards", cardStates);
   const saveSettings = () => store.write("settings", settings);
   const saveDays = () => store.write("days", days);
+  const saveBlooms = () => store.write("blooms", [...blooms].sort());
   // Push settings to Firestore too — called from user actions only,
   // so a cloud fetch never echoes straight back up.
   const cloudPushSettings = () => { if (cloud && cloudHydrated) cloud.pushSettings(settings); };
@@ -1529,6 +1614,7 @@
   function refreshStats() {
     const now = Date.now();
     const p = todaysPlot(now);
+    noteBloom(now, p);   // session ends, trips home, boot and cloud merges all pass here
     const goalOn = !!settings.minutesPerDay;
     const goalNew = p.goal.filter(c => !cardStates[c.id]).length;
     const moreDue = p.more.filter(c => cardStates[c.id]).length;
@@ -1620,6 +1706,19 @@
       cutoff,
       budgetMs,
     });
+  }
+  // A day whose plot bloomed (the goal met; with no goal, nothing left)
+  // turns its heatmap clod gold. Unlike the rest of the stats screen this
+  // can't be worked out later — the plan depended on that day's decks, goal
+  // and card states — so it's written down when it's first seen, and it
+  // sticks: a met goal stays met if the bed grows afterwards (more decks
+  // picked, a higher cap). Synced as a union, like the log (pushBlooms).
+  function noteBloom(now, p) {
+    const key = todayKey(now);
+    if (!p.met || blooms.has(key)) return;
+    blooms.add(key);
+    saveBlooms();
+    if (cloud && cloud.pushBlooms) cloud.pushBlooms([key]);
   }
   // The bed flowers when today's goal is met — hash-picked blooms per cell
   // (BLOOMS, defined with the garden pools), the day's own heatmap plant in
@@ -1897,12 +1996,60 @@
   // but never reshuffles between visits. The xor-shift rounds matter: a
   // bare multiply keeps the hash's low bits periodic, and `% arr.length`
   // reads exactly those bits, which made the ground repeat on a 4-day cycle.
-  const scatter = (arr, dayN, salt) => {
+  const dayHash = (dayN, salt) => {
     let h = Math.imul(dayN ^ salt, 2654435761);
     h = Math.imul(h ^ (h >>> 16), 2246822507);
     h = Math.imul(h ^ (h >>> 13), 3266489909);
-    return arr[((h ^ (h >>> 16)) >>> 0) % arr.length];
+    return (h ^ (h >>> 16)) >>> 0;
   };
+  const scatter = (arr, dayN, salt) => arr[dayHash(dayN, salt) % arr.length];
+
+  // Garden soil (DESIGN.md): the clod under each heatmap day. Everything
+  // random about it — shape, earth family, grains, the odd crack, the moss
+  // tint, when the gold glints — is hashed from the day like its plant, so
+  // it never reshuffles. Returned as theme-free custom properties; the
+  // .clod CSS mixes them with the theme's --earth/--moss/--gold tokens.
+  // Inputs are dayN·64 + salt, so no two (day, salt) draws share a hash.
+  const EARTH = [   // rest-day earth: [weight, hue, chroma, lightness offset]
+    [4, 62, .045, 0],      // loam
+    [3, 76, .05, .035],    // sand
+    [3, 48, .05, -.02],    // clay
+    [2, 82, .014, .01],    // ash
+    [2, 235, .011, 0],     // stone
+  ];
+  const EARTH_W = EARTH.reduce((s, e) => s + e[0], 0);
+  // kind: "bare" (rest day), "grown" (practiced) or "met" (the plot bloomed);
+  // k = the plant's size step 1–4 (moss deepens with it)
+  function soilStyle(kind, dayN, k) {
+    const r = salt => dayHash(dayN * 64 + salt, 0x5011) / 4294967296;
+    const pm = salt => 2 * r(salt) - 1;
+    const at = salt => `${Math.round(20 + 60 * r(salt))}% ${Math.round(20 + 60 * r(salt + 1))}%`;
+    const br = [];
+    for (let i = 0; i < 8; i++) br.push(Math.round(36 + 28 * r(10 + i)) + "%");
+    let css = `--br:${br.slice(0, 4).join(" ")} / ${br.slice(4).join(" ")};` +
+      `--g1:${at(20)};--g2:${at(22)};--g3:${at(24)}`;
+    if (kind === "bare") {
+      let x = r(1) * EARTH_W, f = EARTH[0];
+      for (const e of EARTH) if ((x -= e[0]) < 0) { f = e; break; }
+      css += `;--h:${(f[1] + 6 * pm(2)).toFixed(1)};--c:${(f[2] * (.8 + .4 * r(3))).toFixed(4)}` +
+        `;--dl:${(f[3] + .025 * pm(4)).toFixed(3)};--ca:${Math.round(180 * r(5))}deg;--cr:${r(6) < .2 ? .7 : 0}`;
+    } else if (kind === "grown") {
+      css += `;--k:${k};--h:${(133 + 10 * pm(2)).toFixed(1)};--cm:${(.9 + .2 * r(3)).toFixed(3)};--dl:${(.02 * pm(4)).toFixed(3)}`;
+    } else {
+      css += `;--d:${(-9 * r(7)).toFixed(2)}s`;   // stagger the glints
+    }
+    return css;
+  }
+  // The legend under the heatmap: the same clods, on fixed sample days.
+  {
+    const clod = (kind, k, n, plant) =>
+      `<i class="clod ${kind}${k ? " s" + k : ""}" style="${soilStyle(kind, n, k)}"><span>${plant}</span></i>`;
+    $("heatLegend").innerHTML =
+      `<span>fewer ${clod("grown", 1, 1, "🌱")}${clod("grown", 2, 2, "🌿")}` +
+        `${clod("grown", 3, 3, "🌷")}${clod("grown", 4, 4, "🌻")} more</span>` +
+      `<span>${clod("bare", 0, 5, "🪨")} rest day</span>` +
+      `<span>${clod("met", 3, 6, "🌼")} plot in bloom</span>`;
+  }
 
   function renderStats() {
     const now = Date.now();
@@ -1952,19 +2099,22 @@
         if (day > today) {
           cell.style.visibility = "hidden";
         } else {
-          const n = (days[todayKey(day.getTime())] || {}).reviews || 0;
+          const key = todayKey(day.getTime());
+          const n = (days[key] || {}).reviews || 0;
           const dayN = dayNumber(day.getTime());
-          if (n > 0) {
-            const size = Math.max(1, Math.ceil(4 * n / max));
-            cell.className = `day s${size}`;
-            cell.textContent = plantOfDay(dayN);
-          } else {
-            cell.className = "bare";
-            cell.textContent = groundOfDay(dayN);
-          }
-          const r = ret[todayKey(day.getTime())];
+          // the soil says how the day went: bare earth (rest), moss
+          // (practiced), gold (the day's plot bloomed — see noteBloom)
+          const kind = n === 0 ? "bare" : blooms.has(key) ? "met" : "grown";
+          const size = n > 0 ? Math.max(1, Math.ceil(4 * n / max)) : 0;
+          cell.className = n > 0 ? `clod day ${kind} s${size}` : "clod bare";
+          cell.style.cssText = soilStyle(kind, dayN, size);
+          const plant = document.createElement("span");
+          plant.textContent = n > 0 ? plantOfDay(dayN) : groundOfDay(dayN);
+          cell.appendChild(plant);
+          const r = ret[key];
           const tipText = `${fmtDay(day)} — ${n} review${n === 1 ? "" : "s"}` +
-            (r && r.total ? ` · ${Math.round(100 * r.pass / r.total)}% remembered` : "");
+            (r && r.total ? ` · ${Math.round(100 * r.pass / r.total)}% remembered` : "") +
+            (kind === "met" ? " · plot in bloom 🌻" : "");
           cell.dataset.tip = tipText;
           cell.setAttribute("aria-label", tipText);
         }
@@ -3068,6 +3218,14 @@
       if (!cloudLog[month] && cloud) cloud.pushLog(month, store.read("log:" + month, []));
     }
     if (logGrew) logRev++;       // new entries may change the goal's yardstick
+    // Bloomed days are a union too: a plot that bloomed on any device keeps
+    // its clod gold everywhere. Days the cloud lacks go back up — arrayUnion,
+    // so it doesn't matter which device reconnects first.
+    const cloudBlooms = new Set((cloudState.blooms || []).filter(d => typeof d === "string"));
+    const bloomsUp = [...blooms].filter(d => !cloudBlooms.has(d));
+    for (const d of cloudBlooms) blooms.add(d);
+    saveBlooms();
+    if (bloomsUp.length && cloud && cloud.pushBlooms) cloud.pushBlooms(bloomsUp);
     cloudHydrated = true;        // cloud is the base now — pushes are safe
     lastHydrate = Date.now();
     dirtyLogMonths.clear();      // the merge above already pushed what the cloud lacked
@@ -3138,10 +3296,17 @@
   window.addEventListener("focus", refreshOnReturn);
   // Leaving the tab (or closing it) sends any log entries still waiting on
   // the debounce; Firestore's persistence carries them if the tab dies.
+  // A plot that bloomed mid-session (a focus round that finished the bed)
+  // is written down too, before the tab can go.
+  const onLeave = () => {
+    flushLogPush();
+    const now = Date.now();
+    noteBloom(now, todaysPlot(now));
+  };
   document.addEventListener("visibilitychange", () => {
-    if (document.visibilityState === "hidden") flushLogPush();
+    if (document.visibilityState === "hidden") onLeave();
   });
-  window.addEventListener("pagehide", flushLogPush);
+  window.addEventListener("pagehide", onLeave);
 
   let handledUid; // undefined until the first auth answer; null = guest
   async function handleUser(user) {
@@ -3208,7 +3373,8 @@
     if (anonSettings) settings = normalizeSettings(anonSettings);
     migrateAllSlots(); // imported guest settings may hold pre-split group keys
     days = anonDays;
-    saveCards(); saveSettings(); saveDays();
+    for (const d of readAnon("blooms", [])) blooms.add(d);
+    saveCards(); saveSettings(); saveDays(); saveBlooms();
     for (const [month, entries] of Object.entries(anonLog)) store.write("log:" + month, entries);
     logRev++;
     store.write("importOffered", true);
@@ -3218,7 +3384,7 @@
     try {
       // push the normalized, migrated settings — the raw guest doc would just
       // be re-normalized and pushed again on the next hydration
-      await cloud.importAll(cards, settings, anonLog);
+      await cloud.importAll(cards, settings, anonLog, [...blooms]);
     } catch (e) {
       console.warn("srs: import upload failed — progress is cached locally and",
         "will not be lost; it re-uploads as cards are reviewed", e);
