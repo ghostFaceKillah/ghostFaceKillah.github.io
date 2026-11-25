@@ -529,12 +529,6 @@
   .w2 { background: var(--w2) !important; }
   .w3 { background: var(--w3) !important; }
   .w4 { background: var(--w4) !important; }
-  .heat-legend {
-    display: flex; align-items: center; justify-content: flex-end; flex-wrap: wrap; gap: 6px 12px;
-    margin-top: 10px; font-size: .72rem; color: var(--muted); font-weight: 700;
-  }
-  .heat-legend > span { display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; }
-  .heat-legend i { flex: none; }
 
   .garden-bar { display: flex; gap: 2px; height: 24px; border-radius: 999px; overflow: hidden; }
   .garden-bar i { min-width: 8px; }
@@ -951,7 +945,6 @@
         <div class="heat-months" id="heatMonths"></div>
         <div class="heat-grid" id="heatGrid"></div>
       </div>
-      <div class="heat-legend" id="heatLegend"></div>
       <div class="btn-row">
         <button class="btn ghost" id="guideBtn">📔 Field guide<small id="guideCount"></small></button>
       </div>
@@ -2049,15 +2042,6 @@
       css += `;--d:${(-9 * r(7)).toFixed(2)}s`;   // stagger the glints
     }
     return css;
-  }
-  // The size key under the heatmap, on moss clods (fixed sample days).
-  // Rest days and blooms go without a key (owner, 2026-11-25).
-  {
-    const clod = (kind, k, n, plant) =>
-      `<i class="clod ${kind}${k ? " s" + k : ""}" style="${soilStyle(kind, n, k)}"><span>${plant}</span></i>`;
-    $("heatLegend").innerHTML =
-      `<span>fewer ${clod("grown", 1, 1, "🌱")}${clod("grown", 2, 2, "🌿")}` +
-        `${clod("grown", 3, 3, "🌷")}${clod("grown", 4, 4, "🌻")} more</span>`;
   }
 
   function renderStats() {

@@ -342,9 +342,9 @@ Decided 2026-07-11. This doc is the source of truth for sessions continuing the 
     golden dome (highlight → gold → lime → leaf) with a soft glow, and a
     glint that sweeps across it every 9 s, staggered per day — none under
     `prefers-reduced-motion`. Gold differs from moss in lightness as well as
-    hue, and the tooltip / aria-label add "· plot in bloom 🌻". The legend
-    keeps only the size key (fewer → more) on moss clods: the owner had
-    the rest-day and bloom keys taken out (2026-11-25).
+    hue, and the tooltip / aria-label add "· plot in bloom 🌻". No legend:
+    the owner had it taken out (2026-11-25); each day's tooltip still
+    gives its review count and whether its plot bloomed.
   - **Size** (2026-11-25, the owner found the 15px days small on a big
     screen): the heatmap panel is a size container (`.heat-panel`) and
     `--cell` = clamp(15px, panel width ÷ 20.6, 22px), so the grid fills
