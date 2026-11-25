@@ -347,7 +347,7 @@ Decided 2026-07-11. This doc is the source of truth for sessions continuing the 
   - **Random but never reshuffled:** `soilStyle(kind, dayN, k)` hashes all
     of it from the date with the plants' `dayHash` (inputs `dayN·64 + salt`,
     so no two draws share a hash). `scatter()` now goes through `dayHash`
-    too; the harness checks 4,000 days still grow the same plants.
+    too, with the same output: every day still grows the same plant.
   - **Themes without a re-render:** `soilStyle` emits theme-free numbers as
     custom properties (hue, chroma, lightness jitter, k, grain spots, crack
     angle/alpha, radius, glint delay); the `.clod` rules mix them in
@@ -357,7 +357,7 @@ Decided 2026-07-11. This doc is the source of truth for sessions continuing the 
     `@supports`: an engine without it gets flat pastel clods
     (`--peach-soft` earth, `--mint-soft` moss) rather than none; one
     without `oklch()` at all shows the emoji alone, as before. Only
-    verified in Chromium (the harness simulates the fallback).
+    verified in Chromium.
   - **"Everything done" = the day's plot bloomed**: `todaysPlot(now).met`
     (the goal met; with no goal, nothing left), the same rule that turns
     the home bed golden. It is the one garden fact that can't be derived
@@ -382,10 +382,7 @@ Decided 2026-07-11. This doc is the source of truth for sessions continuing the 
     not that day's decks or goal, so the record starts now (as proposed
     with the prototypes).
   - Code: `EARTH`, `soilStyle` and the `.clod` CSS in index.html;
-    `noteBloom`; `pushBlooms` in cloud.js; `garden.harness.js` (Playwright:
-    soil kinds and colors in both themes, reduced motion, recording,
-    stickiness, tab close, cloud union and push-back, another device's
-    bloom, guest import).
+    `noteBloom`; `pushBlooms` in cloud.js.
 - **Review log & retention** (decided 2026-07-11): every grade appends
   `"ts,grade,prevIvl,cardId"` to a month-chunked log (`log:YYYY-MM` in
   localStorage; `users/{uid}/log/{YYYY-MM}` docs in Firestore — covered by the
