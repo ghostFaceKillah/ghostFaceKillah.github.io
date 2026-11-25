@@ -438,16 +438,26 @@
   #statsScreen .stat:nth-child(2), #guideScreen .stat:nth-child(2) { background: var(--sky-soft); }
   #statsScreen .stat:nth-child(3), #guideScreen .stat:nth-child(3) { background: var(--lav-soft); }
   #statsScreen .stat:nth-child(4), #guideScreen .stat:nth-child(4) { background: var(--pink-soft); }
+  /* the garden grows with the room it has (owner, 2026-11-25: 15px days
+     read small on a big screen): --cell fills the panel up to 22px and
+     never drops below the old 15px (a narrow phone scrolls to the latest
+     weeks, as before). --u is the old 1px, so everything inside a clod
+     scales with it. 18 columns + 17 gaps of 2u = 20.27 cells wide;
+     dividing by 20.6 leaves room for the clods' half-pixel overhang. */
+  .heat-panel { --cell: 15px; --u: calc(var(--cell) / 15); }
+  @supports (width: 1cqi) {
+    .heat-panel { container-type: inline-size; --cell: clamp(15px, 100cqi / 20.6, 22px); }
+  }
   .heatwrap { overflow-x: auto; padding-bottom: 2px; }
   .heat-months {
-    display: grid; grid-auto-flow: column; grid-auto-columns: 15px; gap: 2px;
+    display: grid; grid-auto-flow: column; grid-auto-columns: var(--cell); gap: calc(2 * var(--u));
     height: 15px; margin: 0 auto 4px; width: max-content;
     font-size: .68rem; color: var(--muted); font-weight: 700;
   }
   .heat-months span { white-space: nowrap; }
   .heat-grid {
     display: grid; grid-auto-flow: column;
-    grid-template-rows: repeat(7, 15px); grid-auto-columns: 15px; gap: 2px;
+    grid-template-rows: repeat(7, var(--cell)); grid-auto-columns: var(--cell); gap: calc(2 * var(--u));
     width: max-content; margin: 0 auto;
   }
   /* a practiced day grows a plant (size = reviews); a bare day is ground.
@@ -457,16 +467,16 @@
      colors with the theme tokens, so a theme switch needs no re-render. */
   .clod {
     position: relative; isolation: isolate;
-    display: grid; place-items: center; width: 15px; height: 15px;
+    display: grid; place-items: center; width: var(--cell); height: var(--cell);
     font-style: normal; line-height: 1;
   }
   .clod::before, .clod.met::after {
-    content: ""; position: absolute; inset: -.5px; z-index: -1;
+    content: ""; position: absolute; inset: calc(-.5 * var(--u)); z-index: -1;
     border-radius: var(--br); pointer-events: none;
   }
-  .clod.bare { font-size: 9px; }
+  .clod.bare { font-size: calc(9 * var(--u)); }
   .clod.bare span { opacity: .6; }
-  .clod.grown span, .clod.met span { filter: drop-shadow(0 .7px .5px var(--plant-shadow)); }
+  .clod.grown span, .clod.met span { filter: drop-shadow(0 calc(.7 * var(--u)) calc(.5 * var(--u)) var(--plant-shadow)); }
   /* a browser that can't do math inside oklch() gets flat pastel clods
      instead of none (the guarded rules below replace these) */
   .clod.bare::before { background: var(--peach-soft); }
@@ -476,9 +486,9 @@
     .clod.bare::before {
       --L: calc(var(--earth-l) + var(--dl));
       background:
-        radial-gradient(circle at var(--g1), oklch(calc(var(--L) - .14) calc(var(--c) + .01) var(--h)) 0 1.1px, transparent 1.6px),
-        radial-gradient(circle at var(--g2), oklch(calc(var(--L) - .14) calc(var(--c) + .01) var(--h)) 0 .8px, transparent 1.3px),
-        radial-gradient(circle at var(--g3), oklch(calc(var(--L) + .1) max(0, var(--c) - .015) var(--h)) 0 .9px, transparent 1.4px),
+        radial-gradient(circle at var(--g1), oklch(calc(var(--L) - .14) calc(var(--c) + .01) var(--h)) 0 calc(1.1 * var(--u)), transparent calc(1.6 * var(--u))),
+        radial-gradient(circle at var(--g2), oklch(calc(var(--L) - .14) calc(var(--c) + .01) var(--h)) 0 calc(.8 * var(--u)), transparent calc(1.3 * var(--u))),
+        radial-gradient(circle at var(--g3), oklch(calc(var(--L) + .1) max(0, var(--c) - .015) var(--h)) 0 calc(.9 * var(--u)), transparent calc(1.4 * var(--u))),
         linear-gradient(var(--ca), transparent 47%, oklch(calc(var(--L) - .13) var(--c) var(--h) / var(--cr)) 48% 52%, transparent 53%),
         radial-gradient(circle at 34% 30%, oklch(calc(var(--L) + .05) var(--c) var(--h)), oklch(var(--L) var(--c) var(--h)) 55%,
           oklch(calc(var(--L) - .06) calc(var(--c) + .005) var(--h)));
@@ -488,9 +498,9 @@
       --L: calc(var(--moss-l) + var(--moss-dl) * var(--k) + var(--dl));
       --C: calc((var(--moss-c) + var(--moss-dc) * var(--k)) * var(--cm));
       background:
-        radial-gradient(circle at var(--g1), oklch(calc(var(--L) + .1) calc(var(--C) + .02) calc(var(--h) - 10)) 0 1px, transparent 1.5px),
-        radial-gradient(circle at var(--g2), oklch(calc(var(--L) + .1) calc(var(--C) + .02) calc(var(--h) - 10)) 0 .8px, transparent 1.3px),
-        radial-gradient(circle at var(--g3), oklch(calc(var(--L) - .11) calc(var(--C) * .7) calc(var(--h) + 6)) 0 .9px, transparent 1.4px),
+        radial-gradient(circle at var(--g1), oklch(calc(var(--L) + .1) calc(var(--C) + .02) calc(var(--h) - 10)) 0 calc(1 * var(--u)), transparent calc(1.5 * var(--u))),
+        radial-gradient(circle at var(--g2), oklch(calc(var(--L) + .1) calc(var(--C) + .02) calc(var(--h) - 10)) 0 calc(.8 * var(--u)), transparent calc(1.3 * var(--u))),
+        radial-gradient(circle at var(--g3), oklch(calc(var(--L) - .11) calc(var(--C) * .7) calc(var(--h) + 6)) 0 calc(.9 * var(--u)), transparent calc(1.4 * var(--u))),
         radial-gradient(circle at 34% 30%, oklch(calc(var(--L) + .05) var(--C) var(--h)), oklch(var(--L) var(--C) var(--h)) 55%,
           oklch(calc(var(--L) - .06) calc(var(--C) + .005) var(--h)));
     }
@@ -498,7 +508,7 @@
   /* the day's plot bloomed: a sunlit golden dome that catches a slow glint */
   .clod.met::before {
     background: radial-gradient(circle at 32% 28%, var(--gold-1), var(--gold-2) 32%, var(--gold-3) 72%, var(--gold-4));
-    box-shadow: 0 0 5px var(--gold-glow);
+    box-shadow: 0 0 calc(5 * var(--u)) var(--gold-glow);
   }
   .clod.met::after {
     background: linear-gradient(110deg, transparent 42%, oklch(1 0 0 / .7) 50%, transparent 58%) no-repeat;
@@ -508,10 +518,10 @@
   }
   @keyframes glint { 0%, 86% { background-position: 120% 0; } 100% { background-position: -20% 0; } }
   @media (prefers-reduced-motion: reduce) { .clod.met::after { animation: none; opacity: 0; } }
-  .s1 { font-size: 7px; }
-  .s2 { font-size: 9.5px; }
-  .s3 { font-size: 12px; }
-  .s4 { font-size: 14px; }
+  .s1 { font-size: calc(7 * var(--u, 1px)); }
+  .s2 { font-size: calc(9.5 * var(--u, 1px)); }
+  .s3 { font-size: calc(12 * var(--u, 1px)); }
+  .s4 { font-size: calc(14 * var(--u, 1px)); }
   .gs { background: var(--gs) !important; }
   .gg { background: var(--gg) !important; }
   .gb { background: var(--gb) !important; }
@@ -519,12 +529,6 @@
   .w2 { background: var(--w2) !important; }
   .w3 { background: var(--w3) !important; }
   .w4 { background: var(--w4) !important; }
-  .heat-legend {
-    display: flex; align-items: center; justify-content: flex-end; flex-wrap: wrap; gap: 6px 12px;
-    margin-top: 10px; font-size: .72rem; color: var(--muted); font-weight: 700;
-  }
-  .heat-legend > span { display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; }
-  .heat-legend i { flex: none; }
 
   .garden-bar { display: flex; gap: 2px; height: 24px; border-radius: 999px; overflow: hidden; }
   .garden-bar i { min-width: 8px; }
@@ -936,12 +940,11 @@
     </div>
 
     <div class="label">🌷 Your garden</div>
-    <div class="panel">
+    <div class="panel heat-panel">
       <div class="heatwrap" id="heatWrap">
         <div class="heat-months" id="heatMonths"></div>
         <div class="heat-grid" id="heatGrid"></div>
       </div>
-      <div class="heat-legend" id="heatLegend"></div>
       <div class="btn-row">
         <button class="btn ghost" id="guideBtn">📔 Field guide<small id="guideCount"></small></button>
       </div>
@@ -2039,16 +2042,6 @@
       css += `;--d:${(-9 * r(7)).toFixed(2)}s`;   // stagger the glints
     }
     return css;
-  }
-  // The legend under the heatmap: the same clods, on fixed sample days.
-  {
-    const clod = (kind, k, n, plant) =>
-      `<i class="clod ${kind}${k ? " s" + k : ""}" style="${soilStyle(kind, n, k)}"><span>${plant}</span></i>`;
-    $("heatLegend").innerHTML =
-      `<span>fewer ${clod("grown", 1, 1, "🌱")}${clod("grown", 2, 2, "🌿")}` +
-        `${clod("grown", 3, 3, "🌷")}${clod("grown", 4, 4, "🌻")} more</span>` +
-      `<span>${clod("bare", 0, 5, "🪨")} rest day</span>` +
-      `<span>${clod("met", 3, 6, "🌼")} plot in bloom</span>`;
   }
 
   function renderStats() {
