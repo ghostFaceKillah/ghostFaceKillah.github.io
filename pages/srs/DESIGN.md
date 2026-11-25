@@ -343,7 +343,15 @@ Decided 2026-07-11. This doc is the source of truth for sessions continuing the 
     glint that sweeps across it every 9 s, staggered per day — none under
     `prefers-reduced-motion`. Gold differs from moss in lightness as well as
     hue, and the tooltip / aria-label add "· plot in bloom 🌻". The legend
-    is built from the same clods: four moss sizes, a rest day, a bloomed day.
+    keeps only the size key (fewer → more) on moss clods: the owner had
+    the rest-day and bloom keys taken out (2026-11-25).
+  - **Size** (2026-11-25, the owner found the 15px days small on a big
+    screen): the heatmap panel is a size container (`.heat-panel`) and
+    `--cell` = clamp(15px, panel width ÷ 20.6, 22px), so the grid fills
+    a wide panel at about 1.5× and fits a 390–430px phone without
+    scrolling; it never drops below the old 15px. `--u` (cell ÷ 15, the
+    old 1px) scales everything drawn in px inside a clod: emoji sizes,
+    grains, glow, gap. Without container query units it stays 15px.
   - **Random but never reshuffled:** `soilStyle(kind, dayN, k)` hashes all
     of it from the date with the plants' `dayHash` (inputs `dayN·64 + salt`,
     so no two draws share a hash). `scatter()` now goes through `dayHash`
